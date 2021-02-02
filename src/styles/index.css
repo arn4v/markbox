@@ -1,0 +1,35 @@
+.input-wrapper {
+  @apply flex flex-col gap-1;
+}
+
+.input-label {
+  @apply text-white font-medium text-lg;
+}
+
+.input {
+  @apply rounded-md focus:outline-none border-transparent focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400 px-2 py-2 transition duration-150 ease-in-out w-full;
+}
+
+.input-sheet {
+  @apply w-full px-4 py-2 mt-1 transition duration-150 ease-out border-0 border-transparent rounded-md shadow-sm focus:outline-none focus:ring focus:ring-emerald-400;
+}
+
+.input-transition {
+  @apply transition duration-150 ease-out;
+}
+
+.input-checkbox {
+  @apply bg-emerald-400 text-emerald-400;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-white;
+}
+
+.form-container {
+  @apply flex flex-col w-4/5 gap-4 mx-auto mt-2;
+}
+
+.badge {
+  @apply flex gap-1.5 px-2 py-1 text-xs font-medium text-white items-center justify-center uppercase bg-blue-500 rounded-full;
+}
