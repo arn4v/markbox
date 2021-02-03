@@ -4,7 +4,7 @@ export function TagBadge({ className, title, children }) {
   return (
     <>
       <div
-        class={clsx([
+        className={clsx([
           "flex gap-1.5 px-2 py-1 text-xs font-medium text-white items-center justify-center uppercase rounded-full",
           className,
         ])}>

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useFirebase } from "./firebase";
+import { getFirebase } from "./firebase";
 import { v4 as uuid } from "uuid";
 
-const { auth, firestore } = useFirebase();
+const { auth, firestore } = getFirebase();
 
 /**
  * @param {import("firebase").default.auth.UserCredential} [user]
@@ -42,4 +42,25 @@ export const createUserDoc = async ({ user }) => {
 export const getUserDoc = async (uid) => {
   const docRef = await firestore.collection("users").doc(uid).get();
   return docRef.data();
+};
+
+/**
+ * @param {string} uid
+ * @param {Bookmark} bookmark
+ */
+export const addBookmark = async (uid, bookmark) => {
+  const ref = firestore.collection("users").doc(uid);
+  try {
+    await ref.set(
+      {
+        bookmarks: {
+          [bookmark.id]: bookmark,
+        },
+      },
+      { merge: true },
+    );
+    return true;
+  } catch (err) {
+    throw new Error(err);
+  }
 };

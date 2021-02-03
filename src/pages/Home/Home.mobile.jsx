@@ -5,13 +5,13 @@ import AddBookmarkButton from "~/components/AddBookmarkButton";
 import { NavBar } from "~/components/NavBar";
 import { SearchBar } from "~/components/SearchBar";
 import { SettingsContainer } from "~/components/SettingsContainer";
+import { AddSheet } from "~/components/AddSheet";
+import { EditSheet } from "~/components/EditSheet";
+import { FilterSheet } from "~/components/FilterSheet";
+import { AnimatePresence } from "framer-motion";
 
 const CardList = React.memo(() => {
   const { loading, data } = useSelector((state) => state.bookmarks);
-
-  React.useEffect(() => {
-    console.log(loading, data);
-  }, [data, loading]);
 
   if (loading) return null;
 
@@ -20,7 +20,7 @@ const CardList = React.memo(() => {
       {Object.values(data).map((item) => {
         return (
           <>
-            <BookmarkCard id={item.id} key={item.id} />
+            <BookmarkCard key={item.id} id={item.id} />
           </>
         );
       })}
@@ -29,8 +29,19 @@ const CardList = React.memo(() => {
 });
 
 export function HomeMobile() {
+  const { add, edit, filter } = useSelector((s) => ({
+    add: s.add,
+    filter: s.filter,
+    edit: s.edit,
+  }));
+
   return (
     <>
+      <AnimatePresence>
+        <AddSheet />
+        <FilterSheet />
+        <EditSheet id={edit.id} />
+      </AnimatePresence>
       <div className="flex flex-col w-screen h-screen overflow-x-hidden lg:hidden bg-blueGray-800">
         <AddBookmarkButton />
         <NavBar />

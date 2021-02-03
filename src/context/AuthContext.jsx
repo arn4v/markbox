@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useFirebase } from "~/lib/firebase";
+import { getFirebase } from "~/lib/firebase";
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
     authenticated: false,
     user: null,
   });
-  const { auth } = useFirebase();
+  const { auth } = getFirebase();
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();

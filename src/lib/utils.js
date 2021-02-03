@@ -24,6 +24,5 @@ export const validColors = Object.entries(colors).reduce(
 export function randomColor(tags) {
   const takenColors = Object.values(tags).map((i) => i.color);
   const available = validColors.filter((i) => !takenColors.includes(i));
-  console.log(takenColors, available);
   return available[Math.floor(Math.random() * available.length)];
 }

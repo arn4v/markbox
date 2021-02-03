@@ -2,7 +2,7 @@ import * as React from "react";
 import { createUserDoc } from "~/lib/db";
 import clsx from "clsx";
 import { useHistory } from "react-router-dom";
-import { useFirebase } from "~/lib/firebase";
+import { getFirebase } from "~/lib/firebase";
 import { PageWrapper } from "~/components/PageWrapper";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
@@ -15,7 +15,7 @@ export function LoginPage() {
   });
   const dispatch = useDispatch();
   const history = useHistory();
-  const { auth } = useFirebase();
+  const { auth } = getFirebase();
   const login = (e) => {
     e.preventDefault();
     auth

@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/analytics";
 
-export const useFirebase = () => {
+export const getFirebase = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

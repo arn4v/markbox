@@ -4,6 +4,8 @@ import { TagBadge } from "./TagBadge";
 import { randomColor } from "~/lib/utils";
 import { v4 as uuid } from "uuid";
 import { useDispatch } from "react-redux";
+import { BOOKMARKS_ADD } from "~/store/async";
+import { actions } from "~/store";
 
 export function AddForm({ className }) {
   const [state, setState] = React.useState({
@@ -17,7 +19,7 @@ export function AddForm({ className }) {
   const dispatch = useDispatch();
   const onSubmit = (e) => {
     e.preventDefault();
-    const tag = {
+    const bookmark = {
       id: uuid(),
       title: state.title,
       url: state.url,
@@ -25,6 +27,8 @@ export function AddForm({ className }) {
       created: new Date(),
       updated: new Date(),
     };
+    dispatch(BOOKMARKS_ADD(bookmark));
+    dispatch({ type: actions.ADD_HIDE });
   };
   const deleteTag = (id) => () =>
     setState((s) => {
@@ -64,7 +68,7 @@ export function AddForm({ className }) {
     <>
       <form onSubmit={onSubmit} className={clsx(["form-container", className])}>
         <div className="">
-          <label for="title" className="form-label">
+          <label htmlFor="title" className="form-label">
             Title
           </label>
           <input
@@ -77,7 +81,7 @@ export function AddForm({ className }) {
           />
         </div>
         <div className="">
-          <label for="url" className="form-label">
+          <label htmlFor="url" className="form-label">
             URL
           </label>
           <input
@@ -110,9 +114,9 @@ export function AddForm({ className }) {
                       stroke="currentColor"
                       className="w-3.5 h-3.5 text-white">
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
@@ -137,7 +141,7 @@ export function AddForm({ className }) {
                 type="text"
                 className="mr-4 border-0 focus:ring-0"
                 onChange={onChange}
-                maxlength="15"
+                maxLength="15"
                 value={state.newTag}
               />
               <button
