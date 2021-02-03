@@ -18,5 +18,5 @@ export const mockBookmarks = {
 
 export const mockTags = Object.values(mockBookmarks).reduce(
   (acc, cur) => ({ ...acc, ...cur.tags }),
-  {}
+  {},
 );

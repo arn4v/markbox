@@ -18,7 +18,7 @@ export const validColors = Object.entries(colors).reduce(
       });
     return acc;
   },
-  []
+  [],
 );
 
 export function randomColor(tags) {

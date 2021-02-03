@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { BookmarkCard } from "~/components/BookmarkCard";
-import { AddButton } from "~/components/AddButton";
+import AddBookmarkButton from "~/components/AddBookmarkButton";
 import { NavBar } from "~/components/NavBar";
 import { SearchBar } from "~/components/SearchBar";
 import { SettingsContainer } from "~/components/SettingsContainer";
@@ -32,7 +32,7 @@ export function HomeMobile() {
   return (
     <>
       <div className="flex flex-col w-screen h-screen overflow-x-hidden lg:hidden bg-blueGray-800">
-        <AddButton />
+        <AddBookmarkButton />
         <NavBar />
         <SettingsContainer />
         <div className="flex flex-col w-full gap-3 p-4">

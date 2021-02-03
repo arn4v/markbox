@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddSheet } from "~/components/AddSheet";
 import { EditSheet } from "~/components/EditSheet";
 import { FilterSheet } from "~/components/FilterSheet";
-import { BOOKMARKS_FETCH } from "~/store/asyncActions";
+import { BOOKMARKS_FETCH } from "~/store/async";
 import { HomeDesktop } from "./Home.desktop";
 import { HomeMobile } from "./Home.mobile";
 

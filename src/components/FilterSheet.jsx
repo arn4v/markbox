@@ -6,7 +6,7 @@ import { TagBadge } from "~/components/TagBadge";
 
 export function FilterSheet() {
   const { id, title, url, tags, created, updated } = useSelector(
-    (state) => state.filter.data
+    (state) => state.filter.data,
   );
   const [state, setState] = React.useState({
     newTag: "",
@@ -28,8 +28,7 @@ export function FilterSheet() {
       <div className="absolute flex w-screen h-screen">
         <div
           onClick={hideModal}
-          className="absolute z-20 w-full h-full bg-black opacity-50"
-        ></div>
+          className="absolute z-20 w-full h-full bg-black opacity-50"></div>
         <div className="absolute h-full w-full z-40 flex items-center justify-center bg-black opacity-75"></div>
         <div className="absolute h-full w-full flex items-center justify-center">
           <div className="z-50 rounded-lg w-2/3 h-1/5 bg-blueGray-700 flex flex-col gap-6 items-center justify-center text-gray-100 font-medium p-4">
@@ -38,15 +37,13 @@ export function FilterSheet() {
               <button
                 type="button"
                 onClick={() => setShowError(false)}
-                className="bg-blueGray-600 px-3 py-1.5 rounded-lg"
-              >
+                className="bg-blueGray-600 px-3 py-1.5 rounded-lg">
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => setShowError(false)}
-                className="bg-red-500 text-white px-3 py-1.5 rounded-lg"
-              >
+                className="bg-red-500 text-white px-3 py-1.5 rounded-lg">
                 Confirm
               </button>
             </div>
@@ -62,15 +59,13 @@ export function FilterSheet() {
             <div className="flex items-center justify-end">
               <button
                 className="col-span-1 p-1 text-sm font-medium text-white uppercase rounded-full bg-blueGray-600 focus:outline-none"
-                onClick={hideModal}
-              >
+                onClick={hideModal}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  className="w-4 h-4"
-                >
+                  className="w-4 h-4">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -83,8 +78,7 @@ export function FilterSheet() {
           </div>
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="form-container px-4 justify-between h-5/6"
-          >
+            className="form-container px-4 justify-between h-5/6">
             <div>
               <label for="title" className="form-label">
                 Title
@@ -116,21 +110,18 @@ export function FilterSheet() {
                 <TagBadge
                   key="item.id"
                   title="item.title"
-                  className="item.color"
-                >
+                  className="item.color">
                   <button
                     className="rounded-full py-0.5 focus:outline-none flex"
                     type="button"
                     id="item.id"
-                    onClick={deleteTag}
-                  >
+                    onClick={deleteTag}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      className="w-3.5 h-3.5 text-white"
-                    >
+                      className="w-3.5 h-3.5 text-white">
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -150,9 +141,8 @@ export function FilterSheet() {
                         newTag.length > 0 && this.newTagError !== undefined,
                       "ring ring-green-500":
                         newTag.length > 0 && !this.newTagError,
-                    }
-                  )}
-                >
+                    },
+                  )}>
                   <input
                     id="tags"
                     type="text"
@@ -170,11 +160,10 @@ export function FilterSheet() {
                       {
                         "text-gray-800": newTag.length > 0,
                         "text-gray-500": newTag.length === 0,
-                      }
+                      },
                     )}
                     onClick={addTag}
-                    disabled={newTagError}
-                  >
+                    disabled={newTagError}>
                     Add tag
                   </button>
                 </div>
@@ -189,8 +178,7 @@ export function FilterSheet() {
             <div className="flex items-center gap-4">
               <label
                 for="toRead"
-                className="text-sm font-medium text-white uppercase"
-              >
+                className="text-sm font-medium text-white uppercase">
                 To read?
               </label>
               <input
@@ -204,14 +192,12 @@ export function FilterSheet() {
               <button
                 type="button"
                 className="px-4 py-2.5 text-sm font-medium text-white uppercase rounded-lg bg-red-500 focus:outline-none select-none"
-                onClick={() => setShowDelete(true)}
-              >
+                onClick={() => setShowDelete(true)}>
                 Delete
               </button>
               <button
                 type="submit"
-                className="px-4 py-2.5 text-sm font-medium text-white uppercase rounded-lg bg-blueGray-600 focus:outline-none select-none"
-              >
+                className="px-4 py-2.5 text-sm font-medium text-white uppercase rounded-lg bg-blueGray-600 focus:outline-none select-none">
                 Update
               </button>
             </div>

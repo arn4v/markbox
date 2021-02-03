@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
 
-export function AddButton() {
+export default function AddBookmarkButton() {
   const dispatch = useDispatch();
 
   const showAddSheet = () => {
