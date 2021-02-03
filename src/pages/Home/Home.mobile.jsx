@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { BookmarkCard } from "~/components/BookmarkCard";
 import AddBookmarkButton from "~/components/AddBookmarkButton";
 import { NavBar } from "~/components/NavBar";
 import { SearchBar } from "~/components/SearchBar";
@@ -9,24 +8,7 @@ import { AddSheet } from "~/components/AddSheet";
 import { EditSheet } from "~/components/EditSheet";
 import { FilterSheet } from "~/components/FilterSheet";
 import { AnimatePresence } from "framer-motion";
-
-const CardList = React.memo(() => {
-  const { loading, data } = useSelector((state) => state.bookmarks);
-
-  if (loading) return null;
-
-  return (
-    <>
-      {Object.values(data).map((item) => {
-        return (
-          <>
-            <BookmarkCard key={item.id} id={item.id} />
-          </>
-        );
-      })}
-    </>
-  );
-});
+import CardList from "~/components/CardList";
 
 export function HomeMobile() {
   const { add, edit, filter } = useSelector((s) => ({

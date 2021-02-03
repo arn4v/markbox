@@ -16,7 +16,7 @@ export function HomePage() {
 
   return (
     <>
-      <div className="">
+      <div className="lg:hidden">
         <HomeMobile />
       </div>
       <HomeDesktop />

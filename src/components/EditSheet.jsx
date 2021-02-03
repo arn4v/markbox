@@ -44,7 +44,7 @@ export function EditSheet() {
               <>
                 <motion.div
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.7 }}
+                  animate={{ opacity: 0.3 }}
                   exit={{ opacity: 0 }}
                   transition={{ ease: "easeInOut", duration: 0.3 }}
                   onClick={hideDeleteModal}
@@ -76,7 +76,7 @@ export function EditSheet() {
 
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.7 }}
+              animate={{ opacity: 0.3 }}
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.3 }}
               onClick={hideModal}
