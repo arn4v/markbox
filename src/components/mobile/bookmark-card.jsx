@@ -1,11 +1,12 @@
 import * as React from "react";
-import { TagBadge } from "~/components/TagBadge";
+import { TagBadge } from "~/components/tag-badge";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "~/store";
 
 /**
  * @param {Object} props
  * @param {string} props.id
+ * @exports
  */
 export function BookmarkCard(props) {
   const data = useSelector((state) => state.bookmarks.data[props.id]);

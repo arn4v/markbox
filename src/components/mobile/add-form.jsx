@@ -1,12 +1,17 @@
 import * as React from "react";
 import clsx from "clsx";
-import { TagBadge } from "./TagBadge";
+import { TagBadge } from "../tag-badge";
 import { randomColor } from "~/lib/utils";
 import { v4 as uuid } from "uuid";
 import { useDispatch } from "react-redux";
 import { BOOKMARKS_ADD } from "~/store/async";
 import { actions } from "~/store";
 
+/**
+ * @param {Object} props
+ * @param {string} props.className
+ * @exports
+ */
 export function AddForm({ className }) {
   const [state, setState] = React.useState({
     title: "",

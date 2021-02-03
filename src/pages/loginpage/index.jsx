@@ -3,7 +3,6 @@ import { createUserDoc } from "~/lib/db";
 import clsx from "clsx";
 import { useHistory } from "react-router-dom";
 import { getFirebase } from "~/lib/firebase";
-import { PageWrapper } from "~/components/PageWrapper";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
 
@@ -45,7 +44,7 @@ export function LoginPage() {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
 
   return (
-    <PageWrapper className="items-center justify-center">
+    <div className="items-center justify-center h-screen w-screen overflow-hidden bg-blueGray-800">
       <div className="grid w-4/5 grid-flow-row gap-6 lg:w-1/5">
         <button
           className="flex items-center gap-2 px-1 py-0.5 rounded-md focus:outline-none font-medium text-white transition duration-150 ease-out justify-self-start hover:bg-gray-700"
@@ -121,6 +120,6 @@ export function LoginPage() {
           </div>
         )}
       </div>
-    </PageWrapper>
+    </div>
   );
 }

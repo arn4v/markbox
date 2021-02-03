@@ -1,7 +1,6 @@
-import * as React from "react";
-import { SearchBar } from "~/components/SearchBar";
-import { Logo } from "~/components/Logo";
-import CardList from "~/components/CardList";
+import { SearchBar } from "~/components/search-bar";
+import { Logo } from "../../components/logo";
+import CardList from "~/components/mobile/card-list";
 
 export function HomeDesktop() {
   return (

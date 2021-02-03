@@ -1,1 +1,9 @@
-{ "compilerOptions": { "baseUrl": "./", "paths": { "~/*": ["src/*"] } } }
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": { "~/*": ["src/*"] }
+  },
+  "include": ["src"]
+}

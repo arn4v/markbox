@@ -1,3 +1,9 @@
+/**
+ * @param {Object} props
+ * @param {string} className
+ * @returns {JSX.Element}
+ * @exports
+ */
 export function Logo({ className }) {
   return (
     <>

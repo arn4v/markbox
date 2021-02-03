@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Logo } from "./Logo";
+import { Logo } from "../logo";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
 

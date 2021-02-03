@@ -1,4 +1,4 @@
-import StoreHelper, { getUserDoc } from "~/lib/db";
+import StoreHelper from "~/lib/db";
 import { actions } from ".";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -7,7 +7,6 @@ export async function BOOKMARKS_FETCH(dispatch, getState) {
   const uid = getState().user.uid;
   const store = new StoreHelper(uid, true);
   let data = await store.run();
-  // let data = await getUserDoc(uid);
   data.bookmarks = Object.entries(data.bookmarks).reduce(
     (acc, [key, value]) => {
       value.created = value.created.toDate().toDateString();

@@ -1,5 +1,11 @@
 import clsx from "clsx";
 
+/**
+ * @param {Object} props
+ * @param {string} props.className
+ * @param {string} props.title
+ * @param {React.ReactNode} props.children
+ */
 export function TagBadge({ className, title, children }) {
   return (
     <>

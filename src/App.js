@@ -1,7 +1,7 @@
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { HomePage } from "./pages/Home";
-import { LoginPage } from "./pages/Login";
+import { HomePage } from "./pages/homepage";
+import { LoginPage } from "./pages/loginpage";
 import { store } from "./store";
 import { AuthProvider } from "~/context/AuthContext";
 

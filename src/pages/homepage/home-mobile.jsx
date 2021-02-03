@@ -1,15 +1,18 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import AddBookmarkButton from "~/components/AddBookmarkButton";
-import { NavBar } from "~/components/NavBar";
-import { SearchBar } from "~/components/SearchBar";
-import { SettingsContainer } from "~/components/SettingsContainer";
-import { AddSheet } from "~/components/AddSheet";
-import { EditSheet } from "~/components/EditSheet";
-import { FilterSheet } from "~/components/FilterSheet";
+import AddBookmarkButton from "~/components/mobile/add-button";
+import { NavBar } from "~/components/mobile/navbar";
+import { SearchBar } from "~/components/search-bar";
+import { SettingsContainer } from "~/components/mobile/settings";
+import { AddSheet } from "~/components/mobile/add-sheet";
+import { EditSheet } from "~/components/mobile/edit-sheet";
+import { FilterSheet } from "~/components/mobile/filter-sheet";
 import { AnimatePresence } from "framer-motion";
-import CardList from "~/components/CardList";
+import CardList from "~/components/mobile/card-list";
 
+/**
+ * @exports
+ */
 export function HomeMobile() {
   const { add, edit, filter } = useSelector((s) => ({
     add: s.add,

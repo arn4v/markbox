@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "~/store";
-import { AddForm } from "./AddForm";
+import { AddForm } from "./add-form";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function AddSheet() {

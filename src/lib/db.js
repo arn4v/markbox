@@ -2,7 +2,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { getFirebase } from "./firebase";
-import { v4 as uuid } from "uuid";
 
 const { auth, firestore } = getFirebase();
 
@@ -39,11 +38,6 @@ export const createUserDoc = async ({ user }) => {
       }
     });
   }
-};
-
-export const getUserDoc = async (uid) => {
-  const docRef = await firestore.collection("users").doc(uid).get();
-  return docRef.data();
 };
 
 export default class StoreHelper {
