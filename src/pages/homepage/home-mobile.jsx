@@ -16,11 +16,9 @@ import CardList from "~/components/mobile/card-list";
 export function HomeMobile() {
   return (
     <>
-      <AnimatePresence>
-        <AddSheet />
-        <FilterSheet />
-        <EditSheet />
-      </AnimatePresence>
+      <AddSheet />
+      <FilterSheet />
+      <EditSheet />
       <div className="flex flex-col w-screen h-screen overflow-x-hidden lg:hidden bg-blueGray-800">
         <AddBookmarkButton />
         <NavBar />

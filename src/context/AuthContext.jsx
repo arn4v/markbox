@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [auth, dispatch, history, location.pathname]);
 
   if (state.loading) return <div className=""></div>;
 

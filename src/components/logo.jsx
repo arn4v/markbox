@@ -1,10 +1,8 @@
 /**
- * @param {Object} props
- * @param {string} className
- * @returns {JSX.Element}
- * @exports
+ * @param {{ className: string }} props
  */
-export function Logo({ className }) {
+export const Logo = (props) => {
+  const { className } = props;
   return (
     <>
       <svg
@@ -20,4 +18,4 @@ export function Logo({ className }) {
       </svg>{" "}
     </>
   );
-}
+};

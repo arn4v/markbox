@@ -18,17 +18,22 @@ export const actions = {
   TAB_UPDATE: "tab/update",
   USERDOC_UPDATE: "userdoc/update",
   USER_UPDATE: "user/update",
+  BACKDROP_SHOW: "backdrop/show",
+  BACKDROP_HIDE: "backdrop/hide",
 };
 
 const initialState = {
   add: { show: false },
   authenticated: false,
-  bookmarks: { loading: true, error: undefined, data: undefined },
+  backdrop: { show: false, action: () => {} },
+  bookmarks: { loading: true, data: undefined },
+  folder: { add: { show: false } },
   edit: { show: false, data: undefined },
   filter: { show: false },
   settings: { show: false },
   tags: {},
   user: null,
+  search: "",
   userDoc: null,
 };
 
@@ -72,6 +77,18 @@ function rootReducer(state = initialState, action) {
     }
     case actions.SEARCH_UPDATE: {
       state = Object.assign({}, state, { search: action.payload });
+      break;
+    }
+    case actions.BACKDROP_SHOW: {
+      state = Object.assign({}, state, {
+        backdrop: { show: true, action: action.payload },
+      });
+      break;
+    }
+    case actions.BACKDROP_HIDE: {
+      state = Object.assign({}, state, {
+        backdrop: { show: false, action: () => {} },
+      });
       break;
     }
     default:

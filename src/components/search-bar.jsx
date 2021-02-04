@@ -1,8 +1,9 @@
 import * as React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../store";
 
 export function SearchBar() {
+  const show = useSelector((state) => state.filter.show);
   const [search, setSearch] = React.useState("");
   const dispatch = useDispatch();
   /** @param {React.ChangeEvent<HTMLInputElement>} e */
@@ -10,7 +11,8 @@ export function SearchBar() {
     setSearch(e.target.value);
     dispatch({ type: actions.SEARCH_UPDATE, payload: e.target.value });
   };
-  const showFilter = () => dispatch({ type: actions.FILTER_SHOW });
+  const toggleFilter = () =>
+    dispatch({ type: show ? actions.FILTER_HIDE : actions.FILTER_SHOW });
 
   return (
     <div className="flex items-center justify-center w-full gap-3">
@@ -20,11 +22,11 @@ export function SearchBar() {
         value={search}
         onChange={onChange}
         placeholder="Search"
-        className="w-full placeholder-gray-500 text-gray-700 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:outline-none"
+        className="w-full placeholder-gray-500 border-0 border-transparent transition duration-150 ease-in-out text-gray-700 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:border-0 focus:outline-none"
       />
       <button
         className="flex items-center justify-center h-full gap-2 px-2 rounded-lg dark:bg-blueGray-700 focus:outline-none"
-        onClick={showFilter}>
+        onClick={toggleFilter}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

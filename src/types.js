@@ -1,11 +1,15 @@
 /**
+ * @typedef {import("firebase").default.firestore.Timestamp} Timestamp
+ */
+
+/**
  * @typedef {Object} Bookmark
  * @property {string} id
  * @property {string} title
  * @property {string} url
  * @property {Object} tags
- * @property {string} created
- * @property {string} updated
+ * @property {Timestamp} created
+ * @property {Timestamp} updated
  */
 
 /**
@@ -13,8 +17,12 @@
  */
 
 /**
+ * @typedef {("add" | "delete" | "update")} DatabaseAction
+ */
+
+/**
  * @typedef {Object} Task
- * @property {("add" | "delete")} type
+ * @property {DatabaseAction} type
  * @property {Schema} schema
  * @property {Object} data
  */

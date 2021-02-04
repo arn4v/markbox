@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
  * @param {Object} props
  * @param {string} props.className
  * @param {string} props.title
- * @param {React.ReactNode} props.children
+ * @param {React.ReactNode} [props.children]
  */
 export function TagBadge({ className, title, children }) {
   return (
@@ -25,7 +25,7 @@ export function TagBadge({ className, title, children }) {
 TagBadge.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.element,
 };
 
 TagBadge.defaultProps = {

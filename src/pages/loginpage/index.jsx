@@ -44,10 +44,10 @@ export function LoginPage() {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
 
   return (
-    <div className="items-center justify-center h-screen w-screen overflow-hidden bg-blueGray-800">
+    <div className="items-center flex justify-center h-screen w-screen overflow-hidden bg-blueGray-800">
       <div className="grid w-4/5 grid-flow-row gap-6 lg:w-1/5">
         <button
-          className="flex items-center gap-2 px-1 py-0.5 rounded-md focus:outline-none font-medium text-white transition duration-150 ease-out justify-self-start hover:bg-gray-700"
+          className="flex items-center gap-2 px-1 py-0.5 rounded-md focus:outline-none font-medium text-white transition duration-150 ease-out justify-self-start hover:bg-blueGray-700"
           onClick={() => history.push("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

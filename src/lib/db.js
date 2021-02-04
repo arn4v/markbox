@@ -6,7 +6,7 @@ import { getFirebase } from "./firebase";
 const { auth, firestore } = getFirebase();
 
 /**
- * @param {import("firebase").default.auth.UserCredential} [user]
+ * @param {Partial<import("firebase").default.auth.UserCredential>} [user]
  */
 export const createUserDoc = async ({ user }) => {
   if (!user) {
@@ -22,7 +22,7 @@ export const createUserDoc = async ({ user }) => {
         }, reject);
       });
     } catch (err) {
-      throw new Error("No logged in user", err.toString());
+      throw new Error(err);
     }
   }
   if (user) {
@@ -34,6 +34,8 @@ export const createUserDoc = async ({ user }) => {
           uid: user.uid,
           settings: { theme: "dark" },
           bookmarks: {},
+          tags: {},
+          folders: {},
         });
       }
     });
@@ -64,6 +66,15 @@ export default class StoreHelper {
 
   /**
    * @param {Schema} schema
+   * @param {Bookmark | Tag} data
+   */
+  update(schema, data) {
+    this.__tasks__.push({ type: "update", data, schema });
+    return this;
+  }
+
+  /**
+   * @param {Schema} schema
    * @param {string} id
    */
   delete(schema, id) {
@@ -82,7 +93,7 @@ export default class StoreHelper {
     }
   }
 
-  /** @returns {Promise.<firebase.firestore.DocumentData> | Promise.<void>} */
+  /** @returns {Promise.<firebase.firestore.DocumentData>} */
   async run() {
     if (!this.__uid__) {
       throw new Error("UID not provided");
@@ -92,7 +103,7 @@ export default class StoreHelper {
           acc[cur.schema] = {
             ...acc[cur.schema],
             [cur.data.id]:
-              cur.type === "add"
+              cur.type === ("add" || "update")
                 ? cur.data
                 : firebase.firestore.FieldValue.delete(),
           };
