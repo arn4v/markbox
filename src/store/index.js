@@ -2,21 +2,22 @@ import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
 
 export const actions = {
+  ADD_HIDE: "add/hide",
+  ADD_SHOW: "add/show",
   AUTHENTICATE: "authenticate",
-  USER_UPDATE: "user/update",
-  LOGOUT: "logout",
-  TAB_UPDATE: "tab/update",
   BOOKMARKS_ADD: "bookmarks/add",
   BOOKMARKS_DELETE: "bookmarks/delete",
   BOOKMARKS_UPDATE: "bookmarks/update",
-  EDIT_SHOW: "edit/show",
   EDIT_HIDE: "edit/hide",
-  ADD_SHOW: "add/show",
-  ADD_HIDE: "add/hide",
-  USERDOC_UPDATE: "userdoc/update",
-  FILTER_SHOW: "filter/show",
+  EDIT_SHOW: "edit/show",
   FILTER_HIDE: "filter/hide",
+  FILTER_SHOW: "filter/show",
+  LOGOUT: "logout",
+  SEARCH_UPDATE: "search/update",
   SETTINGS_TOGGLE: "settings/toggle",
+  TAB_UPDATE: "tab/update",
+  USERDOC_UPDATE: "userdoc/update",
+  USER_UPDATE: "user/update",
 };
 
 const initialState = {
@@ -67,6 +68,10 @@ function rootReducer(state = initialState, action) {
     }
     case actions.SETTINGS_TOGGLE: {
       state = { ...state, settings: { show: !state.settings.show } };
+      break;
+    }
+    case actions.SEARCH_UPDATE: {
+      state = Object.assign({}, state, { search: action.payload });
       break;
     }
     default:

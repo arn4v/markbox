@@ -14,18 +14,14 @@ export function EditSheet() {
     tags: {},
     toRead: false,
     newTag: "",
-    newTagError: undefined,
+    newTags: {},
+    newTagError: "",
     showDelete: false,
     showError: false,
   });
-  const [newTag, setNewTag] = React.useState("");
-  const [newTagError, setNewTagError] = React.useState(undefined);
   const [showDelete, setShowDelete] = React.useState(false);
-  const [showError, setShowError] = React.useState(false);
   const dispatch = useDispatch();
   const hideModal = () => dispatch({ type: actions.EDIT_HIDE });
-  const deleteTag = () => {};
-  const addTag = () => {};
   const showDeleteModal = () => setShowDelete(true);
   const hideDeleteModal = () => setShowDelete(false);
 
@@ -34,6 +30,24 @@ export function EditSheet() {
       setState((s) => ({ ...s, ...data }));
     }
   }, [data]);
+
+  React.useState(() => {
+    if (state.newTag.length === 0) setState((s) => ({ ...s, newTagError: "" }));
+    if (
+      Object.values(state.tags)
+        .map((i) => i.title)
+        .includes(state.newTag)
+    )
+      setState((s) => ({
+        ...s,
+        newTagError: "A tag by this name already exists",
+      }));
+    return false;
+  }, [state.newTag]);
+
+  const onChange = (e) => setState((s) => ({ ...s, newTag: e.target.value }));
+  const addTag = (e) => setState((s) => ({ tags: { ...s.tags } }));
+  const deleteTag = () => {};
 
   return (
     <>
@@ -179,16 +193,18 @@ export function EditSheet() {
                           "flex items-center justify-between overflow-hidden bg-white rounded-md focus:ring focus:ring-emerald-400",
                           {
                             "ring ring-red-500":
-                              newTag.length > 0 &&
+                              state.newTag.length > 0 &&
                               this.newTagError !== undefined,
                             "ring ring-green-500":
-                              newTag.length > 0 && !this.newTagError,
+                              state.newTag.length > 0 && !state.newTagError,
                           },
                         )}>
                         <input
                           id="tags"
                           type="text"
                           className="border-0 focus:ring-0"
+                          value={state.newTag}
+                          onChange={onChange}
                           maxLength="15"
                         />
                         <button
@@ -199,19 +215,19 @@ export function EditSheet() {
                             ],
 
                             {
-                              "text-gray-800": newTag.length > 0,
-                              "text-gray-500": newTag.length === 0,
+                              "text-gray-800": state.newTag.length > 0,
+                              "text-gray-500": state.newTag.length === 0,
                             },
                           )}
                           onClick={addTag}
-                          disabled={newTagError}>
+                          disabled={state.newTagError}>
                           Add tag
                         </button>
                       </div>
                     )}
-                    {showError && (
+                    {state.showError && (
                       <div className="flex bg-red-500 px-2 py-0.5 text-white text-sm font-medium rounded-md items-center justify-start mt-2">
-                        {newTagError}
+                        {state.newTagError}
                       </div>
                     )}
                   </div>

@@ -2,6 +2,8 @@ import * as React from "react";
 import { TagBadge } from "~/components/tag-badge";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "~/store";
+import PropTypes from "prop-types";
+import format from "date-fns/format";
 
 /**
  * @param {Object} props
@@ -19,7 +21,9 @@ export function BookmarkCard(props) {
     <>
       <div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
         <div className="flex flex-col items-start justify-center w-5/6 gap-1">
-          <span className="text-xs text-white">{data?.created}</span>
+          <span className="text-xs text-white">
+            {format(data?.created, "do MMMM, yyyy")}
+          </span>
           <div className="text-sm font-medium w-5/6 break-words text-white">
             {data?.title}
           </div>
@@ -96,3 +100,7 @@ export function BookmarkCard(props) {
     </>
   );
 }
+
+BookmarkCard.propTypes = {
+  id: PropTypes.string.isRequired,
+};

@@ -9,8 +9,8 @@ export async function BOOKMARKS_FETCH(dispatch, getState) {
   let data = await store.run();
   data.bookmarks = Object.entries(data.bookmarks).reduce(
     (acc, [key, value]) => {
-      value.created = value.created.toDate().toDateString();
-      value.updated = value.updated.toDate().toDateString();
+      value.created = value.created.toDate();
+      value.updated = value.updated.toDate();
       acc[key] = value;
       return acc;
     },

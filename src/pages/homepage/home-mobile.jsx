@@ -14,18 +14,12 @@ import CardList from "~/components/mobile/card-list";
  * @exports
  */
 export function HomeMobile() {
-  const { add, edit, filter } = useSelector((s) => ({
-    add: s.add,
-    filter: s.filter,
-    edit: s.edit,
-  }));
-
   return (
     <>
       <AnimatePresence>
         <AddSheet />
         <FilterSheet />
-        <EditSheet id={edit.id} />
+        <EditSheet />
       </AnimatePresence>
       <div className="flex flex-col w-screen h-screen overflow-x-hidden lg:hidden bg-blueGray-800">
         <AddBookmarkButton />

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import PropTypes from "prop-types";
 
 /**
  * @param {Object} props
@@ -20,3 +21,13 @@ export function TagBadge({ className, title, children }) {
     </>
   );
 }
+
+TagBadge.propTypes = {
+  className: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.element.isRequired,
+};
+
+TagBadge.defaultProps = {
+  className: "",
+};

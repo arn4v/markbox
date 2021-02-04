@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import { useDispatch } from "react-redux";
 import { BOOKMARKS_ADD } from "~/store/async";
 import { actions } from "~/store";
+import PropTypes from "prop-types";
 
 /**
  * @param {Object} props
@@ -192,3 +193,7 @@ export function AddForm({ className }) {
     </>
   );
 }
+
+AddForm.propTypes = {
+  className: PropTypes.string,
+};

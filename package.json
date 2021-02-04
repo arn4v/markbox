@@ -8,6 +8,7 @@
     "@testing-library/react": "^11.2.4",
     "@testing-library/user-event": "^12.6.3",
     "clsx": "^1.1.1",
+    "date-fns": "^2.16.1",
     "firebase": "^8.2.5",
     "framer-motion": "^3.3.0-beta.22",
     "prop-types": "^15.7.2",
@@ -49,9 +50,9 @@
     "@craco/craco": "^6.1.0",
     "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/postcss7-compat": "^2.0.2",
-    "autoprefixer": "^10.2.4",
+    "autoprefixer": "^9.8.6",
     "craco-alias": "^2.1.1",
-    "postcss": "^8.2.4",
+    "postcss": "^7.0.35",
     "prettier": "^2.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
   }
