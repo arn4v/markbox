@@ -1,7 +1,5 @@
 import * as React from "react";
 import { Logo } from "~/components/logo";
-import { HiPlus } from "react-icons/hi";
-import { useSelector } from "react-redux";
 import { FoldersContainer } from "./folders-container";
 import { ProfileDropdown } from "./profile-dropdown";
 

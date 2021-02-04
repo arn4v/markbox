@@ -28,7 +28,9 @@ export function FoldersContainer() {
           {Object.values(folders).map((item) => {
             return <></>;
           })} */}
-        {show && <AddFolder />}
+        <AnimatePresence exitBeforeEnter>
+          {show && <AddFolder />}
+        </AnimatePresence>
       </div>
     </>
   );

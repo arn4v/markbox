@@ -13,6 +13,14 @@
  */
 
 /**
+ * @typedef {Object} Folder
+ * @property {string} id
+ * @property {string} title
+ * @property {Timestamp} created
+ * @property {Timestamp} updated
+ */
+
+/**
  * @typedef {("bookmarks" | "tags")} Schema
  */
 
@@ -32,4 +40,6 @@
  * @property {string} id
  * @property {string} title
  * @property {string} color
+ * @property {Timestamp} created
+ * @property {Timestamp} updated
  */
