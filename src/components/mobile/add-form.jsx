@@ -4,7 +4,7 @@ import { TagBadge } from "../tag-badge";
 import { randomColor } from "~/lib/utils";
 import { v4 as uuid } from "uuid";
 import { useDispatch } from "react-redux";
-import { BOOKMARKS_ADD } from "~/store/async";
+import { ADD } from "~/store/async";
 import { actions } from "~/store";
 import PropTypes from "prop-types";
 
@@ -33,7 +33,7 @@ export function AddForm({ className }) {
       created: new Date(),
       updated: new Date(),
     };
-    dispatch(BOOKMARKS_ADD(bookmark));
+    dispatch(ADD("bookmarks", bookmark));
     dispatch({ type: actions.ADD_HIDE });
   };
   const deleteTag = (id) => () =>

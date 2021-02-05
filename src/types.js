@@ -8,8 +8,8 @@
  * @property {string} title
  * @property {string} url
  * @property {Object} tags
- * @property {Timestamp} created
- * @property {Timestamp} updated
+ * @property {Date | Timestamp} created
+ * @property {Date | Timestamp} updated
  */
 
 /**
@@ -21,7 +21,7 @@
  */
 
 /**
- * @typedef {("bookmarks" | "tags")} Schema
+ * @typedef {("bookmarks" | "folders" | "tags")} Schema
  */
 
 /**

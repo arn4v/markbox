@@ -19,19 +19,47 @@ export async function BOOKMARKS_FETCH(dispatch, getState) {
   dispatch({ type: actions.BOOKMARKS_UPDATE, payload: data.bookmarks });
 }
 
-/** @param {Partial<Bookmark> & { id: string }} bookmark */
-export function BOOKMARKS_UPDATE(bookmark) {
-  return async (dispatch, getState) => {};
-}
-
-/** @param {Bookmark} bookmark */
-export function BOOKMARKS_ADD(bookmark) {
-  bookmark.created = firebase.firestore.Timestamp.fromDate(bookmark.created);
-  bookmark.updated = firebase.firestore.Timestamp.fromDate(bookmark.updated);
+/**
+ *
+ * @param {Schema} type
+ * @param {Bookmark | Tag | Folder} data
+ * */
+export function ADD(type, data) {
+  data.created = firebase.firestore.Timestamp.fromDate(data.created);
+  data.updated = firebase.firestore.Timestamp.fromDate(data.updated);
   return async (dispatch, getState) => {
     const uid = getState().user.uid;
     const store = new StoreHelper(uid, true);
-    await store.add("bookmarks", bookmark).run();
-    dispatch(BOOKMARKS_FETCH);
+    await store.add(type, data).run();
+  };
+}
+
+/**
+ *
+ * @param {Schema} type
+ * @param {Bookmark | Tag | Folder} data
+ * */
+export function UPDATE(type, data) {
+  data.created = firebase.firestore.Timestamp.fromDate(data.created);
+  data.updated = firebase.firestore.Timestamp.fromDate(data.updated);
+  return async (dispatch, getState) => {
+    const uid = getState().user.uid;
+    const store = new StoreHelper(uid, true);
+    await store.add(type, data).run();
+  };
+}
+
+/**
+ *
+ * @param {Schema} type
+ * @param {Bookmark | Tag | Folder} data
+ * */
+export function DELETE(type, data) {
+  data.created = firebase.firestore.Timestamp.fromDate(data.created);
+  data.updated = firebase.firestore.Timestamp.fromDate(data.updated);
+  return async (dispatch, getState) => {
+    const uid = getState().user.uid;
+    const store = new StoreHelper(uid, true);
+    await store.add(type, data).run();
   };
 }
