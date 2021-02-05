@@ -10,8 +10,6 @@ import { AddFolder } from "./add-folder";
 export function FoldersContainer() {
   const [show, setShow] = React.useState(false);
   const folders = useSelector((s) => s.folders);
-  const { auth } = getFirebase();
-  const history = useHistory();
 
   return (
     <>
@@ -20,7 +18,7 @@ export function FoldersContainer() {
           <span className="">Folders</span>
           <button
             onClick={() => setShow(!show)}
-            className="bg-blueGray-700 px-2 text-sm uppercase p-0.5 hover:bg-blueGray-600 rounded-full transition duration-150 ease-in-out focus:outline-none dark:text-white">
+            className="bg-blueGray-700 text-sm uppercase px-2 py-1 hover:bg-blueGray-600 rounded-full transition duration-150 ease-in-out focus:outline-none dark:text-white">
             {show ? "Cancel" : "Edit"}
           </button>
         </div>

@@ -4,6 +4,8 @@ import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useOnClickOutside } from "~/hooks/onclick-outside";
 import { actions } from "~/store";
+import { v4 as uuid } from "uuid";
+import { ADD } from "~/store/async";
 
 export function AddFolder() {
   const [newFolder, setNewFolder] = React.useState("");
@@ -18,6 +20,13 @@ export function AddFolder() {
   };
 
   const addFolder = () => {
+    /** @type {Folder} */
+    let data;
+    data.id = uuid();
+    data.title = newFolder;
+    data.created = new Date();
+    data.updated = new Date();
+    dispatch(ADD("folders", data));
     dispatch({ type: actions.BACKDROP_HIDE, payload: () => setAdd(false) });
     setAdd(false);
   };
@@ -33,25 +42,21 @@ export function AddFolder() {
   return (
     <>
       <>
-        <div ref={ref} className={clsx("relative", add && "z-30")}>
+        <div
+          ref={ref}
+          className={clsx("relative overflow-hidden h-auto", add && "z-30")}>
           <motion.button
-            initial={{ height: 0 }}
-            animate={{ height: "auto" }}
-            exit={{ height: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ duration: 0.1, ease: "easeInOut" }}
             onClick={showAdd}
             className={clsx([
               "w-full items-center justify-center  flex px-2 py-1.5 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg focus:outline-none",
               { "z-30": add, "hover:bg-blueGray-600": !add },
             ])}
             disabled={add}>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.1, ease: "easeInOut" }}>
-              Add folder
-            </motion.span>
+            Add folder
           </motion.button>
           <AnimatePresence>
             {add && (
