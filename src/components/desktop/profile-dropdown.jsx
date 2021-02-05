@@ -1,11 +1,11 @@
-import { useHistory } from "react-router-dom";
+import { useRouter } from "next/router";
 import { getFirebase } from "~/lib/firebase";
 
 export function ProfileDropdown() {
-  const history = useHistory();
+  const router = useRouter();
   const { auth } = getFirebase();
   const logout = () => {
-    auth.signOut().then(() => history.push("/login"));
+    auth.signOut().then(() => router.push("/login"));
   };
 
   return (

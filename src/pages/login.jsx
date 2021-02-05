@@ -1,19 +1,19 @@
 import * as React from "react";
 import { createUserDoc } from "~/lib/db";
 import clsx from "clsx";
-import { useHistory } from "react-router-dom";
+import { useRouter } from "next/router";
 import { getFirebase } from "~/lib/firebase";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
 
-export function LoginPage() {
+export default function LoginPage() {
   const [state, setState] = React.useState({
     email: "",
     password: "",
     error: { show: false, message: "" },
   });
   const dispatch = useDispatch();
-  const history = useHistory();
+  const router = useRouter();
   const { auth } = getFirebase();
   const login = (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export function LoginPage() {
         if (user) {
           createUserDoc({ user });
           dispatch({ type: actions.AUTHENTICATE, payload: { user } });
-          history.push("/");
+          router.push("/");
         }
       })
       .catch((err) => {
@@ -44,11 +44,11 @@ export function LoginPage() {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
 
   return (
-    <div className="items-center flex justify-center h-screen w-screen overflow-hidden bg-blueGray-800">
-      <div className="grid w-4/5 grid-flow-row gap-6 lg:w-1/5">
+    <div className="flex items-center justify-center w-screen h-screen overflow-hidden bg-blueGray-800">
+      <div className="w-4/5 grid grid-flow-row gap-6 lg:w-1/5">
         <button
           className="flex items-center gap-2 px-1 py-0.5 rounded-md focus:outline-none font-medium text-white transition duration-150 ease-out justify-self-start hover:bg-blueGray-700"
-          onClick={() => history.push("/")}>
+          onClick={() => router.push("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -101,7 +101,7 @@ export function LoginPage() {
           <div className="flex items-center justify-between p-3 text-white bg-red-500 rounded-lg">
             <div className="w-full text-sm">{state.error.message}</div>
             <button
-              className="p-1 transition duration-150 ease-in-out rounded-full hover:bg-red-400 focus:outline-none"
+              className="p-1 rounded-full transition duration-150 ease-in-out hover:bg-red-400 focus:outline-none"
               onClick={reset}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

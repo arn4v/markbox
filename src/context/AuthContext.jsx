@@ -1,14 +1,8 @@
 import * as React from "react";
 import { getFirebase } from "~/lib/firebase";
-import { useHistory, useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
-
-const ctx = React.createContext({
-  loading: true,
-  authenticated: false,
-  user: null,
-});
 
 const authRoutes = ["/", "/settings"];
 export function AuthProvider({ children }) {
@@ -18,8 +12,7 @@ export function AuthProvider({ children }) {
     user: null,
   });
   const { auth } = getFirebase();
-  const history = useHistory();
-  const location = useLocation();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -33,22 +26,13 @@ export function AuthProvider({ children }) {
         dispatch({ type: actions.AUTHENTICATE, payload: { user } });
       } else {
         setState((s) => ({ ...s, loading: false, authenticated: false }));
-        if (authRoutes.includes(location.pathname)) history.push("/login");
+        if (authRoutes.includes(location.pathname)) router.push("/login");
       }
     });
     return () => unsubscribe();
-  }, [auth, dispatch, history, location.pathname]);
+  }, [auth, dispatch, router, router.pathname]);
 
   if (state.loading) return <div className=""></div>;
 
-  return (
-    <>
-      <ctx.Provider value={state}>{children}</ctx.Provider>
-    </>
-  );
+  return <>{children}</>;
 }
-const useAuth = () => {
-  const context = React.useContext(ctx);
-  if (!ctx) throw new Error("Use useAuth within the AuthProvider");
-  return context;
-};
