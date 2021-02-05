@@ -44,17 +44,17 @@ export default function LoginPage() {
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen overflow-hidden bg-blueGray-800">
+    <div className="flex items-center justify-center w-screen h-screen overflow-hidden dark:bg-blueGray-800">
       <div className="w-4/5 grid grid-flow-row gap-6 lg:w-1/5">
         <button
-          className="flex items-center gap-2 px-1 py-0.5 rounded-md focus:outline-none font-medium text-white transition duration-150 ease-out justify-self-start hover:bg-blueGray-700"
+          className="flex items-center gap-2 px-1 py-0.5 rounded-md focus:outline-none font-medium dark:text-white transition duration-150 ease-out justify-self-start hover:bg-blueGray-700"
           onClick={() => router.push("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            className="w-4 h-4 text-white stroke-2">
+            className="w-4 h-4 stroke-2">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

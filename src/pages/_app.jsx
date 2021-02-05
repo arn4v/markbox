@@ -1,6 +1,9 @@
 import { Provider } from "react-redux";
 import { store } from "~/store";
-import { AuthProvider } from "~/context/AuthContext";
+import { AuthMiddleware } from "~/middleware/auth";
+import "~/styles/tailwind.css";
+import "~/styles/index.css";
+import "~/styles/tailwind-utils.css";
 
 /** @param {import("next/app").AppProps} props */
 export default function App(props) {
@@ -8,9 +11,9 @@ export default function App(props) {
   return (
     <>
       <Provider store={store}>
-        <AuthProvider>
+        <AuthMiddleware>
           <Component {...pageProps} />
-        </AuthProvider>
+        </AuthMiddleware>
       </Provider>
     </>
   );

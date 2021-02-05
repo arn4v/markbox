@@ -4,8 +4,9 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
 
-const authRoutes = ["/", "/settings"];
-export function AuthProvider({ children }) {
+const authRoutes = ["/dashboard", "/settings"];
+
+export function AuthMiddleware({ children }) {
   const [state, setState] = React.useState({
     loading: true,
     authenticated: false,
