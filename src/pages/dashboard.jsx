@@ -1,13 +1,10 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BOOKMARKS_FETCH } from "~/store/async";
-import { HomeDesktop } from "./home-desktop";
-import { HomeMobile } from "./home-mobile";
+import { HomeDesktop } from "~/components/partials/dashboard/desktop";
+import { HomeMobile } from "~/components/partials/dashboard/mobile";
 
-/**
- * @exports
- */
-export function HomePage() {
+export default function HomePage() {
   const { user } = useSelector((s) => ({
     user: s.user,
   }));
