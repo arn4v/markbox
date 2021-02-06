@@ -20,12 +20,12 @@ export function AddBookmarkButton() {
 
   const cancel = () => {
     setState(() => initialState);
-    dispatch({ type: actions.BACKDROP_HIDE, payload: () => setAdd(false) });
+    dispatch({ type: actions.BACKDROP_HIDE });
     setAdd(false);
   };
 
   const showAdd = () => {
-    dispatch({ type: actions.BACKDROP_SHOW });
+    dispatch({ type: actions.BACKDROP_SHOW, payload: () => setAdd(false) });
     setAdd(true);
   };
 

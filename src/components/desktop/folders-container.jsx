@@ -30,7 +30,11 @@ export function FoldersContainer() {
         <AnimatePresence>
           {show && <AddFolder />}
           {/* <Folder id="all" /> */}
-          <div className={clsx(show && "border-b border-gray-500 pb-4")}>
+          <div
+            className={clsx(
+              "flex flex-col gap-4",
+              show && "border-b border-gray-500 pb-4",
+            )}>
             {Object.values(folders).map((item) => {
               return <>{<Folder key={item.id} id={item.id} edit={show} />}</>;
             })}

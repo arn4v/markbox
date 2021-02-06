@@ -2,30 +2,31 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useOnClickOutside } from "~/hooks/onclick-outside";
-import { HiTrash, HiPencil, HiCheck } from "react-icons/hi";
+import { HiTrash, HiPencil } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
-import { UPDATE } from "~/store/async";
+import { DELETE, UPDATE } from "~/store/async";
+import { Popup } from "./popup";
+import { actions } from "~/store";
+import StoreHelper from "~/lib/db";
 
 /**
  * @param {Object} props
  * @param {string} props.id
- * @param {bool} props.edit
+ * @param {boolean} props.edit
  */
 export function Folder(props) {
   const { id, edit: globalEdit } = props;
   const [title, setTitle] = React.useState("");
-  const [edit, setEdit] = React.useState(false);
+  const [showEdit, setEdit] = React.useState(false);
+  const [showDelete, setShowDelete] = React.useState(false);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.folders[id]);
   const ref = React.useRef(null);
+  const deleteRef = React.useRef(null);
 
   /** @param {React.ChangeEvent<HTMLInputElement>} e */
   const onChange = (e) => setTitle(e.target.value);
-  const cancelEdit = () => {
-    setEdit(false);
-    setTitle(data?.title);
-  };
   const update = () => {
     let _data = data;
     _data.title = title;
@@ -33,17 +34,66 @@ export function Folder(props) {
     setEdit(false);
   };
 
-  React.useEffect(() => {
+  const enterEditMode = () => {
+    if (showDelete) setShowDelete(false);
+    setEdit(true);
+    dispatch({ type: actions.BACKDROP_SHOW, payload: () => setEdit(false) });
+  };
+
+  const exitEditMode = () => {
+    setEdit(false);
     setTitle(data?.title);
+    if (!showDelete) dispatch({ type: actions.BACKDROP_HIDE });
+  };
+
+  const enterDeleteMode = () => {
+    if (showEdit) {
+      setEdit(false);
+      // dispatch({
+      //   type: actions.BACKDROP_UPDATE_ACTION,
+      //   action: () => setShowDelete(false),
+      // });
+    } else {
+    }
+    dispatch({
+      type: actions.BACKDROP_SHOW,
+      payload: () => setShowDelete(false),
+    });
+
+    setShowDelete(true);
+  };
+
+  const exitDeleteMode = () => {
+    setShowDelete(false);
+    if (!showEdit) dispatch({ type: actions.BACKDROP_HIDE });
+  };
+
+  const deleteFolder = () => {
+    exitDeleteMode();
+    dispatch(DELETE("folders", data.id));
+  };
+
+  const updateFolder = (e) => {
+    e.preventDefault();
+    let _data = data;
+    _data.title = title;
+    exitDeleteMode();
+    dispatch(UPDATE("folders", _data));
+  };
+
+  React.useEffect(() => {
+    if (data) setTitle(data?.title);
+    console.log(data, title);
   }, [data]);
 
   useOnClickOutside(ref, () => {
-    if (edit) cancelEdit();
+    if (showEdit) exitEditMode();
+    if (showDelete) exitDeleteMode();
   });
 
   return (
     <>
-      <div ref={ref}>
+      <div ref={ref} className="relative">
         <div className="flex items-center justify-between gap-2">
           {globalEdit && (
             <svg
@@ -65,24 +115,11 @@ export function Folder(props) {
               [
                 "w-full items-center justify-between dark:text-white lg:h-10 px-2 flex transition duration-150 ease-in-out bg-blueGray-700 rounded-lg focus:outline-none",
               ],
+              (showEdit || showDelete) && "z-30",
               !globalEdit && "dark:hover:bg-blueGray-600",
             )}
             disabled={globalEdit}>
-            {!edit ? (
-              <span>{data?.title}</span>
-            ) : (
-              <motion.input
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ ease: "easeInOut", duration: 0.2 }}
-                type="text"
-                value={title}
-                onChange={onChange}
-                className="h-2/3 w-2/3 rounded border-none focus:ring-0 dark:text-black"
-                autoFocus
-              />
-            )}
+            <span>{data?.title}</span>
             <AnimatePresence>
               {globalEdit && (
                 <motion.span
@@ -93,29 +130,61 @@ export function Folder(props) {
                   className={clsx([
                     "items-center flex justify-center gap-1.5",
                   ])}>
-                  {!edit ? (
-                    <>
-                      <button
-                        onClick={() => setEdit(true)}
-                        className="rounded-full p-1 dark:hover:bg-blueGray-600 duration-150 ease-in-out">
-                        <HiPencil className="h-4 w-4" />
-                      </button>
-                      <button className="rounded-full p-1 dark:hover:bg-blueGray-600 transition duration-150 ease-in-out">
-                        <HiTrash className="h-4 w-4" />
-                      </button>
-                    </>
-                  ) : (
+                  <>
                     <button
-                      onClick={update}
-                      className="rounded-full p-1 dark:hover:bg-blueGray-500 dark:bg-blueGray-600 duration-150 ease-in-out">
-                      <HiCheck />
+                      onClick={enterEditMode}
+                      className="rounded-full p-1 dark:hover:bg-blueGray-600 duration-150 ease-in-out focus:outline-none"
+                      disabled={showEdit}>
+                      <HiPencil className="h-4 w-4" />
                     </button>
-                  )}
+                    <button
+                      onClick={enterDeleteMode}
+                      className="rounded-full p-1 dark:hover:bg-blueGray-600 transition duration-150 ease-in-out focus:outline-none"
+                      disabled={showDelete}>
+                      <HiTrash className="h-4 w-4" />
+                    </button>
+                  </>
                 </motion.span>
               )}
             </AnimatePresence>
           </button>
         </div>
+        <Popup show={showEdit}>
+          <form onSubmit={updateFolder} className="flex flex-col gap-2">
+            <input
+              name="title"
+              type="text"
+              value={title}
+              onChange={onChange}
+              className="rounded-lg dark:text-black px-2 py-1.5"
+            />
+            <div className="flex justify-between gap-12">
+              <button
+                type="button"
+                onClick={exitEditMode}
+                className="w-full items-center justify-center hover:bg-blueGray-500 flex px-1.5 py-1 transition duration-150 ease-in-out bg-blueGray-600 rounded-lg focus:outline-none">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="w-full items-center justify-center hover:bg-blueGray-500 flex px-1.5 py-1 transition duration-150 ease-in-out bg-blueGray-600 rounded-lg focus:outline-none">
+                Update
+              </button>
+            </div>
+          </form>
+        </Popup>
+        <Popup show={showDelete}>
+          <div className="flex items-center gap-4 justify-between">
+            <button className="w-full items-center justify-center hover:bg-blueGray-500 flex px-1.5 py-1 transition duration-150 ease-in-out bg-blueGray-600 rounded-lg focus:outline-none">
+              Cancel
+            </button>
+            <button
+              onClick={deleteFolder}
+              className="w-full items-center justify-center hover:bg-blueGray-500 flex px-1.5 py-1 transition duration-150 ease-in-out bg-blueGray-600 rounded-lg focus:outline-none">
+              Delete
+            </button>
+          </div>
+        </Popup>
       </div>
     </>
   );
