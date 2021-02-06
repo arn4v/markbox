@@ -42,6 +42,19 @@ export const createUserDoc = async ({ user }) => {
   }
 };
 
+function timestampToDate(data) {
+  data = ["bookmarks", "folders", "tags"].reduce((acc, cur) => {
+    acc[cur] = Object.values(data[cur]).reduce((acc, cur) => {
+      cur.created = cur.created.toDate();
+      cur.updated = cur.updated.toDate();
+      acc[cur.id] = cur;
+      return acc;
+    }, {});
+    return acc;
+  }, {});
+  return data;
+}
+
 export default class StoreHelper {
   /**
    * @param {string} [uid]
@@ -57,7 +70,7 @@ export default class StoreHelper {
 
   /**
    * @param {Schema} schema
-   * @param {Bookmark | Tag} data
+   * @param {Bookmark | Folder | Tag} data
    */
   add(schema, data) {
     this.__tasks__.push({ type: "add", data, schema });
@@ -66,7 +79,7 @@ export default class StoreHelper {
 
   /**
    * @param {Schema} schema
-   * @param {Bookmark | Tag} data
+   * @param {Bookmark | Folder | Tag} data
    */
   update(schema, data) {
     this.__tasks__.push({ type: "update", data, schema });
@@ -88,7 +101,6 @@ export default class StoreHelper {
       throw new Error("UID not provided");
     } else {
       const data = (await this.__ref__.get()).data();
-      console.log(data);
       return data;
     }
   }
@@ -111,13 +123,17 @@ export default class StoreHelper {
         }, {});
         try {
           await this.__ref__.set(toMerge, { merge: true });
-          if (this.__getDoc__) return await this.fetch();
+          if (this.__getDoc__) {
+            return timestampToDate(await this.fetch());
+          }
         } catch (err) {
           throw new Error(err);
         }
       } else {
         try {
-          if (this.__getDoc__) return await this.fetch();
+          if (this.__getDoc__) {
+            return timestampToDate(await this.fetch());
+          }
         } catch (err) {
           throw new Error(err);
         }

@@ -24,7 +24,7 @@ export default function LoginPage() {
         if (user) {
           createUserDoc({ user });
           dispatch({ type: actions.AUTHENTICATE, payload: { user } });
-          router.push("/");
+          router.push("/dashboard");
         }
       })
       .catch((err) => {

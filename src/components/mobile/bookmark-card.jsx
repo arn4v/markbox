@@ -11,7 +11,7 @@ import format from "date-fns/format";
  * @exports
  */
 export function BookmarkCard(props) {
-  const data = useSelector((state) => state.bookmarks.data[props.id]);
+  const data = useSelector((state) => state.bookmarks[props.id]);
   const dispatch = useDispatch();
   const showEditSheet = () => {
     dispatch({ type: actions.EDIT_SHOW, payload: data });
