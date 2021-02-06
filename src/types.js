@@ -3,24 +3,6 @@
  */
 
 /**
- * @typedef {Object} Bookmark
- * @property {string} id
- * @property {string} title
- * @property {string} url
- * @property {Object} tags
- * @property {Date | Timestamp} created
- * @property {Date | Timestamp} updated
- */
-
-/**
- * @typedef {Object} Folder
- * @property {string} id
- * @property {string} title
- * @property {Timestamp} created
- * @property {Timestamp} updated
- */
-
-/**
  * @typedef {("bookmarks" | "folders" | "tags")} Schema
  */
 
@@ -36,10 +18,28 @@
  */
 
 /**
+ * @typedef {Object} Bookmark
+ * @property {string} id
+ * @property {string} title
+ * @property {string} url
+ * @property {Object} tags
+ * @property {Date} created
+ * @property {Date} updated
+ */
+
+/**
+ * @typedef {Object} Folder
+ * @property {string} id
+ * @property {string} title
+ * @property {Date} created
+ * @property {Date} updated
+ */
+
+/**
  * @typedef {Object} Tag
  * @property {string} id
  * @property {string} title
  * @property {string} color
- * @property {Timestamp} created
- * @property {Timestamp} updated
+ * @property {Date} created
+ * @property {Date} updated
  */

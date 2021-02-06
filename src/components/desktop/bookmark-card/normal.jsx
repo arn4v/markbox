@@ -8,7 +8,7 @@ import { TagBadge } from "~/components/tag-badge";
  * @param {string} props.id
  */
 export default function Normal(props) {
-  const data = useSelector((state) => state.bookmarks.data[props.id]);
+  const data = useSelector((state) => state.bookmarks[props.id]);
   const dispatch = useDispatch();
   const edit = () => dispatch({ type: actions.EDIT_SHOW });
 

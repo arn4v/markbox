@@ -5,6 +5,8 @@ export const actions = {
   ADD_HIDE: "add/hide",
   ADD_SHOW: "add/show",
   AUTHENTICATE: "authenticate",
+  BACKDROP_HIDE: "backdrop/hide",
+  BACKDROP_SHOW: "backdrop/show",
   BOOKMARKS_ADD: "bookmarks/add",
   BOOKMARKS_DELETE: "bookmarks/delete",
   BOOKMARKS_UPDATE: "bookmarks/update",
@@ -12,29 +14,28 @@ export const actions = {
   EDIT_SHOW: "edit/show",
   FILTER_HIDE: "filter/hide",
   FILTER_SHOW: "filter/show",
+  FOLDERS_UPDATE: "folders/update",
   LOGOUT: "logout",
   SEARCH_UPDATE: "search/update",
   SETTINGS_TOGGLE: "settings/toggle",
   TAB_UPDATE: "tab/update",
+  TAGS_UPDATE: "tags/update",
   USERDOC_UPDATE: "userdoc/update",
   USER_UPDATE: "user/update",
-  BACKDROP_SHOW: "backdrop/show",
-  BACKDROP_HIDE: "backdrop/hide",
 };
 
 const initialState = {
   add: { show: false },
   authenticated: false,
   backdrop: { show: false, action: () => {} },
-  bookmarks: { loading: true, data: undefined },
-  folder: { add: { show: false } },
+  bookmarks: {},
   edit: { show: false, data: undefined },
   filter: { show: false },
+  folders: {},
+  search: "",
   settings: { show: false },
   tags: {},
-  user: null,
-  search: "",
-  userDoc: null,
+  user: {},
 };
 
 function rootReducer(state = initialState, action) {
@@ -76,19 +77,29 @@ function rootReducer(state = initialState, action) {
       break;
     }
     case actions.SEARCH_UPDATE: {
-      state = Object.assign({}, state, { search: action.payload });
+      state = { ...state, search: action.payload };
       break;
     }
     case actions.BACKDROP_SHOW: {
-      state = Object.assign({}, state, {
+      state = {
+        ...state,
         backdrop: { show: true, action: action.payload },
-      });
+      };
       break;
     }
     case actions.BACKDROP_HIDE: {
-      state = Object.assign({}, state, {
+      state = {
+        ...state,
         backdrop: { show: false, action: () => {} },
-      });
+      };
+      break;
+    }
+    case actions.TAGS_UPDATE: {
+      state = { ...state, tags: action.payload };
+      break;
+    }
+    case actions.FOLDERS_UPDATE: {
+      state = { ...state, folders: action.payload };
       break;
     }
     default:

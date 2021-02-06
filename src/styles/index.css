@@ -3,15 +3,15 @@
 }
 
 .input-label {
-  @apply text-white font-medium text-lg;
+  @apply text-lg font-medium dark:text-white;
 }
 
 .input {
-  @apply rounded-md focus:outline-none border-transparent focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400 px-2 py-2 transition duration-150 ease-in-out w-full;
+  @apply w-full px-2 py-2 border-transparent rounded-md focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400 transition duration-150 ease-in-out;
 }
 
 .input-sheet {
-  @apply w-full px-4 py-2 mt-1 transition duration-150 ease-out border-0 border-transparent rounded-md shadow-sm focus:outline-none focus:ring focus:ring-emerald-400;
+  @apply w-full px-4 py-2 mt-1 border-0 border-transparent transition duration-150 ease-out rounded-md shadow-sm focus:outline-none focus:ring focus:ring-emerald-400;
 }
 
 .input-transition {
@@ -27,7 +27,11 @@
 }
 
 .form-container {
-  @apply flex flex-col w-4/5 gap-4 mx-auto mt-2;
+  @apply flex flex-col w-4/5 mx-auto mt-2 gap-4;
+}
+
+.popper-container {
+  @apply relative pb-4 border-b border-gray-500 h-auto;
 }
 
 .badge {

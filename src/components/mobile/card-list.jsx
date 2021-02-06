@@ -3,13 +3,13 @@ import { useSelector } from "react-redux";
 import { BookmarkCard } from "./bookmark-card";
 
 const CardList = React.memo(() => {
-  const { loading, data } = useSelector((state) => state.bookmarks);
-
-  if (loading) return null;
+  const bookmarks = useSelector((state) => state.bookmarks);
 
   return (
     <>
-      {Object.values(data).map((item) => {
+      {Object.values(bookmarks).map((item) => {
+        console.log(item);
+        return null;
         return (
           <>
             <BookmarkCard key={item.id} id={item.id} />
