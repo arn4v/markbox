@@ -75,13 +75,13 @@ export function UPDATE(type, data) {
 /**
  *
  * @param {Schema} type
- * @param {Bookmark | Tag | Folder} data
+ * @param {string} data
  * */
-export function DELETE(type, data) {
+export function DELETE(type, id) {
   return async (dispatch, getState) => {
     const uid = getState().user.uid;
     const sh = new StoreHelper(uid, true);
-    sh.add(type, data);
+    sh.delete(type, id);
     const doc = await sh.run();
     dispatch({ type: UPDATE_ACTIONS[type], payload: doc[type] });
   };

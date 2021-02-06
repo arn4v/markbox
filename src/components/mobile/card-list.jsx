@@ -8,8 +8,6 @@ const CardList = React.memo(() => {
   return (
     <>
       {Object.values(bookmarks).map((item) => {
-        console.log(item);
-        return null;
         return (
           <>
             <BookmarkCard key={item.id} id={item.id} />

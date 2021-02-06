@@ -7,6 +7,7 @@ export const actions = {
   AUTHENTICATE: "authenticate",
   BACKDROP_HIDE: "backdrop/hide",
   BACKDROP_SHOW: "backdrop/show",
+  BACKDROP_UPDATE_ACTION: "backdrop/updateAction",
   BOOKMARKS_ADD: "bookmarks/add",
   BOOKMARKS_DELETE: "bookmarks/delete",
   BOOKMARKS_UPDATE: "bookmarks/update",
@@ -91,6 +92,13 @@ function rootReducer(state = initialState, action) {
       state = {
         ...state,
         backdrop: { show: false, action: () => {} },
+      };
+      break;
+    }
+    case actions.BACKDROP_UPDATE_ACTION: {
+      state = {
+        ...state,
+        backdrop: { ...state.backdrop, action: action.payload },
       };
       break;
     }
