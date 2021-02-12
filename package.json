@@ -9,15 +9,15 @@
     "format": "prettier --write ./src/**/*.{js,jsx,ts,tsx}"
   },
   "dependencies": {
-    "@fontsource/inter": "^4.1.1",
+    "@fontsource/inter": "^4.2.1",
     "@next/bundle-analyzer": "^10.0.6",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.6.3",
+    "@testing-library/user-event": "^12.7.0",
     "clsx": "^1.1.1",
-    "date-fns": "^2.16.1",
-    "firebase": "^8.2.6",
-    "firebase-admin": "^9.4.2",
+    "date-fns": "^2.17.0",
+    "firebase": "^8.2.7",
+    "firebase-admin": "^9.5.0",
     "framer-motion": "^3.3.0",
     "next": "^10.0.6",
     "next-offline": "^5.0.3",
@@ -25,7 +25,7 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-icons": "^4.1.0",
+    "react-icons": "^4.2.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
@@ -36,11 +36,11 @@
     "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^10.2.4",
     "craco-alias": "^2.1.1",
-    "husky": "^4.3.8",
-    "postcss": "^8.2.4",
+    "husky": "^5.0.9",
+    "postcss": "^8.2.6",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
-    "tailwindcss": "^2.0.2"
+    "tailwindcss": "^2.0.3"
   },
   "husky": {
     "hooks": {
