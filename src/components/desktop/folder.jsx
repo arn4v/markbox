@@ -83,7 +83,6 @@ export function Folder(props) {
 
   React.useEffect(() => {
     if (data) setTitle(data?.title);
-    console.log(data, title);
   }, [data]);
 
   useOnClickOutside(ref, () => {
