@@ -1,9 +1,10 @@
 import * as React from "react";
-import PropTypes from "prop-types";
+import { v4 as uuid } from "uuid";
 import { Popup } from "./popup";
 import { actions } from "~/store";
 import { useDispatch } from "react-redux";
 import { useOnClickOutside } from "~/hooks/onclick-outside";
+import { ADD } from "~/store/async";
 
 const initialState = {
   title: "",
@@ -24,6 +25,18 @@ export function AddBookmarkButton() {
     setAdd(false);
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(
+      ADD("bookmarks", {
+        id: uuid(),
+        ...state,
+        created: new Date(),
+        updated: new Date(),
+      }),
+    );
+  };
+
   const showAdd = () => {
     dispatch({ type: actions.BACKDROP_SHOW, payload: () => setAdd(false) });
     setAdd(true);
@@ -37,14 +50,14 @@ export function AddBookmarkButton() {
 
   return (
     <>
-      <div ref={ref} className="relative pb-4 border-b border-gray-500 h-auto">
+      <div ref={ref} className="relative h-auto pb-4 border-b border-gray-500">
         <button
           onClick={showAdd}
           className="px-2 py-1.5 w-full dark:text-white dark:bg-blueGray-700 dark:hover:bg-blueGray-600 rounded-lg transition duration-150 ease-in-out focus:outline-none">
           Create bookmark
         </button>
         <Popup className="" show={add}>
-          <form className="flex flex-col gap-3">
+          <form className="flex flex-col gap-3" onSubmit={onSubmit}>
             <input
               name="title"
               type="text"
@@ -69,9 +82,9 @@ export function AddBookmarkButton() {
                 Cancel
               </button>
               <button
-                // onClick={addFolder}
+                type="submit"
                 className="w-full items-center justify-center hover:bg-blueGray-500 flex px-1.5 py-1 transition duration-150 ease-in-out bg-blueGray-600 rounded-lg focus:outline-none">
-                Add folder
+                Add
               </button>
             </div>
           </form>

@@ -73,7 +73,11 @@ export default class StoreHelper {
    * @param {Bookmark | Folder | Tag} data
    */
   add(schema, data) {
-    this.__tasks__.push({ type: "add", data, schema });
+    this.__tasks__.push({
+      type: "add",
+      schema,
+      data: { ...data, created: new Date(), updated: new Date() },
+    });
     return this;
   }
 

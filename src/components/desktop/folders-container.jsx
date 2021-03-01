@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { AnimatePresence } from "framer-motion";
 import { AddFolder } from "./add-folder";
 import clsx from "clsx";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 export function FoldersContainer() {
   const [show, setShow] = React.useState(false);
@@ -30,15 +31,30 @@ export function FoldersContainer() {
         <AnimatePresence>
           {show && <AddFolder />}
           {/* <Folder id="all" /> */}
-          <div
-            className={clsx(
-              "flex flex-col gap-4",
-              show && "border-b border-gray-500 pb-4",
-            )}>
-            {Object.values(folders).map((item) => {
-              return <>{<Folder key={item.id} id={item.id} edit={show} />}</>;
-            })}
-          </div>
+          <Droppable droppableId="folders" type="FOLDER">
+            {(provided) => (
+              <div
+                className={clsx(
+                  "flex flex-col gap-4",
+                  show && "border-b border-gray-500 pb-4",
+                )}
+                {...provided.droppableProps}>
+                {Object.values(folders).map((item, index) => {
+                  return (
+                    <>
+                      <Folder
+                        key={item.id}
+                        id={item.id}
+                        edit={show}
+                        index={index}
+                      />
+                    </>
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         </AnimatePresence>
       </div>
     </>

@@ -23,16 +23,16 @@
  * @property {string} title
  * @property {string} url
  * @property {Object} tags
- * @property {Date} created
- * @property {Date} updated
+ * @property {Date} [created]
+ * @property {Date} [updated]
  */
 
 /**
  * @typedef {Object} Folder
  * @property {string} id
  * @property {string} title
- * @property {Date} created
- * @property {Date} updated
+ * @property {Date} [created]
+ * @property {Date} [updated]
  */
 
 /**
@@ -40,6 +40,6 @@
  * @property {string} id
  * @property {string} title
  * @property {string} color
- * @property {Date} created
- * @property {Date} updated
+ * @property {Date} [created]
+ * @property {Date} [updated]
  */

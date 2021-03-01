@@ -33,20 +33,20 @@ export function FETCH_UPDATE(schema) {
       const doc = await sh.run();
       if (schema === "all") {
         Object.entries(UPDATE_ACTIONS).forEach(([key, type]) => {
-          dispatch({ type, payload: doc[key] });
+          console.log(doc, key, type);
+          // dispatch({ type, payload: doc[key] });
         });
       } else {
-        dispatch({ type: UPDATE_ACTIONS[schema], payload: doc[schema] });
+        // dispatch({ type: UPDATE_ACTIONS[schema], payload: doc[schema] });
       }
     }
   };
 }
 
 /**
- *
  * @param {Schema} type
  * @param {Bookmark | Tag | Folder} data
- * */
+ */
 export function ADD(type, data) {
   return async (dispatch, getState) => {
     const uid = getState().user.uid;
@@ -58,10 +58,9 @@ export function ADD(type, data) {
 }
 
 /**
- *
  * @param {Schema} type
  * @param {Bookmark | Tag | Folder} data
- * */
+ */
 export function UPDATE(type, data) {
   return async (dispatch, getState) => {
     const uid = getState().user.uid;
@@ -73,10 +72,9 @@ export function UPDATE(type, data) {
 }
 
 /**
- *
  * @param {Schema} type
- * @param {string} data
- * */
+ * @param {string} id
+ */
 export function DELETE(type, id) {
   return async (dispatch, getState) => {
     const uid = getState().user.uid;

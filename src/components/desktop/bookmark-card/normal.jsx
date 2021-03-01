@@ -17,9 +17,9 @@ export default function Normal(props) {
       <div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
         <div className="flex flex-col items-start justify-center w-5/6 gap-1">
           <span className="text-xs text-white">
-            {format(data?.created, "do MMMM, yyyy")}
+            {/* {format(data?.created, "do MMMM, yyyy")} */}
           </span>
-          <div className="text-sm font-medium w-5/6 break-words text-white">
+          <div className="w-5/6 text-sm font-medium text-white break-words">
             {data?.title}
           </div>
           <a
