@@ -28,3 +28,4 @@ yarn-error.log*
 .eslintcache.next
 .next
 .eslintcache
+.husky

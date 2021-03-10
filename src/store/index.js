@@ -28,7 +28,7 @@ export const actions = {
 const initialState = {
   add: { show: false },
   authenticated: false,
-  backdrop: { show: false, action: () => {} },
+  backdrop: { show: false, action: () => undefined },
   bookmarks: {},
   edit: { show: false, data: undefined },
   filter: { show: false },
