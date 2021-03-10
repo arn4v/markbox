@@ -53,7 +53,6 @@ const Folder = (props) => {
       //   type: actions.BACKDROP_UPDATE_ACTION,
       //   action: () => setShowDelete(false),
       // });
-    } else {
     }
     dispatch({
       type: actions.BACKDROP_SHOW,

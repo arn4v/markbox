@@ -138,7 +138,7 @@ const EditSheet = () => {
                   onSubmit={(e) => e.preventDefault()}
                   className="form-container px-4 justify-between h-5/6">
                   <div>
-                    <label for="title" className="form-label">
+                    <label htmlFor="title" className="form-label">
                       Title
                     </label>
                     <input
@@ -150,7 +150,7 @@ const EditSheet = () => {
                     />
                   </div>
                   <div>
-                    <label for="url" className="form-label">
+                    <label htmlFor="url" className="form-label">
                       URL
                     </label>
                     <input
@@ -239,7 +239,7 @@ const EditSheet = () => {
                   </div>
                   <div className="flex items-center gap-4">
                     <label
-                      for="toRead"
+                      htmlFor="toRead"
                       className="text-sm font-medium text-white uppercase">
                       To read?
                     </label>
