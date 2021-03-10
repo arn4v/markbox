@@ -5,6 +5,10 @@ import BookmarkCard from "../BookmarkCard";
 const CardList = React.memo(() => {
   const bookmarks = useSelector((state) => state.bookmarks);
 
+  React.useEffect(() => {
+    console.log("bmks", bookmarks);
+  }, [bookmarks]);
+
   return (
     <>
       {Object.values(bookmarks).map((item) => {

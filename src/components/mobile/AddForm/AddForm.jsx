@@ -27,6 +27,7 @@ const AddForm = ({ className }) => {
     newTagError: undefined,
   });
   const dispatch = useDispatch();
+
   const onSubmit = (e) => {
     e.preventDefault();
     const bookmark = {
@@ -34,17 +35,17 @@ const AddForm = ({ className }) => {
       title: state.title,
       url: state.url,
       tags: state.tags,
-      created: new Date(),
-      updated: new Date(),
     };
     dispatch(ADD("bookmarks", bookmark));
     dispatch({ type: actions.ADD_HIDE });
   };
+
   const deleteTag = (id) => () =>
     setState((s) => {
       delete s.tags[id];
       return { ...s };
     });
+
   const addTag = () => {
     if (!state.newTagError) {
       const id = uuid();

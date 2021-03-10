@@ -42,7 +42,8 @@ const initialState = {
 function rootReducer(state = initialState, action) {
   switch (action.type) {
     case actions.AUTHENTICATE: {
-      state = { ...state, authenticated: true, user: action.payload.user };
+      console.log(action);
+      state = { ...state, authenticated: true, user: action.payload };
       break;
     }
     case actions.FILTER_SHOW: {
@@ -70,7 +71,7 @@ function rootReducer(state = initialState, action) {
       break;
     }
     case actions.BOOKMARKS_UPDATE: {
-      state = { ...state, bookmarks: { loading: false, data: action.payload } };
+      state = { ...state, bookmarks: action.payload };
       break;
     }
     case actions.SETTINGS_TOGGLE: {

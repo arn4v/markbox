@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { actions } from "~/store";
 import { TagBadge } from "~/components/tag-badge";
 import { AnimatePresence, motion } from "framer-motion";
+import { DELETE } from "~/store/async";
 
 const EditSheet = () => {
   const { show, data } = useSelector((state) => state.edit);
@@ -24,6 +25,11 @@ const EditSheet = () => {
   const hideModal = () => dispatch({ type: actions.EDIT_HIDE });
   const showDeleteModal = () => setShowDelete(true);
   const hideDeleteModal = () => setShowDelete(false);
+  const deleteBookmark = () => {
+    dispatch(DELETE("bookmarks", state.id));
+    hideDeleteModal();
+    hideModal();
+  };
 
   React.useEffect(() => {
     if (data) {
@@ -77,7 +83,7 @@ const EditSheet = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => {}}
+                          onClick={deleteBookmark}
                           className="bg-red-500 text-white px-3 py-1.5 rounded-lg">
                           Confirm
                         </button>

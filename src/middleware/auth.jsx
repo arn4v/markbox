@@ -7,11 +7,6 @@ import { actions } from "~/store";
 const authRoutes = ["/dashboard", "/settings"];
 
 export function AuthMiddleware({ children }) {
-  const [state, setState] = React.useState({
-    loading: true,
-    authenticated: false,
-    user: null,
-  });
   const { auth } = getFirebase();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -19,21 +14,13 @@ export function AuthMiddleware({ children }) {
   React.useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setState(() => ({
-          loading: false,
-          authenticated: true,
-          user,
-        }));
-        dispatch({ type: actions.AUTHENTICATE, payload: { user } });
+        dispatch({ type: actions.AUTHENTICATE, payload: user });
       } else {
-        setState((s) => ({ ...s, loading: false, authenticated: false }));
         if (authRoutes.includes(location.pathname)) router.push("/login");
       }
     });
     return () => unsubscribe();
   }, [auth, dispatch, router, router.pathname]);
-
-  if (state.loading) return <div className=""></div>;
 
   return <>{children}</>;
 }

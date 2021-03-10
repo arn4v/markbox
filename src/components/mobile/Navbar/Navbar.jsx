@@ -18,7 +18,7 @@ const Navbar = () => {
           <div className="flex items-center justify-end pr-4 col-span-1">
             <button
               onClick={showSettings}
-              className="px-2.5 py-1.5 bg-blueGray-600 focus:outline-none rounded-lg flex gap-1.5 items-center justify-center">
+              className="px-2.5 py-1.5 dark:bg-blueGray-700 focus:outline-none rounded-lg flex gap-1.5 items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

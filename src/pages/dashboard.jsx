@@ -5,11 +5,12 @@ import { HomeDesktop } from "~/components/partials/Dashboard/desktop";
 import { HomeMobile } from "~/components/partials/Dashboard/mobile";
 
 export default function HomePage() {
+  const uid = useSelector((s) => s.user.uid);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(FETCH_UPDATE("all"));
-  }, [dispatch]);
+  }, [dispatch, uid]);
 
   return (
     <>

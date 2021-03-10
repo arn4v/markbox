@@ -9,10 +9,6 @@ const FoldersContainer = () => {
   const [show, setShow] = React.useState(false);
   const folders = useSelector((s) => s.folders);
 
-  React.useEffect(() => {
-    console.log("FOLDERS UPDATED", folders);
-  }, [folders]);
-
   return (
     <>
       <div className="flex flex-col w-full gap-4">

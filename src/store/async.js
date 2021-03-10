@@ -27,17 +27,18 @@ const UPDATE_ACTIONS = {
 /** @param {Schema | "all"} schema */
 export function FETCH_UPDATE(schema) {
   return async (dispatch, getState) => {
+    console.log(getState())
     const uid = getState().user.uid;
     if (uid) {
       const sh = new StoreHelper(uid, true);
       const doc = await sh.run();
+      console.log("got doc", doc);
       if (schema === "all") {
         Object.entries(UPDATE_ACTIONS).forEach(([key, type]) => {
-          console.log(doc, key, type);
-          // dispatch({ type, payload: doc[key] });
+          dispatch({ type, payload: doc[key] });
         });
       } else {
-        // dispatch({ type: UPDATE_ACTIONS[schema], payload: doc[schema] });
+        dispatch({ type: UPDATE_ACTIONS[schema], payload: doc[schema] });
       }
     }
   };
