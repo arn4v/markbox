@@ -2,7 +2,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../store";
 
-export function SearchBar() {
+const SearchBar = () => {
   const show = useSelector((state) => state.filter.show);
   const [search, setSearch] = React.useState("");
   const dispatch = useDispatch();
@@ -44,4 +44,6 @@ export function SearchBar() {
       </button>
     </div>
   );
-}
+};
+
+export default SearchBar;

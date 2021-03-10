@@ -1,14 +1,13 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import AddBookmarkButton from "~/components/mobile/add-button";
-import { NavBar } from "~/components/mobile/navbar";
-import { SearchBar } from "~/components/search-bar";
-import { SettingsContainer } from "~/components/mobile/settings";
-import { AddSheet } from "~/components/mobile/add-sheet";
-import { EditSheet } from "~/components/mobile/edit-sheet";
-import { FilterSheet } from "~/components/mobile/filter-sheet";
-import { AnimatePresence } from "framer-motion";
-import CardList from "~/components/mobile/card-list";
+import AddBookmarkButton from "~/components/mobile/AddButton";
+import NavBar from "~/components/mobile/Navbar";
+import SearchBar from "~/components/search-bar";
+import SettingsContainer from "~/components/mobile/Settings";
+import AddSheet from "~/components/mobile/AddSheet";
+import EditSheet from "~/components/mobile/EditSheet";
+import FilterSheet from "~/components/mobile/FilterSheet";
+import CardList from "~/components/mobile/CardList";
 
 /**
  * @exports

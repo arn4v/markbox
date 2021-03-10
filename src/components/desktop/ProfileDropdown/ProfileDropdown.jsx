@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { getFirebase } from "~/lib/firebase";
 
-export function ProfileDropdown() {
+const ProfileDropdown = () => {
   const router = useRouter();
   const { auth } = getFirebase();
   const logout = () => {
@@ -17,4 +17,6 @@ export function ProfileDropdown() {
       </button>
     </>
   );
-}
+};
+
+export default ProfileDropdown;

@@ -1,8 +1,8 @@
 import * as React from "react";
-import { SearchBar } from "~/components/search-bar";
-import CardList from "~/components/mobile/card-list";
-import { Sidebar } from "~/components/desktop/sidebar";
-import { FilterContainer } from "~/components/desktop/filter-container";
+import SearchBar from "~/components/search-bar";
+import CardList from "~/components/mobile/CardList";
+import Sidebar from "~/components/desktop/Sidebar";
+import FilterContainer from "~/components/desktop/FilterContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "~/store";
 import { AnimatePresence, motion } from "framer-motion";

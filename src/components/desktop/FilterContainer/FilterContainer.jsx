@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelector } from "react-redux";
 
-export function FilterContainer() {
+const FilterContainer = () => {
   const show = useSelector((state) => state.filter.show);
   return (
     <>
@@ -43,4 +43,6 @@ export function FilterContainer() {
       </AnimatePresence>
     </>
   );
-}
+};
+
+export default FilterContainer;

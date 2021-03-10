@@ -6,11 +6,14 @@ import PropTypes from "prop-types";
 import format from "date-fns/format";
 
 /**
- * @param {Object} props
- * @param {string} props.id
- * @exports
+ * @typedef {Object} Props
+ * @property {string} id
  */
-export function BookmarkCard(props) {
+
+/**
+ * @type {React.FC<Props>}
+ */
+const BookmarkCard = (props) => {
   const data = useSelector((state) => state.bookmarks[props.id]);
   const dispatch = useDispatch();
   const showEditSheet = () => {
@@ -99,8 +102,10 @@ export function BookmarkCard(props) {
       </div>
     </>
   );
-}
+};
 
 BookmarkCard.propTypes = {
   id: PropTypes.string.isRequired,
 };
+
+export default BookmarkCard;

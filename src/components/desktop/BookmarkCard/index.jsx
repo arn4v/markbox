@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import format from "date-fns/format";
 import { AnimatePresence } from "framer-motion";
 import { actions } from "~/store";
-import Normal from "~/components/desktop/bookmark-card/normal";
+import Normal from "~/components/desktop/BookmarkCard/normal";
 
 /**
  * @param {Object} props

@@ -6,9 +6,9 @@ import { useOnClickOutside } from "~/hooks/onclick-outside";
 import { actions } from "~/store";
 import { v4 as uuid } from "uuid";
 import { ADD } from "~/store/async";
-import { Popup } from "./popup";
+import { Popup } from "../Popup";
 
-export function AddFolder() {
+const AddFolder = () => {
   const [newFolder, setNewFolder] = React.useState("");
   const onChange = (e) => setNewFolder(e.target.value);
   const [add, setAdd] = React.useState(false);
@@ -84,4 +84,6 @@ export function AddFolder() {
       </div>
     </>
   );
-}
+};
+
+export default AddFolder;

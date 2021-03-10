@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Logo } from "../logo";
+import { Logo } from "../../logo";
 import { useDispatch } from "react-redux";
 import { actions } from "~/store";
 
-export function NavBar() {
+const Navbar = () => {
   const dispatch = useDispatch();
   const showSettings = () => dispatch({ type: actions.SETTINGS_TOGGLE });
 
@@ -57,4 +57,6 @@ export function NavBar() {
       </div>
     </>
   );
-}
+};
+
+export default Navbar;

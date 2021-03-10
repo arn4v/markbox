@@ -5,7 +5,7 @@ import { actions } from "~/store";
 import { TagBadge } from "~/components/tag-badge";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function EditSheet() {
+const EditSheet = () => {
   const { show, data } = useSelector((state) => state.edit);
   const [state, setState] = React.useState({
     id: "",
@@ -265,4 +265,6 @@ export function EditSheet() {
       </AnimatePresence>
     </>
   );
-}
+};
+
+export default EditSheet;

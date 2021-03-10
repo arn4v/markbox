@@ -1,11 +1,9 @@
-import * as React from "react";
-import { DragDropContext } from "react-beautiful-dnd";
 import { Logo } from "~/components/logo";
-import { AddBookmarkButton } from "./add-bookmark";
-import { FoldersContainer } from "./folders-container";
-import { ProfileDropdown } from "./profile-dropdown";
+import AddBookmarkButton from "./AddBookmark";
+import FoldersContainer from "./FoldersContainer";
+import ProfileDropdown from "./ProfileDropdown";
 
-export function Sidebar() {
+const Sidebar = () => {
   return (
     <>
       <div className="flex items-start justify-end w-1/4 h-full pt-12 pb-8 pr-6 border-r border-blueGray-600">
@@ -20,4 +18,6 @@ export function Sidebar() {
       </div>
     </>
   );
-}
+};
+
+export default Sidebar;

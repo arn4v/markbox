@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelector } from "react-redux";
 
-export function SettingsContainer() {
+const SettingsContainer = () => {
   const show = useSelector((s) => s.settings.show);
   return (
     <>
@@ -33,4 +33,6 @@ export function SettingsContainer() {
       </AnimatePresence>
     </>
   );
-}
+};
+
+export default SettingsContainer;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { BookmarkCard } from "./bookmark-card";
+import BookmarkCard from "../BookmarkCard";
 
 const CardList = React.memo(() => {
   const bookmarks = useSelector((state) => state.bookmarks);

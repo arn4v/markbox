@@ -1,10 +1,13 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "~/store";
-import { AddForm } from "./add-form";
+import AddForm from "../AddForm";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function AddSheet() {
+/**
+ * @type {React.FC}
+ */
+const AddSheet = () => {
   const show = useSelector((s) => s.add.show);
   const dispatch = useDispatch();
   const hideModal = () => {
@@ -63,4 +66,6 @@ export function AddSheet() {
       </AnimatePresence>
     </>
   );
-}
+};
+
+export default AddSheet;

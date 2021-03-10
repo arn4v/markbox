@@ -1,6 +1,6 @@
 import * as React from "react";
 import { v4 as uuid } from "uuid";
-import { Popup } from "./popup";
+import { Popup } from "../Popup";
 import { actions } from "~/store";
 import { useDispatch } from "react-redux";
 import { useOnClickOutside } from "~/hooks/onclick-outside";
@@ -13,7 +13,7 @@ const initialState = {
   folder: "",
 };
 
-export function AddBookmarkButton() {
+const AddBookmark = () => {
   const [state, setState] = React.useState(initialState);
   const [add, setAdd] = React.useState(false);
   const dispatch = useDispatch();
@@ -92,4 +92,6 @@ export function AddBookmarkButton() {
       </div>
     </>
   );
-}
+};
+
+export default AddBookmark;

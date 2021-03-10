@@ -1,13 +1,44 @@
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require("esbuild-loader");
+
+function useEsbuildMinify(config, options) {
+  const terserIndex = config.optimization.minimizer.findIndex(
+    (minimizer) => minimizer.constructor.name === "TerserPlugin",
+  );
+  if (terserIndex > -1) {
+    config.optimization.minimizer.splice(
+      terserIndex,
+      1,
+      new ESBuildMinifyPlugin(options),
+    );
+  }
+}
+
+function useEsbuildLoader(config, options) {
+  const jsLoader = config.module.rules.find(
+    (rule) => rule.test && rule.test.test(".js"),
+  );
+
+  if (jsLoader) {
+    jsLoader.use.loader = "esbuild-loader";
+    jsLoader.use.options = options;
+  }
+}
+
 module.exports = {
-  webpack: (config, { dev, isServer }) => {
-    // Replace React with Preact only in client production build
-    if (!dev && !isServer) {
-      Object.assign(config.resolve.alias, {
-        react: "preact/compat",
-        "react-dom/test-utils": "preact/test-utils",
-        "react-dom": "preact/compat",
-      });
-    }
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new ESBuildPlugin(),
+      new webpack.ProvidePlugin({
+        React: "react",
+      }),
+    );
+
+    useEsbuildMinify(config);
+
+    useEsbuildLoader(config, {
+      loader: "tsx",
+      target: "es2015",
+    });
 
     return config;
   },

@@ -1,6 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
-import { TagBadge } from "../tag-badge";
+import { TagBadge } from "../../tag-badge";
 import { randomColor } from "~/lib/utils";
 import { v4 as uuid } from "uuid";
 import { useDispatch } from "react-redux";
@@ -9,11 +9,15 @@ import { actions } from "~/store";
 import PropTypes from "prop-types";
 
 /**
- * @param {Object} props
- * @param {string} props.className
+ * @typedef {Object} Props
+ * @property {string} className
+ */
+
+/**
+ * @type {React.FC<Props>}
  * @exports
  */
-export function AddForm({ className }) {
+const AddForm = ({ className }) => {
   const [state, setState] = React.useState({
     title: "",
     url: "",
@@ -82,7 +86,7 @@ export function AddForm({ className }) {
             value={state.title}
             onChange={onChange}
             type="text"
-            required="required"
+            required
             className="input-sheet"
           />
         </div>
@@ -95,7 +99,7 @@ export function AddForm({ className }) {
             onChange={onChange}
             value={state.url}
             type="url"
-            required="required"
+            required
             className="input-sheet"
           />
         </div>
@@ -147,7 +151,7 @@ export function AddForm({ className }) {
                 type="text"
                 className="mr-4 border-0 focus:ring-0"
                 onChange={onChange}
-                maxLength="15"
+                maxLength={15}
                 value={state.newTag}
               />
               <button
@@ -173,7 +177,7 @@ export function AddForm({ className }) {
         </div>
         <div className="flex items-center gap-4">
           <label
-            for="toRead"
+            htmlFor="toRead"
             className="text-sm font-medium text-white uppercase">
             To read?
           </label>
@@ -192,8 +196,10 @@ export function AddForm({ className }) {
       </form>
     </>
   );
-}
+};
 
 AddForm.propTypes = {
   className: PropTypes.string,
 };
+
+export default AddForm;

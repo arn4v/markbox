@@ -13,11 +13,11 @@ export default function App(props) {
   return (
     <>
       <Provider store={store}>
-        {/* <ThemeProvider attribute="class" defaultTheme="dark"> */}
-          {/* <AuthMiddleware> */}
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          <AuthMiddleware>
             <Component {...pageProps} />
-          {/* </AuthMiddleware> */}
-        {/* </ThemeProvider> */}
+          </AuthMiddleware>
+        </ThemeProvider>
       </Provider>
     </>
   );
