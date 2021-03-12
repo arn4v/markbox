@@ -1,29 +1,32 @@
 import clsx from "clsx";
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { v4 as uuid } from "uuid";
 import { actions } from "~/store";
 import { TagBadge } from "~/components/tag-badge";
 import { AnimatePresence, motion } from "framer-motion";
+import { HiPlusCircle, HiXCircle } from "react-icons/hi";
 import { DELETE } from "~/store/async";
+import { randomColor } from "~/lib/utils";
+
+const initialState = {
+  id: "",
+  title: "",
+  url: "",
+  tags: {},
+  toRead: false,
+  showDelete: false,
+  showError: false,
+};
 
 const EditSheet = () => {
   const { show, data } = useSelector((state) => state.edit);
-  const [state, setState] = React.useState({
-    id: "",
-    title: "",
-    url: "",
-    tags: {},
-    toRead: false,
-    newTag: "",
-    newTags: {},
-    newTagError: "",
-    showDelete: false,
-    showError: false,
-  });
+  const [state, setState] = React.useState(initialState);
+  const [newTag, setNewTag] = React.useState("");
+  const [newTagError, setNewTagError] = React.useState("");
   const [showDelete, setShowDelete] = React.useState(false);
   const dispatch = useDispatch();
   const hideModal = () => dispatch({ type: actions.EDIT_HIDE });
-  const showDeleteModal = () => setShowDelete(true);
   const hideDeleteModal = () => setShowDelete(false);
   const deleteBookmark = () => {
     dispatch(DELETE("bookmarks", state.id));
@@ -32,28 +35,47 @@ const EditSheet = () => {
   };
 
   React.useEffect(() => {
+    () => setState(() => initialState);
+  }, []);
+
+  React.useEffect(() => {
     if (data) {
       setState((s) => ({ ...s, ...data }));
     }
   }, [data]);
 
   React.useState(() => {
-    if (state.newTag.length === 0) setState((s) => ({ ...s, newTagError: "" }));
+    if (newTag.length === 0) setNewTagError("");
+
     if (
       Object.values(state.tags)
         .map((i) => i.title)
-        .includes(state.newTag)
-    )
-      setState((s) => ({
-        ...s,
-        newTagError: "A tag by this name already exists",
-      }));
-    return false;
-  }, [state.newTag]);
+        .includes(newTag)
+    ) {
+      setNewTagError("A tag by this name already exists");
+    }
+  }, [newTag]);
 
-  const onChange = (e) => setState((s) => ({ ...s, newTag: e.target.value }));
-  const addTag = (e) => setState((s) => ({ tags: { ...s.tags } }));
-  const deleteTag = () => {};
+  const addTag = (e) => {
+    if (!newTagError) {
+      const id = uuid();
+      const title = newTag;
+      const color = randomColor(state.tags);
+      const created = new Date();
+      const tag = { id, title, color, created };
+      setState((s) => ({ ...s, tags: { ...s.tags, [id]: tag } }));
+      setNewTag("");
+      setNewTagError("");
+    } else {
+      setState((s) => ({ ...s, showError: true }));
+    }
+  };
+
+  const deleteTag = (id) => () =>
+    setState((s) => {
+      delete s.tags[id];
+      return { ...s };
+    });
 
   return (
     <>
@@ -96,7 +118,7 @@ const EditSheet = () => {
 
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.3 }}
+              animate={{ opacity: 0.7 }}
               exit={{ opacity: 0 }}
               transition={{ ease: "easeInOut", duration: 0.3 }}
               onClick={hideModal}
@@ -104,11 +126,11 @@ const EditSheet = () => {
             />
             {show && (
               <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "66%", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
+                initial={{ height: 0 }}
+                animate={{ height: "auto" }}
+                exit={{ height: 0 }}
                 transition={{ ease: "easeInOut", duration: 0.5 }}
-                className="relative z-30 flex flex-col overflow-y-scroll py-6 bottom-sheet px-4 items-start justify-center mt-auto w-full rounded-t-lg bg-blueGray-700">
+                className="relative z-40 flex flex-col overflow-y-scroll py-6 bottom-sheet px-4 items-start justify-center w-full mt-auto rounded-t-lg h-4/6 bg-blueGray-700">
                 <div className="grid w-4/5 grid-cols-6 mx-auto">
                   <div className="col-span-1"></div>
                   <div className="col-span-4 mx-auto mt-0 text-lg font-medium text-white">
@@ -174,7 +196,7 @@ const EditSheet = () => {
                               className="rounded-full py-0.5 focus:outline-none flex"
                               type="button"
                               id={item.id}
-                              onClick={deleteTag}>
+                              onClick={deleteTag(item.id)}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -194,46 +216,55 @@ const EditSheet = () => {
                       })}
                     </div>
                     {Object.keys(state.tags).length <= 10 && (
-                      <div
-                        className={clsx(
-                          "flex items-center justify-between overflow-hidden bg-white rounded-md focus:ring focus:ring-emerald-400",
-                          {
-                            "ring ring-red-500":
-                              state.newTag.length > 0 &&
-                              this.newTagError !== undefined,
-                            "ring ring-green-500":
-                              state.newTag.length > 0 && !state.newTagError,
-                          },
-                        )}>
-                        <input
-                          id="tags"
-                          type="text"
-                          className="border-0 focus:ring-0"
-                          value={state.newTag}
-                          onChange={onChange}
-                          maxLength="15"
-                        />
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={clsx(
+                            "flex items-center justify-between overflow-hidden bg-white rounded-md focus:ring focus:ring-emerald-400 transition-all duration-100 ease-in-out",
+                            newTag.length > 0 &&
+                              !newTagError &&
+                              "ring ring-green-400",
+                            newTag.length > 0 &&
+                              newTagError !== undefined &&
+                              "ring ring-red-500",
+                          )}>
+                          <input
+                            id="tags"
+                            name="newTag"
+                            type="text"
+                            className="border-0 w-full bg-transparent focus:ring-0"
+                            value={newTag}
+                            onChange={(e) => setNewTag(e.target.value)}
+                            maxLength="15"
+                          />
+                          {newTag.length > 0 && (
+                            <button
+                              className="mx-2 focus:outline-none"
+                              onClick={() => {
+                                setNewTag("");
+                                setNewTagError("");
+                              }}>
+                              <HiXCircle className="h-5 w-5" />
+                            </button>
+                          )}
+                        </div>
                         <button
                           type="button"
-                          className={clsx(
-                            [
-                              "h-full px-3 text-xs font-semibold uppercase focus:outline-none whitespace-nowrap",
-                            ],
-
+                          className={clsx([
+                            "h-full px-2 text-xs font-semibold uppercase focus:outline-none whitespace-nowrap",
                             {
-                              "text-gray-800": state.newTag.length > 0,
-                              "text-gray-500": state.newTag.length === 0,
+                              "text-gray-800": newTag.length > 0,
+                              "text-gray-500": newTag.length === 0,
                             },
-                          )}
+                          ])}
                           onClick={addTag}
-                          disabled={state.newTagError}>
-                          Add tag
+                          disabled={newTag.length === 0 || !!newTagError}>
+                          <HiPlusCircle className="h-5 w-5 text-white" />
                         </button>
                       </div>
                     )}
                     {state.showError && (
                       <div className="flex bg-red-500 px-2 py-0.5 text-white text-sm font-medium rounded-md items-center justify-start mt-2">
-                        {state.newTagError}
+                        {newTagError}
                       </div>
                     )}
                   </div>
@@ -254,7 +285,7 @@ const EditSheet = () => {
                     <button
                       type="button"
                       className="px-4 py-2.5 text-sm font-medium text-white uppercase rounded-lg bg-red-500 focus:outline-none select-none"
-                      onClick={showDeleteModal}>
+                      onClick={() => setShowDelete(true)}>
                       Delete
                     </button>
                     <button

@@ -94,7 +94,7 @@ const Folder = (props) => {
       <div ref={ref} className="relative">
         <div className="flex items-center justify-between gap-2">
           {globalEdit && (
-            <div {...provided.dragHandleProps}>
+            <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
