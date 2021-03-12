@@ -1,3 +1,6 @@
+[![GitHub license](https://img.shields.io/github/license/arn4v/bookmarky)](https://github.com/arn4v/bookmarky/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/arn4v/bookmarky)](https://github.com/arn4v/bookmarky/issues)
+
 # Bookmarky
 
 Bookmarky is an open-source bookmarking app inspired by [Pinboard](https://pinboard.in) built with React, Next.js, TailwindCSS & Firebase.
