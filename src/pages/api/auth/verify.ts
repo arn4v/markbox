@@ -23,5 +23,5 @@ export default nextConnect<NextApiRequest, NextApiResponse>().get(
       console.log(err);
       res.status(403).end();
     }
-  }
+  },
 );

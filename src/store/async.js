@@ -27,7 +27,7 @@ const UPDATE_ACTIONS = {
 /** @param {Schema | "all"} schema */
 export function FETCH_UPDATE(schema) {
   return async (dispatch, getState) => {
-    console.log(getState())
+    console.log(getState());
     const uid = getState().user.uid;
     if (uid) {
       const sh = new StoreHelper(uid, true);

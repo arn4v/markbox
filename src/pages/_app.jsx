@@ -4,9 +4,8 @@ import { AuthMiddleware } from "~/middleware/auth";
 import "~/styles/tailwind.css";
 import "~/styles/index.css";
 import "~/styles/tailwind-utils.css";
-import "@fontsource/inter";
+import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
-import PropTypes from "prop-types";
 
 /** @param {import("next/app").AppProps} props */
 export default function App(props) {

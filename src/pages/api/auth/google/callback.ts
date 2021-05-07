@@ -17,7 +17,7 @@ export default nextConnect<NextApiRequest, NextApiResponse>().get(
     });
     let claims = {};
     const profile = await fetch(
-      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${result.token.access_token}`
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${result.token.access_token}`,
     ).then((res) => res.json());
     let user: User;
     try {
@@ -53,8 +53,8 @@ export default nextConnect<NextApiRequest, NextApiResponse>().get(
         sameSite: "strict",
         secure: true,
         httpOnly: true,
-      })
+      }),
     );
     res.redirect("/auth/success");
-  }
+  },
 );

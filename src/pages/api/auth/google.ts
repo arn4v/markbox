@@ -13,5 +13,5 @@ export default nextConnect<NextApiRequest, NextApiResponse>().get(
       state,
     });
     res.redirect(authorizeUri);
-  }
+  },
 );

@@ -43,7 +43,7 @@ export const createUserDoc = async ({ user }) => {
 };
 
 function timestampToDate(data) {
-  console.log(data)
+  console.log(data);
   data = ["bookmarks", "folders", "tags"].reduce((acc, cur) => {
     acc[cur] = Object.values(data[cur]).reduce((acc, cur) => {
       cur.created = cur.created.toDate();
