@@ -15,6 +15,9 @@
   "dependencies": {
     "@next/bundle-analyzer": "^10.2.0",
     "@prisma/client": "^2.22.1",
+    "@radix-ui/react-dialog": "0.0.16",
+    "@radix-ui/react-id": "0.0.6",
+    "@radix-ui/react-tooltip": "0.0.17",
     "bcrypt": "^5.0.1",
     "clsx": "^1.1.1",
     "cookie": "^0.4.1",
@@ -33,6 +36,8 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0",
     "simple-oauth2": "^4.2.0",
     "uuid": "^8.3.2",
     "zustand": "^3.5.0"
