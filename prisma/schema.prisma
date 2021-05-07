@@ -1,0 +1,42 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./../db.sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  type           String   @default("email")
+  name           String   @default("")
+  email          String   @unique
+  email_verified Boolean
+  password       String?
+  folders        Folder[]
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@map(name: "users")
+}
+
+model Folder {
+  id        String     @id @default(uuid())
+  title     String
+  color     String
+  bookmarks Bookmark[]
+  User      User?      @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@map("folders")
+}
+
+model Bookmark {
+  id       String  @id @default(uuid())
+  title    String
+  Folder   Folder? @relation(fields: [folderId], references: [id])
+  folderId String?
+
+  @@map("bookmarks")
+}
