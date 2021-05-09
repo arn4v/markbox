@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+
 .input-wrapper {
   @apply flex flex-col gap-1;
 }
@@ -37,3 +40,5 @@
 .badge {
   @apply flex gap-1.5 px-2 py-1 text-xs font-medium text-white items-center justify-center uppercase bg-blue-500 rounded-full;
 }
+
+@tailwind utilities;
