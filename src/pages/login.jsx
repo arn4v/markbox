@@ -1,10 +1,7 @@
 import * as React from "react";
-import { createUserDoc } from "~/lib/db";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { getFirebase } from "~/lib/firebase";
 import { useDispatch } from "react-redux";
-import { actions } from "~/store";
 
 export default function LoginPage() {
   const [state, setState] = React.useState({
@@ -14,27 +11,9 @@ export default function LoginPage() {
   });
   const dispatch = useDispatch();
   const router = useRouter();
-  const { auth } = getFirebase();
+
   const login = (e) => {
     e.preventDefault();
-    auth
-      .signInWithEmailAndPassword(state.email, state.password)
-      .then((res) => {
-        const { user } = res;
-        if (user) {
-          createUserDoc({ user });
-          dispatch({ type: actions.AUTHENTICATE, payload: { user } });
-          router.push("/dashboard");
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          setState((s) => ({
-            ...s,
-            error: { show: true, message: err.toString() },
-          }));
-        }
-      });
   };
 
   const reset = () => {

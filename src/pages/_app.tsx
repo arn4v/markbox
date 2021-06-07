@@ -4,10 +4,9 @@ import { AuthMiddleware } from "~/middleware/auth";
 import "~/styles/index.css";
 import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
+import { AppPropsType } from "next/app";
 
-/** @param {import("next/app").AppProps} props */
-export default function App(props) {
-  const { Component, pageProps } = props;
+export default function App({}: AppPropsType) {
   return (
     <Provider store={store}>
       <ThemeProvider attribute="class" defaultTheme="dark">
