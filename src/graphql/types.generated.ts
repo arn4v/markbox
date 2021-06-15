@@ -85,6 +85,7 @@ export type Query = {
   __typename?: "Query";
   bookmark: Bookmark;
   bookmarks: Array<Bookmark>;
+  user?: Maybe<User>;
 };
 
 export type QueryBookmarkArgs = {
@@ -95,6 +96,15 @@ export type UpdateBookmarkInput = {
   title?: Maybe<Scalars["String"]>;
   url?: Maybe<Scalars["String"]>;
   tags?: Maybe<Array<Scalars["String"]>>;
+};
+
+export type User = {
+  __typename?: "User";
+  id: Scalars["ID"];
+  email: Scalars["String"];
+  emailVerified: Scalars["Boolean"];
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -184,6 +194,20 @@ export type GetBookmarkQuery = {
     url: string;
     tags: Array<string>;
   };
+};
+
+export type UserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type UserQuery = {
+  __typename?: "Query";
+  user?: Maybe<{
+    __typename?: "User";
+    id: string;
+    email: string;
+    emailVerified: boolean;
+    createdAt: string;
+    updatedAt: string;
+  }>;
 };
 
 export const LoginDocument = gql`
@@ -512,6 +536,51 @@ export type GetBookmarkQueryResult = Apollo.QueryResult<
   GetBookmarkQuery,
   GetBookmarkQueryVariables
 >;
+export const UserDocument = gql`
+  query User {
+    user {
+      id
+      email
+      emailVerified
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+}
+export function useUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(
+    UserDocument,
+    options,
+  );
+}
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -640,6 +709,7 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   UpdateBookmarkInput: UpdateBookmarkInput;
+  User: ResolverTypeWrapper<User>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 }>;
 
@@ -654,6 +724,7 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   Query: {};
   UpdateBookmarkInput: UpdateBookmarkInput;
+  User: User;
   Boolean: Scalars["Boolean"];
 }>;
 
@@ -736,6 +807,19 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+}>;
+
+export type UserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"],
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  emailVerified?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
@@ -744,6 +828,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   LoginMessage?: LoginMessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 }>;
 
 /**

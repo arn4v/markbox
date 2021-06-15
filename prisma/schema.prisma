@@ -8,38 +8,39 @@ generator client {
 }
 
 model User {
-  id             String     @id @default(uuid())
-  type           String     @default("email")
-  name           String     @default("")
-  email          String     @unique
-  email_verified Boolean    @default(false)
-  password       String?
-  bookmarks      Bookmark[]
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @updatedAt
+  id            String     @id @default(uuid())
+  type          String     @default("email")
+  name          String     @default("")
+  email         String     @unique
+  emailVerified Boolean    @default(false) @map("email_verified")
+  password      String
+  bookmarks     Bookmark[]
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
 
-  Tag Tag[]
   @@map(name: "users")
 }
 
 model Bookmark {
-  id    String @id @default(uuid())
-  title String
-  url   String
-  tags  Tag[]
+  id        String   @id @default(uuid())
+  title     String
+  url       String
+  tags      Tag[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
   @@map("bookmarks")
 }
 
 model Tag {
-  id     String  @id @default(uuid())
-  title  String
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
-
+  id         String    @id @default(uuid())
+  title      String
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
   Bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id])
   bookmarkId String?
-  @@map("folders")
+
+  @@map("tags")
 }

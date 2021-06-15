@@ -31,9 +31,18 @@ export default gql`
     accessToken: String
   }
 
+  type User {
+    id: ID!
+    email: String!
+    emailVerified: Boolean!
+    createdAt: String!
+    updatedAt: String!
+  }
+
   type Query {
     bookmark(id: ID!): Bookmark!
     bookmarks: [Bookmark!]!
+    user: User
   }
 
   type Mutation {

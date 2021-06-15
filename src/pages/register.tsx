@@ -15,10 +15,23 @@ export default function RegisterPage() {
   const [handleRegister, { data, loading, error }] = useRegisterMutation({
     variables: state,
     onCompleted: ({ register }) => {
-      if (register.code === "successful") {
-        router.push("/login");
-      } else {
-        console.log("Doesn't work");
+      switch (register.code) {
+        case "successful": {
+          router.push("/login", {
+            query: {
+              message: register.message,
+            },
+          });
+          break;
+        }
+        case "conflict": {
+          router.push("/login", {
+            query: {
+              message: register.message,
+            },
+          });
+          break;
+        }
       }
     },
   });

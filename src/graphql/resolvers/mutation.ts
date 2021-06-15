@@ -1,17 +1,40 @@
-import { hashPassword } from "~/lib/password";
+import { comparePassword, hashPassword } from "~/lib/password";
 import GQLContext from "~/types/GQLContext";
 import { MutationResolvers } from "../types.generated";
 import prisma from "~/lib/prisma";
+import { jwtSign } from "~/lib/jwt";
 
 export default {
-  async login(_, args, ctx) {
-    return {
-      code: "",
-      message: "",
-    };
+  async login(_, { email, password }, ctx) {
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (user) {
+      const isPasswordValid = await comparePassword(password, user.password);
+      if (isPasswordValid) {
+        const jwt = await jwtSign({ sub: user.id });
+        return {
+          code: "successful",
+          message: "Successfully logged in.",
+          accessToken: jwt,
+        };
+      } else {
+        return {
+          code: "invalid_password",
+          message: "Passwords don't match.",
+        };
+      }
+    } else {
+      return {
+        code: "invalid_user",
+        message: "User doesn't exist",
+      };
+    }
   },
   async register(_, { email, password }, ctx) {
-    console.log(email, password)
+    console.log(email, password);
     const user = await prisma.user.findUnique({
       where: {
         email,
@@ -27,11 +50,11 @@ export default {
       });
       return {
         code: "successful",
-        message: "Successfully registered user.",
+        message: "Successfully registered. Please log in.",
       };
     } else {
       return {
-        code: "conflict_user_exists",
+        code: "conflict",
         message: "User already exists.",
       };
     }
