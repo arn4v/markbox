@@ -3,7 +3,7 @@ import GQLContext from "~/types/GQLContext";
 import { MutationResolvers } from "../types.generated";
 import prisma from "~/lib/prisma";
 
-const MutationResolvers: MutationResolvers<GQLContext> = {
+export default {
   async login(_, args, ctx) {
     return {
       code: "",
@@ -11,6 +11,7 @@ const MutationResolvers: MutationResolvers<GQLContext> = {
     };
   },
   async register(_, { email, password }, ctx) {
+    console.log(email, password)
     const user = await prisma.user.findUnique({
       where: {
         email,
@@ -35,7 +36,7 @@ const MutationResolvers: MutationResolvers<GQLContext> = {
       };
     }
   },
-  async addBookmark(_, { input }, ctx) {
+  async createBookmark(_, { input }, ctx) {
     const { tags, title, url } = input;
     const newBookmark = await prisma.bookmark.create({
       data: {
@@ -81,6 +82,4 @@ const MutationResolvers: MutationResolvers<GQLContext> = {
       tags: _tags.map((item) => item.title),
     };
   },
-};
-
-export default MutationResolvers;
+} as MutationResolvers<GQLContext>;
