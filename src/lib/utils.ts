@@ -1,19 +1,19 @@
-import passwordValidator from "password-validator"
+import { NextApiRequest } from "next";
+import passwordValidator from "password-validator";
 import colors from "tailwindcss/colors";
 
 export const passwordSchema = new passwordValidator()
-	.is()
-	.min(6)
-	.is()
-	.max(16)
-	.has()
-	.lowercase()
-	.has()
-	.uppercase()
-	.is()
-	.not()
-	.oneOf(["Passw0rd", "Password123"])
-
+  .is()
+  .min(6)
+  .is()
+  .max(16)
+  .has()
+  .lowercase()
+  .has()
+  .uppercase()
+  .is()
+  .not()
+  .oneOf(["Passw0rd", "Password123"]);
 
 export const validColors = Object.entries(colors).reduce(
   (acc, [key, value]) => {
@@ -41,3 +41,17 @@ export function randomColor(tags) {
   const available = validColors.filter((i) => !takenColors.includes(i));
   return available[Math.floor(Math.random() * available.length)];
 }
+
+export const getToken = async (req: NextApiRequest): Promise<string> => {
+  return await new Promise((resolve, reject) => {
+    if (
+      typeof req.headers.authorization === "string" &&
+      req.headers.authorization.length > 0 &&
+      req.headers.authorization.includes("Bearer ")
+    ) {
+      resolve(req.headers.authorization.replace("Bearer ", ""));
+    } else {
+      reject(new Error("No token in headers."));
+    }
+  });
+};

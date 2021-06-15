@@ -1,6 +1,8 @@
 overwrite: true
 schema: ./src/graphql/typeDefs.ts
-documents: "./src/**/*.{tsx,ts}"
+documents: 
+  - "./src/graphql/mutations/**/*.{tsx,ts}"
+  - "./src/graphql/queries/**/*.{tsx,ts}"
 hooks:
   afterOneFileWrite:
     - prettier --write
@@ -15,7 +17,9 @@ generates:
       - typescript
       - typescript-operations
       - typescript-react-apollo
+      - typescript-resolvers
     config:
+      useIndexSignature: true
       withHOC: false
       withHooks: true
       withComponent: false

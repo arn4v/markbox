@@ -5,8 +5,8 @@ import typeDefs from "~/graphql/typeDefs";
 import GQLContext from "~/types/GQLContext";
 
 const apolloServer = new ApolloServer({
-  typeDefs: typeDefs,
-  resolvers: resolvers,
+  typeDefs,
+  resolvers,
   playground: !isProd,
   context: ({ req, res }: GQLContext) => ({ req, res }),
 });

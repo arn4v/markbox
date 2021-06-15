@@ -8,35 +8,38 @@ generator client {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  type           String   @default("email")
-  name           String   @default("")
-  email          String   @unique
-  email_verified Boolean
+  id             String     @id @default(uuid())
+  type           String     @default("email")
+  name           String     @default("")
+  email          String     @unique
+  email_verified Boolean    @default(false)
   password       String?
-  folders        Folder[]
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  bookmarks      Bookmark[]
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
 
+  Tag Tag[]
   @@map(name: "users")
 }
 
-model Folder {
-  id        String     @id @default(uuid())
-  title     String
-  color     String
-  bookmarks Bookmark[]
-  User      User?      @relation(fields: [userId], references: [id])
-  userId    String?
+model Bookmark {
+  id    String @id @default(uuid())
+  title String
+  url   String
+  tags  Tag[]
 
-  @@map("folders")
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+  @@map("bookmarks")
 }
 
-model Bookmark {
-  id       String  @id @default(uuid())
-  title    String
-  Folder   Folder? @relation(fields: [folderId], references: [id])
-  folderId String?
+model Tag {
+  id     String  @id @default(uuid())
+  title  String
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
-  @@map("bookmarks")
+  Bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id])
+  bookmarkId String?
+  @@map("folders")
 }

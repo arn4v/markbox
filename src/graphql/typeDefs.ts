@@ -8,15 +8,27 @@ export default gql`
     tags: [String!]!
   }
 
-  input AddUpdateBookmarkInput {
+  input CreateBookmarkInput {
     title: String!
     url: String!
     tags: [String!]!
   }
 
+  input UpdateBookmarkInput {
+    title: String
+    url: String
+    tags: [String!]
+  }
+
   type AuthenticationMessage {
     code: String!
     message: String!
+  }
+
+  type LoginMessage {
+    code: String!
+    message: String!
+    accessToken: String
   }
 
   type Query {
@@ -25,9 +37,9 @@ export default gql`
   }
 
   type Mutation {
-    login(email: String!, password: String!): AuthenticationMessage
+    login(email: String!, password: String!): LoginMessage
     register(email: String!, password: String!): AuthenticationMessage
-    addBookmark(input: AddUpdateBookmarkInput): Bookmark
-    updateBookmark(id: ID!, input: AddUpdateBookmarkInput): Bookmark
+    createBookmark(input: CreateBookmarkInput!): Bookmark
+    updateBookmark(id: ID!, input: UpdateBookmarkInput!): Bookmark
   }
 `;
