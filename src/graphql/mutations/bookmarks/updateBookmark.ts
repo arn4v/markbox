@@ -1,0 +1,12 @@
+import { gql } from "@apollo/client";
+
+export default gql`
+  mutation UpdateBookmark($id: ID!, $input: AddUpdateBookmarkInput) {
+    updateBookmark(id: $id, input: $input) {
+      id
+      title
+      url
+      tags
+    }
+  }
+`;
