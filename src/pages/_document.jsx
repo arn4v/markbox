@@ -4,7 +4,7 @@ export default class CustomDocument extends Document {
   render() {
     return (
       <>
-        <Html lang="en" className="light">
+        <Html lang="en">
           <Head></Head>
           <body>
             <Main />
