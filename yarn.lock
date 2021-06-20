@@ -1144,17 +1144,6 @@
     auto-bind "~4.0.0"
     tslib "~2.2.0"
 
-"@graphql-codegen/typescript-react-apollo@^2.2.5":
-  version "2.2.5"
-  resolved "https://registry.npmjs.org/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-2.2.5.tgz#e561d77c3c1cfe32e42ab34c08d517bffc5e9f30"
-  integrity sha512-W9YI6qg6TwjD5CD+rQBmbZjwkA88MKc/9i31xvH2xGgdwzY1ybaTL10zMwsm5Ac+dOU6aCGHZVZzHd4wMrO1nw==
-  dependencies:
-    "@graphql-codegen/plugin-helpers" "^1.18.7"
-    "@graphql-codegen/visitor-plugin-common" "1.21.0"
-    auto-bind "~4.0.0"
-    change-case-all "1.0.14"
-    tslib "~2.2.0"
-
 "@graphql-codegen/typescript-react-query@^1.3.2":
   version "1.3.2"
   resolved "https://registry.npmjs.org/@graphql-codegen/typescript-react-query/-/typescript-react-query-1.3.2.tgz#fa6e6b5eaeee08288fd324c547bab46024ca2052"
