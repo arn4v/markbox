@@ -2,20 +2,22 @@ import "~/styles/index.css";
 import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { AuthProvider } from "~/components/AuthProvider";
+import { QueryClientProvider, QueryClient } from "react-query";
+import TokenStoreProvider from "~/components/TokenProvider";
 
-const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: "/api/graphql",
-  ssrMode: false,
-});
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={apolloClient}>
-      <ThemeProvider attribute="class" defaultTheme="light">
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </ApolloProvider>
+    <QueryClientProvider client={queryClient}>
+      <TokenStoreProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </AuthProvider>
+      </TokenStoreProvider>
+    </QueryClientProvider>
   );
 }

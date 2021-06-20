@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import * as React from "react";
 import { useRegisterMutation } from "~/graphql/types.generated";
-import { BASE_URL } from "~/constants";
 
 export default function RegisterPage() {
   const [state, setState] = React.useState<{ email: string; password: string }>(
@@ -12,9 +11,8 @@ export default function RegisterPage() {
     },
   );
   const router = useRouter();
-  const [handleRegister, { data, loading, error }] = useRegisterMutation({
-    variables: state,
-    onCompleted: ({ register }) => {
+  const { mutate: handleRegister } = useRegisterMutation({
+    onSuccess: ({ register }) => {
       switch (register.code) {
         case "successful": {
           router.push("/login", {
@@ -46,7 +44,7 @@ export default function RegisterPage() {
           className="h-full w-full flex flex-col items-start justify-center gap-5"
           onSubmit={(e) => {
             e.preventDefault();
-            handleRegister();
+            handleRegister(state);
           }}>
           <label htmlFor="email">Email</label>
           <input
