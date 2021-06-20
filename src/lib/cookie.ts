@@ -1,11 +1,12 @@
 import { CookieSerializeOptions, serialize } from "cookie";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import ApiResponse from "~/types/ApiResponse";
 
 /**
  * This sets `cookie` on `res` object
  */
 export const createSetCookie =
-	(res: NextApiResponse) =>
+	(res: ApiResponse) =>
 	(name: string, value: string, options: CookieSerializeOptions = {}) => {
 		const stringValue =
 			typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
@@ -23,12 +24,11 @@ export const createSetCookie =
  * Adds `cookie` function on `res.cookie` to set cookies for response
  */
 const withCookies =
-	(handler: NextApiHandler) =>
-	(
-		req: NextApiRequest,
-		res: NextApiResponse & { setCookie: ReturnType<typeof createSetCookie> },
-	) => {
+	(handler: NextApiHandler) => (req: NextApiRequest, res: ApiResponse) => {
 		res.setCookie = createSetCookie(res);
+		res.removeCookie = (name: string) =>
+			res.setCookie(name, "", { maxAge: -1, path: "/" });
+
 		return handler(req, res);
 	};
 
