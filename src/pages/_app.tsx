@@ -9,15 +9,15 @@ import TokenStoreProvider from "~/components/TokenProvider";
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TokenStoreProvider>
-        <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </AuthProvider>
-      </TokenStoreProvider>
-    </QueryClientProvider>
-  );
+	return (
+		<QueryClientProvider client={queryClient}>
+			<TokenStoreProvider>
+				<AuthProvider>
+					<ThemeProvider attribute="class" defaultTheme="light">
+						<Component {...pageProps} />
+					</ThemeProvider>
+				</AuthProvider>
+			</TokenStoreProvider>
+		</QueryClientProvider>
+	);
 }
