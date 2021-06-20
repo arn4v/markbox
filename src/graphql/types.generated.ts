@@ -9,7 +9,7 @@ import {
 	useQuery,
 	UseQueryOptions,
 } from "react-query";
-import { useFetch } from "./fetcher";
+import { fetcher } from "./fetcher";
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
 	[K in keyof T]: T[K];
@@ -115,36 +115,6 @@ export type User = {
 	email: Scalars["String"];
 	emailVerified: Scalars["Boolean"];
 	createdAt: Scalars["String"];
-	updatedAt: Scalars["String"];
-};
-
-export type LoginMutationVariables = Exact<{
-	email: Scalars["String"];
-	password: Scalars["String"];
-}>;
-
-export type LoginMutation = {
-	__typename?: "Mutation";
-	login?: Maybe<{
-		__typename?: "LoginMessage";
-		code: string;
-		message: string;
-		accessToken?: Maybe<string>;
-	}>;
-};
-
-export type RegisterMutationVariables = Exact<{
-	email: Scalars["String"];
-	password: Scalars["String"];
-}>;
-
-export type RegisterMutation = {
-	__typename?: "Mutation";
-	register?: Maybe<{
-		__typename?: "AuthenticationMessage";
-		code: string;
-		message: string;
-	}>;
 };
 
 export type CreateBookmarkMutationVariables = Exact<{
@@ -171,6 +141,30 @@ export type DeleteBookmarkMutationVariables = Exact<{
 export type DeleteBookmarkMutation = {
 	__typename?: "Mutation";
 	deleteBookmark?: Maybe<boolean>;
+};
+
+export type LoginMutationVariables = Exact<{
+	email: Scalars["String"];
+	password: Scalars["String"];
+}>;
+
+export type LoginMutation = {
+	__typename?: "Mutation";
+	login?: Maybe<{ __typename?: "LoginMessage"; code: string; message: string }>;
+};
+
+export type RegisterMutationVariables = Exact<{
+	email: Scalars["String"];
+	password: Scalars["String"];
+}>;
+
+export type RegisterMutation = {
+	__typename?: "Mutation";
+	register?: Maybe<{
+		__typename?: "AuthenticationMessage";
+		code: string;
+		message: string;
+	}>;
 };
 
 export type UpdateBookmarkMutationVariables = Exact<{
@@ -233,12 +227,8 @@ export type UserQuery = {
 		email: string;
 		emailVerified: boolean;
 		createdAt: string;
-		updatedAt: string;
 	}>;
 };
-
-export type WithIndex<TObject> = TObject & Record<string, any>;
-export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -355,7 +345,7 @@ export type DirectiveResolverFn<
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = ResolversObject<{
+export type ResolversTypes = {
 	AuthenticationMessage: ResolverTypeWrapper<AuthenticationMessage>;
 	String: ResolverTypeWrapper<Scalars["String"]>;
 	Bookmark: ResolverTypeWrapper<Bookmark>;
@@ -367,10 +357,10 @@ export type ResolversTypes = ResolversObject<{
 	Query: ResolverTypeWrapper<{}>;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: ResolverTypeWrapper<User>;
-}>;
+};
 
 /** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = ResolversObject<{
+export type ResolversParentTypes = {
 	AuthenticationMessage: AuthenticationMessage;
 	String: Scalars["String"];
 	Bookmark: Bookmark;
@@ -382,21 +372,21 @@ export type ResolversParentTypes = ResolversObject<{
 	Query: {};
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: User;
-}>;
+};
 
 export type AuthenticationMessageResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["AuthenticationMessage"] = ResolversParentTypes["AuthenticationMessage"],
-> = ResolversObject<{
+> = {
 	code?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
+};
 
 export type BookmarkResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Bookmark"] = ResolversParentTypes["Bookmark"],
-> = ResolversObject<{
+> = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -404,12 +394,12 @@ export type BookmarkResolvers<
 	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
+};
 
 export type LoginMessageResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["LoginMessage"] = ResolversParentTypes["LoginMessage"],
-> = ResolversObject<{
+> = {
 	code?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	accessToken?: Resolver<
@@ -418,12 +408,12 @@ export type LoginMessageResolvers<
 		ContextType
 	>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
+};
 
 export type MutationResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
-> = ResolversObject<{
+> = {
 	login?: Resolver<
 		Maybe<ResolversTypes["LoginMessage"]>,
 		ParentType,
@@ -454,12 +444,12 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationDeleteBookmarkArgs, "id">
 	>;
-}>;
+};
 
 export type QueryResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
-> = ResolversObject<{
+> = {
 	bookmark?: Resolver<
 		ResolversTypes["Bookmark"],
 		ParentType,
@@ -472,28 +462,27 @@ export type QueryResolvers<
 		ContextType
 	>;
 	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
-}>;
+};
 
 export type UserResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"],
-> = ResolversObject<{
+> = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	emailVerified?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
+};
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = any> = {
 	AuthenticationMessage?: AuthenticationMessageResolvers<ContextType>;
 	Bookmark?: BookmarkResolvers<ContextType>;
 	LoginMessage?: LoginMessageResolvers<ContextType>;
 	Mutation?: MutationResolvers<ContextType>;
 	Query?: QueryResolvers<ContextType>;
 	User?: UserResolvers<ContextType>;
-}>;
+};
 
 /**
  * @deprecated
@@ -501,47 +490,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
 
-export const LoginDocument = `
-    mutation Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    code
-    message
-    accessToken
-  }
-}
-    `;
-export const useLoginMutation = <TError = unknown, TContext = unknown>(
-	options?: UseMutationOptions<
-		LoginMutation,
-		TError,
-		LoginMutationVariables,
-		TContext
-	>,
-) =>
-	useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
-		useFetch<LoginMutation, LoginMutationVariables>(LoginDocument),
-		options,
-	);
-export const RegisterDocument = `
-    mutation Register($email: String!, $password: String!) {
-  register(email: $email, password: $password) {
-    code
-    message
-  }
-}
-    `;
-export const useRegisterMutation = <TError = unknown, TContext = unknown>(
-	options?: UseMutationOptions<
-		RegisterMutation,
-		TError,
-		RegisterMutationVariables,
-		TContext
-	>,
-) =>
-	useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
-		useFetch<RegisterMutation, RegisterMutationVariables>(RegisterDocument),
-		options,
-	);
 export const CreateBookmarkDocument = `
     mutation CreateBookmark($input: CreateBookmarkInput!) {
   createBookmark(input: $input) {
@@ -568,9 +516,11 @@ export const useCreateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		CreateBookmarkMutationVariables,
 		TContext
 	>(
-		useFetch<CreateBookmarkMutation, CreateBookmarkMutationVariables>(
-			CreateBookmarkDocument,
-		),
+		(variables?: CreateBookmarkMutationVariables) =>
+			fetcher<CreateBookmarkMutation, CreateBookmarkMutationVariables>(
+				CreateBookmarkDocument,
+				variables,
+			)(),
 		options,
 	);
 export const DeleteBookmarkDocument = `
@@ -592,9 +542,59 @@ export const useDeleteBookmarkMutation = <TError = unknown, TContext = unknown>(
 		DeleteBookmarkMutationVariables,
 		TContext
 	>(
-		useFetch<DeleteBookmarkMutation, DeleteBookmarkMutationVariables>(
-			DeleteBookmarkDocument,
-		),
+		(variables?: DeleteBookmarkMutationVariables) =>
+			fetcher<DeleteBookmarkMutation, DeleteBookmarkMutationVariables>(
+				DeleteBookmarkDocument,
+				variables,
+			)(),
+		options,
+	);
+export const LoginDocument = `
+    mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    code
+    message
+  }
+}
+    `;
+export const useLoginMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		LoginMutation,
+		TError,
+		LoginMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
+		(variables?: LoginMutationVariables) =>
+			fetcher<LoginMutation, LoginMutationVariables>(
+				LoginDocument,
+				variables,
+			)(),
+		options,
+	);
+export const RegisterDocument = `
+    mutation Register($email: String!, $password: String!) {
+  register(email: $email, password: $password) {
+    code
+    message
+  }
+}
+    `;
+export const useRegisterMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		RegisterMutation,
+		TError,
+		RegisterMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
+		(variables?: RegisterMutationVariables) =>
+			fetcher<RegisterMutation, RegisterMutationVariables>(
+				RegisterDocument,
+				variables,
+			)(),
 		options,
 	);
 export const UpdateBookmarkDocument = `
@@ -623,9 +623,11 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		UpdateBookmarkMutationVariables,
 		TContext
 	>(
-		useFetch<UpdateBookmarkMutation, UpdateBookmarkMutationVariables>(
-			UpdateBookmarkDocument,
-		),
+		(variables?: UpdateBookmarkMutationVariables) =>
+			fetcher<UpdateBookmarkMutation, UpdateBookmarkMutationVariables>(
+				UpdateBookmarkDocument,
+				variables,
+			)(),
 		options,
 	);
 export const GetAllBookmarksDocument = `
@@ -649,9 +651,10 @@ export const useGetAllBookmarksQuery = <
 ) =>
 	useQuery<GetAllBookmarksQuery, TError, TData>(
 		["GetAllBookmarks", variables],
-		useFetch<GetAllBookmarksQuery, GetAllBookmarksQueryVariables>(
+		fetcher<GetAllBookmarksQuery, GetAllBookmarksQueryVariables>(
 			GetAllBookmarksDocument,
-		).bind(null, variables),
+			variables,
+		),
 		options,
 	);
 export const GetBookmarkDocument = `
@@ -672,9 +675,10 @@ export const useGetBookmarkQuery = <TData = GetBookmarkQuery, TError = unknown>(
 ) =>
 	useQuery<GetBookmarkQuery, TError, TData>(
 		["GetBookmark", variables],
-		useFetch<GetBookmarkQuery, GetBookmarkQueryVariables>(
+		fetcher<GetBookmarkQuery, GetBookmarkQueryVariables>(
 			GetBookmarkDocument,
-		).bind(null, variables),
+			variables,
+		),
 		options,
 	);
 export const UserDocument = `
@@ -684,7 +688,6 @@ export const UserDocument = `
     email
     emailVerified
     createdAt
-    updatedAt
   }
 }
     `;
@@ -694,6 +697,6 @@ export const useUserQuery = <TData = UserQuery, TError = unknown>(
 ) =>
 	useQuery<UserQuery, TError, TData>(
 		["User", variables],
-		useFetch<UserQuery, UserQueryVariables>(UserDocument).bind(null, variables),
+		fetcher<UserQuery, UserQueryVariables>(UserDocument, variables),
 		options,
 	);

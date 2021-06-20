@@ -38,7 +38,6 @@ export default gql`
 		email: String!
 		emailVerified: Boolean!
 		createdAt: String!
-		updatedAt: String!
 	}
 
 	type Query {

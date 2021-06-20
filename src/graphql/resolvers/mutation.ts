@@ -3,6 +3,8 @@ import GQLContext from "~/types/GQLContext";
 import { MutationResolvers } from "../types.generated";
 import prisma from "~/lib/prisma";
 import { jwtSign } from "~/lib/jwt";
+import ms from "ms";
+import { isProd } from "~/constants";
 
 export default {
 	async login(_, { email, password }, ctx) {
@@ -15,6 +17,13 @@ export default {
 			const isPasswordValid = await comparePassword(password, user.password);
 			if (isPasswordValid) {
 				const jwt = await jwtSign({ sub: user.id });
+				ctx.res.setCookie("access_token", jwt, {
+					path: "/",
+					sameSite: isProd,
+					secure: isProd,
+					httpOnly: isProd,
+					maxAge: ms("12h"),
+				});
 				return {
 					code: "successful",
 					message: "Successfully logged in.",
@@ -34,7 +43,6 @@ export default {
 		}
 	},
 	async register(_, { email, password }, ctx) {
-		console.log(email, password);
 		const user = await prisma.user.findUnique({
 			where: {
 				email,
@@ -42,12 +50,14 @@ export default {
 		});
 		if (!user) {
 			const hashedPassword = await hashPassword(password);
+
 			await prisma.user.create({
 				data: {
 					email,
 					password: hashedPassword,
 				},
 			});
+
 			return {
 				code: "successful",
 				message: "Successfully registered. Please log in.",
@@ -61,6 +71,7 @@ export default {
 	},
 	async createBookmark(_, { input }, ctx) {
 		const { tags, title, url } = input;
+
 		const newBookmark = await prisma.bookmark.create({
 			data: {
 				title: title,
@@ -70,11 +81,13 @@ export default {
 				},
 			},
 		});
+
 		const newTags = await prisma.tag.findMany({
 			where: {
 				bookmarkId: newBookmark.id,
 			},
 		});
+
 		return {
 			id: newBookmark.id,
 			title: newBookmark.title,
@@ -86,6 +99,7 @@ export default {
 	},
 	async updateBookmark(_, { id, input }, ctx) {
 		const { title, url } = input;
+
 		const _updated = await prisma.bookmark.update({
 			where: {
 				id,
@@ -95,16 +109,20 @@ export default {
 				url: url,
 			},
 		});
+
 		const _tags = await prisma.tag.findMany({
 			where: {
 				bookmarkId: _updated.id,
 			},
 		});
+
 		return {
 			id: _updated.id,
 			title: _updated.title,
 			url: _updated.url,
 			tags: _tags.map((item) => item.title),
+			createdAt: _updated.createdAt.toISOString(),
+			updatedAt: _updated.updatedAt.toISOString(),
 		};
 	},
 } as MutationResolvers<GQLContext>;

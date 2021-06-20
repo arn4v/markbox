@@ -24,6 +24,8 @@ export default {
 			title,
 			url,
 			tags: [],
+			createdAt: createdAt.toISOString(),
+			updatedAt: updatedAt.toISOString(),
 		};
 	},
 	async bookmarks(_, __, ctx) {

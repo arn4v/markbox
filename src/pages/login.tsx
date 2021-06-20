@@ -15,10 +15,10 @@ export default function RegisterPage() {
 	const { setAccessToken } = useTokenStore();
 	const router = useRouter();
 	const { mutate: handleLogin } = useLoginMutation({
-		onSuccess: ({ login: { code, message, accessToken = undefined } }) => {
-			switch (code) {
+		onSuccess: ({ login }) => {
+			switch (login.code) {
 				case "successful": {
-					if (accessToken) setAccessToken(accessToken);
+					if (login.accessToken) setAccessToken(login.accessToken);
 					router.push("/dashboard");
 					break;
 				}

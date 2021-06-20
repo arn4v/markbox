@@ -19,11 +19,8 @@ generates:
       - typescript-resolvers
       - typescript-react-query
     config:
-      useIndexSignature: true
-      withHOC: false
+      useIndexSignature: false
       withHooks: true
-      withComponent: false
       fetcher:
-        isReactHook: true
-        func: "./fetcher#useFetch"
+        func: "./fetcher#fetcher"
       preResolveTypes: true

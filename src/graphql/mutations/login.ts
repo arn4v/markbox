@@ -5,7 +5,6 @@ export default gql`
 		login(email: $email, password: $password) {
 			code
 			message
-			accessToken
 		}
 	}
 `;

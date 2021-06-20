@@ -7,7 +7,6 @@ export default gql`
 			email
 			emailVerified
 			createdAt
-			updatedAt
 		}
 	}
 `;
