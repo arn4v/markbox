@@ -1,3 +1,9 @@
+export type ArgumentTypes<F extends Function> = F extends (
+  ...args: infer A
+) => any
+  ? A
+  : never;
+
 /**
  * @typedef {import("firebase").default.firestore.Timestamp} Timestamp
  */

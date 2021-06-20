@@ -1,18 +1,14 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { actions } from "../store";
+import { useToggle } from "react-use";
 
 const SearchBar = () => {
-  const show = useSelector((state) => state.filter.show);
   const [search, setSearch] = React.useState("");
-  const dispatch = useDispatch();
+  const [_, toggleFilter] = useToggle(false);
+
   /** @param {React.ChangeEvent<HTMLInputElement>} e */
   const onChange = (e) => {
     setSearch(e.target.value);
-    dispatch({ type: actions.SEARCH_UPDATE, payload: e.target.value });
   };
-  const toggleFilter = () =>
-    dispatch({ type: show ? actions.FILTER_HIDE : actions.FILTER_SHOW });
 
   return (
     <div className="flex items-center justify-center w-full gap-3">

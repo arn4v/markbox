@@ -7,5 +7,5 @@ export const jwtSign = createSigner({
 
 export const jwtVerify = createVerifier({
   key: async () => process.env.JWT_SECRET,
-  maxAge: ms("2 days"),
+  maxAge: ms("12h"),
 });

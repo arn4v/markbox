@@ -1,12 +1,15 @@
 import { ApolloServer } from "apollo-server-micro";
 import { isProd } from "~/constants";
 import schema from "~/graphql/schema";
+import withCookies from "~/lib/cookie";
 import GQLContext from "~/types/GQLContext";
 
 const apolloServer = new ApolloServer({
   schema: schema,
   playground: !isProd,
-  context: ({ req, res }: GQLContext) => ({ req, res }),
+  context: ({ req, res }: GQLContext) => {
+    return { req, res };
+  },
 });
 
 export const config = {
@@ -15,4 +18,6 @@ export const config = {
   },
 };
 
-export default apolloServer.createHandler({ path: "/api/graphql" });
+const handler = apolloServer.createHandler({ path: "/api/graphql" });
+
+export default withCookies(handler);
