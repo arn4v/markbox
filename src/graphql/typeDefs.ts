@@ -6,6 +6,8 @@ export default gql`
     title: String!
     url: String!
     tags: [String!]!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input CreateBookmarkInput {
@@ -50,5 +52,6 @@ export default gql`
     register(email: String!, password: String!): AuthenticationMessage
     createBookmark(input: CreateBookmarkInput!): Bookmark
     updateBookmark(id: ID!, input: UpdateBookmarkInput!): Bookmark
+    deleteBookmark(id: ID!): Boolean
   }
 `;

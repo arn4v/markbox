@@ -7,6 +7,8 @@ export default gql`
       title
       url
       tags
+      createdAt
+      updatedAt
     }
   }
 `;

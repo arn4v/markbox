@@ -1,8 +1,9 @@
 import { User } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
+import ApiResponse from "./ApiResponse";
 
 export default interface GQLContext {
   req: NextApiRequest;
-  res: NextApiResponse;
+  res: ApiResponse;
   user?: User;
 }

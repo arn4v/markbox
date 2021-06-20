@@ -39,6 +39,8 @@ export type Bookmark = {
   title: Scalars["String"];
   url: Scalars["String"];
   tags: Array<Scalars["String"]>;
+  createdAt: Scalars["String"];
+  updatedAt: Scalars["String"];
 };
 
 export type CreateBookmarkInput = {
@@ -60,6 +62,7 @@ export type Mutation = {
   register?: Maybe<AuthenticationMessage>;
   createBookmark?: Maybe<Bookmark>;
   updateBookmark?: Maybe<Bookmark>;
+  deleteBookmark?: Maybe<Scalars["Boolean"]>;
 };
 
 export type MutationLoginArgs = {
@@ -79,6 +82,10 @@ export type MutationCreateBookmarkArgs = {
 export type MutationUpdateBookmarkArgs = {
   id: Scalars["ID"];
   input: UpdateBookmarkInput;
+};
+
+export type MutationDeleteBookmarkArgs = {
+  id: Scalars["ID"];
 };
 
 export type Query = {
@@ -136,12 +143,11 @@ export type RegisterMutation = {
   }>;
 };
 
-export type CreateBookmarkInputMutationVariables = Exact<{
-  id: Scalars["ID"];
+export type CreateBookmarkMutationVariables = Exact<{
   input: CreateBookmarkInput;
 }>;
 
-export type CreateBookmarkInputMutation = {
+export type CreateBookmarkMutation = {
   __typename?: "Mutation";
   createBookmark?: Maybe<{
     __typename?: "Bookmark";
@@ -149,7 +155,18 @@ export type CreateBookmarkInputMutation = {
     title: string;
     url: string;
     tags: Array<string>;
+    createdAt: string;
+    updatedAt: string;
   }>;
+};
+
+export type DeleteBookmarkMutationVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type DeleteBookmarkMutation = {
+  __typename?: "Mutation";
+  deleteBookmark?: Maybe<boolean>;
 };
 
 export type UpdateBookmarkMutationVariables = Exact<{
@@ -165,6 +182,8 @@ export type UpdateBookmarkMutation = {
     title: string;
     url: string;
     tags: Array<string>;
+    createdAt: string;
+    updatedAt: string;
   }>;
 };
 
@@ -178,6 +197,8 @@ export type GetAllBookmarksQuery = {
     title: string;
     url: string;
     tags: Array<string>;
+    createdAt: string;
+    updatedAt: string;
   }>;
 };
 
@@ -193,6 +214,8 @@ export type GetBookmarkQuery = {
     title: string;
     url: string;
     tags: Array<string>;
+    createdAt: string;
+    updatedAt: string;
   };
 };
 
@@ -309,59 +332,108 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
 >;
-export const CreateBookmarkInputDocument = gql`
-  mutation CreateBookmarkInput($id: ID!, $input: CreateBookmarkInput!) {
+export const CreateBookmarkDocument = gql`
+  mutation CreateBookmark($input: CreateBookmarkInput!) {
     createBookmark(input: $input) {
       id
       title
       url
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
-export type CreateBookmarkInputMutationFn = Apollo.MutationFunction<
-  CreateBookmarkInputMutation,
-  CreateBookmarkInputMutationVariables
+export type CreateBookmarkMutationFn = Apollo.MutationFunction<
+  CreateBookmarkMutation,
+  CreateBookmarkMutationVariables
 >;
 
 /**
- * __useCreateBookmarkInputMutation__
+ * __useCreateBookmarkMutation__
  *
- * To run a mutation, you first call `useCreateBookmarkInputMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateBookmarkInputMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateBookmarkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookmarkMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createBookmarkInputMutation, { data, loading, error }] = useCreateBookmarkInputMutation({
+ * const [createBookmarkMutation, { data, loading, error }] = useCreateBookmarkMutation({
  *   variables: {
- *      id: // value for 'id'
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateBookmarkInputMutation(
+export function useCreateBookmarkMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateBookmarkInputMutation,
-    CreateBookmarkInputMutationVariables
+    CreateBookmarkMutation,
+    CreateBookmarkMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    CreateBookmarkInputMutation,
-    CreateBookmarkInputMutationVariables
-  >(CreateBookmarkInputDocument, options);
+    CreateBookmarkMutation,
+    CreateBookmarkMutationVariables
+  >(CreateBookmarkDocument, options);
 }
-export type CreateBookmarkInputMutationHookResult = ReturnType<
-  typeof useCreateBookmarkInputMutation
+export type CreateBookmarkMutationHookResult = ReturnType<
+  typeof useCreateBookmarkMutation
 >;
-export type CreateBookmarkInputMutationResult =
-  Apollo.MutationResult<CreateBookmarkInputMutation>;
-export type CreateBookmarkInputMutationOptions = Apollo.BaseMutationOptions<
-  CreateBookmarkInputMutation,
-  CreateBookmarkInputMutationVariables
+export type CreateBookmarkMutationResult =
+  Apollo.MutationResult<CreateBookmarkMutation>;
+export type CreateBookmarkMutationOptions = Apollo.BaseMutationOptions<
+  CreateBookmarkMutation,
+  CreateBookmarkMutationVariables
+>;
+export const DeleteBookmarkDocument = gql`
+  mutation DeleteBookmark($id: ID!) {
+    deleteBookmark(id: $id)
+  }
+`;
+export type DeleteBookmarkMutationFn = Apollo.MutationFunction<
+  DeleteBookmarkMutation,
+  DeleteBookmarkMutationVariables
+>;
+
+/**
+ * __useDeleteBookmarkMutation__
+ *
+ * To run a mutation, you first call `useDeleteBookmarkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBookmarkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBookmarkMutation, { data, loading, error }] = useDeleteBookmarkMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteBookmarkMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteBookmarkMutation,
+    DeleteBookmarkMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteBookmarkMutation,
+    DeleteBookmarkMutationVariables
+  >(DeleteBookmarkDocument, options);
+}
+export type DeleteBookmarkMutationHookResult = ReturnType<
+  typeof useDeleteBookmarkMutation
+>;
+export type DeleteBookmarkMutationResult =
+  Apollo.MutationResult<DeleteBookmarkMutation>;
+export type DeleteBookmarkMutationOptions = Apollo.BaseMutationOptions<
+  DeleteBookmarkMutation,
+  DeleteBookmarkMutationVariables
 >;
 export const UpdateBookmarkDocument = gql`
   mutation UpdateBookmark($id: ID!, $input: UpdateBookmarkInput!) {
@@ -370,6 +442,8 @@ export const UpdateBookmarkDocument = gql`
       title
       url
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -424,6 +498,8 @@ export const GetAllBookmarksDocument = gql`
       title
       url
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -484,6 +560,8 @@ export const GetBookmarkDocument = gql`
       title
       url
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -707,10 +785,10 @@ export type ResolversTypes = ResolversObject<{
   CreateBookmarkInput: CreateBookmarkInput;
   LoginMessage: ResolverTypeWrapper<LoginMessage>;
   Mutation: ResolverTypeWrapper<{}>;
+  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Query: ResolverTypeWrapper<{}>;
   UpdateBookmarkInput: UpdateBookmarkInput;
   User: ResolverTypeWrapper<User>;
-  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -722,10 +800,10 @@ export type ResolversParentTypes = ResolversObject<{
   CreateBookmarkInput: CreateBookmarkInput;
   LoginMessage: LoginMessage;
   Mutation: {};
+  Boolean: Scalars["Boolean"];
   Query: {};
   UpdateBookmarkInput: UpdateBookmarkInput;
   User: User;
-  Boolean: Scalars["Boolean"];
 }>;
 
 export type AuthenticationMessageResolvers<
@@ -745,6 +823,8 @@ export type BookmarkResolvers<
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -789,6 +869,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateBookmarkArgs, "id" | "input">
+  >;
+  deleteBookmark?: Resolver<
+    Maybe<ResolversTypes["Boolean"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteBookmarkArgs, "id">
   >;
 }>;
 

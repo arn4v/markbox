@@ -80,6 +80,8 @@ export default {
       title: newBookmark.title,
       url: newBookmark.url,
       tags: newTags.map((item) => item.title),
+      createdAt: newBookmark.createdAt.toISOString(),
+      updatedAt: newBookmark.updatedAt.toISOString(),
     };
   },
   async updateBookmark(_, { id, input }, ctx) {

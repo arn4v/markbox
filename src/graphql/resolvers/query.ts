@@ -34,7 +34,14 @@ export default {
           userId,
         },
       })
-    ).map(({ id, url, title }) => ({ id, url, title, tags: [] }));
+    ).map(({ id, url, title, createdAt, updatedAt }) => ({
+      id,
+      url,
+      title,
+      tags: [],
+      createdAt: createdAt.toISOString(),
+      updatedAt: updatedAt.toISOString(),
+    }));
   },
   async user(_, __, ctx) {
     const userId = await protectResolver(ctx.req);
