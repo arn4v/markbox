@@ -1,8 +1,10 @@
+
 export default function AddBookmarkButton() {
+
 	return (
 		<button
 			className="absolute bottom-0 right-0 p-4 mb-6 mr-4 transition bg-indigo-500 rounded-full focus:outline-none focus:bg-indigo-600"
-			onClick={showAddSheet}>
+			onClick={() => setShowAdd((prev) => ({ ...prev, show: true }))}>
 			<svg
 				width="24"
 				height="24"

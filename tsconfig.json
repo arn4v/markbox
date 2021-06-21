@@ -1,26 +1,25 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
-    "lib": ["dom", "DOM.Iterable", "ES2017", "ESNext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "importHelpers": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "typeRoots": ["@types", "./node_modules/@types"],
-    "baseUrl": ".",
-    "checkJs": true,
-    "paths": {
-      "~/*": ["src/*"]
-    }
-  },
-  "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "types", "src"]
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "CommonJS",
+		"lib": ["DOM", "ESNext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"importHelpers": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"typeRoots": ["@types", "./node_modules/@types"],
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["src/*"]
+		}
+	},
+	"exclude": ["node_modules"],
+	"include": ["next-env.d.ts", "types", "src/**/*"]
 }

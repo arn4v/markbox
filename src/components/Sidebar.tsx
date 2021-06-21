@@ -1,6 +1,6 @@
 import { Logo } from "~/components/Logo";
-import AddBookmarkButton from "./desktop/AddBookmark";
-import ProfileDropdown from "./desktop/ProfileDropdown";
+import CreateBookmarkButton from "./CreateBookmarkButton";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Sidebar = () => {
 	return (
@@ -8,7 +8,7 @@ const Sidebar = () => {
 			<div className="flex flex-col justify-between w-1/2 h-full">
 				<div className="flex flex-col w-full gap-6 font-medium dark:text-white">
 					<Logo className="my-1.5" />
-					<AddBookmarkButton />
+					<CreateBookmarkButton />
 				</div>
 				<ProfileDropdown />
 			</div>

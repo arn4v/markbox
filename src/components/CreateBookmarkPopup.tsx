@@ -1,17 +1,18 @@
 import * as React from "react";
-import { Popup } from "./Popup";
 import { useOnClickOutside } from "~/hooks/onclick-outside";
 import { useCreateBookmarkMutation } from "~/graphql/types.generated";
 
+const initialState = {
+	title: "",
+	url: "",
+	tags: {},
+	collection: "",
+};
+
 const AddBookmark = () => {
-	const [state, setState] = React.useState({
-		title: "",
-		url: "",
-		tags: {},
-		folder: "",
-	});
+	const [state, setState] = React.useState(initialState);
 	const [add, setAdd] = React.useState(false);
-	const [createBookmark] = useCreateBookmarkMutation();
+	const { mutate: createBookmark } = useCreateBookmarkMutation();
 	const ref = React.useRef(null);
 
 	const cancel = () => {
@@ -19,11 +20,10 @@ const AddBookmark = () => {
 		setAdd(false);
 	};
 
-	const onSubmit = (e) => {
+	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		createBookmark({
-			variables: state,
-		});
+		const { collection, tags, ...input } = state;
+		createBookmark({ input });
 	};
 
 	const showAdd = () => {
