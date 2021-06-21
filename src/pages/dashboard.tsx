@@ -6,7 +6,10 @@ export default function HomePage() {
 
 	return (
 		<div className="h-screen w-screen bg-gray-900 flex flex-col">
-			<div className="h-full "></div>
+			<div className="h-full w-1/5 bg-gray-700 flex flex-col py-12 px-4">
+
+
+			</div>
 		</div>
 	);
 }
