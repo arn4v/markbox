@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TagBadge } from "~/components/TagBadge";
+import { Badge } from "~/components/Badge";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
 import { useGetBookmarkQuery } from "~/graphql/types.generated";
@@ -42,10 +42,11 @@ const BookmarkCard = (props) => {
 				<div className="flex gap-2 mt-1.5">
 					{Object.values(data?.tags).map((item) => {
 						return (
-							<TagBadge
+							<Badge
 								key={item.id}
 								title={item.title}
 								className={item.color}
+								variant="solid"
 							/>
 						);
 					})}

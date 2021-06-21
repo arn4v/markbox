@@ -2,12 +2,12 @@ import clsx from "clsx";
 import * as React from "react";
 import { v4 as uuid } from "uuid";
 import { useStore } from "~/store";
-import { TagBadge } from "~/components/TagBadge";
+import { Badge } from "~/components/Badge";
 import { motion } from "framer-motion";
 import { HiPlusCircle, HiXCircle } from "react-icons/hi";
 import { useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import { randomColor } from "~/lib/utils";
-import Overlay from "./Overlay";
+import Overlay from "../../../components/Overlay";
 
 const initialState = {
 	id: "",
@@ -177,7 +177,7 @@ const EditSheet = () => {
 							<div className="flex flex-wrap gap-2 w-full my-2">
 								{Object.values(state.tags).map((item) => {
 									return (
-										<TagBadge
+										<Badge
 											key={item.id}
 											title={item.title}
 											className={item.color}>
@@ -200,7 +200,7 @@ const EditSheet = () => {
 													/>
 												</svg>
 											</button>
-										</TagBadge>
+										</Badge>
 									);
 								})}
 							</div>

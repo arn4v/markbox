@@ -1,6 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
-import { TagBadge } from "./TagBadge";
+import { Badge } from "../../../components/Badge";
 import { randomColor } from "~/lib/utils";
 import { v4 as uuid } from "uuid";
 import { useCreateBookmarkMutation } from "~/graphql/types.generated";
@@ -103,7 +103,7 @@ const AddForm = ({ className }) => {
 				<div className="flex flex-wrap gap-2 w-full my-2">
 					{Object.values(state.tags).map((item) => {
 						return (
-							<TagBadge key={item.id} title={item.title} className={item.color}>
+							<Badge key={item.id} title={item.title} className={item.color}>
 								<button
 									className="rounded-full py-0.5 focus:outline-none flex"
 									type="button"
@@ -123,7 +123,7 @@ const AddForm = ({ className }) => {
 										/>
 									</svg>
 								</button>
-							</TagBadge>
+							</Badge>
 						);
 					})}
 				</div>
