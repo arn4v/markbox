@@ -1,6 +1,6 @@
 import { Logo } from "~/components/Logo";
 import CreateBookmarkButton from "./CreateBookmarkButton";
-import ProfileDropdown from "./ProfileDropdown";
+import ProfileDropdown from "../../common/components/ProfileDropdown";
 
 const Sidebar = () => {
 	return (

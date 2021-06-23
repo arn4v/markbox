@@ -2,9 +2,9 @@ import * as React from "react";
 import { HiPlus } from "react-icons/hi";
 import { useAuth } from "~/providers/AuthProvider";
 import { Logo } from "~/components/Logo";
-import CreateBookmarkButton from "~/components/CreateBookmarkButton";
+import CreateBookmarkButton from "~/modules/dashboard/components/CreateBookmarkButton";
 import Collections from "~/components/Collections";
-import Navbar from "~/components/Navbar";
+import Navbar from "~/modules/dashboard/components/Navbar";
 import LoadingPage from "~/components/LoadingPage";
 import { useRouter } from "next/router";
 

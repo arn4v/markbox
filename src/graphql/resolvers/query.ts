@@ -2,7 +2,7 @@ import { AuthenticationError } from "apollo-server-micro";
 import { jwtVerify } from "~/lib/jwt";
 import prisma from "~/lib/prisma";
 import GQLContext from "~/types/GQLContext";
-import protectResolver from "../protectedResolver";
+import protectResolver from "../protect-resolver";
 import { QueryResolvers } from "../types.generated";
 
 export default {
