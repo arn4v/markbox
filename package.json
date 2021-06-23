@@ -15,7 +15,7 @@
 		"prisma": "prisma",
 		"db": "prisma studio --port 5556 --browser none",
 		"db-gen": "prisma generate",
-		"db-gen-watch": "prisma generate --watch",
+		"db-gen-watch": "nodemon -e prisma -w ./prisma --exec prisma generate && prisma db push",
 		"db-push": "prisma db push --skip-generate",
 		"db-seed-users": "prisma db seed --preview-feature",
 		"db-dev": "nodemon -w ./prisma -e prisma --exec npx prisma generate && npx prisma db push",

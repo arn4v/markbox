@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import colors from "~/lib/colors";
 import { Colors } from "~/types/Colors";
 
 interface Props {
@@ -20,7 +21,7 @@ export default function Badge({
 		<div
 			className={clsx([
 				"flex gap-1.5 px-2 py-1 text-xs font-medium text-white items-center justify-center uppercase rounded-full",
-				variant === "solid" && `bg-${color}`,
+				variant === "solid" && `bg-[${colors[color]}]`,
 				variant === "outline" && ``,
 				className,
 			])}>

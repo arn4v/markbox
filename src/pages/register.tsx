@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import * as React from "react";
 import { useRegisterMutation } from "~/graphql/types.generated";
+import InfoBox from "~/components/InfoBox";
 
 export default function RegisterPage() {
 	const [state, setState] = React.useState<{ email: string; password: string }>(
@@ -12,9 +13,8 @@ export default function RegisterPage() {
 	);
 	const router = useRouter();
 	const { mutate: handleRegister } = useRegisterMutation({
-		onSettled: ({ register }, error) => {
-			console.log(register, error);
-			if (error) return;
+		onSuccess: ({ register }) => {
+			console.log(register);
 			switch (register.code) {
 				case "successful": {
 					router.push("/login", {
@@ -38,10 +38,18 @@ export default function RegisterPage() {
 
 	return (
 		<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 gap-8">
-			<div className="w-5/6 lg:w-2/5 text-2xl font-bold grid place-items-center">
+			<div className="w-5/6 lg:w-1/3 text-2xl font-bold grid place-items-center">
 				Register
 			</div>
-			<div className="w-5/6 lg:w-2/5 bg-white rounded-lg shadow-lg py-6 px-10">
+			{router.query?.message && (
+				<InfoBox
+					className="w-5/6 mx-auto lg:w-1/3 justify-center"
+					text={router.query?.message as string}
+					bgColor="blueGray-500"
+					textColor="indigo-500"
+				/>
+			)}
+			<div className="w-5/6 lg:w-1/3 bg-white rounded-lg shadow-lg py-6 px-10">
 				<form
 					className="h-full w-full flex flex-col items-start justify-center gap-5"
 					onSubmit={(e) => {

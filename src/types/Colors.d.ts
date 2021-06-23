@@ -1,3 +1,3 @@
 import colors from "../lib/colors";
 
-export type Colors = typeof colors[keyof typeof colors];
+export type Colors = keyof typeof colors;
