@@ -1,10 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { isProd } from "~/constants";
 
-const options: Prisma.PrismaClientOptions = isProd
-	? {}
-	: { log: ["query", "info", `warn`, `error`] };
-
-if (!global.prisma) global.prisma = new PrismaClient(options);
+if (!global.prisma) global.prisma = new PrismaClient();
 
 export default global.prisma as PrismaClient;

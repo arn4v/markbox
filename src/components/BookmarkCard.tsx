@@ -1,33 +1,28 @@
 import * as React from "react";
-import { Badge } from "~/components/Badge";
+import { Dialog } from "@reach/dialog";
+import Badge from "~/components/Badge";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
 import { useGetBookmarkQuery } from "~/graphql/types.generated";
-import { useStore } from "~/store";
 
-/**
- * @typedef {Object} Props
- * @property {string} id
- */
+interface Props {
+	id: string;
+}
 
-/**
- * @type {React.FC<Props>}
- */
-const BookmarkCard = (props) => {
+const BookmarkCard = (props: Props) => {
+	const [showEdit, setShowEdit] = React.useState<boolean>(false);
 	const {
 		data: { bookmark: data },
-	} = useGetBookmarkQuery({ variables: { id: props.id } });
-	const showEdit = useStore((state) => state.actions.showEditSheet);
+	} = useGetBookmarkQuery({ id: props.id });
 
-	const showEditSheet = () => {
-		showEdit(data);
-	};
+	const onEditOpen = () => setShowEdit(true);
+	const onEditClose = () => setShowEdit(false);
 
 	return (
 		<div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
 			<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 				<span className="text-xs text-white">
-					{format(data?.createdAt, "do MMMM, yyyy")}
+					{format(new Date(data?.createdAt), "do MMMM, yyyy")}
 				</span>
 				<div className="text-sm font-medium w-5/6 break-words text-white">
 					{data?.title}
@@ -41,14 +36,7 @@ const BookmarkCard = (props) => {
 				</a>
 				<div className="flex gap-2 mt-1.5">
 					{Object.values(data?.tags).map((item) => {
-						return (
-							<Badge
-								key={item.id}
-								title={item.title}
-								className={item.color}
-								variant="solid"
-							/>
-						);
+						return <Badge key={item.id} title={item.name} variant="solid" />;
 					})}
 				</div>
 			</div>
@@ -74,7 +62,7 @@ const BookmarkCard = (props) => {
 				</a>
 				<button
 					type="button"
-					onClick={showEditSheet}
+					onClick={onEditOpen}
 					className="focus:outline-none">
 					<svg
 						width="18"
@@ -101,13 +89,12 @@ const BookmarkCard = (props) => {
 						</defs>
 					</svg>
 				</button>
+				<Dialog isOpen={showEdit} onDismiss={onEditClose}>
+					Hello
+				</Dialog>
 			</div>
 		</div>
 	);
-};
-
-BookmarkCard.propTypes = {
-	id: PropTypes.string.isRequired,
 };
 
 export default BookmarkCard;

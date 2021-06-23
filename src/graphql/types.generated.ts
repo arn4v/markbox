@@ -42,7 +42,7 @@ export type Bookmark = {
 	id: Scalars["ID"];
 	title: Scalars["String"];
 	url: Scalars["String"];
-	tags: Array<Scalars["String"]>;
+	tags: Array<Tag>;
 	createdAt: Scalars["String"];
 	updatedAt: Scalars["String"];
 };
@@ -103,6 +103,12 @@ export type QueryBookmarkArgs = {
 	id: Scalars["ID"];
 };
 
+export type Tag = {
+	__typename?: "Tag";
+	id: Scalars["String"];
+	name: Scalars["String"];
+};
+
 export type UpdateBookmarkInput = {
 	title?: Maybe<Scalars["String"]>;
 	url?: Maybe<Scalars["String"]>;
@@ -128,9 +134,9 @@ export type CreateBookmarkMutation = {
 		id: string;
 		title: string;
 		url: string;
-		tags: Array<string>;
 		createdAt: string;
 		updatedAt: string;
+		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	}>;
 };
 
@@ -179,9 +185,9 @@ export type UpdateBookmarkMutation = {
 		id: string;
 		title: string;
 		url: string;
-		tags: Array<string>;
 		createdAt: string;
 		updatedAt: string;
+		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	}>;
 };
 
@@ -194,9 +200,9 @@ export type GetAllBookmarksQuery = {
 		id: string;
 		title: string;
 		url: string;
-		tags: Array<string>;
 		createdAt: string;
 		updatedAt: string;
+		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	}>;
 };
 
@@ -211,9 +217,9 @@ export type GetBookmarkQuery = {
 		id: string;
 		title: string;
 		url: string;
-		tags: Array<string>;
 		createdAt: string;
 		updatedAt: string;
+		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	};
 };
 
@@ -355,6 +361,7 @@ export type ResolversTypes = {
 	Mutation: ResolverTypeWrapper<{}>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Query: ResolverTypeWrapper<{}>;
+	Tag: ResolverTypeWrapper<Tag>;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: ResolverTypeWrapper<User>;
 };
@@ -370,6 +377,7 @@ export type ResolversParentTypes = {
 	Mutation: {};
 	Boolean: Scalars["Boolean"];
 	Query: {};
+	Tag: Tag;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: User;
 };
@@ -390,7 +398,7 @@ export type BookmarkResolvers<
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	tags?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -464,6 +472,15 @@ export type QueryResolvers<
 	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
+export type TagResolvers<
+	ContextType = any,
+	ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"],
+> = {
+	id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"],
@@ -481,6 +498,7 @@ export type Resolvers<ContextType = any> = {
 	LoginMessage?: LoginMessageResolvers<ContextType>;
 	Mutation?: MutationResolvers<ContextType>;
 	Query?: QueryResolvers<ContextType>;
+	Tag?: TagResolvers<ContextType>;
 	User?: UserResolvers<ContextType>;
 };
 
@@ -496,7 +514,10 @@ export const CreateBookmarkDocument = `
     id
     title
     url
-    tags
+    tags {
+      id
+      name
+    }
     createdAt
     updatedAt
   }
@@ -603,7 +624,10 @@ export const UpdateBookmarkDocument = `
     id
     title
     url
-    tags
+    tags {
+      id
+      name
+    }
     createdAt
     updatedAt
   }
@@ -636,7 +660,10 @@ export const GetAllBookmarksDocument = `
     id
     title
     url
-    tags
+    tags {
+      id
+      name
+    }
     createdAt
     updatedAt
   }
@@ -663,7 +690,10 @@ export const GetBookmarkDocument = `
     id
     title
     url
-    tags
+    tags {
+      id
+      name
+    }
     createdAt
     updatedAt
   }

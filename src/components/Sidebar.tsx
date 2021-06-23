@@ -1,5 +1,5 @@
 import { Logo } from "~/components/Logo";
-import CreateBookmarkButton from "../../create/components/CreateBookmarkButton";
+import CreateBookmarkButton from "./CreateBookmarkButton";
 import ProfileDropdown from "./ProfileDropdown";
 
 const Sidebar = () => {

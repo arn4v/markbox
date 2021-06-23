@@ -6,7 +6,10 @@ export default gql`
 			id
 			title
 			url
-			tags
+			tags {
+				id
+				name
+			}
 			createdAt
 			updatedAt
 		}

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import * as React from "react";
 import { useLoginMutation } from "~/graphql/types.generated";
-import { useTokenStore } from "~/components/TokenProvider";
+import { useTokenStore } from "~/providers/TokenProvider";
 
 export default function RegisterPage() {
 	const [state, setState] = React.useState<{ email: string; password: string }>(
@@ -78,7 +78,7 @@ export default function RegisterPage() {
 			</div>
 			<div className="mx-auto">
 				Don't have an account? Register{" "}
-				<Link href="/login">
+				<Link href="/register">
 					<a className="text-blue-600 hover:border-b border-blue-600 pb-[1px]">
 						here
 					</a>

@@ -120,7 +120,7 @@ export default {
 			id: _updated.id,
 			title: _updated.title,
 			url: _updated.url,
-			tags: _tags.map((item) => item.title),
+			tags: _tags.map(({}) => ({})),
 			createdAt: _updated.createdAt.toISOString(),
 			updatedAt: _updated.updatedAt.toISOString(),
 		};

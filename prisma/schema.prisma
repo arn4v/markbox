@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,11 +14,24 @@ model User {
   email         String     @unique
   emailVerified Boolean    @default(false) @map("email_verified")
   password      String
+  tags          Tag[]
   bookmarks     Bookmark[]
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 
   @@map(name: "users")
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  name      String
+  bookmarks Bookmark[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  User      User?      @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@map(name: "tags")
 }
 
 model Bookmark {
@@ -32,15 +45,4 @@ model Bookmark {
   userId    String?
 
   @@map("bookmarks")
-}
-
-model Tag {
-  id         String    @id @default(uuid())
-  title      String
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
-  Bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id])
-  bookmarkId String?
-
-  @@map("tags")
 }

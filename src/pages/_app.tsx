@@ -2,9 +2,9 @@ import "~/styles/index.css";
 import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import { AuthProvider } from "~/components/AuthProvider";
+import { AuthProvider } from "~/providers/AuthProvider";
 import { QueryClientProvider, QueryClient } from "react-query";
-import TokenStoreProvider from "~/components/TokenProvider";
+import TokenStoreProvider from "~/providers/TokenProvider";
 
 const queryClient = new QueryClient();
 

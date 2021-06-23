@@ -5,9 +5,14 @@ export default gql`
 		id: ID!
 		title: String!
 		url: String!
-		tags: [String!]!
+		tags: [Tag!]!
 		createdAt: String!
 		updatedAt: String!
+	}
+
+	type Tag {
+		id: String!
+		name: String!
 	}
 
 	input CreateBookmarkInput {

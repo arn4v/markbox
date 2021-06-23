@@ -4,16 +4,16 @@ import { colors } from "~/lib/colors";
 interface Props {
 	className?: string;
 	title: string;
-	children: React.ReactNode;
-	color: typeof colors[keyof typeof colors];
+	children?: React.ReactNode;
+	color?: typeof colors[keyof typeof colors];
 	variant: "solid" | "outline";
 }
 
-export function Badge({
+export default function Badge({
 	className = "",
 	title,
 	children,
-	color,
+	color = "gray-200",
 	variant,
 }: Props) {
 	return (

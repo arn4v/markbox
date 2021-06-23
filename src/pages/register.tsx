@@ -12,7 +12,9 @@ export default function RegisterPage() {
 	);
 	const router = useRouter();
 	const { mutate: handleRegister } = useRegisterMutation({
-		onSuccess: ({ register }) => {
+		onSettled: ({ register }, error) => {
+			console.log(register, error);
+			if (error) return;
 			switch (register.code) {
 				case "successful": {
 					router.push("/login", {

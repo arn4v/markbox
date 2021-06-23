@@ -27,11 +27,12 @@
 		"build-storybook": "build-storybook",
 		"cy:run": "cypress run --headless --browser chrome",
 		"cy:open": "cypress open --browser chrome",
-		"test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run"
+		"test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
+		"start-docker": "docker-compose up -d"
 	},
 	"dependencies": {
 		"@prisma/client": "^2.25.0",
-		"@radix-ui/react-dialog": "^0.0.18",
+		"@reach/dialog": "^0.15.0",
 		"apollo-server-micro": "^2.25.1",
 		"bcrypt": "^5.0.1",
 		"clsx": "^1.1.1",
