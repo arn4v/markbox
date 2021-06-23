@@ -7,7 +7,7 @@ import { QueryResolvers } from "../types.generated";
 
 export default {
 	async bookmark(_, { id }, ctx) {
-		await protectResolver(ctx.req);
+		const userId = await protectResolver(ctx.req, ctx.res);
 		const {
 			id: _id,
 			title,
@@ -29,7 +29,7 @@ export default {
 		};
 	},
 	async bookmarks(_, __, ctx) {
-		const userId = await protectResolver(ctx.req);
+		const userId = await protectResolver(ctx.req, ctx.res);
 		return (
 			await prisma.bookmark.findMany({
 				where: {
@@ -46,7 +46,7 @@ export default {
 		}));
 	},
 	async user(_, __, ctx) {
-		const userId = await protectResolver(ctx.req);
+		const userId = await protectResolver(ctx.req, ctx.res);
 		const { id, email, emailVerified, createdAt, updatedAt } =
 			await prisma.user.findUnique({
 				where: {

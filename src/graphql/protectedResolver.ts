@@ -1,9 +1,11 @@
 import { AuthenticationError } from "apollo-server-micro";
 import { NextApiRequest } from "next";
 import { jwtVerify } from "~/lib/jwt";
+import ApiResponse from "~/types/ApiResponse";
 
 export default async function protectResolver(
 	req: NextApiRequest,
+	res: ApiResponse,
 ): Promise<string> {
 	const headerToken = req.headers.authorization;
 	const cookieToken = req.cookies.access_token;
@@ -43,6 +45,7 @@ export default async function protectResolver(
 					throw new AuthenticationError("Unable to decode jwt");
 				}
 			} catch (err) {
+				res.removeCookie("access_token")
 				throw new AuthenticationError(err.toString());
 			}
 		}
