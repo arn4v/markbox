@@ -1,22 +1,20 @@
 import * as React from "react";
-import { Dialog } from "@reach/dialog";
+import Modal from "~/components/Modal";
 import Badge from "~/components/Badge";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
 import { useGetBookmarkQuery } from "~/graphql/types.generated";
+import useDisclosure from "~/hooks/use-disclosure";
 
 interface Props {
 	id: string;
 }
 
 const BookmarkCard = (props: Props) => {
-	const [showEdit, setShowEdit] = React.useState<boolean>(false);
+	const { isOpen, onClose, onOpen } = useDisclosure();
 	const {
 		data: { bookmark: data },
 	} = useGetBookmarkQuery({ id: props.id });
-
-	const onEditOpen = () => setShowEdit(true);
-	const onEditClose = () => setShowEdit(false);
 
 	return (
 		<div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
@@ -60,10 +58,7 @@ const BookmarkCard = (props: Props) => {
 						/>
 					</svg>
 				</a>
-				<button
-					type="button"
-					onClick={onEditOpen}
-					className="focus:outline-none">
+				<button type="button" onClick={onOpen} className="focus:outline-none">
 					<svg
 						width="18"
 						height="19"
@@ -89,9 +84,10 @@ const BookmarkCard = (props: Props) => {
 						</defs>
 					</svg>
 				</button>
-				<Dialog isOpen={showEdit} onDismiss={onEditClose}>
-					Hello
-				</Dialog>
+				<div className="">
+
+				</div>
+				
 			</div>
 		</div>
 	);

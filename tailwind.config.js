@@ -1,6 +1,8 @@
 const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 
+delete colors.lightBlue;
+
 /** @type {import("tailwindcss/tailwind-config").TailwindConfig} */
 module.exports = {
 	mode: "jit",

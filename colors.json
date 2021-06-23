@@ -1,4 +1,4 @@
-const colors = [
+[
 	"black",
 	"white",
 	"rose-50",
@@ -220,7 +220,5 @@ const colors = [
 	"blueGray-600",
 	"blueGray-700",
 	"blueGray-800",
-	"blueGray-900",
-] as const;
-
-export default colors;
+	"blueGray-900"
+]

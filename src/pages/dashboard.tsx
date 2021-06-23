@@ -5,9 +5,13 @@ import { Logo } from "~/components/Logo";
 import CreateBookmarkButton from "~/components/CreateBookmarkButton";
 import Collections from "~/components/Collections";
 import Navbar from "~/components/Navbar";
+import LoadingPage from "~/components/LoadingPage";
+import { useRouter } from "next/router";
 
 export default function HomePage() {
-	const { user } = useAuth(true);
+	const { isLoading } = useAuth(true);
+
+	if (isLoading) <LoadingPage />;
 
 	return (
 		<div className="h-screen w-screen bg-blueGray-50 flex">

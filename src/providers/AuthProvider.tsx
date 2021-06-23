@@ -58,7 +58,8 @@ export function useAuth(isProtected: boolean = false) {
 			!value.isAuthenticated &&
 			!value.user
 		) {
-			router.push("/login", {
+			router.push({
+				href: "/login",
 				query: {
 					message: "Could not verify user, please login again.",
 				},

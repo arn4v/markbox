@@ -3,6 +3,7 @@ import Link from "next/link";
 import * as React from "react";
 import { useLoginMutation } from "~/graphql/types.generated";
 import { useTokenStore } from "~/providers/TokenProvider";
+import InfoBox from "~/components/InfoBox";
 
 export default function RegisterPage() {
 	const [state, setState] = React.useState<{ email: string; password: string }>(
@@ -18,7 +19,6 @@ export default function RegisterPage() {
 		onSuccess: ({ login }) => {
 			switch (login.code) {
 				case "successful": {
-					if (login.accessToken) setAccessToken(login.accessToken);
 					router.push("/dashboard");
 					break;
 				}
@@ -40,6 +40,14 @@ export default function RegisterPage() {
 			<div className="w-5/6 lg:w-1/3 text-2xl font-bold grid place-items-center">
 				Login
 			</div>
+			{router.query?.message && (
+				<InfoBox
+					className="w-5/6 mx-auto lg:w-1/3 justify-center"
+					text={router.query?.message as string}
+					bgColor="blueGray-500"
+					textColor="indigo-500"
+				/>
+			)}
 			<div className="w-5/6 lg:w-1/3 bg-white rounded-lg shadow-lg py-6 px-10">
 				<form
 					className="h-full w-full flex flex-col items-start justify-center gap-5"

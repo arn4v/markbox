@@ -1,11 +1,11 @@
 import clsx from "clsx";
-import { colors } from "~/lib/colors";
+import { Colors } from "~/types/Colors";
 
 interface Props {
 	className?: string;
 	title: string;
 	children?: React.ReactNode;
-	color?: typeof colors[keyof typeof colors];
+	color?: Colors;
 	variant: "solid" | "outline";
 }
 
