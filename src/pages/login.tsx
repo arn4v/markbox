@@ -3,7 +3,6 @@ import Link from "next/link";
 import * as React from "react";
 import { useLoginMutation } from "~/graphql/types.generated";
 import qs from "qs";
-import { useTokenStore } from "~/providers/TokenProvider";
 import InfoBox from "~/components/InfoBox";
 
 export default function RegisterPage() {

@@ -12,13 +12,11 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<TokenStoreProvider>
-				<AuthProvider>
-					<ThemeProvider attribute="class" defaultTheme="dark">
-						<Component {...pageProps} />
-					</ThemeProvider>
-				</AuthProvider>
-			</TokenStoreProvider>
+			<AuthProvider>
+				<ThemeProvider attribute="class" defaultTheme="dark">
+					<Component {...pageProps} />
+				</ThemeProvider>
+			</AuthProvider>
 		</QueryClientProvider>
 	);
 }
