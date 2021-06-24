@@ -2,11 +2,11 @@ import * as React from "react";
 import { useAuth } from "~/providers/AuthProvider";
 import { Logo } from "~/components/Logo";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateBookmarkButton";
-import Collections from "~/components/Collections";
 import Navbar from "~/modules/dashboard/components/Navbar";
 import LoadingPage from "~/components/LoadingPage";
 import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
 import dynamic from "next/dynamic";
+import Tags from "~/modules/dashboard/components/Tags";
 
 const DashboardPage = () => {
 	const { isLoading } = useAuth(true);
@@ -19,7 +19,7 @@ const DashboardPage = () => {
 				<div className="h-full w-1/6 px-6 shadow-xl dark:shadow-none bg-white dark:bg-transparent border-r border-gray-400 dark:border-gray-700 flex flex-col py-8 gap-6 justify-between items-center">
 					<div className="w-full">
 						<Logo className="fill-current text-black dark:text-white" />
-						<Collections />
+						<Tags />
 					</div>
 					<div className="w-full gap-4 flex flex-col">
 						<CreateBookmarkButton />

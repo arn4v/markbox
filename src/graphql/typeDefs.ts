@@ -13,6 +13,7 @@ export default gql`
 	type Tag {
 		id: String!
 		name: String!
+		bookmarks: [Bookmark!]!
 	}
 
 	input CreateBookmarkInput {
@@ -47,7 +48,8 @@ export default gql`
 
 	type Query {
 		bookmark(id: ID!): Bookmark!
-		bookmarks: [Bookmark!]!
+		bookmarks(tag: String): [Bookmark!]!
+		tags: [Tag!]!
 		user: User
 	}
 

@@ -1,12 +1,10 @@
 import gql from "../gql-tag";
 
 export default gql`
-	query User {
-		user {
+	query GetTags {
+		tags {
 			id
-			email
-			emailVerified
-			createdAt
+			name
 		}
 	}
 `;

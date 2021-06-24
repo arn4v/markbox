@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import gql from "../gql-tag";
 
 export default gql`
 	query GetBookmark($id: ID!) {
