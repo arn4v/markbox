@@ -1,12 +1,8 @@
 import * as React from "react";
 import { HiPlus } from "react-icons/hi";
 import useDisclosure from "~/hooks/use-disclosure";
-import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
-import Modal from "~/components/Modal";
 import { motion } from "framer-motion";
-import Drawer from "~/components/Drawer";
-
-const MotionDialog = motion(Dialog);
+import Drawer, { DrawerContent } from "~/components/Drawer";
 
 export default function CreateBookmarkButton() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -19,28 +15,11 @@ export default function CreateBookmarkButton() {
 				Create bookmark
 				<HiPlus className="h-5 w-5" />
 			</button>
-			<Drawer isOpen={isOpen} onClose={onClose} placement="right">
-				hey
+			<Drawer isOpen={isOpen} onClose={onClose}>
+				<DrawerContent placement="right" className="h-screen w-1/5">
+					Hey
+				</DrawerContent>
 			</Drawer>
-			{/* <Modal isOpen={isOpen} onClose={onClose}>
-				<Modal.Content
-					className="dark:bg-blueGray-700 rounded-lg h-auto w-3/5"
-					variants={{
-						initial: {
-							y: -20,
-						},
-						animate: {
-							y: 0,
-						},
-					}}
-					initial="initial"
-					animate="animate"
-					exit="initial"
-					transition={{
-						duration: 0.2,
-						ease: "easeInOut",
-					}}></Modal.Content>
-			</Modal> */}
 		</>
 	);
 }

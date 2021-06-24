@@ -1,63 +1,133 @@
-import React, { useRef } from "react";
-import { motion } from "framer-motion";
-import useTargetChildren from "~/hooks/use-target-children";
+import * as React from "react";
+import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
+import Portal from "./Portal";
+import clsx from "clsx";
+import { getTargetChildren } from "~/lib/react-children";
 
 type DrawerProps = {
-	placement: "left" | "right";
 	isOpen: boolean;
 	onClose: () => void;
 	children: React.ReactNode;
 };
 
-interface DrawerComponent extends React.FC<DrawerProps> {
-	Content: typeof DrawerContent;
-}
+interface DrawerComponent extends Component<DrawerProps> {}
 
-const Drawer: DrawerComponent = ({ placement, children, isOpen, onClose }) => {
-	const drawerRef = useRef<null | HTMLDivElement>(null);
-	const [withTarget] = useTargetChildren(children, DrawerContent);
+const Drawer: DrawerComponent = ({ children, isOpen, onClose }) => {
+	const [withTarget] = getTargetChildren(children, DrawerContent);
 
 	return (
-		<>
-			<motion.div
-				className="z-10 fixed inset-0 bg-black"
-				style={
-					{
-						"--tw-bg-opacity": 0.4,
-					} as any
-				}
-				variants={{
-					open: { opacity: 1, pointerEvents: "auto" as const },
-					closed: { opacity: 0, pointerEvents: "none" as const },
-				}}
-				initial="closed"
-				animate={isOpen ? "open" : "closed"}
-				transition={{ type: "tween" }}
-				onClick={onClose}
-			/>
-		</>
+		<Portal>
+			<AnimatePresence>
+				{isOpen && (
+					<div className="h-screen w-screen fixed inset-0 overflow-none">
+						<motion.div
+							className="z-10 fixed inset-0 bg-black"
+							style={
+								{
+									"--tw-bg-opacity": 0.4,
+								} as any
+							}
+							variants={{
+								open: { opacity: 1, pointerEvents: "auto" as const },
+								closed: { opacity: 0, pointerEvents: "none" as const },
+							}}
+							initial="closed"
+							animate="open"
+							exit="closed"
+							transition={{ type: "tween" }}
+							onClick={onClose}
+						/>
+						{withTarget}
+					</div>
+				)}
+			</AnimatePresence>
+		</Portal>
 	);
 };
 
 Drawer.displayName = "Drawer";
 
-const DrawerContent: React.ForwardRefExoticComponent<{}> =
-	React.forwardRef<HTMLDivElement>(({}, ref) => {
-		return (
-			<motion.div
-				ref={ref}
-				className="fixed top-0 bottom-0 z-30"
-				initial="closed"
-				animate={isOpen ? "open" : "closed"}
-				variants={{
-					open: { opacity: 1, x: 0 },
-					closed: { opacity: 0, x: "-100%" },
-				}}
-				transition={{ type: "spring", stiffness: 350, damping: 40 }}>
-				{children}
-			</motion.div>
-		);
-	});
+interface DrawerContentProps extends HTMLMotionProps<"div"> {
+	children: React.ReactNode;
+	placement: "top" | "bottom" | "left" | "right";
+}
 
-Drawer.Content = DrawerContent;
+export const DrawerContent = React.forwardRef<
+	HTMLDivElement,
+	DrawerContentProps
+>(({ children, placement, className }, ref) => {
+	const [openVariant, closeVariant] = React.useMemo(() => {
+		if (placement === "bottom") {
+			return [
+				{
+					y: "0",
+				},
+				{
+					y: "100%",
+				},
+			];
+		}
+
+		if (placement === "top") {
+			return [
+				{
+					y: "0",
+				},
+				{
+					y: "-100%",
+				},
+			];
+		}
+
+		if (placement === "left") {
+			return [
+				{
+					x: "0",
+				},
+				{
+					x: "-100%",
+				},
+			];
+		}
+
+		if (placement === "right") {
+			return [
+				{
+					x: "0",
+				},
+				{
+					x: "100%",
+				},
+			];
+		}
+
+		return [{}, {}];
+	}, [placement]);
+
+	return (
+		<motion.div
+			ref={ref}
+			className={clsx([
+				"absolute z-30",
+				placement === "top" && "top-0",
+				placement === "bottom" && "bottom-0",
+				placement === "left" && "left-0",
+				placement === "right" && "right-0",
+				className,
+			])}
+			initial="closed"
+			animate="open"
+			exit="closed"
+			variants={{
+				open: { opacity: 1, ...openVariant },
+				closed: { opacity: 0, ...closeVariant },
+			}}
+			transition={{ type: "spring", stiffness: 350, damping: 40 }}>
+			{children}
+		</motion.div>
+	);
+});
+
+DrawerContent.displayName = "DrawerContent";
+
 export default Drawer;

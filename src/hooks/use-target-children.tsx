@@ -11,18 +11,19 @@ export default function useTargetChildren(
 
 	React.useEffect(() => {
 		const _withTarget = [];
-		const _withoutTarget = React.Children.map(children, (item) => {
-			if (!React.isValidElement(item)) return item;
+		const _withoutTarget = React.Children.toArray(children).filter((item) => {
+			if (!React.isValidElement(item)) return true;
+			console.log(item.type === target);
 			if (item.type === target) {
 				_withTarget.push(item);
-				return null;
+				return false;
 			}
-			return item;
+			return true;
 		});
 
 		setWithTarget(_withTarget);
 		setWithoutTarget(_withoutTarget);
 	}, [children, target]);
 
-	return [withTarget.length >= 0 ? withTarget : undefined, withoutTarget];
+	return [withTarget, withoutTarget];
 }

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { useIsomorphicLayoutEffect } from "react-use";
+import { isSsr } from "~/constants";
 
 interface Props {
 	children?: React.ReactNode;
@@ -11,16 +12,21 @@ export default function Portal({ children, type = "portal" }: Props) {
 	const portalNode = React.useRef<HTMLDivElement>(null);
 
 	useIsomorphicLayoutEffect(() => {
-		const existingNode = document.querySelectorAll("body > div." + type);
+		const existingNode = Array.from(
+			document.querySelectorAll("body > div." + type),
+		)[0];
 		if (!existingNode) {
 			const el = document.createElement("div");
 			el.className = type;
-			const bodyEl = document.getElementsByTagName("body")[0];
-			bodyEl.append(el);
+			el.setAttribute("data-portal-type", type);
+			document.body.append(el);
+			portalNode.current = el;
 		}
+		() => {
+			document.body.removeChild(portalNode.current);
+		};
 	}, [children, type]);
 
-	return portalNode.current
-		? createPortal(children, portalNode.current)
-		: undefined;
+	if (isSsr) return null;
+	return portalNode.current ? createPortal(children, portalNode.current) : null;
 }
