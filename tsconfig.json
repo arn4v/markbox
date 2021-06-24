@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "CommonJS",
+		"target": "ES2019",
+		"module": "esnext",
 		"lib": ["DOM", "ESNext"],
 		"allowJs": true,
 		"skipLibCheck": true,
@@ -21,5 +21,5 @@
 		}
 	},
 	"exclude": ["node_modules"],
-	"include": ["next-env.d.ts", "types", "src/**/*"]
+	"include": ["next-env.d.ts", "types", "src"]
 }

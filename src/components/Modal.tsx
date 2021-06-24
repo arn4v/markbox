@@ -4,6 +4,7 @@ import {
 	DialogOverlay,
 	DialogContent,
 	DialogContentProps,
+	DialogOverlayProps,
 } from "@reach/dialog";
 
 interface ModalType {
@@ -11,14 +12,14 @@ interface ModalType {
 	Content: typeof ModalContent;
 }
 
-interface ModalProps {
+export type ModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	children: ModalChildren | Array<ModalChildren>;
 	overlayTransitionDuration?: number;
-}
+} & React.ComponentProps<typeof MotionOverlay>;
 
-type ModalChildren = React.ReactElement<DialogContentProps>;
+type ModalChildren = React.ReactElement<ModalContentProps>;
 
 const MotionOverlay = motion(DialogOverlay);
 
@@ -27,7 +28,7 @@ const overlayVariants: Variants = {
 		opacity: 0,
 	},
 	animate: {
-		opacity: 1,
+		opacity: 0.5,
 	},
 };
 
@@ -36,11 +37,13 @@ const Modal: ModalType = ({
 	isOpen,
 	onClose,
 	overlayTransitionDuration,
+	...props
 }: ModalProps) => {
 	return (
 		<AnimatePresence exitBeforeEnter>
 			{isOpen && (
 				<MotionOverlay
+					as="div"
 					style={{ backgroundColor: "black" }}
 					onDismiss={onClose}
 					transition={{
@@ -50,7 +53,8 @@ const Modal: ModalType = ({
 					variants={overlayVariants}
 					initial="initial"
 					animate="animate"
-					exit="initial">
+					exit="initial"
+					{...props}>
 					{children}
 				</MotionOverlay>
 			)}
@@ -64,13 +68,19 @@ const Modal: ModalType = ({
 
 const MotionContent = motion(DialogContent);
 
-const ModalContent = ({ children }: DialogContentProps): JSX.Element => {
+export type ModalContentProps = React.ComponentProps<typeof MotionContent> & {
+	children?: React.ReactNode;
+};
+
+const ModalContent = ({
+	children,
+	...props
+}: ModalContentProps): JSX.Element => {
 	// TODO: Wrap in motion()
 	// Currently throws error
 	// Type '{ children: ReactNode; as: "div"; }' is not assignable to type 'IntrinsicAttributes & Pick<{ as?: "div"; } & Omit<Pick<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof HTMLAttributes<...>> & { ...; }, "children" | "as"> & MotionProps, "title" | ... 250 more ... | "css"> & RefAttributes<...>'. Property 'children' does not exist on type 'IntrinsicAttributes & Pick<{ as?: "div"; } & Omit<Pick<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof HTMLAttributes<...>> & { ...; }, "children" | "as"> & MotionProps, "title" | ... 250 more ... | "css"> & RefAttributes<...>'.
-	const MotionDialogContent = DialogContent;
 
-	return <MotionDialogContent as="div">{children}</MotionDialogContent>;
+	return <MotionContent as="div" {...props} />;
 };
 
 Modal.Content = ModalContent;

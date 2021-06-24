@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import * as React from "react";
+import qs from "qs";
 import { useRegisterMutation } from "~/graphql/types.generated";
 import InfoBox from "~/components/InfoBox";
 
@@ -16,20 +17,14 @@ export default function RegisterPage() {
 		onSuccess: ({ register }) => {
 			console.log(register);
 			switch (register.code) {
-				case "successful": {
-					router.push("/login", {
-						query: {
-							message: register.message,
-						},
-					});
-					break;
-				}
+				case "successful":
 				case "conflict": {
-					router.push("/login", {
-						query: {
-							message: register.message,
-						},
-					});
+					router.push(
+						"/login?" +
+							qs.stringify({
+								message: register.message,
+							}),
+					);
 					break;
 				}
 			}
@@ -45,8 +40,8 @@ export default function RegisterPage() {
 				<InfoBox
 					className="w-5/6 mx-auto lg:w-1/3 justify-center"
 					text={router.query?.message as string}
-					bgColor="blueGray-500"
-					textColor="indigo-500"
+					bgColor="indigo-200"
+					textColor="indigo-700"
 				/>
 			)}
 			<div className="w-5/6 lg:w-1/3 bg-white rounded-lg shadow-lg py-6 px-10">

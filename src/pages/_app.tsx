@@ -1,4 +1,5 @@
 import "~/styles/index.css";
+import "@reach/dialog/styles.css";
 import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
@@ -13,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
 		<QueryClientProvider client={queryClient}>
 			<TokenStoreProvider>
 				<AuthProvider>
-					<ThemeProvider attribute="class" defaultTheme="light">
+					<ThemeProvider attribute="class" defaultTheme="dark">
 						<Component {...pageProps} />
 					</ThemeProvider>
 				</AuthProvider>
