@@ -50,7 +50,7 @@ export type Bookmark = {
 export type CreateBookmarkInput = {
 	title: Scalars["String"];
 	url: Scalars["String"];
-	tags: Array<Scalars["String"]>;
+	tags: Array<TagInput>;
 };
 
 export type LoginMessage = {
@@ -84,7 +84,6 @@ export type MutationCreateBookmarkArgs = {
 };
 
 export type MutationUpdateBookmarkArgs = {
-	id: Scalars["ID"];
 	input: UpdateBookmarkInput;
 };
 
@@ -105,19 +104,24 @@ export type QueryBookmarkArgs = {
 };
 
 export type QueryBookmarksArgs = {
-	tag?: Maybe<Scalars["String"]>;
+	tag?: Maybe<TagInput>;
 };
 
 export type Tag = {
 	__typename?: "Tag";
-	id: Scalars["String"];
+	id: Scalars["ID"];
 	name: Scalars["String"];
 };
 
+export type TagInput = {
+	id: Scalars["ID"];
+};
+
 export type UpdateBookmarkInput = {
+	id: Scalars["ID"];
 	title?: Maybe<Scalars["String"]>;
 	url?: Maybe<Scalars["String"]>;
-	tags?: Maybe<Array<Scalars["String"]>>;
+	tags?: Maybe<Array<TagInput>>;
 };
 
 export type User = {
@@ -179,7 +183,6 @@ export type RegisterMutation = {
 };
 
 export type UpdateBookmarkMutationVariables = Exact<{
-	id: Scalars["ID"];
 	input: UpdateBookmarkInput;
 }>;
 
@@ -197,7 +200,7 @@ export type UpdateBookmarkMutation = {
 };
 
 export type GetAllBookmarksQueryVariables = Exact<{
-	tagName?: Maybe<Scalars["String"]>;
+	tag?: Maybe<TagInput>;
 }>;
 
 export type GetAllBookmarksQuery = {
@@ -376,6 +379,7 @@ export type ResolversTypes = {
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Query: ResolverTypeWrapper<{}>;
 	Tag: ResolverTypeWrapper<Tag>;
+	TagInput: TagInput;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: ResolverTypeWrapper<User>;
 };
@@ -392,6 +396,7 @@ export type ResolversParentTypes = {
 	Boolean: Scalars["Boolean"];
 	Query: {};
 	Tag: Tag;
+	TagInput: TagInput;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: User;
 };
@@ -458,7 +463,7 @@ export type MutationResolvers<
 		Maybe<ResolversTypes["Bookmark"]>,
 		ParentType,
 		ContextType,
-		RequireFields<MutationUpdateBookmarkArgs, "id" | "input">
+		RequireFields<MutationUpdateBookmarkArgs, "input">
 	>;
 	deleteBookmark?: Resolver<
 		Maybe<ResolversTypes["Boolean"]>,
@@ -492,7 +497,7 @@ export type TagResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"],
 > = {
-	id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -635,8 +640,8 @@ export const useRegisterMutation = <TError = unknown, TContext = unknown>(
 		options,
 	);
 export const UpdateBookmarkDocument = `
-    mutation UpdateBookmark($id: ID!, $input: UpdateBookmarkInput!) {
-  updateBookmark(id: $id, input: $input) {
+    mutation UpdateBookmark($input: UpdateBookmarkInput!) {
+  updateBookmark(input: $input) {
     id
     title
     url
@@ -671,8 +676,8 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		options,
 	);
 export const GetAllBookmarksDocument = `
-    query GetAllBookmarks($tagName: String) {
-  bookmarks(tag: $tagName) {
+    query GetAllBookmarks($tag: TagInput) {
+  bookmarks(tag: $tag) {
     id
     title
     url

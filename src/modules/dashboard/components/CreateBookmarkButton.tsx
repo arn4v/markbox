@@ -5,10 +5,12 @@ import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useCreateBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import clsx from "clsx";
+import { useQueryClient } from "react-query";
 
 export default function CreateBookmarkButton() {
 	const { isOpen, onOpen, onClose: primaryOnClose } = useDisclosure();
 	const { lg } = useBreakpoints();
+	const queryClient = useQueryClient();
 	const drawerPlacement = React.useMemo(() => {
 		return lg ? "right" : "bottom";
 	}, [lg]);
@@ -54,6 +56,7 @@ export default function CreateBookmarkButton() {
 							onSubmit={(e) => {
 								e.preventDefault();
 								mutate({ input: { ...state, tags: [] } });
+								queryClient.invalidateQueries("GetAllBookmarks");
 								onClose();
 							}}>
 							<div className="w-full">

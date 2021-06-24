@@ -5,8 +5,10 @@ import prisma from "~/lib/prisma";
 import { jwtSign } from "~/lib/jwt";
 import ms from "ms";
 import { isProd } from "~/constants";
+import { omitKeys, pickKeys } from "~/lib/misc";
+import protectResolver from "../protect-resolver";
 
-export default {
+const Mutation: MutationResolvers<GQLContext> = {
 	async login(_, { email, password }, ctx) {
 		const user = await prisma.user.findFirst({
 			where: {
@@ -69,6 +71,7 @@ export default {
 		}
 	},
 	async createBookmark(_, { input }, ctx) {
+		const userId = await protectResolver(ctx.req, ctx.res);
 		const { tags, title, url } = input;
 
 		const newBookmark = await prisma.bookmark.create({
@@ -76,14 +79,21 @@ export default {
 				title: title,
 				url: url,
 				tags: {
-					create: tags.map((item) => ({ title: item })),
+					connectOrCreate: tags.map((item) => ({
+						create: {
+							name: item,
+						},
+						where: {},
+					})),
+				},
+				User: {
+					connect: {
+						id: userId,
+					},
 				},
 			},
-		});
-
-		const newTags = await prisma.tag.findMany({
-			where: {
-				bookmarkId: newBookmark.id,
+			include: {
+				tags: true,
 			},
 		});
 
@@ -91,12 +101,13 @@ export default {
 			id: newBookmark.id,
 			title: newBookmark.title,
 			url: newBookmark.url,
-			tags: newTags.map((item) => item.title),
+			tags: newBookmark.tags.map((item) => pickKeys(item, "id", "name")),
 			createdAt: newBookmark.createdAt.toISOString(),
 			updatedAt: newBookmark.updatedAt.toISOString(),
 		};
 	},
 	async updateBookmark(_, { id, input }, ctx) {
+		await protectResolver(ctx.req, ctx.res);
 		const { title, url } = input;
 
 		const _updated = await prisma.bookmark.update({
@@ -107,11 +118,8 @@ export default {
 				title: title,
 				url: url,
 			},
-		});
-
-		const _tags = await prisma.tag.findMany({
-			where: {
-				bookmarkId: _updated.id,
+			include: {
+				tags: true,
 			},
 		});
 
@@ -119,9 +127,20 @@ export default {
 			id: _updated.id,
 			title: _updated.title,
 			url: _updated.url,
-			tags: _tags.map(({}) => ({})),
+			tags: _updated.tags.map((item) => pickKeys(item, "id", "name")),
 			createdAt: _updated.createdAt.toISOString(),
 			updatedAt: _updated.updatedAt.toISOString(),
 		};
 	},
-} as MutationResolvers<GQLContext>;
+	async deleteBookmark(_, { id }, ctx) {
+		await protectResolver(ctx.req, ctx.res);
+		const deleted = await prisma.bookmark.delete({
+			where: {
+				id,
+			},
+		});
+		return !!deleted;
+	},
+};
+
+export default Mutation;

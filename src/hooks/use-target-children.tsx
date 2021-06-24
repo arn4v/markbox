@@ -13,7 +13,6 @@ export default function useTargetChildren(
 		const _withTarget = [];
 		const _withoutTarget = React.Children.toArray(children).filter((item) => {
 			if (!React.isValidElement(item)) return true;
-			console.log(item.type === target);
 			if (item.type === target) {
 				_withTarget.push(item);
 				return false;

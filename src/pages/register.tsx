@@ -15,7 +15,6 @@ export default function RegisterPage() {
 	const router = useRouter();
 	const { mutate: handleRegister } = useRegisterMutation({
 		onSuccess: ({ register }) => {
-			console.log(register);
 			switch (register.code) {
 				case "successful":
 				case "conflict": {

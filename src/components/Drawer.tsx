@@ -13,7 +13,10 @@ type DrawerProps = {
 interface DrawerComponent extends Component<DrawerProps> {}
 
 const Drawer: DrawerComponent = ({ children, isOpen, onClose }) => {
-	const [withTarget] = getTargetChildren(children, DrawerContent);
+	const [withTarget] = React.useMemo(
+		() => getTargetChildren(children, DrawerContent),
+		[children],
+	);
 
 	return (
 		<Portal>
