@@ -28,7 +28,9 @@
 		"cy:run": "cypress run --headless --browser chrome",
 		"cy:open": "cypress open --browser chrome",
 		"test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
-		"start-docker": "docker-compose up -d"
+		"start-docker": "docker-compose up -d",
+		"lint": "next lint",
+		"lint-fix": "next lint --fix"
 	},
 	"dependencies": {
 		"@prisma/client": "^2.25.0",
@@ -89,6 +91,8 @@
 		"babel-loader": "^8.2.2",
 		"concurrently": "^6.2.0",
 		"cypress": "^7.5.0",
+		"eslint": "^7.29.0",
+		"eslint-config-next": "^11.0.1",
 		"html-webpack-plugin": "5",
 		"nodemon": "^2.0.7",
 		"postcss": "^8.3.5",
