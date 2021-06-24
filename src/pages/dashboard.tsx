@@ -6,8 +6,9 @@ import Collections from "~/components/Collections";
 import Navbar from "~/modules/dashboard/components/Navbar";
 import LoadingPage from "~/components/LoadingPage";
 import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
+import dynamic from "next/dynamic";
 
-export default function HomePage() {
+const DashboardPage = () => {
 	const { isLoading } = useAuth(true);
 
 	if (isLoading) <LoadingPage />;
@@ -31,4 +32,10 @@ export default function HomePage() {
 			</div>
 		</div>
 	);
-}
+};
+
+const DashboardPageCSR = dynamic(Promise.resolve(DashboardPage), {
+	ssr: false,
+});
+
+export default DashboardPageCSR;
