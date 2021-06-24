@@ -3,18 +3,15 @@ import Modal from "~/components/Modal";
 import Badge from "~/components/Badge";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
-import { useGetBookmarkQuery } from "~/graphql/types.generated";
+import { Bookmark, useGetBookmarkQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
 
 interface Props {
-	id: string;
+	data: Bookmark;
 }
 
-const BookmarkCard = (props: Props) => {
+const BookmarkCard = ({ data }: Props) => {
 	const { isOpen, onClose, onOpen } = useDisclosure();
-	const {
-		data: { bookmark: data },
-	} = useGetBookmarkQuery({ id: props.id });
 
 	return (
 		<div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
@@ -84,10 +81,7 @@ const BookmarkCard = (props: Props) => {
 						</defs>
 					</svg>
 				</button>
-				<div className="">
-
-				</div>
-				
+				<div className=""></div>
 			</div>
 		</div>
 	);

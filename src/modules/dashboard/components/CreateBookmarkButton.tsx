@@ -24,10 +24,6 @@ export default function CreateBookmarkButton() {
 		setState(initialState);
 	};
 
-	React.useEffect(() => {
-		console.log(isOpen);
-	}, [isOpen]);
-
 	return (
 		<>
 			<button
