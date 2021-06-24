@@ -5,7 +5,6 @@ import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
 import Modal from "~/components/Modal";
 import { motion } from "framer-motion";
 import Drawer from "~/components/Drawer";
-import VanillaDrawer from "~/components/VanillaDrawer";
 
 const MotionDialog = motion(Dialog);
 
@@ -20,9 +19,9 @@ export default function CreateBookmarkButton() {
 				Create bookmark
 				<HiPlus className="h-5 w-5" />
 			</button>
-			<VanillaDrawer isOpen={isOpen} onClose={onClose} placement="right">
+			<Drawer isOpen={isOpen} onClose={onClose} placement="right">
 				hey
-			</VanillaDrawer>
+			</Drawer>
 			{/* <Modal isOpen={isOpen} onClose={onClose}>
 				<Modal.Content
 					className="dark:bg-blueGray-700 rounded-lg h-auto w-3/5"
