@@ -27,7 +27,6 @@ export default {
 				return {
 					code: "successful",
 					message: "Successfully logged in.",
-					accessToken: jwt,
 				};
 			} else {
 				return {

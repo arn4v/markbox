@@ -1,15 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-html.dark input:-webkit-autofill,
-html.dark input:-webkit-autofill:hover,
-html.dark input:-webkit-autofill:focus,
-html.dark textarea:-webkit-autofill,
-html.dark textarea:-webkit-autofill:hover,
-html.dark textarea:-webkit-autofill:focus,
-html.dark select:-webkit-autofill,
-html.dark select:-webkit-autofill:hover,
-html.dark select:-webkit-autofill:focus {
-	-webkit-text-fill-color: rgba(39, 39, 42, 1);
-}
