@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-micro";
+import gql from "./gql-tag";
 
 export default gql`
 	type Bookmark {
@@ -13,7 +13,6 @@ export default gql`
 	type Tag {
 		id: String!
 		name: String!
-		bookmarks: [Bookmark!]!
 	}
 
 	input CreateBookmarkInput {
@@ -49,7 +48,7 @@ export default gql`
 	type Query {
 		bookmark(id: ID!): Bookmark!
 		bookmarks(tag: String): [Bookmark!]!
-		tags: [Tag!]!
+		tags: [Tag!]
 		user: User
 	}
 

@@ -96,7 +96,7 @@ export type Query = {
 	__typename?: "Query";
 	bookmark: Bookmark;
 	bookmarks: Array<Bookmark>;
-	tags: Array<Tag>;
+	tags?: Maybe<Array<Tag>>;
 	user?: Maybe<User>;
 };
 
@@ -112,7 +112,6 @@ export type Tag = {
 	__typename?: "Tag";
 	id: Scalars["String"];
 	name: Scalars["String"];
-	bookmarks: Array<Bookmark>;
 };
 
 export type UpdateBookmarkInput = {
@@ -235,7 +234,7 @@ export type GetTagsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetTagsQuery = {
 	__typename?: "Query";
-	tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
+	tags?: Maybe<Array<{ __typename?: "Tag"; id: string; name: string }>>;
 };
 
 export type UserQueryVariables = Exact<{ [key: string]: never }>;
@@ -485,7 +484,7 @@ export type QueryResolvers<
 		ContextType,
 		RequireFields<QueryBookmarksArgs, never>
 	>;
-	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
+	tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>;
 	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
@@ -495,11 +494,6 @@ export type TagResolvers<
 > = {
 	id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	bookmarks?: Resolver<
-		Array<ResolversTypes["Bookmark"]>,
-		ParentType,
-		ContextType
-	>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

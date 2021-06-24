@@ -1,11 +1,10 @@
-import { AuthenticationError } from "apollo-server-micro";
-import { jwtVerify } from "~/lib/jwt";
+import { pickKeys } from "~/lib/misc";
 import prisma from "~/lib/prisma";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
-import { QueryResolvers } from "../types.generated";
+import { QueryResolvers, Tag } from "../types.generated";
 
-export default {
+const Query: QueryResolvers<GQLContext> = {
 	async bookmark(_, { id }, ctx) {
 		const userId = await protectResolver(ctx.req, ctx.res);
 		const {
@@ -28,19 +27,21 @@ export default {
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-	async bookmarks(_, __, ctx) {
+	async bookmarks(_, { tag }, ctx) {
 		const userId = await protectResolver(ctx.req, ctx.res);
-		return (
-			await prisma.bookmark.findMany({
-				where: {
-					userId,
-				},
-			})
-		).map(({ id, url, title, createdAt, updatedAt }) => ({
+		const bookmarks = await prisma.bookmark.findMany({
+			where: {
+				userId,
+			},
+			include: {
+				tags: true,
+			},
+		});
+		return bookmarks.map(({ id, url, title, createdAt, updatedAt, tags }) => ({
 			id,
 			url,
 			title,
-			tags: [],
+			tags: tags.map((item) => ({ id: item.id, name: item.name })),
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
 		}));
@@ -61,4 +62,15 @@ export default {
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-} as QueryResolvers<GQLContext>;
+	async tags(_, __, { req, res }): Promise<Tag[]> {
+		const userId = await protectResolver(req, res);
+		const tags = await prisma.tag.findMany({
+			where: {
+				userId,
+			},
+		});
+		return tags.map((item) => pickKeys(item, "id", "name"));
+	},
+};
+
+export default Query;
