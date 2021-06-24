@@ -1,8 +1,6 @@
 import * as React from "react";
-import { isSsr } from "~/constants";
 
 export default function useMediaQuery(query: string) {
-	if (isSsr) return null;
 	const [matches, setMatches] = React.useState<boolean>(false);
 
 	React.useEffect(() => {
