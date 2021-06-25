@@ -1,77 +1,11 @@
-import { comparePassword, hashPassword } from "~/lib/password";
 import GQLContext from "~/types/GQLContext";
 import { MutationResolvers } from "../types.generated";
-import prisma from "~/lib/prisma";
-import { jwtSign } from "~/lib/jwt";
-import ms from "ms";
-import { isProd } from "~/constants";
 import { omitKeys, pickKeys } from "~/lib/misc";
 import protectResolver from "../protect-resolver";
 
 const Mutation: MutationResolvers<GQLContext> = {
-	async login(_, { email, password }, ctx) {
-		const user = await prisma.user.findFirst({
-			where: {
-				email,
-			},
-		});
-		if (user) {
-			const isPasswordValid = await comparePassword(password, user.password);
-			if (isPasswordValid) {
-				const jwt = await jwtSign({ sub: user.id });
-				ctx.res.setCookie("access_token", jwt, {
-					path: "/",
-					sameSite: isProd,
-					secure: isProd,
-					httpOnly: isProd,
-					maxAge: ms("12h"),
-				});
-				return {
-					code: "successful",
-					message: "Successfully logged in.",
-				};
-			} else {
-				return {
-					code: "invalid_password",
-					message: "Passwords don't match.",
-				};
-			}
-		} else {
-			return {
-				code: "invalid_user",
-				message: "User doesn't exist",
-			};
-		}
-	},
-	async register(_, { email, password }, ctx) {
-		const user = await prisma.user.findUnique({
-			where: {
-				email,
-			},
-		});
-		if (!user) {
-			const hashedPassword = await hashPassword(password);
-
-			await prisma.user.create({
-				data: {
-					email,
-					password: hashedPassword,
-				},
-			});
-
-			return {
-				code: "successful",
-				message: "Successfully registered. Please log in.",
-			};
-		} else {
-			return {
-				code: "conflict",
-				message: "User already exists.",
-			};
-		}
-	},
-	async createBookmark(_, { input }, ctx) {
-		const userId = await protectResolver(ctx.req, ctx.res);
+	async createBookmark(_, { input }, { req, res, prisma }) {
+		const userId = await protectResolver(req, res);
 		const { tags, title, url } = input;
 
 		const newBookmark = await prisma.bookmark.create({
@@ -81,9 +15,11 @@ const Mutation: MutationResolvers<GQLContext> = {
 				tags: {
 					connectOrCreate: tags.map((item) => ({
 						create: {
-							name: item,
+							name: item.name,
 						},
-						where: {},
+						where: {
+							id: item.id,
+						},
 					})),
 				},
 				User: {
@@ -106,17 +42,24 @@ const Mutation: MutationResolvers<GQLContext> = {
 			updatedAt: newBookmark.updatedAt.toISOString(),
 		};
 	},
-	async updateBookmark(_, { id, input }, ctx) {
-		await protectResolver(ctx.req, ctx.res);
-		const { title, url } = input;
+	async updateBookmark(_, { input }, { req, res, prisma }) {
+		const userId = await protectResolver(req, res);
+		const id = input.id;
+		const { title, tags, url } = omitKeys(input, "id");
 
 		const _updated = await prisma.bookmark.update({
 			where: {
 				id,
 			},
 			data: {
-				title: title,
-				url: url,
+				tags: {
+					create: tags
+						.filter((item) => typeof item.name === "string")
+						.map((item) => ({ name: item.name })),
+					connect: tags
+						.filter((item) => typeof item.id === "string")
+						.map((item) => ({ id: item.id })),
+				},
 			},
 			include: {
 				tags: true,
@@ -132,8 +75,8 @@ const Mutation: MutationResolvers<GQLContext> = {
 			updatedAt: _updated.updatedAt.toISOString(),
 		};
 	},
-	async deleteBookmark(_, { id }, ctx) {
-		await protectResolver(ctx.req, ctx.res);
+	async deleteBookmark(_, { id }, { prisma, req, res }) {
+		await protectResolver(req, res);
 		const deleted = await prisma.bookmark.delete({
 			where: {
 				id,

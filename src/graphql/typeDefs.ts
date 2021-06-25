@@ -15,21 +15,26 @@ export default gql`
 		name: String!
 	}
 
-	input TagInput {
+	input FilterBookmarksTagInput {
 		id: ID!
+	}
+
+	input CreateOrUpdateBookmarkTagInput {
+		id: ID
+		name: String
 	}
 
 	input CreateBookmarkInput {
 		title: String!
 		url: String!
-		tags: [TagInput!]!
+		tags: [CreateOrUpdateBookmarkTagInput!]!
 	}
 
 	input UpdateBookmarkInput {
 		id: ID!
 		title: String
 		url: String
-		tags: [TagInput!]
+		tags: [CreateOrUpdateBookmarkTagInput!]
 	}
 
 	type AuthenticationMessage {
@@ -52,14 +57,12 @@ export default gql`
 
 	type Query {
 		bookmark(id: ID!): Bookmark!
-		bookmarks(tag: TagInput): [Bookmark!]!
+		bookmarks(tag: FilterBookmarksTagInput): [Bookmark!]!
 		tags: [Tag!]
 		user: User
 	}
 
 	type Mutation {
-		login(email: String!, password: String!): LoginMessage
-		register(email: String!, password: String!): AuthenticationMessage
 		createBookmark(input: CreateBookmarkInput!): Bookmark
 		updateBookmark(input: UpdateBookmarkInput!): Bookmark
 		deleteBookmark(id: ID!): Boolean

@@ -1,4 +1,7 @@
-export function omitKeys<T, K extends keyof T>(obj: T, ...keys: K[]) {
+export function omitKeys<T, K extends keyof T>(
+	obj: T,
+	...keys: K[]
+): Omit<T, K> {
 	for (const key in keys) {
 		delete obj[key];
 	}
@@ -6,7 +9,10 @@ export function omitKeys<T, K extends keyof T>(obj: T, ...keys: K[]) {
 	return obj;
 }
 
-export function pickKeys<T, K extends keyof T>(obj: T, ...keys: K[]) {
+export function pickKeys<T, K extends keyof T>(
+	obj: T,
+	...keys: K[]
+): Pick<T, K> {
 	return keys.reduce((acc, cur) => {
 		acc[cur] = obj[cur];
 		return acc;

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export default gql`
-	query GetAllBookmarks($tag: TagInput) {
+	query GetAllBookmarks($tag: FilterBookmarksTagInput) {
 		bookmarks(tag: $tag) {
 			id
 			title

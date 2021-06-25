@@ -1,5 +1,5 @@
 import { pickKeys } from "~/lib/misc";
-import prisma from "~/lib/prisma";
+import { prisma } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { QueryResolvers, Tag } from "../types.generated";

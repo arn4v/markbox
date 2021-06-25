@@ -50,7 +50,16 @@ export type Bookmark = {
 export type CreateBookmarkInput = {
 	title: Scalars["String"];
 	url: Scalars["String"];
-	tags: Array<TagInput>;
+	tags: Array<CreateOrUpdateBookmarkTagInput>;
+};
+
+export type CreateOrUpdateBookmarkTagInput = {
+	id?: Maybe<Scalars["ID"]>;
+	name?: Maybe<Scalars["String"]>;
+};
+
+export type FilterBookmarksTagInput = {
+	id: Scalars["ID"];
 };
 
 export type LoginMessage = {
@@ -62,21 +71,9 @@ export type LoginMessage = {
 
 export type Mutation = {
 	__typename?: "Mutation";
-	login?: Maybe<LoginMessage>;
-	register?: Maybe<AuthenticationMessage>;
 	createBookmark?: Maybe<Bookmark>;
 	updateBookmark?: Maybe<Bookmark>;
 	deleteBookmark?: Maybe<Scalars["Boolean"]>;
-};
-
-export type MutationLoginArgs = {
-	email: Scalars["String"];
-	password: Scalars["String"];
-};
-
-export type MutationRegisterArgs = {
-	email: Scalars["String"];
-	password: Scalars["String"];
 };
 
 export type MutationCreateBookmarkArgs = {
@@ -104,7 +101,7 @@ export type QueryBookmarkArgs = {
 };
 
 export type QueryBookmarksArgs = {
-	tag?: Maybe<TagInput>;
+	tag?: Maybe<FilterBookmarksTagInput>;
 };
 
 export type Tag = {
@@ -113,15 +110,11 @@ export type Tag = {
 	name: Scalars["String"];
 };
 
-export type TagInput = {
-	id: Scalars["ID"];
-};
-
 export type UpdateBookmarkInput = {
 	id: Scalars["ID"];
 	title?: Maybe<Scalars["String"]>;
 	url?: Maybe<Scalars["String"]>;
-	tags?: Maybe<Array<TagInput>>;
+	tags?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
 };
 
 export type User = {
@@ -158,30 +151,6 @@ export type DeleteBookmarkMutation = {
 	deleteBookmark?: Maybe<boolean>;
 };
 
-export type LoginMutationVariables = Exact<{
-	email: Scalars["String"];
-	password: Scalars["String"];
-}>;
-
-export type LoginMutation = {
-	__typename?: "Mutation";
-	login?: Maybe<{ __typename?: "LoginMessage"; code: string; message: string }>;
-};
-
-export type RegisterMutationVariables = Exact<{
-	email: Scalars["String"];
-	password: Scalars["String"];
-}>;
-
-export type RegisterMutation = {
-	__typename?: "Mutation";
-	register?: Maybe<{
-		__typename?: "AuthenticationMessage";
-		code: string;
-		message: string;
-	}>;
-};
-
 export type UpdateBookmarkMutationVariables = Exact<{
 	input: UpdateBookmarkInput;
 }>;
@@ -200,7 +169,7 @@ export type UpdateBookmarkMutation = {
 };
 
 export type GetAllBookmarksQueryVariables = Exact<{
-	tag?: Maybe<TagInput>;
+	tag?: Maybe<FilterBookmarksTagInput>;
 }>;
 
 export type GetAllBookmarksQuery = {
@@ -374,12 +343,13 @@ export type ResolversTypes = {
 	Bookmark: ResolverTypeWrapper<Bookmark>;
 	ID: ResolverTypeWrapper<Scalars["ID"]>;
 	CreateBookmarkInput: CreateBookmarkInput;
+	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
+	FilterBookmarksTagInput: FilterBookmarksTagInput;
 	LoginMessage: ResolverTypeWrapper<LoginMessage>;
 	Mutation: ResolverTypeWrapper<{}>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Query: ResolverTypeWrapper<{}>;
 	Tag: ResolverTypeWrapper<Tag>;
-	TagInput: TagInput;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: ResolverTypeWrapper<User>;
 };
@@ -391,12 +361,13 @@ export type ResolversParentTypes = {
 	Bookmark: Bookmark;
 	ID: Scalars["ID"];
 	CreateBookmarkInput: CreateBookmarkInput;
+	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
+	FilterBookmarksTagInput: FilterBookmarksTagInput;
 	LoginMessage: LoginMessage;
 	Mutation: {};
 	Boolean: Scalars["Boolean"];
 	Query: {};
 	Tag: Tag;
-	TagInput: TagInput;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: User;
 };
@@ -441,18 +412,6 @@ export type MutationResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = {
-	login?: Resolver<
-		Maybe<ResolversTypes["LoginMessage"]>,
-		ParentType,
-		ContextType,
-		RequireFields<MutationLoginArgs, "email" | "password">
-	>;
-	register?: Resolver<
-		Maybe<ResolversTypes["AuthenticationMessage"]>,
-		ParentType,
-		ContextType,
-		RequireFields<MutationRegisterArgs, "email" | "password">
-	>;
 	createBookmark?: Resolver<
 		Maybe<ResolversTypes["Bookmark"]>,
 		ParentType,
@@ -591,54 +550,6 @@ export const useDeleteBookmarkMutation = <TError = unknown, TContext = unknown>(
 			)(),
 		options,
 	);
-export const LoginDocument = `
-    mutation Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    code
-    message
-  }
-}
-    `;
-export const useLoginMutation = <TError = unknown, TContext = unknown>(
-	options?: UseMutationOptions<
-		LoginMutation,
-		TError,
-		LoginMutationVariables,
-		TContext
-	>,
-) =>
-	useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
-		(variables?: LoginMutationVariables) =>
-			fetcher<LoginMutation, LoginMutationVariables>(
-				LoginDocument,
-				variables,
-			)(),
-		options,
-	);
-export const RegisterDocument = `
-    mutation Register($email: String!, $password: String!) {
-  register(email: $email, password: $password) {
-    code
-    message
-  }
-}
-    `;
-export const useRegisterMutation = <TError = unknown, TContext = unknown>(
-	options?: UseMutationOptions<
-		RegisterMutation,
-		TError,
-		RegisterMutationVariables,
-		TContext
-	>,
-) =>
-	useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
-		(variables?: RegisterMutationVariables) =>
-			fetcher<RegisterMutation, RegisterMutationVariables>(
-				RegisterDocument,
-				variables,
-			)(),
-		options,
-	);
 export const UpdateBookmarkDocument = `
     mutation UpdateBookmark($input: UpdateBookmarkInput!) {
   updateBookmark(input: $input) {
@@ -676,7 +587,7 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		options,
 	);
 export const GetAllBookmarksDocument = `
-    query GetAllBookmarks($tag: TagInput) {
+    query GetAllBookmarks($tag: FilterBookmarksTagInput) {
   bookmarks(tag: $tag) {
     id
     title

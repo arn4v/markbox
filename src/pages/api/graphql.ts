@@ -1,8 +1,7 @@
 import { ApolloServer } from "apollo-server-micro";
 import { isProd } from "~/constants";
 import schema from "~/graphql/schema";
-import withCookies from "~/lib/cookie";
-import prisma from "~/lib/prisma";
+import withCookies, { prisma, routeHandler } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 
 const apolloServer = new ApolloServer({
@@ -19,6 +18,6 @@ export const config = {
 	},
 };
 
-const handler = apolloServer.createHandler({ path: "/api/graphql" });
+const graphqlHandler = apolloServer.createHandler({ path: "/api/graphql" });
 
-export default withCookies(handler);
+export default withCookies(routeHandler().all(graphqlHandler));
