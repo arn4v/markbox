@@ -41,10 +41,16 @@ export default withCookies(
 					message: "Successfully registered. Please log in.",
 				});
 			} else {
-				throw Boom.conflict("User already exists.");
+				res.status(409).send({
+					code: "user_conflict",
+					message: "User already exists.",
+				});
 			}
 		} catch (err) {
-			throw Boom.badRequest(err.toString());
+			res.status(400).send({
+				code: "invalid_body",
+				message: err.toString(),
+			});
 		}
 	}),
 );

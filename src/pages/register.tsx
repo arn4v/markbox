@@ -1,34 +1,44 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import * as React from "react";
-import qs from "qs";
-import { useRegisterMutation } from "~/graphql/types.generated";
 import InfoBox from "~/components/InfoBox";
+import { useMutation } from "react-query";
+import qs from "qs";
+import axios from "redaxios";
+
+interface RegisterBody {
+	email: string;
+	password: string;
+}
 
 export default function RegisterPage() {
-	const [state, setState] = React.useState<{ email: string; password: string }>(
+	const [state, setState] = React.useState<RegisterBody>({
+		email: "",
+		password: "",
+	});
+	const router = useRouter();
+	const { mutate: handleRegister } = useMutation(
+		"register",
+		async (variables: RegisterBody) =>
+			axios.post("/api/auth/register", variables),
 		{
-			email: "",
-			password: "",
+			onSuccess: async (res) => {
+				const register = res.data;
+				switch (register.code) {
+					case "successful":
+					case "conflict": {
+						router.push(
+							"/login?" +
+								qs.stringify({
+									message: register.message,
+								}),
+						);
+						break;
+					}
+				}
+			},
 		},
 	);
-	const router = useRouter();
-	const { mutate: handleRegister } = useRegisterMutation({
-		onSuccess: ({ register }) => {
-			switch (register.code) {
-				case "successful":
-				case "conflict": {
-					router.push(
-						"/login?" +
-							qs.stringify({
-								message: register.message,
-							}),
-					);
-					break;
-				}
-			}
-		},
-	});
 
 	return (
 		<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 gap-8">

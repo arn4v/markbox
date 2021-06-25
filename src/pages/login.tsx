@@ -1,39 +1,47 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import * as React from "react";
-import { useLoginMutation } from "~/graphql/types.generated";
 import qs from "qs";
 import InfoBox from "~/components/InfoBox";
+import { useMutation } from "react-query";
+import axios from "redaxios";
+
+interface LoginBody {
+	email: string;
+	password: string;
+}
 
 export default function RegisterPage() {
-	const [state, setState] = React.useState<{ email: string; password: string }>(
-		{
-			email: "",
-			password: "",
-		},
-	);
+	const [state, setState] = React.useState<LoginBody>({
+		email: "",
+		password: "",
+	});
 	const router = useRouter();
 	const [error, setError] = React.useState<string>(undefined);
-	const { mutate: handleLogin } = useLoginMutation({
-		onSuccess: ({ login }) => {
-			switch (login.code) {
-				case "successful": {
-					router.push("/dashboard");
-					break;
+	const { mutate: handleLogin } = useMutation(
+		"login",
+		async (variables) => axios.post("/api/auth/login", variables),
+		{
+			onSuccess: (res) => {
+				switch (res.status) {
+					case 200: {
+						router.push("/dashboard");
+						break;
+					}
+					case 409: {
+						router.push(
+							"/register?" +
+								qs.stringify({
+									message:
+										"Couldn't find an account with your email, please register and login again.",
+								}),
+						);
+						break;
+					}
 				}
-				case "invalid_user": {
-					router.push(
-						"/register?" +
-							qs.stringify({
-								message:
-									"Couldn't find an account with your email, please register and login again.",
-							}),
-					);
-					break;
-				}
-			}
+			},
 		},
-	});
+	);
 
 	return (
 		<>
