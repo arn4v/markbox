@@ -2,6 +2,7 @@ import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import useOnClickOutside from "~/hooks/use-onclickoutside";
+import { mergeRefs } from "~/lib/react";
 
 export interface PopupProps {
 	button: React.ReactNode;
@@ -15,7 +16,7 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 	(
 		{ button, children, onDismiss, isOpen, className },
 		// TODO: Fix forwardRef type - it should be RefObject<T>
-		ref,
+		ref: React.MutableRefObject<HTMLDivElement>,
 	) => {
 		const internalRef = React.useRef<HTMLDivElement>(null);
 		useOnClickOutside(internalRef, onDismiss);
@@ -23,12 +24,7 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 		return (
 			<div
 				ref={(node) => {
-					internalRef.current = node;
-					if (typeof ref === "function") {
-						ref(node);
-					} else if (ref) {
-						(ref as React.MutableRefObject<HTMLDivElement>).current = node;
-					}
+					mergeRefs(node, internalRef, ref);
 				}}
 				className="relative">
 				{button}
