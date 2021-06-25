@@ -5,7 +5,7 @@ import useOnClickOutside from "~/hooks/use-onclickoutside";
 import { mergeRefs } from "~/lib/react";
 import styles from "./Popup.module.css";
 
-export interface PopupProps {
+export type PopupProps = JSX.IntrinsicElements["div"] & {
 	isOpen: boolean;
 	onDismiss: () => void;
 	className?: string;
@@ -26,7 +26,7 @@ export interface PopupProps {
 		| "bottom-left"
 		| "bottom-right"
 		| "custom";
-}
+};
 
 const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 	(
@@ -38,6 +38,7 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 			className,
 			toAnimate = false,
 			placement = "bottom",
+			...props
 		},
 		ref: React.MutableRefObject<HTMLDivElement>,
 	) => {
@@ -71,7 +72,8 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 								placement === "right" && "left-full top-1/2 -translate-y-1/2",
 								placement === "top" && "bottom-full left-1/2 -translate-x-1/2",
 								className,
-							])}>
+							])}
+							{...props}>
 							{children}
 						</div>
 					)}

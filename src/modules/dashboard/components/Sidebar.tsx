@@ -1,17 +1,9 @@
-import { Logo } from "~/components/Logo";
-import CreateBookmarkButton from "./CreateBookmarkButton";
-import ProfileDropdown from "../../common/components/ProfileDropdown";
+import Tags from "./Tags";
 
 const Sidebar = () => {
 	return (
-		<div className="flex items-start justify-end w-1/4 h-full pt-12 pb-8 pr-6 border-r border-blueGray-600">
-			<div className="flex flex-col justify-between w-1/2 h-full">
-				<div className="flex flex-col w-full gap-6 font-medium dark:text-white">
-					<Logo className="my-1.5" />
-					<CreateBookmarkButton />
-				</div>
-				<ProfileDropdown />
-			</div>
+		<div className="h-full w-1/4 px-6 shadow-xl dark:shadow-none bg-white dark:bg-transparent border-r border-gray-400 dark:border-gray-700 flex flex-col py-8 gap-6 justify-between items-center">
+			<Tags />
 		</div>
 	);
 };

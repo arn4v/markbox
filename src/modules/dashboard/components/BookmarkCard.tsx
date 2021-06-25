@@ -60,33 +60,33 @@ const BookmarkCard = ({ data }: Props) => {
 						trigger={
 							<button
 								onClick={onDropdownToggle}
+								aria-expanded={isDropdownOpen}
+								aria-haspopup={true}
 								className="hover:bg-blueGray-600 rounded-full p-1 focus:outline-none transition">
 								<HiOutlineMenu className="h-5 w-5" />
 							</button>
 						}>
-						<div className="w-48 dark:bg-blueGray-600 overflow-hidden rounded-lg mt-1">
-							<ul className="w-full flex flex-col">
-								<li className="w-full border-b border-blueGray-400">
-									<button
-										className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
-										onClick={() => {
-											onDropdownClose();
-										}}>
-										Edit <HiPencil />
-									</button>
-								</li>
-								<li className="w-full">
-									<button
-										className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
-										onClick={() => {
-											mutate({ id: data.id });
-											onDropdownClose();
-										}}>
-										Delete <HiTrash />
-									</button>
-								</li>
-							</ul>
-						</div>
+						<ul className="w-48 dark:bg-blueGray-600 overflow-hidden rounded-lg mt-1 flex flex-col">
+							<li className="w-full border-b border-blueGray-400">
+								<button
+									className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+									onClick={() => {
+										onDropdownClose();
+									}}>
+									Edit <HiPencil />
+								</button>
+							</li>
+							<li className="w-full">
+								<button
+									className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+									onClick={() => {
+										mutate({ id: data.id });
+										onDropdownClose();
+									}}>
+									Delete <HiTrash />
+								</button>
+							</li>
+						</ul>
 					</Popup>
 				) : (
 					<>
