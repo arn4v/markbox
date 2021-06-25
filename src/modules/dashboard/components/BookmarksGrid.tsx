@@ -5,7 +5,7 @@ export default function BookmarksGrid() {
 	const { data } = useGetAllBookmarksQuery();
 
 	return (
-		<div className="">
+		<div className="flex flex-col gap-4">
 			{data?.bookmarks.map((item) => {
 				return <BookmarkCard key={item.id} data={item} />;
 			})}

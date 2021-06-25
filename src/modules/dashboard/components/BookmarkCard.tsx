@@ -1,10 +1,13 @@
 import * as React from "react";
-import Modal from "~/components/Modal";
 import Badge from "~/components/Badge";
-import PropTypes from "prop-types";
 import format from "date-fns/format";
-import { Bookmark, useGetBookmarkQuery } from "~/graphql/types.generated";
+import { Bookmark } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
+import { HiChevronDown, HiPencil, HiX } from "react-icons/hi";
+import Drawer, { DrawerContent } from "~/components/Drawer";
+import useBreakpoints from "~/hooks/use-breakpoints";
+import clsx from "clsx";
+import Popup from "~/components/Popup";
 
 interface Props {
 	data: Bookmark;
@@ -12,6 +15,7 @@ interface Props {
 
 const BookmarkCard = ({ data }: Props) => {
 	const { isOpen, onClose, onOpen } = useDisclosure();
+	const { isLg } = useBreakpoints();
 
 	return (
 		<div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
@@ -36,53 +40,67 @@ const BookmarkCard = ({ data }: Props) => {
 				</div>
 			</div>
 			<div className="flex flex-col items-end w-1/6 gap-3">
-				<a
-					target="_blank"
-					rel="noreferrer"
-					href={data.url}
-					className="focus:outline-none">
-					<svg
-						width="14"
-						height="14"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M13 1L5.5 8.5m0-6h-3A1.5 1.5 0 001 4v7.5A1.5 1.5 0 002.5 13H10a1.5 1.5 0 001.5-1.5v-3l-6-6zm3-1.5H13 8.5zM13 1v4.5V1z"
-							stroke="#EDF2F7"
-							strokeWidth="1.5"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						/>
-					</svg>
-				</a>
-				<button type="button" onClick={onOpen} className="focus:outline-none">
-					<svg
-						width="18"
-						height="19"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg">
-						<g clipPath="url(#clip0)">
-							<path
-								d="M12.422 4.606l2.941 2.941-2.94-2.94zM13.67 3.36a2.08 2.08 0 012.94 2.94L5.16 17.75H2.25v-2.97L13.67 3.36v0z"
-								stroke="#EDF2F7"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</g>
-						<defs>
-							<clipPath id="clip0">
+				{isLg ? (
+					<Popup
+						isOpen={isOpen}
+						onDismiss={onClose}
+						button={
+							<button onClick={onOpen}>
+								<HiChevronDown />
+							</button>
+						}>
+						<div></div>
+					</Popup>
+				) : (
+					<>
+						<a
+							target="_blank"
+							rel="noreferrer"
+							href={data?.url}
+							className="focus:outline-none">
+							<svg
+								width="14"
+								height="14"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg">
 								<path
-									fill="#fff"
-									transform="translate(0 .5)"
-									d="M0 0h18v18H0z"
+									d="M13 1L5.5 8.5m0-6h-3A1.5 1.5 0 001 4v7.5A1.5 1.5 0 002.5 13H10a1.5 1.5 0 001.5-1.5v-3l-6-6zm3-1.5H13 8.5zM13 1v4.5V1z"
+									stroke="#EDF2F7"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
 								/>
-							</clipPath>
-						</defs>
-					</svg>
-				</button>
-				<div className=""></div>
+							</svg>
+						</a>
+						<button
+							type="button"
+							onClick={onOpen}
+							className="focus:outline-none">
+							<HiPencil />
+						</button>
+					</>
+				)}
 			</div>
+			<Drawer isOpen={!isLg && isOpen} onClose={onClose}>
+				<DrawerContent
+					placement="right"
+					className={clsx([
+						"p-8 bg-blueGray-700",
+						isLg
+							? "h-screen w-1/3 rounded-l-lg"
+							: "w-screen h-1/2 rounded-t-lg",
+					])}>
+					<div className="w-full flex justify-between items-center">
+						<h1 className="text-lg font-bold">Create new bookmark</h1>
+						<button
+							onClick={onClose}
+							className="p-2 rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500 transition">
+							<HiX />
+							<span className="sr-only">Close drawer</span>
+						</button>
+					</div>
+				</DrawerContent>
+			</Drawer>
 		</div>
 	);
 };

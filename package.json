@@ -25,9 +25,9 @@
 		"db-migrate": "prisma db migrate deploy",
 		"storybook": "start-storybook -p 6006",
 		"build-storybook": "build-storybook",
-		"cy:run": "cypress run --headless --browser chrome",
-		"cy:open": "cypress open --browser chrome",
-		"test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
+		"cy-run": "cypress run --headless --browser chrome",
+		"cy-open": "cypress open --browser chrome",
+		"test-e2e": "start-server-and-test dev http://localhost:3000 cy:run",
 		"start-docker": "docker-compose up -d",
 		"lint": "next lint",
 		"lint-fix": "next lint --fix"

@@ -40,6 +40,7 @@ const Drawer: DrawerComponent = ({ children, isOpen, onClose }) => {
 							transition={{ type: "tween" }}
 							onClick={onClose}
 						/>
+						{/* {children} */}
 						{withTarget}
 					</div>
 				)}

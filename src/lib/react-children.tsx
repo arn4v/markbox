@@ -5,13 +5,13 @@ export function getTargetChildren(
 	target: React.ElementType,
 ) {
 	const withTarget: React.ReactElement<any, any>[] = [];
-	const withoutTarget = React.Children.toArray(children).filter((item) => {
-		if (!React.isValidElement(item)) return true;
+	const withoutTarget = React.Children.map(children, (item) => {
+		if (!React.isValidElement(item)) return item;
 		if (item.type === target) {
 			withTarget.push(item);
-			return false;
+			return null;
 		}
-		return true;
+		return item;
 	});
 
 	return [withTarget, withoutTarget];

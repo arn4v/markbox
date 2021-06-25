@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html.dark:not(html.light) input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px #1b1b1b inset !important;
+	-webkit-text-fill-color: white !important;
+}
+
+html.dark:not(html.light) input:-webkit-autofill:focus {
+	-webkit-box-shadow: 0 0 0 1000px #27272a inset !important;
+	-webkit-text-fill-color: white !important;
+}
+
+html.light:not(html.dark) input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px #e5e7eb inset !important;
+	-webkit-text-fill-color: #1b1b1b !important;
+}
+
+html.light:not(html.dark) input:-webkit-autofill:focus {
+	-webkit-box-shadow: 0 0 0 1000px #e5e7eb inset !important;
+	-webkit-text-fill-color: #1b1b1b !important;
+}

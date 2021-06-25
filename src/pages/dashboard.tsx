@@ -27,7 +27,7 @@ const DashboardPage = () => {
 						<ProfileDropdown />
 					</div>
 				</div>
-				<div className="h-full flex-grow flex flex-col">
+				<div className="h-full flex-grow flex p-8 flex-col">
 					<Navbar />
 					<BookmarksGrid />
 				</div>
