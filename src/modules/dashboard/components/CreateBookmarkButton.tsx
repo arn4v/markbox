@@ -14,7 +14,11 @@ export default function CreateBookmarkButton() {
 	const drawerPlacement = React.useMemo(() => {
 		return lg ? "right" : "bottom";
 	}, [lg]);
-	const { mutate } = useCreateBookmarkMutation();
+	const { mutate } = useCreateBookmarkMutation({
+		onSuccess: () => {
+			queryClient.invalidateQueries("GetAllBookmarks");
+		},
+	});
 	const initialState = {
 		title: "",
 		url: "",
@@ -29,7 +33,7 @@ export default function CreateBookmarkButton() {
 	return (
 		<>
 			<button
-				className="w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2"
+				className="w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2 focus:outline-none"
 				onClick={onOpen}>
 				Create bookmark
 				<HiPlus className="h-5 w-5" />
@@ -56,7 +60,6 @@ export default function CreateBookmarkButton() {
 							onSubmit={(e) => {
 								e.preventDefault();
 								mutate({ input: { ...state, tags: [] } });
-								queryClient.invalidateQueries("GetAllBookmarks");
 								onClose();
 							}}>
 							<div className="w-full">

@@ -1,6 +1,6 @@
 import { AuthenticationError } from "apollo-server-micro";
 import { NextApiRequest } from "next";
-import { jwtVerify } from "~/lib/jwt";
+import { jwtVerify } from "~/lib/utils.server";
 import ApiResponse from "~/types/ApiResponse";
 
 export default async function protectResolver(

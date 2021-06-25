@@ -1,13 +1,14 @@
 import * as React from "react";
 import Badge from "~/components/Badge";
-import format from "date-fns/format";
-import { Bookmark } from "~/graphql/types.generated";
-import useDisclosure from "~/hooks/use-disclosure";
-import { HiChevronDown, HiPencil, HiX } from "react-icons/hi";
 import Drawer, { DrawerContent } from "~/components/Drawer";
-import useBreakpoints from "~/hooks/use-breakpoints";
-import clsx from "clsx";
 import Popup from "~/components/Popup";
+import clsx from "clsx";
+import format from "date-fns/format";
+import useBreakpoints from "~/hooks/use-breakpoints";
+import useDisclosure from "~/hooks/use-disclosure";
+import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
+import { HiOutlineMenu, HiPencil, HiTrash, HiX } from "react-icons/hi";
+import { useQueryClient } from "react-query";
 
 interface Props {
 	data: Bookmark;
@@ -15,7 +16,18 @@ interface Props {
 
 const BookmarkCard = ({ data }: Props) => {
 	const { isOpen, onClose, onOpen, onToggle } = useDisclosure();
+	const {
+		isOpen: isDropdownOpen,
+		onClose: onDropdownClose,
+		onToggle: onDropdownToggle,
+	} = useDisclosure();
 	const { isLg } = useBreakpoints();
+	const { mutate } = useDeleteBookmarkMutation({
+		onSuccess: () => {
+			queryClient.invalidateQueries("GetAllBookmarks");
+		},
+	});
+	const queryClient = useQueryClient();
 
 	return (
 		<div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
@@ -42,15 +54,39 @@ const BookmarkCard = ({ data }: Props) => {
 			<div className="flex flex-col items-end w-1/6 gap-3">
 				{isLg ? (
 					<Popup
-						isOpen={isOpen}
-						onDismiss={onClose}
-						placement="right"
+						isOpen={isDropdownOpen}
+						onDismiss={onDropdownClose}
+						placement="bottom"
 						trigger={
-							<button onClick={onToggle}>
-								<HiChevronDown />
+							<button
+								onClick={onDropdownToggle}
+								className="hover:bg-blueGray-600 rounded-full p-1 focus:outline-none transition">
+								<HiOutlineMenu className="h-5 w-5" />
 							</button>
 						}>
-						<div></div>
+						<div className="w-48 dark:bg-blueGray-600 overflow-hidden rounded-lg mt-1">
+							<ul className="w-full flex flex-col">
+								<li className="w-full border-b border-blueGray-400">
+									<button
+										className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+										onClick={() => {
+											onDropdownClose();
+										}}>
+										Edit <HiPencil />
+									</button>
+								</li>
+								<li className="w-full">
+									<button
+										className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+										onClick={() => {
+											mutate({ id: data.id });
+											onDropdownClose();
+										}}>
+										Delete <HiTrash />
+									</button>
+								</li>
+							</ul>
+						</div>
 					</Popup>
 				) : (
 					<>
