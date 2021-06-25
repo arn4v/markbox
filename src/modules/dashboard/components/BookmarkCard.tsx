@@ -14,7 +14,7 @@ interface Props {
 }
 
 const BookmarkCard = ({ data }: Props) => {
-	const { isOpen, onClose, onOpen } = useDisclosure();
+	const { isOpen, onClose, onOpen, onToggle } = useDisclosure();
 	const { isLg } = useBreakpoints();
 
 	return (
@@ -44,8 +44,9 @@ const BookmarkCard = ({ data }: Props) => {
 					<Popup
 						isOpen={isOpen}
 						onDismiss={onClose}
-						button={
-							<button onClick={onOpen}>
+						placement="right"
+						trigger={
+							<button onClick={onToggle}>
 								<HiChevronDown />
 							</button>
 						}>

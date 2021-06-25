@@ -5,6 +5,7 @@ export default function useDisclosure() {
 
 	const onOpen = () => setOpen(true);
 	const onClose = () => setOpen(false);
+	const onToggle = () => setOpen((prev) => !prev);
 
-	return { isOpen, onOpen, onClose };
+	return { isOpen, onOpen, onClose, onToggle };
 }

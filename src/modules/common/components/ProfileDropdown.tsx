@@ -14,7 +14,8 @@ const ProfileDropdown = () => {
 			isOpen={isOpen}
 			onDismiss={onClose}
 			className="bottom-0 flex flex-col gap-2"
-			button={
+			placement="custom"
+			trigger={
 				<button
 					onClick={isOpen ? onClose : onOpen}
 					className="w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2 focus:outline-none">
