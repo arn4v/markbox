@@ -43,15 +43,16 @@ const Mutation: MutationResolvers<GQLContext> = {
 		};
 	},
 	async updateBookmark(_, { input }, { req, res, prisma }) {
-		const userId = await protectResolver(req, res);
-		const id = input.id;
-		const { title, tags, url } = omitKeys(input, "id");
+		await protectResolver(req, res);
+		const { id, title, tags, url } = input;
 
 		const _updated = await prisma.bookmark.update({
 			where: {
 				id,
 			},
 			data: {
+				title,
+				url,
 				tags: {
 					create: tags
 						.filter((item) => typeof item.name === "string")
@@ -65,6 +66,8 @@ const Mutation: MutationResolvers<GQLContext> = {
 				tags: true,
 			},
 		});
+
+		console.log(_updated);
 
 		return {
 			id: _updated.id,

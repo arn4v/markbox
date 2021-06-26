@@ -9,6 +9,7 @@ import useDisclosure from "~/hooks/use-disclosure";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import { HiOutlineMenu, HiPencil, HiTrash, HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
+import EditBookmarkDrawer from "./EditBookmarkDrawer";
 
 interface Props {
 	data: Bookmark;
@@ -22,9 +23,6 @@ const BookmarkCard = ({ data }: Props) => {
 		onToggle: onDropdownToggle,
 	} = useDisclosure();
 	const { isLg } = useBreakpoints();
-	const drawerPlacement = React.useMemo(() => {
-		return isLg ? "right" : "bottom";
-	}, [isLg]);
 	const { mutate } = useDeleteBookmarkMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries("GetAllBookmarks");
@@ -122,26 +120,7 @@ const BookmarkCard = ({ data }: Props) => {
 					</>
 				)}
 			</div>
-			<Drawer isOpen={isOpen} onClose={onClose}>
-				<DrawerContent
-					placement={drawerPlacement}
-					className={clsx([
-						"p-8 bg-blueGray-700",
-						isLg
-							? "h-screen w-1/3 rounded-l-lg"
-							: "w-screen h-1/2 rounded-t-lg",
-					])}>
-					<div className="w-full flex justify-between items-center">
-						<h1 className="text-lg font-bold">Create new bookmark</h1>
-						<button
-							onClick={onClose}
-							className="p-2 rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500 transition">
-							<HiX />
-							<span className="sr-only">Close drawer</span>
-						</button>
-					</div>
-				</DrawerContent>
-			</Drawer>
+			<EditBookmarkDrawer isOpen={isOpen} onClose={onClose} data={data} />
 		</div>
 	);
 };
