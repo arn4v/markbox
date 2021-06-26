@@ -19,33 +19,30 @@ const Drawer: DrawerComponent = ({ children, isOpen, onClose }) => {
 	);
 
 	return (
-		<Portal>
-			<AnimatePresence>
-				{isOpen && (
-					<div className="h-screen w-screen fixed inset-0 overflow-none">
-						<motion.div
-							className="z-10 fixed inset-0 bg-black"
-							style={
-								{
-									"--tw-bg-opacity": 0.4,
-								} as any
-							}
-							variants={{
-								open: { opacity: 1, pointerEvents: "auto" as const },
-								closed: { opacity: 0, pointerEvents: "none" as const },
-							}}
-							initial="closed"
-							animate="open"
-							exit="closed"
-							transition={{ type: "tween" }}
-							onClick={onClose}
-						/>
-						{/* {children} */}
-						{withTarget}
-					</div>
-				)}
-			</AnimatePresence>
-		</Portal>
+		<AnimatePresence>
+			{isOpen && (
+				<div className="h-screen w-screen fixed inset-0 overflow-none z-[100]">
+					<motion.div
+						className="z-10 fixed inset-0 bg-black"
+						style={
+							{
+								"--tw-bg-opacity": 0.4,
+							} as any
+						}
+						variants={{
+							open: { opacity: 1, pointerEvents: "auto" as const },
+							closed: { opacity: 0, pointerEvents: "none" as const },
+						}}
+						initial="closed"
+						animate="open"
+						exit="closed"
+						transition={{ type: "tween" }}
+						onClick={onClose}
+					/>
+					{withTarget}
+				</div>
+			)}
+		</AnimatePresence>
 	);
 };
 

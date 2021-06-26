@@ -15,13 +15,16 @@ interface Props {
 }
 
 const BookmarkCard = ({ data }: Props) => {
-	const { isOpen, onClose, onOpen, onToggle } = useDisclosure();
+	const { isOpen, onClose, onOpen } = useDisclosure();
 	const {
 		isOpen: isDropdownOpen,
 		onClose: onDropdownClose,
 		onToggle: onDropdownToggle,
 	} = useDisclosure();
 	const { isLg } = useBreakpoints();
+	const drawerPlacement = React.useMemo(() => {
+		return isLg ? "right" : "bottom";
+	}, [isLg]);
 	const { mutate } = useDeleteBookmarkMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries("GetAllBookmarks");
@@ -71,6 +74,7 @@ const BookmarkCard = ({ data }: Props) => {
 								<button
 									className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
 									onClick={() => {
+										onOpen();
 										onDropdownClose();
 									}}>
 									Edit <HiPencil />
@@ -118,9 +122,9 @@ const BookmarkCard = ({ data }: Props) => {
 					</>
 				)}
 			</div>
-			<Drawer isOpen={!isLg && isOpen} onClose={onClose}>
+			<Drawer isOpen={isOpen} onClose={onClose}>
 				<DrawerContent
-					placement="right"
+					placement={drawerPlacement}
 					className={clsx([
 						"p-8 bg-blueGray-700",
 						isLg

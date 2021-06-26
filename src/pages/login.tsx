@@ -20,15 +20,19 @@ export default function RegisterPage() {
 	const [error, setError] = React.useState<string>(undefined);
 	const { mutate: handleLogin } = useMutation(
 		"login",
-		async (variables) => axios.post("/api/auth/login", variables),
+		async (variables: LoginBody) => axios.post("/api/auth/login", variables),
 		{
 			onSuccess: (res) => {
-				switch (res.status) {
-					case 200: {
+				switch (res.data.code) {
+					case "successful": {
 						router.push("/dashboard");
 						break;
 					}
-					case 409: {
+					case "invalid_password": {
+						setError("Wrong password.");
+						break;
+					}
+					case "invalid_user": {
 						router.push(
 							"/register?" +
 								qs.stringify({

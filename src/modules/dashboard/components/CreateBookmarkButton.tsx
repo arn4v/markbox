@@ -9,8 +9,8 @@ import { useQueryClient } from "react-query";
 
 export default function CreateBookmarkButton() {
 	const { isOpen, onOpen, onClose: primaryOnClose } = useDisclosure();
-	const { isLg: lg } = useBreakpoints();
 	const queryClient = useQueryClient();
+	const { isLg: lg } = useBreakpoints();
 	const drawerPlacement = React.useMemo(() => {
 		return lg ? "right" : "bottom";
 	}, [lg]);
