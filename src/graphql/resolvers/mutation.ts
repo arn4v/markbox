@@ -67,8 +67,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 			},
 		});
 
-		console.log(_updated);
-
 		return {
 			id: _updated.id,
 			title: _updated.title,

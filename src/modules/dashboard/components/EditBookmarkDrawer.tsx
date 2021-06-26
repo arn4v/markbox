@@ -16,7 +16,6 @@ interface Props {
 const EditBookmarkDrawer = ({ isOpen, onClose, data }: Props) => {
 	const { mutate } = useUpdateBookmarkMutation({
 		onSuccess: (res) => {
-			console.log(res);
 			queryClient.invalidateQueries("GetAllBookmarks");
 		},
 	});
