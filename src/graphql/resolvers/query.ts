@@ -32,11 +32,15 @@ const Query: QueryResolvers<GQLContext> = {
 		const bookmarks = await prisma.bookmark.findMany({
 			where: {
 				userId,
-				tags: {
-					every: {
-						id: tag,
-					},
-				},
+				...(tag
+					? {
+							tags: {
+								every: {
+									id: tag.id,
+								},
+							},
+					  }
+					: {}),
 			},
 			include: {
 				tags: true,

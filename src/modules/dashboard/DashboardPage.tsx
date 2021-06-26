@@ -1,10 +1,8 @@
-import * as React from "react";
-import { useAuth } from "~/providers/AuthProvider";
-import Navbar from "~/modules/dashboard/components/Navbar";
 import LoadingPage from "~/components/LoadingPage";
-import dynamic from "next/dynamic";
-import BookmarksGrid from "~/modules/dashboard/components/BookmarksGrid";
-import Sidebar from "~/modules/dashboard/components/Sidebar";
+import { useAuth } from "~/providers/AuthProvider";
+import BookmarksGrid from "./components/BookmarksGrid";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 const DashboardPage = () => {
 	const { isLoading } = useAuth(true);
@@ -24,8 +22,4 @@ const DashboardPage = () => {
 	);
 };
 
-const DashboardPageCSR = dynamic(Promise.resolve(DashboardPage), {
-	ssr: false,
-});
-
-export default DashboardPageCSR;
+export default DashboardPage;

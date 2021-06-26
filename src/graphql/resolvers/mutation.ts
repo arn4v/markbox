@@ -1,26 +1,60 @@
 import GQLContext from "~/types/GQLContext";
 import { MutationResolvers } from "../types.generated";
-import { omitKeys, pickKeys } from "~/lib/misc";
+import { pickKeys } from "~/lib/misc";
 import protectResolver from "../protect-resolver";
+import { Tag } from "@prisma/client";
 
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		const { tags, title, url } = input;
+		const { title, url } = input;
+		const tags: Tag[] = [];
+
+		/**
+		 *
+		 * connectOrCreate does allow specifying userId
+		 * So, when a tag is created using connectOrCreate it is not connected to the user
+		 *
+		 * To combat this, we first have to use findMany and Array.prototype.filter
+		 * to get the existing tags connected to the user making the request
+		 *
+		 * After that, we have to check in a loop if a tag with that particular name already exists
+		 * If it does, then we don't create a new tag
+		 * If it doesn't, then we create a new tag
+		 *
+		 */
+
+		const existingTags = (
+			await prisma.tag.findMany({
+				where: { AND: input.tags.map((item) => ({ name: item.name, userId })) },
+			})
+		).filter((item) => typeof item !== "undefined");
+
+		for (const tag of input.tags) {
+			// Find existing tag
+			const existingTag = existingTags.find((item) => item.name === tag.name);
+			if (!existingTag) {
+				// If existing tag doesn't exist, create a new tag and push the object to the `tags` array
+				tags.push(
+					await prisma.tag.create({
+						data: {
+							name: tag.name,
+							userId,
+						},
+					}),
+				);
+			} else {
+				// If tag does exist, then push the prefetched tag to the `tags` array
+				tags.push(existingTag);
+			}
+		}
 
 		const newBookmark = await prisma.bookmark.create({
 			data: {
 				title: title,
 				url: url,
 				tags: {
-					connectOrCreate: tags.map((item) => ({
-						create: {
-							name: item.name,
-						},
-						where: {
-							id: item.id,
-						},
-					})),
+					connect: tags.map((item) => ({ id: item.id })),
 				},
 				User: {
 					connect: {
@@ -43,8 +77,31 @@ const Mutation: MutationResolvers<GQLContext> = {
 		};
 	},
 	async updateBookmark(_, { input }, { req, res, prisma }) {
-		await protectResolver(req, res);
-		const { id, title, tags, url } = input;
+		const userId = await protectResolver(req, res);
+		const { id, title, url } = input;
+		const tags: Tag[] = [];
+
+		const existingTags = (
+			await prisma.tag.findMany({
+				where: { AND: input.tags.map((item) => ({ name: item.name, userId })) },
+			})
+		).filter((item) => typeof item !== "undefined");
+
+		for (const tag of input.tags) {
+			const existingTag = existingTags.find((item) => item.name === tag.name);
+			if (!existingTag) {
+				tags.push(
+					await prisma.tag.create({
+						data: {
+							name: tag.name,
+							userId,
+						},
+					}),
+				);
+			} else {
+				tags.push(existingTag);
+			}
+		}
 
 		const _updated = await prisma.bookmark.update({
 			where: {
@@ -54,12 +111,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 				title,
 				url,
 				tags: {
-					create: tags
-						.filter((item) => typeof item.name === "string")
-						.map((item) => ({ name: item.name })),
-					connect: tags
-						.filter((item) => typeof item.id === "string")
-						.map((item) => ({ id: item.id })),
+					connect: tags.map((item) => ({ id: item.id })),
 				},
 			},
 			include: {

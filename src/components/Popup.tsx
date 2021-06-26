@@ -20,11 +20,11 @@ export type PopupProps = JSX.IntrinsicElements["div"] & {
 		| "right-top"
 		| "right-bottom"
 		| "top"
-		| "top-left"
-		| "top-right"
+		| "top-end"
+		| "top-start"
 		| "bottom"
-		| "bottom-left"
-		| "bottom-right"
+		| "bottom-end"
+		| "bottom-start"
 		| "custom";
 };
 
@@ -59,14 +59,14 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 								"absolute z-30 rounded-lg",
 								toAnimate && styles.popup,
 								placement !== "custom" && "transform",
-								placement === "bottom-left" && "left-0 top-full",
-								placement === "bottom-right" && "top-full right-0",
+								placement === "bottom-end" && "left-0 top-full",
+								placement === "bottom-start" && "top-full right-0",
 								placement === "left-bottom" && "right-full bottom-0",
 								placement === "left-top" && "right-full top-0",
 								placement === "right-bottom" && "left-full bottom-0",
 								placement === "right-top" && "left-full top-0",
-								placement === "top-left" && "bottom-full left-0",
-								placement === "top-right" && "bottom-full right-0",
+								placement === "top-end" && "bottom-full left-0",
+								placement === "top-start" && "bottom-full right-0",
 								placement === "bottom" && "top-full left-1/2 -translate-x-1/2",
 								placement === "left" && "right-full top-1/2 -translate-y-1/2",
 								placement === "right" && "left-full top-1/2 -translate-y-1/2",

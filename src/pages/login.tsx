@@ -98,7 +98,7 @@ export default function RegisterPage() {
 					</form>
 				</div>
 				<div className="mx-auto">
-					Don't have an account? Register{" "}
+					Don&apos;t have an account? Register{" "}
 					<Link href="/register">
 						<a className="text-blue-600 hover:border-b border-blue-600 pb-[1px]">
 							here

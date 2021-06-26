@@ -54,12 +54,12 @@ export type CreateBookmarkInput = {
 };
 
 export type CreateOrUpdateBookmarkTagInput = {
-	id?: Maybe<Scalars["ID"]>;
-	name?: Maybe<Scalars["String"]>;
+	name: Scalars["String"];
 };
 
 export type FilterBookmarksTagInput = {
-	id: Scalars["ID"];
+	id?: Maybe<Scalars["ID"]>;
+	name?: Maybe<Scalars["String"]>;
 };
 
 export type LoginMessage = {

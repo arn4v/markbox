@@ -16,12 +16,12 @@ export default gql`
 	}
 
 	input FilterBookmarksTagInput {
-		id: ID!
+		id: ID
+		name: String
 	}
 
 	input CreateOrUpdateBookmarkTagInput {
-		id: ID
-		name: String
+		name: String!
 	}
 
 	input CreateBookmarkInput {

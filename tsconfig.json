@@ -18,7 +18,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"~/*": ["src/*"]
-		}
+		},
 	},
 	"exclude": ["node_modules"],
 	"include": ["next-env.d.ts", "types", "src"]
