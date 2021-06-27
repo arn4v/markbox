@@ -84,6 +84,30 @@ const Mutation: MutationResolvers<GQLContext> = {
 		});
 		return !!deleted;
 	},
+	async deleteTag(_, { id }, { req, res, prisma }) {
+		await protectResolver(req, res);
+		try {
+			const deleted = await prisma.tag.delete({
+				where: {
+					id,
+				},
+			});
+			return true;
+		} catch (err) {
+			return false;
+		}
+	},
+	async renameTag(_, { input: { id, name } }, { prisma, req, res }) {
+		await protectResolver(req, res);
+		return await prisma.tag.update({
+			where: {
+				id,
+			},
+			data: {
+				name,
+			},
+		});
+	},
 };
 
 export default Mutation;
