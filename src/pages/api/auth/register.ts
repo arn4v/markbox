@@ -24,6 +24,7 @@ export default withCookies(
 					email,
 				},
 			});
+
 			if (!user) {
 				await passwordSchema.validateAsync(password);
 				const hashedPassword = await hashPassword(password);
@@ -42,7 +43,7 @@ export default withCookies(
 			} else {
 				res.status(409).send({
 					code: "user_conflict",
-					message: "User already exists.",
+					message: "User already exists. Please log in.",
 				});
 			}
 		} catch (err) {

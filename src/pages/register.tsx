@@ -4,7 +4,6 @@ import * as React from "react";
 import InfoBox from "~/components/InfoBox";
 import { useMutation } from "react-query";
 import qs from "qs";
-import axios from "redaxios";
 
 interface RegisterBody {
 	email: string;
@@ -19,18 +18,26 @@ export default function RegisterPage() {
 	const router = useRouter();
 	const { mutate: handleRegister } = useMutation(
 		"register",
-		async (variables: RegisterBody) =>
-			axios.post("/api/auth/register", variables),
+		async (variables: RegisterBody) => {
+			return await fetch("/api/auth/register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(variables),
+			}).then((res) => res.json());
+		},
 		{
-			onSuccess: async (res) => {
-				const register = res.data;
-				switch (register.code) {
+			onSuccess(res) {
+				switch (res.code) {
 					case "successful":
-					case "conflict": {
+						router.push("/login");
+						break;
+					case "user_conflict": {
 						router.push(
 							"/login?" +
 								qs.stringify({
-									message: register.message,
+									message: res.message,
 								}),
 						);
 						break;
