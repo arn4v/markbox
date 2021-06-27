@@ -79,9 +79,8 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 	const { data } = useGetAllTagsQuery();
 	const { mutate } = useUpdateBookmarkMutation({
 		onSuccess: (res) => {
-			for (const query of ["GetAllBookmarks", "GetTags"]) {
-				queryClient.invalidateQueries(query);
-			}
+			queryClient.invalidateQueries("GetAllBookmarks");
+			queryClient.invalidateQueries("GetAllTags");
 			refetchBookmark();
 		},
 	});
