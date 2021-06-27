@@ -6,7 +6,7 @@ delete colors.lightBlue;
 /** @type {import("tailwindcss/tailwind-config").TailwindConfig} */
 module.exports = {
 	mode: "jit",
-	purge: ["./src/**/*.{jsx,tsx,ts,js}"],
+	purge: ["./src/**/*.{jsx,tsx,ts,js,css}"],
 	darkMode: "class",
 	theme: {
 		extend: {

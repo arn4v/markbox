@@ -72,7 +72,7 @@ export default function RegisterPage() {
 						<input
 							id="email"
 							type="email"
-							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200"
+							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
 							autoComplete="email"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, email: e.target.value }))
@@ -82,12 +82,12 @@ export default function RegisterPage() {
 						<label htmlFor="password">Password</label>
 						<input
 							id="password"
-							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200"
+							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
 							type="password"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, password: e.target.value }))
 							}
-							autoComplete="new-password"
+							autoComplete="current-password"
 							required
 						/>
 						<button
