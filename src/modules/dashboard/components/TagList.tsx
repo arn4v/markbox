@@ -19,12 +19,19 @@ export default function TagList() {
 				Tags
 			</h2>
 			<div className="my-2 w-full flex flex-col items-center justify-start gap-2 pr-6">
-				<Tag redirect={false} active={typeof tag === "undefined"}>
+				<Tag
+					id={undefined}
+					showDropdown={false}
+					redirect={false}
+					active={typeof tag === "undefined"}>
 					All
 				</Tag>
 				{data?.tags?.map((item) => {
 					return (
-						<Tag key={item.id} active={tag === item.name.toLowerCase()}>
+						<Tag
+							key={item.id}
+							id={item.id}
+							active={tag === item.name.toLowerCase()}>
 							{item.name}
 						</Tag>
 					);

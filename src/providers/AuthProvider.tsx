@@ -27,7 +27,7 @@ export function AuthProvider({ children }: Props) {
 	const { isLoading } = useUserQuery(
 		{},
 		{
-			refetchInterval: ms("30s"),
+			refetchInterval: ms("5s"),
 			onSuccess: (data) => {
 				if (!!data.user) {
 					setAuthenticated(!!data.user);

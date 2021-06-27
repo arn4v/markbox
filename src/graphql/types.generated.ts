@@ -74,6 +74,8 @@ export type Mutation = {
 	__typename?: "Mutation";
 	createBookmark?: Maybe<Bookmark>;
 	updateBookmark?: Maybe<Bookmark>;
+	renameTag?: Maybe<Tag>;
+	deleteTag?: Maybe<Scalars["Boolean"]>;
 	deleteBookmark?: Maybe<Scalars["Boolean"]>;
 };
 
@@ -83,6 +85,14 @@ export type MutationCreateBookmarkArgs = {
 
 export type MutationUpdateBookmarkArgs = {
 	input: UpdateBookmarkInput;
+};
+
+export type MutationRenameTagArgs = {
+	input?: Maybe<RenameTagInput>;
+};
+
+export type MutationDeleteTagArgs = {
+	id: Scalars["ID"];
 };
 
 export type MutationDeleteBookmarkArgs = {
@@ -103,6 +113,11 @@ export type QueryBookmarkArgs = {
 
 export type QueryBookmarksArgs = {
 	tag?: Maybe<FilterBookmarksTagInput>;
+};
+
+export type RenameTagInput = {
+	id: Scalars["ID"];
+	name: Scalars["String"];
 };
 
 export type Tag = {
@@ -150,6 +165,24 @@ export type DeleteBookmarkMutationVariables = Exact<{
 export type DeleteBookmarkMutation = {
 	__typename?: "Mutation";
 	deleteBookmark?: Maybe<boolean>;
+};
+
+export type DeleteTagMutationVariables = Exact<{
+	id: Scalars["ID"];
+}>;
+
+export type DeleteTagMutation = {
+	__typename?: "Mutation";
+	deleteTag?: Maybe<boolean>;
+};
+
+export type RenameTagMutationVariables = Exact<{
+	input?: Maybe<RenameTagInput>;
+}>;
+
+export type RenameTagMutation = {
+	__typename?: "Mutation";
+	renameTag?: Maybe<{ __typename?: "Tag"; id: string }>;
 };
 
 export type UpdateBookmarkMutationVariables = Exact<{
@@ -350,6 +383,7 @@ export type ResolversTypes = {
 	Mutation: ResolverTypeWrapper<{}>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Query: ResolverTypeWrapper<{}>;
+	RenameTagInput: RenameTagInput;
 	Tag: ResolverTypeWrapper<Tag>;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: ResolverTypeWrapper<User>;
@@ -368,6 +402,7 @@ export type ResolversParentTypes = {
 	Mutation: {};
 	Boolean: Scalars["Boolean"];
 	Query: {};
+	RenameTagInput: RenameTagInput;
 	Tag: Tag;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: User;
@@ -424,6 +459,18 @@ export type MutationResolvers<
 		ParentType,
 		ContextType,
 		RequireFields<MutationUpdateBookmarkArgs, "input">
+	>;
+	renameTag?: Resolver<
+		Maybe<ResolversTypes["Tag"]>,
+		ParentType,
+		ContextType,
+		RequireFields<MutationRenameTagArgs, never>
+	>;
+	deleteTag?: Resolver<
+		Maybe<ResolversTypes["Boolean"]>,
+		ParentType,
+		ContextType,
+		RequireFields<MutationDeleteTagArgs, "id">
 	>;
 	deleteBookmark?: Resolver<
 		Maybe<ResolversTypes["Boolean"]>,
@@ -547,6 +594,50 @@ export const useDeleteBookmarkMutation = <TError = unknown, TContext = unknown>(
 		(variables?: DeleteBookmarkMutationVariables) =>
 			fetcher<DeleteBookmarkMutation, DeleteBookmarkMutationVariables>(
 				DeleteBookmarkDocument,
+				variables,
+			)(),
+		options,
+	);
+export const DeleteTagDocument = `
+    mutation DeleteTag($id: ID!) {
+  deleteTag(id: $id)
+}
+    `;
+export const useDeleteTagMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		DeleteTagMutation,
+		TError,
+		DeleteTagMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<DeleteTagMutation, TError, DeleteTagMutationVariables, TContext>(
+		(variables?: DeleteTagMutationVariables) =>
+			fetcher<DeleteTagMutation, DeleteTagMutationVariables>(
+				DeleteTagDocument,
+				variables,
+			)(),
+		options,
+	);
+export const RenameTagDocument = `
+    mutation RenameTag($input: RenameTagInput) {
+  renameTag(input: $input) {
+    id
+  }
+}
+    `;
+export const useRenameTagMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		RenameTagMutation,
+		TError,
+		RenameTagMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<RenameTagMutation, TError, RenameTagMutationVariables, TContext>(
+		(variables?: RenameTagMutationVariables) =>
+			fetcher<RenameTagMutation, RenameTagMutationVariables>(
+				RenameTagDocument,
 				variables,
 			)(),
 		options,
