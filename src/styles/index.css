@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 html.dark:not(html.light) input:-webkit-autofill {
-	-webkit-box-shadow: 0 0 0 1000px #1b1b1b inset !important;
+	-webkit-box-shadow: 0 0 0 1000px #475569 inset !important;
 	-webkit-text-fill-color: white !important;
 }
 
 html.dark:not(html.light) input:-webkit-autofill:focus {
-	-webkit-box-shadow: 0 0 0 1000px #27272a inset !important;
+	-webkit-box-shadow: 0 0 0 1000px #64748b inset !important;
 	-webkit-text-fill-color: white !important;
 }
 

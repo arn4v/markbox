@@ -49,7 +49,7 @@ export default function RegisterPage() {
 
 	return (
 		<>
-			<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 dark:bg-gray-900 gap-8 text-black dark:text-white">
+			<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 dark:bg-blueGray-800 gap-8 text-black dark:text-white">
 				<div className="w-5/6 lg:w-1/3 text-2xl font-bold grid place-items-center">
 					Login
 				</div>
@@ -61,7 +61,7 @@ export default function RegisterPage() {
 						textColor="indigo-700"
 					/>
 				)}
-				<div className="w-5/6 lg:w-1/3 bg-white dark:bg-gray-700 rounded-lg shadow-lg py-6 px-10">
+				<div className="w-5/6 lg:w-1/3 bg-white dark:bg-blueGray-700 rounded-lg shadow-lg py-6 px-10">
 					<form
 						className="h-full w-full flex flex-col items-start justify-center gap-5"
 						onSubmit={(e) => {
@@ -72,7 +72,7 @@ export default function RegisterPage() {
 						<input
 							id="email"
 							type="email"
-							className="w-full focus:outline-none focus:ring-2 ring-gray-700 rounded focus:border-transparent border-gray-200 dark:border-gray-600 border-2 dark:bg-gray-800 dark:caret-gray-400 caret-black focus:bg-gray-500"
+							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200"
 							autoComplete="email"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, email: e.target.value }))
@@ -82,7 +82,7 @@ export default function RegisterPage() {
 						<label htmlFor="password">Password</label>
 						<input
 							id="password"
-							className="w-full focus:outline-none focus:ring-2 rounded focus:border-transparent border-gray-200 dark:border-gray-600 border-2 dark:bg-gray-800 dark:caret-gray-400 caret-black focus:bg-gray-500"
+							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200"
 							type="password"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, password: e.target.value }))

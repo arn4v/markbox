@@ -33,7 +33,7 @@ export default function Navbar() {
 						</a>
 					</Link>
 					<div className="w-[1px] h-5 bg-gray-400"></div>
-					<Link href="/signup">
+					<Link href="/register">
 						<a className="inline-flex items-center bg-indigo-500 text-white border-0 py-1 px-3 focus:outline-none hover:bg-indigo-600 transition rounded text-base mt-4 md:mt-0">
 							Sign up
 							<HiArrowRight className="h-3 w-3 ml-2" />

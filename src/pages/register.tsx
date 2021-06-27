@@ -41,7 +41,7 @@ export default function RegisterPage() {
 	);
 
 	return (
-		<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 gap-8">
+		<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 gap-8 dark:bg-blueGray-800">
 			<div className="w-5/6 lg:w-1/3 text-2xl font-bold grid place-items-center">
 				Register
 			</div>
@@ -53,7 +53,7 @@ export default function RegisterPage() {
 					textColor="indigo-700"
 				/>
 			)}
-			<div className="w-5/6 lg:w-1/3 bg-white rounded-lg shadow-lg py-6 px-10">
+			<div className="w-5/6 lg:w-1/3 bg-white rounded-lg shadow-lg py-6 px-10 dark:bg-blueGray-700">
 				<form
 					className="h-full w-full flex flex-col items-start justify-center gap-5"
 					onSubmit={(e) => {
@@ -64,7 +64,7 @@ export default function RegisterPage() {
 					<input
 						id="email"
 						type="email"
-						className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent border-gray-200"
+						className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200"
 						autoComplete="email"
 						onChange={(e) =>
 							setState((prev) => ({ ...prev, email: e.target.value }))
@@ -74,7 +74,7 @@ export default function RegisterPage() {
 					<label htmlFor="password">Password</label>
 					<input
 						id="password"
-						className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent border-gray-200"
+						className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200"
 						type="password"
 						onChange={(e) =>
 							setState((prev) => ({ ...prev, password: e.target.value }))
@@ -92,7 +92,7 @@ export default function RegisterPage() {
 			<div className="mx-auto">
 				Already have an account? Login{" "}
 				<Link href="/login">
-					<a className="text-blue-600 hover:border-b border-blue-600 pb-[1px]">
+					<a className="text-blue-600 dark:text-blue-400 dark:hover:border-blue-600 hover:border-b dark:border-blue-400 pb-[1px]">
 						here
 					</a>
 				</Link>
