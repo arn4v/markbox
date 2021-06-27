@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HiArrowRight, HiChevronRight } from "react-icons/hi";
 import { Logo } from "~/components/Logo";
-import { useAuth } from "~/providers/AuthProvider";
+import { useAuth } from "~/hooks/use-auth";
 
 export default function Navbar() {
 	const { isAuthenticated } = useAuth();

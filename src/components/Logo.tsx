@@ -1,9 +1,10 @@
 import clsx from "clsx";
 
-/**
- * @param {{ className?: string }} props
- */
-export const Logo = ({ className }) => {
+interface Props {
+	className?: string;
+}
+
+export const Logo = ({ className }: Props) => {
 	return (
 		<svg
 			width="162"

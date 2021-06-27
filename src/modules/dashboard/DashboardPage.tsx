@@ -1,5 +1,5 @@
 import LoadingPage from "~/components/LoadingPage";
-import { useAuth } from "~/providers/AuthProvider";
+import { useAuth } from "~/hooks/use-auth";
 import BookmarksGrid from "./components/BookmarksGrid";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";

@@ -56,7 +56,8 @@
 		"react-icons": "^4.2.0",
 		"react-query": "^3.17.2",
 		"react-use": "^17.2.4",
-		"redaxios": "^0.4.1"
+		"redaxios": "^0.4.1",
+		"zustand": "^3.5.4"
 	},
 	"devDependencies": {
 		"@graphql-codegen/add": "^2.0.2",

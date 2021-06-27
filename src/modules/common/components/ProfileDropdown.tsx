@@ -2,9 +2,9 @@ import * as React from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import Popup from "~/components/Popup";
 import useDisclosure from "~/hooks/use-disclosure";
-import { useAuth } from "~/providers/AuthProvider";
 import { HiCog } from "react-icons/hi";
 import Link from "next/link";
+import { useAuth } from "~/hooks/use-auth";
 
 const ProfileDropdown = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
