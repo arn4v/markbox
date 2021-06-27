@@ -36,7 +36,8 @@ export default function CreateBookmarkButton() {
 	const { data } = useGetAllTagsQuery();
 	const { mutate } = useCreateBookmarkMutation({
 		onSuccess: () => {
-			queryClient.invalidateQueries(["GetAllBookmarks", "GetTags"]);
+			queryClient.invalidateQueries("GetAllBookmarks");
+			queryClient.invalidateQueries("GetAllTags");
 		},
 	});
 
