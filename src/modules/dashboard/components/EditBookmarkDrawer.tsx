@@ -78,12 +78,12 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 	);
 	const { data } = useGetTagsQuery();
 	const { mutate } = useUpdateBookmarkMutation({
-		onSuccess: () => {
-			queryClient.invalidateQueries([
-				"GetAllBookmarks",
-				"GetBookmark",
-				"GetTags",
-			]);
+		onSuccess: (res) => {
+			console.log(res);
+			for (const query of ["GetAllBookmarks", "GetTags"]) {
+				queryClient.invalidateQueries(query);
+			}
+			queryClient.invalidateQueries(["GetBookmark", { id }]);
 		},
 	});
 
@@ -93,8 +93,17 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { title, url, tags } = state;
-		mutate({ input: { id, title, url, tags: Object.values(tags) } });
+		const { title, url } = state;
+		const tags = Object.values(state.tags).reduce((acc, cur) => {
+			const existingTag = data.tags.find((item) => item.name === cur.name);
+			if (existingTag) {
+				acc.push({ id: existingTag.id });
+			} else {
+				acc.push(cur);
+			}
+			return acc;
+		}, []);
+		mutate({ input: { id, title, url, tags } });
 		internalOnClose();
 	};
 

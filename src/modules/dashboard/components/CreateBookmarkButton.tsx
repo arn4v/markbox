@@ -36,7 +36,7 @@ export default function CreateBookmarkButton() {
 	const { data } = useGetTagsQuery();
 	const { mutate } = useCreateBookmarkMutation({
 		onSuccess: () => {
-			queryClient.invalidateQueries("GetAllBookmarks");
+			queryClient.invalidateQueries(["GetAllBookmarks", "GetTags"]);
 		},
 	});
 
@@ -76,8 +76,19 @@ export default function CreateBookmarkButton() {
 							className="flex flex-col gap-4"
 							onSubmit={(e) => {
 								e.preventDefault();
-								const { tags, title, url } = state;
-								mutate({ input: { title, url, tags: Object.values(tags) } });
+								const { title, url } = state;
+								const tags = Object.values(state.tags).reduce((acc, cur) => {
+									const existingTag = data.tags.find(
+										(item) => item.name === cur.name,
+									);
+									if (existingTag) {
+										acc.push({ id: existingTag.id });
+									} else {
+										acc.push(cur);
+									}
+									return acc;
+								}, []);
+								mutate({ input: { title, url, tags } });
 								onClose();
 							}}>
 							<div className="w-full">
