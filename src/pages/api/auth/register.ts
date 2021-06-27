@@ -1,6 +1,5 @@
 import { NextApiRequest } from "next";
 import withCookies, {
-	Boom,
 	hashPassword,
 	prisma,
 	routeHandler,

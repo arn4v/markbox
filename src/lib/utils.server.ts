@@ -1,5 +1,4 @@
 import ms from "ms";
-import Boom from "@hapi/boom";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { createVerifier, createSigner } from "fast-jwt";
 import { hash, genSalt, compare } from "bcrypt";
@@ -48,24 +47,7 @@ export const prisma = global.prisma as PrismaClient;
 /* -------------------------------------------------------------------------- */
 
 export const routeHandler = () =>
-	nextConnect<NextApiRequest, NextApiResponse>({
-		onError(e, req, res, next) {
-			if (Boom.isBoom(e)) {
-				res.status(e.output.payload.statusCode);
-				res.json({
-					error: e.output.payload.error,
-					message: e.output.payload.message,
-				});
-			} else {
-				res.status(500);
-				res.json({
-					message: "Unexpected error",
-				});
-				console.error(e);
-				// unexcepted error
-			}
-		},
-	});
+	nextConnect<NextApiRequest, NextApiResponse>();
 
 /* -------------------------------------------------------------------------- */
 /*                                Cookie utils                                */
@@ -102,5 +84,3 @@ const withCookies =
 	};
 
 export default withCookies;
-
-export { Boom };

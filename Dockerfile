@@ -15,8 +15,6 @@ COPY . .
 # build
 ENV NODE_ENV production
 
-RUN ls .
-
 RUN yarn build
 
 RUN chown -R node:node /app/.next
