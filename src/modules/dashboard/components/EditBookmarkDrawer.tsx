@@ -63,7 +63,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 
 	// React query
 	const queryClient = useQueryClient();
-	const {} = useGetBookmarkQuery(
+	const { refetch: refetchBookmark } = useGetBookmarkQuery(
 		{ id },
 		{
 			onSuccess(data) {
@@ -79,11 +79,10 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 	const { data } = useGetTagsQuery();
 	const { mutate } = useUpdateBookmarkMutation({
 		onSuccess: (res) => {
-			console.log(res);
 			for (const query of ["GetAllBookmarks", "GetTags"]) {
 				queryClient.invalidateQueries(query);
 			}
-			queryClient.invalidateQueries(["GetBookmark", { id }]);
+			refetchBookmark();
 		},
 	});
 

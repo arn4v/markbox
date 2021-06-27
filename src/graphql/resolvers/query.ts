@@ -80,6 +80,19 @@ const Query: QueryResolvers<GQLContext> = {
 		});
 		return tags.map((item) => pickKeys(item, "id", "name"));
 	},
+	async getTagBookmarkCount(_, { id }, { req, res }) {
+		const userId = await protectResolver(req, res);
+		const count = await prisma.bookmark.count({
+			where: {
+				tags: {
+					every: {
+						id,
+					},
+				},
+			},
+		});
+		return count;
+	},
 };
 
 export default Query;

@@ -59,8 +59,7 @@ export type CreateOrUpdateBookmarkTagInput = {
 };
 
 export type FilterBookmarksTagInput = {
-	id?: Maybe<Scalars["ID"]>;
-	name?: Maybe<Scalars["String"]>;
+	id: Scalars["ID"];
 };
 
 export type LoginMessage = {
@@ -103,6 +102,7 @@ export type Query = {
 	__typename?: "Query";
 	bookmark: Bookmark;
 	bookmarks: Array<Bookmark>;
+	getTagBookmarkCount: Scalars["Int"];
 	tags?: Maybe<Array<Tag>>;
 	user?: Maybe<User>;
 };
@@ -113,6 +113,10 @@ export type QueryBookmarkArgs = {
 
 export type QueryBookmarksArgs = {
 	tag?: Maybe<FilterBookmarksTagInput>;
+};
+
+export type QueryGetTagBookmarkCountArgs = {
+	id: Scalars["ID"];
 };
 
 export type RenameTagInput = {
@@ -234,6 +238,15 @@ export type GetBookmarkQuery = {
 		updatedAt: string;
 		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	};
+};
+
+export type GetTagBookmarkCountQueryVariables = Exact<{
+	id: Scalars["ID"];
+}>;
+
+export type GetTagBookmarkCountQuery = {
+	__typename?: "Query";
+	getTagBookmarkCount: number;
 };
 
 export type GetTagsQueryVariables = Exact<{ [key: string]: never }>;
@@ -383,6 +396,7 @@ export type ResolversTypes = {
 	Mutation: ResolverTypeWrapper<{}>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Query: ResolverTypeWrapper<{}>;
+	Int: ResolverTypeWrapper<Scalars["Int"]>;
 	RenameTagInput: RenameTagInput;
 	Tag: ResolverTypeWrapper<Tag>;
 	UpdateBookmarkInput: UpdateBookmarkInput;
@@ -402,6 +416,7 @@ export type ResolversParentTypes = {
 	Mutation: {};
 	Boolean: Scalars["Boolean"];
 	Query: {};
+	Int: Scalars["Int"];
 	RenameTagInput: RenameTagInput;
 	Tag: Tag;
 	UpdateBookmarkInput: UpdateBookmarkInput;
@@ -495,6 +510,12 @@ export type QueryResolvers<
 		ParentType,
 		ContextType,
 		RequireFields<QueryBookmarksArgs, never>
+	>;
+	getTagBookmarkCount?: Resolver<
+		ResolversTypes["Int"],
+		ParentType,
+		ContextType,
+		RequireFields<QueryGetTagBookmarkCountArgs, "id">
 	>;
 	tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>;
 	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
@@ -731,6 +752,26 @@ export const useGetBookmarkQuery = <TData = GetBookmarkQuery, TError = unknown>(
 		["GetBookmark", variables],
 		fetcher<GetBookmarkQuery, GetBookmarkQueryVariables>(
 			GetBookmarkDocument,
+			variables,
+		),
+		options,
+	);
+export const GetTagBookmarkCountDocument = `
+    query GetTagBookmarkCount($id: ID!) {
+  getTagBookmarkCount(id: $id)
+}
+    `;
+export const useGetTagBookmarkCountQuery = <
+	TData = GetTagBookmarkCountQuery,
+	TError = unknown,
+>(
+	variables: GetTagBookmarkCountQueryVariables,
+	options?: UseQueryOptions<GetTagBookmarkCountQuery, TError, TData>,
+) =>
+	useQuery<GetTagBookmarkCountQuery, TError, TData>(
+		["GetTagBookmarkCount", variables],
+		fetcher<GetTagBookmarkCountQuery, GetTagBookmarkCountQueryVariables>(
+			GetTagBookmarkCountDocument,
 			variables,
 		),
 		options,

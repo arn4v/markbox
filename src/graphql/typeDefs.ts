@@ -16,8 +16,7 @@ export default gql`
 	}
 
 	input FilterBookmarksTagInput {
-		id: ID
-		name: String
+		id: ID!
 	}
 
 	input CreateOrUpdateBookmarkTagInput {
@@ -56,16 +55,17 @@ export default gql`
 		createdAt: String!
 	}
 
-	type Query {
-		bookmark(id: ID!): Bookmark!
-		bookmarks(tag: FilterBookmarksTagInput): [Bookmark!]!
-		tags: [Tag!]
-		user: User
-	}
-
 	input RenameTagInput {
 		id: ID!
 		name: String!
+	}
+
+	type Query {
+		bookmark(id: ID!): Bookmark!
+		bookmarks(tag: FilterBookmarksTagInput): [Bookmark!]!
+		getTagBookmarkCount(id: ID!): Int!
+		tags: [Tag!]
+		user: User
 	}
 
 	type Mutation {
