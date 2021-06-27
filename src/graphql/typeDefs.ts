@@ -63,16 +63,17 @@ export default gql`
 	type Query {
 		bookmark(id: ID!): Bookmark!
 		bookmarks(tag: FilterBookmarksTagInput): [Bookmark!]!
-		getTagBookmarkCount(id: ID!): Int!
+		tag(id: ID!): Tag!
+		tagBookmarksCount(id: ID!): Int!
 		tags: [Tag!]
 		user: User
 	}
 
 	type Mutation {
-		createBookmark(input: CreateBookmarkInput!): Bookmark
-		updateBookmark(input: UpdateBookmarkInput!): Bookmark
-		renameTag(input: RenameTagInput): Tag
-		deleteTag(id: ID!): Boolean
-		deleteBookmark(id: ID!): Boolean
+		createBookmark(input: CreateBookmarkInput!): Bookmark!
+		updateBookmark(input: UpdateBookmarkInput!): Bookmark!
+		renameTag(input: RenameTagInput): Tag!
+		deleteTag(id: ID!): Boolean!
+		deleteBookmark(id: ID!): Boolean!
 	}
 `;

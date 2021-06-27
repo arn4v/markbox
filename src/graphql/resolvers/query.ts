@@ -1,12 +1,11 @@
 import { pickKeys } from "~/lib/misc";
-import { prisma } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { QueryResolvers, Tag } from "../types.generated";
 
 const Query: QueryResolvers<GQLContext> = {
-	async bookmark(_, { id }, ctx) {
-		const userId = await protectResolver(ctx.req, ctx.res);
+	async bookmark(_, { id }, { prisma, req, res }) {
+		const userId = await protectResolver(req, res);
 		const {
 			id: _id,
 			title,
@@ -27,8 +26,8 @@ const Query: QueryResolvers<GQLContext> = {
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-	async bookmarks(_, { tag }, ctx) {
-		const userId = await protectResolver(ctx.req, ctx.res);
+	async bookmarks(_, { tag }, { req, res, prisma }) {
+		const userId = await protectResolver(req, res);
 		const bookmarks = await prisma.bookmark.findMany({
 			where: {
 				userId,
@@ -55,8 +54,8 @@ const Query: QueryResolvers<GQLContext> = {
 			updatedAt: updatedAt.toISOString(),
 		}));
 	},
-	async user(_, __, ctx) {
-		const userId = await protectResolver(ctx.req, ctx.res);
+	async user(_, __, { req, res, prisma }) {
+		const userId = await protectResolver(req, res);
 		const { id, email, emailVerified, createdAt, updatedAt } =
 			await prisma.user.findUnique({
 				where: {
@@ -71,7 +70,7 @@ const Query: QueryResolvers<GQLContext> = {
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-	async tags(_, __, { req, res }): Promise<Tag[]> {
+	async tags(_, __, { req, res, prisma }): Promise<Tag[]> {
 		const userId = await protectResolver(req, res);
 		const tags = await prisma.tag.findMany({
 			where: {
@@ -80,7 +79,19 @@ const Query: QueryResolvers<GQLContext> = {
 		});
 		return tags.map((item) => pickKeys(item, "id", "name"));
 	},
-	async getTagBookmarkCount(_, { id }, { req, res }) {
+	async tag(_, { id }, { req, res, prisma }) {
+		await protectResolver(req, res);
+		return await prisma.tag.findUnique({
+			where: {
+				id,
+			},
+			select: {
+				id: true,
+				name: true,
+			},
+		});
+	},
+	async tagBookmarksCount(_, { id }, { prisma, req, res }) {
 		const userId = await protectResolver(req, res);
 		const count = await prisma.bookmark.count({
 			where: {

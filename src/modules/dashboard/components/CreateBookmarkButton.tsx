@@ -4,7 +4,7 @@ import useDisclosure from "~/hooks/use-disclosure";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
 	useCreateBookmarkMutation,
-	useGetTagsQuery,
+	useGetAllTagsQuery,
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import clsx from "clsx";
@@ -33,7 +33,7 @@ export default function CreateBookmarkButton() {
 
 	// Data fetching/mutation
 	const queryClient = useQueryClient();
-	const { data } = useGetTagsQuery();
+	const { data } = useGetAllTagsQuery();
 	const { mutate } = useCreateBookmarkMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries(["GetAllBookmarks", "GetTags"]);
@@ -77,8 +77,9 @@ export default function CreateBookmarkButton() {
 							onSubmit={(e) => {
 								e.preventDefault();
 								const { title, url } = state;
+								console.log(data.tags);
 								const tags = Object.values(state.tags).reduce((acc, cur) => {
-									const existingTag = data.tags.find(
+									const existingTag = data?.tags.find(
 										(item) => item.name === cur.name,
 									);
 									if (existingTag) {

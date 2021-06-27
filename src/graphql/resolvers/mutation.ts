@@ -99,14 +99,24 @@ const Mutation: MutationResolvers<GQLContext> = {
 	},
 	async renameTag(_, { input: { id, name } }, { prisma, req, res }) {
 		await protectResolver(req, res);
-		return await prisma.tag.update({
+
+		const tag = await prisma.tag.update({
 			where: {
 				id,
 			},
 			data: {
 				name,
 			},
+			select: {
+				id: true,
+				name: true,
+			},
 		});
+
+		return {
+			id: tag.id,
+			name: tag.name,
+		};
 	},
 };
 

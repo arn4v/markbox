@@ -1,7 +1,7 @@
 import gql from "../gql-tag";
 
 export default gql`
-	query GetTags {
+	query GetAllTags {
 		tags {
 			id
 			name

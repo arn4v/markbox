@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useGetTagsQuery } from "~/graphql/types.generated";
+import { useGetAllTagsQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
 import Tag from "./Tag";
 
@@ -12,7 +12,17 @@ export default function TagList() {
 		onClose: onEditModeDisabled,
 		onToggle: onEditModeToggle,
 	} = useDisclosure();
-	const { data } = useGetTagsQuery({}, { initialData: { tags: [] } });
+	const { data } = useGetAllTagsQuery(
+		{},
+		{
+			initialData: { tags: [] },
+			onSuccess(data) {
+				if (!data.tags.length) {
+					onEditModeDisabled();
+				}
+			},
+		},
+	);
 	const {
 		query: { tag },
 	} = useRouter();

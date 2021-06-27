@@ -1,14 +1,10 @@
 import * as React from "react";
 import clsx from "clsx";
 import Link from "next/link";
-import { HiPencil, HiTrash } from "react-icons/hi";
-import { useQueryClient } from "react-query";
-import Popup from "~/components/Popup";
-import {
-	useDeleteTagMutation,
-	useGetTagBookmarkCountQuery,
-} from "~/graphql/types.generated";
+import { useGetTagQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
+import EditTagPopup from "./EditTag";
+import DeleteTagPopup from "./DeleteTag";
 
 interface TagProps {
 	children: string;
@@ -25,18 +21,16 @@ export default function Tag({
 	id,
 	isEditModeEnabled,
 }: TagProps) {
-	const queryClient = useQueryClient();
-	const { data, refetch } = useGetTagBookmarkCountQuery({ id });
-	const { mutate } = useDeleteTagMutation({
-		onSuccess() {
-			queryClient.invalidateQueries("GetTags");
-			refetch();
-		},
-	});
+	const { data, refetch } = useGetTagQuery({ id });
 	const {
 		isOpen: isDeleteOpen,
 		onClose: onDeleteClose,
 		onOpen: onDeleteOpen,
+	} = useDisclosure();
+	const {
+		isOpen: isEditOpen,
+		onClose: onEditClose,
+		onOpen: onEditOpen,
 	} = useDisclosure();
 
 	return (
@@ -64,60 +58,18 @@ export default function Tag({
 			</Link>
 			{isEditModeEnabled && (
 				<div className="flex items-center gap-4">
-					<button
-						className={clsx([
-							"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
-							isDeleteOpen && "z-30",
-						])}
-						onClick={() => {}}>
-						<HiPencil />
-					</button>
-					<Popup
+					<EditTagPopup
+						data={data?.tag}
+						isOpen={isEditOpen}
+						onClose={onEditClose}
+						onOpen={onEditOpen}
+					/>
+					<DeleteTagPopup
+						data={data?.tag}
 						isOpen={isDeleteOpen}
-						onDismiss={onDeleteClose}
-						className="left-full ml-2 top-0"
-						placement="custom"
-						showOverlay
-						trigger={
-							<button
-								type="button"
-								style={
-									isDeleteOpen
-										? {
-												zIndex: 30,
-										  }
-										: {}
-								}
-								className={clsx([
-									"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
-								])}
-								onClick={onDeleteOpen}>
-								<HiTrash />
-							</button>
-						}>
-						<div className="p-2 flex flex-col gap-4 w-56 bg-blueGray-700 rounded-lg">
-							<div className="text-center">
-								This tag is related to {data?.getTagBookmarkCount ?? 0}{" "}
-								bookmarks. Do you really want to delete it?
-							</div>
-							<div className="w-full items-center flex justify-between">
-								<button
-									type="button"
-									className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
-									onClick={onDeleteClose}>
-									Dismiss
-								</button>
-								<button
-									type="button"
-									className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
-									onClick={() => {
-										mutate({ id });
-									}}>
-									Delete
-								</button>
-							</div>
-						</div>
-					</Popup>
+						onClose={onDeleteClose}
+						onOpen={onDeleteOpen}
+					/>
 				</div>
 			)}
 		</li>

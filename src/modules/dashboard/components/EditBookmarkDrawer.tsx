@@ -7,8 +7,8 @@ import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
 	Bookmark,
 	CreateOrUpdateBookmarkTagInput,
+	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useGetTagsQuery,
 	useUpdateBookmarkMutation,
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
@@ -76,7 +76,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 			},
 		},
 	);
-	const { data } = useGetTagsQuery();
+	const { data } = useGetAllTagsQuery();
 	const { mutate } = useUpdateBookmarkMutation({
 		onSuccess: (res) => {
 			for (const query of ["GetAllBookmarks", "GetTags"]) {
