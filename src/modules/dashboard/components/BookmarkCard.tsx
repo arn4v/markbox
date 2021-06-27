@@ -120,7 +120,7 @@ const BookmarkCard = ({ data }: Props) => {
 					</>
 				)}
 			</div>
-			<EditBookmarkDrawer isOpen={isOpen} onClose={onClose} data={data} />
+			<EditBookmarkDrawer isOpen={isOpen} onClose={onClose} id={data.id} />
 		</div>
 	);
 };

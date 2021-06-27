@@ -142,7 +142,7 @@ export default function CreateBookmarkButton() {
 									<button
 										type="button"
 										onClick={() => {
-											const tagName = newTagInputRef.current.value;
+											const tagName = newTagInputRef.current.value.trim();
 											setState((prev) => ({
 												...prev,
 												newTag: "",

@@ -6,11 +6,10 @@ import React from "react";
 interface TagProps {
 	children: string;
 	redirect?: boolean;
+	active: boolean;
 }
 
-export default function Tag({ children, redirect = true }: TagProps) {
-	const router = useRouter();
-
+export default function Tag({ children, redirect = true, active }: TagProps) {
 	return (
 		<Link
 			href={{
@@ -25,9 +24,7 @@ export default function Tag({ children, redirect = true }: TagProps) {
 			<a
 				className={clsx([
 					"px-4 py-2 w-full transition rounded-md",
-					typeof router.query.tag === "undefined"
-						? "bg-blueGray-600"
-						: "bg-blueGray-700 hover:bg-blueGray-600",
+					active ? "bg-blueGray-600" : "bg-blueGray-700 hover:bg-blueGray-600",
 				])}>
 				{children}
 			</a>
