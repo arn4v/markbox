@@ -59,7 +59,7 @@ export type CreateOrUpdateBookmarkTagInput = {
 };
 
 export type FilterBookmarksTagInput = {
-	id: Scalars["ID"];
+	name: Scalars["String"];
 };
 
 export type LoginMessage = {

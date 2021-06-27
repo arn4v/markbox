@@ -1,5 +1,8 @@
 import { useRouter } from "next/router";
-import { useGetAllBookmarksQuery } from "~/graphql/types.generated";
+import {
+	useGetAllBookmarksQuery,
+	useGetAllTagsQuery,
+} from "~/graphql/types.generated";
 import BookmarkCard from "./BookmarkCard";
 
 export default function BookmarksGrid() {
