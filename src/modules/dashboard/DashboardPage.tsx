@@ -14,7 +14,7 @@ const DashboardPage = () => {
 			<Navbar />
 			<div className="w-3/5 mx-auto h-full flex">
 				<Sidebar />
-				<div className="h-full flex-grow flex p-8 flex-col">
+				<div className="h-full flex-grow flex pl-8 flex-col">
 					<BookmarksGrid />
 				</div>
 			</div>
