@@ -1,5 +1,5 @@
 import * as React from "react";
-import { HiOutlineChevronDown } from "react-icons/hi";
+import { HiLogout, HiOutlineChevronDown } from "react-icons/hi";
 import Popup from "~/components/Popup";
 import useDisclosure from "~/hooks/use-disclosure";
 import { HiCog } from "react-icons/hi";
@@ -36,12 +36,17 @@ const ProfileDropdown = () => {
 				</li>
 				<li className="w-full">
 					<Link href="/settings">
-						<a
-							className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
-							onClick={() => {}}>
+						<a className="py-2 border-b border-blueGray-400 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none">
 							Settings <HiCog />
 						</a>
 					</Link>
+				</li>
+				<li className="w-full">
+					<a
+						className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+						href="/api/auth/logout">
+						Logout <HiLogout />
+					</a>
 				</li>
 			</ul>
 		</Popup>
