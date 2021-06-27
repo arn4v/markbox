@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import create from "zustand";
 import { User, useUserQuery } from "~/graphql/types.generated";
 import QueryString from "qs";
+import { omitKeys, pickKeys } from "~/lib/misc";
 
 interface UseAuthReturn {
 	isAuthenticated: boolean;
@@ -11,14 +12,14 @@ interface UseAuthReturn {
 }
 
 interface State extends Omit<UseAuthReturn, "isLoading"> {
-	setState(partial: Partial<UseAuthReturn>): void;
+	setState(partial: Omit<UseAuthReturn, "isLoading">): void;
 }
 
 const useAuthStore = create<State>((set) => ({
 	isAuthenticated: false,
 	user: undefined,
 	setState(partial) {
-		set((state) => ({ ...state, ...partial }));
+		set(partial);
 	},
 }));
 
@@ -30,12 +31,13 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 		{
 			refetchInterval: ms("5s"),
 			onSuccess: (data) => {
-				if (!!data.user && !user) {
+				if (typeof data.user !== "undefined" && typeof user === "undefined") {
 					setState({
 						isAuthenticated: true,
 						user: data.user,
 					});
 				}
+				console.log(data, user);
 			},
 			onError() {
 				if (isProtected) {

@@ -29,6 +29,7 @@ export default function RegisterPage() {
 		},
 		{
 			onSuccess(res) {
+				console.log(res)
 				switch (res.code) {
 					case "successful":
 						router.push("/login");

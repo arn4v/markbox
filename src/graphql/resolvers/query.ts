@@ -57,17 +57,19 @@ const Query: QueryResolvers<GQLContext> = {
 	},
 	async user(_, __, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
+
 		const { id, email, emailVerified, createdAt, updatedAt } =
-			await prisma.user.findUnique({
+			await prisma.user.findFirst({
 				where: {
 					id: userId,
 				},
 			});
+
 		return {
-			createdAt: createdAt.toISOString(),
+			id,
 			email,
 			emailVerified,
-			id,
+			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
