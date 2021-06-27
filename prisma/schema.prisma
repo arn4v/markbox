@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
@@ -14,35 +14,37 @@ model User {
   email         String     @unique
   emailVerified Boolean    @default(false) @map("email_verified")
   password      String
-  tags          Tag[]
-  bookmarks     Bookmark[]
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
+  bookmarks     Bookmark[]
+  tags          Tag[]
 
-  @@map(name: "users")
+  @@map("users")
 }
 
 model Tag {
   id        String     @id @default(uuid())
   name      String
-  bookmarks Bookmark[]
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
-  User      User?      @relation(fields: [userId], references: [id])
   userId    String?
+  User      User?      @relation(fields: [userId], references: [id])
+  bookmarks Bookmark[]
 
-  @@map(name: "tags")
+  @@index([userId], name: "userId")
+  @@map("tags")
 }
 
 model Bookmark {
   id        String   @id @default(uuid())
   title     String
   url       String
-  tags      Tag[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  User      User?    @relation(fields: [userId], references: [id])
   userId    String?
+  User      User?    @relation(fields: [userId], references: [id])
+  tags      Tag[]
 
+  @@index([userId], name: "userId")
   @@map("bookmarks")
 }
