@@ -17,7 +17,7 @@ export default function TagList() {
 		{
 			initialData: { tags: [] },
 			onSuccess(data) {
-				if (!data.tags.length) {
+				if (data?.tags?.length!) {
 					onEditModeDisabled();
 				}
 			},

@@ -34,7 +34,7 @@ const Query: QueryResolvers<GQLContext> = {
 				...(tag
 					? {
 							tags: {
-								every: {
+								some: {
 									name: tag.name,
 									userId,
 								},
