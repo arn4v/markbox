@@ -12,6 +12,7 @@ export type PopupProps = JSX.IntrinsicElements["div"] & {
 	children: React.ReactNode;
 	trigger: React.ReactNode;
 	toAnimate?: boolean;
+	showOverlay?: boolean;
 	placement?:
 		| "left"
 		| "left-top"
@@ -38,6 +39,7 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 			className,
 			toAnimate = false,
 			placement = "bottom",
+			showOverlay = false,
 			...props
 		},
 		ref: React.MutableRefObject<HTMLDivElement>,
@@ -53,6 +55,25 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 				className="relative">
 				{button}
 				<AnimatePresence exitBeforeEnter>
+					{isOpen && showOverlay && (
+						<motion.div
+							className="z-10 fixed inset-0 bg-black"
+							style={
+								{
+									"--tw-bg-opacity": 0.4,
+								} as any
+							}
+							variants={{
+								open: { opacity: 1, pointerEvents: "auto" as const },
+								closed: { opacity: 0, pointerEvents: "none" as const },
+							}}
+							initial="closed"
+							animate="open"
+							exit="closed"
+							transition={{ type: "tween" }}
+							onClick={onDismiss}
+						/>
+					)}
 					{isOpen && (
 						<div
 							className={clsx([

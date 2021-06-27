@@ -40,7 +40,7 @@ export default function Tag({
 	} = useDisclosure();
 
 	return (
-		<li className="flex w-full gap-4 items-center">
+		<li className={clsx(["flex w-full gap-4 items-center"])}>
 			<Link
 				href={{
 					href: "/dashboard",
@@ -54,6 +54,7 @@ export default function Tag({
 				<a
 					className={clsx([
 						"px-4 py-2 flex-grow transition rounded-md",
+						isDeleteOpen && "z-30",
 						active
 							? "bg-blueGray-600"
 							: "bg-blueGray-700 hover:bg-blueGray-600",
@@ -64,7 +65,10 @@ export default function Tag({
 			{isEditModeEnabled && (
 				<div className="flex items-center gap-4">
 					<button
-						className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none h-6 w-6 rounded-full"
+						className={clsx([
+							"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
+							isDeleteOpen && "z-30",
+						])}
 						onClick={() => {}}>
 						<HiPencil />
 					</button>
@@ -73,10 +77,20 @@ export default function Tag({
 						onDismiss={onDeleteClose}
 						className="left-full ml-2 top-0"
 						placement="custom"
+						showOverlay
 						trigger={
 							<button
 								type="button"
-								className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6"
+								style={
+									isDeleteOpen
+										? {
+												zIndex: 30,
+										  }
+										: {}
+								}
+								className={clsx([
+									"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
+								])}
 								onClick={onDeleteOpen}>
 								<HiTrash />
 							</button>
