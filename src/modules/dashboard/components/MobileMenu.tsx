@@ -4,7 +4,7 @@ import { HiCog, HiLogout, HiMenu } from "react-icons/hi";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useAuth } from "~/hooks/use-auth";
 import useDisclosure from "~/hooks/use-disclosure";
-import CreateBookmarkButton from "./CreateBookmarkButton";
+import CreateBookmarkButton from "./CreateBookmark/CreateBookmarkButton";
 
 export default function MobileMenu(): JSX.Element {
 	const { user } = useAuth();
@@ -35,6 +35,9 @@ export default function MobileMenu(): JSX.Element {
 					className="w-full h-auto dark:bg-blueGray-700 rounded-t-lg py-6">
 					<ul className="flex flex-col text-base w-full px-6 gap-4">
 						<CreateBookmarkButton
+							onClick={() => {
+								onClose();
+							}}
 							className="bg-blueGray-600 z-50 relative"
 						/>
 					</ul>

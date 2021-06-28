@@ -1,7 +1,7 @@
 import { Logo } from "~/components/Logo";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
-import CreateBookmarkButton from "./CreateBookmarkButton";
+import CreateBookmarkButton from "./CreateBookmark/CreateBookmarkButton";
 import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
