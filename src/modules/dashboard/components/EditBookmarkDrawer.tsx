@@ -111,11 +111,11 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 				placement={drawerPlacement}
 				className={clsx([
 					"p-8 bg-blueGray-700",
-					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-1/2 rounded-t-lg",
+					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 				])}>
 				<div className="w-full flex flex-col gap-6">
 					<div className="w-full flex justify-between items-center">
-						<h1 className="text-lg font-bold">Create new bookmark</h1>
+						<h1 className="text-lg font-bold">Edit bookmark</h1>
 						<button
 							onClick={internalOnClose}
 							className="p-2 rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500 transition">
@@ -123,7 +123,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 							<span className="sr-only">Close drawer</span>
 						</button>
 					</div>
-					<div className="mt-8">
+					<div className="lg:mt-8">
 						<form className="flex flex-col gap-4" onSubmit={onSubmit}>
 							<div className="w-full">
 								<label htmlFor="title" className="block">

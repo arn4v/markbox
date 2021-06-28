@@ -14,9 +14,7 @@ const DashboardPage = () => {
 			<Navbar />
 			<div className="w-full 2xl:w-3/5 mx-auto h-full flex">
 				<Sidebar />
-				<div className="h-full flex-grow flex pl-8 flex-col">
-					<BookmarksGrid />
-				</div>
+				<BookmarksGrid />
 			</div>
 		</div>
 	);

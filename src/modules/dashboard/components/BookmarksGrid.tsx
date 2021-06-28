@@ -15,10 +15,12 @@ export default function BookmarksGrid() {
 	);
 
 	return (
-		<div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-6">
-			{data?.bookmarks.map((item) => {
-				return <BookmarkCard key={item.id} data={item} />;
-			})}
+		<div className="h-full flex-grow flex p-4 lg:p-0 lg:pt-8 lg:pl-8 flex-col">
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-x-6">
+				{data?.bookmarks.map((item) => {
+					return <BookmarkCard key={item.id} data={item} />;
+				})}
+			</div>
 		</div>
 	);
 }

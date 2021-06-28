@@ -36,15 +36,6 @@ export default function MobileMenu(): JSX.Element {
 					<ul className="flex flex-col text-base w-full px-6 gap-4">
 						<CreateBookmarkButton
 							className="bg-blueGray-600 z-50 relative"
-							isOpen={isCreateOpen}
-							onOpen={() => {
-								onCreateOpen();
-								onClose();
-							}}
-							onClose={() => {
-								onOpen();
-								onCreateClose();
-							}}
 						/>
 					</ul>
 					<ul className="flex flex-col text-base w-full px-6 gap-4 mt-4 pt-4 border-t border-blueGray-400">
