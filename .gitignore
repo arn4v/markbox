@@ -31,3 +31,6 @@ yarn-error.log*
 .husky
 
 /*.sqlite
+**/public/workbox-*.js
+**/public/sw.js
+**/public/worker-*.js
