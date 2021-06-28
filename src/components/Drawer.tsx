@@ -2,8 +2,16 @@ import * as React from "react";
 import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
 import clsx from "clsx";
 import { getTargetChildren } from "~/lib/react";
+import { Portal, PortalProps } from "@reach/portal";
 
 type DrawerProps = {
+	portalProps?: PortalProps;
+	containerProps?: {
+		className?: string;
+	};
+	overlayProps?: {
+		className?: string;
+	};
 	isOpen: boolean;
 	onClose: () => void;
 	children: React.ReactNode;
@@ -11,37 +19,53 @@ type DrawerProps = {
 
 interface DrawerComponent extends Component<DrawerProps> {}
 
-const Drawer: DrawerComponent = ({ children, isOpen, onClose }) => {
+const Drawer: DrawerComponent = ({
+	children,
+	isOpen,
+	onClose,
+	containerProps,
+	overlayProps,
+	portalProps,
+}) => {
 	const [withTarget] = React.useMemo(
 		() => getTargetChildren(children, DrawerContent),
 		[children],
 	);
 
 	return (
-		<AnimatePresence>
-			{isOpen && (
-				<div className="h-screen w-screen fixed inset-0 overflow-none z-[100]">
-					<motion.div
-						className="z-10 fixed inset-0 bg-black"
-						style={
-							{
-								"--tw-bg-opacity": 0.4,
-							} as any
-						}
-						variants={{
-							open: { opacity: 1, pointerEvents: "auto" as const },
-							closed: { opacity: 0, pointerEvents: "none" as const },
-						}}
-						initial="closed"
-						animate="open"
-						exit="closed"
-						transition={{ type: "tween" }}
-						onClick={onClose}
-					/>
-					{withTarget}
-				</div>
-			)}
-		</AnimatePresence>
+		<Portal>
+			<AnimatePresence>
+				{isOpen && (
+					<div
+						className={clsx([
+							"h-screen w-screen fixed inset-0 overflow-none",
+							containerProps?.className ?? "z-[100]",
+						])}>
+						<motion.div
+							className={clsx([
+								"z-10 fixed inset-0 bg-black",
+								overlayProps?.className,
+							])}
+							style={
+								{
+									"--tw-bg-opacity": 0.4,
+								} as any
+							}
+							variants={{
+								open: { opacity: 1, pointerEvents: "auto" as const },
+								closed: { opacity: 0, pointerEvents: "none" as const },
+							}}
+							initial="closed"
+							animate="open"
+							exit="closed"
+							transition={{ type: "tween" }}
+							onClick={onClose}
+						/>
+						{withTarget}
+					</div>
+				)}
+			</AnimatePresence>
+		</Portal>
 	);
 };
 

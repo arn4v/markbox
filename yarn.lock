@@ -1252,7 +1252,7 @@
     react-remove-scroll "^2.4.1"
     tslib "^2.1.0"
 
-"@reach/portal@0.15.0":
+"@reach/portal@0.15.0", "@reach/portal@^0.15.0":
   version "0.15.0"
   resolved "https://registry.npmjs.org/@reach/portal/-/portal-0.15.0.tgz#b137582a1ecc4e04c60ce9a9c672dd2d23a2f1cc"
   integrity sha512-Aulqjk/PIRu+R7yhINYAAYfYh++ZdC30qwHDWDtGk2cmTEJT7m9AlvBX+W7T+Q3Ux6Wy5f37eV+TTGid1CcjFw==

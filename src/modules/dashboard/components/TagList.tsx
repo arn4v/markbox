@@ -29,7 +29,7 @@ export default function TagList() {
 
 	return (
 		<div className="flex flex-col w-full items-center">
-			<div className="w-full flex items-center justify-between my-2 pr-6">
+			<div className="w-full flex items-center justify-between my-2">
 				<h2
 					className={clsx([
 						"text-gray-900 dark:text-gray-400 font-bold uppercase text-lg",
@@ -42,7 +42,7 @@ export default function TagList() {
 					{isEditModeEnabled ? "Dismiss" : "Edit"}
 				</button>
 			</div>
-			<div className="my-2 w-full flex flex-col items-center justify-start gap-2 pr-6">
+			<div className="my-2 w-full flex flex-col items-center justify-start gap-2">
 				<Tag
 					id={undefined}
 					isEditModeEnabled={false}

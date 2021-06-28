@@ -11,7 +11,13 @@ import clsx from "clsx";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 
-export default function CreateBookmarkButton() {
+interface Props {
+	className?: string;
+}
+
+export default function CreateBookmarkButton({
+	className,
+}: Props): JSX.Element {
 	const initialState = {
 		title: "",
 		url: "",
@@ -49,10 +55,15 @@ export default function CreateBookmarkButton() {
 	return (
 		<>
 			<button
-				className="w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2 focus:outline-none"
+				className={clsx([
+					"w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2 focus:outline-none",
+					className,
+				])}
 				aria-haspopup={true}
 				aria-expanded={isDrawerOpen}
-				onClick={onDrawerOpen}>
+				onClick={() => {
+					onDrawerOpen();
+				}}>
 				Create bookmark
 				<HiPlus className="h-5 w-5" />
 			</button>
@@ -61,7 +72,7 @@ export default function CreateBookmarkButton() {
 					placement={drawerPlacement}
 					className={clsx([
 						"p-8 bg-blueGray-700",
-						lg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-1/2 rounded-t-lg",
+						lg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 					])}>
 					<div className="w-full flex justify-between items-center">
 						<h1 className="text-lg font-bold">Create new bookmark</h1>

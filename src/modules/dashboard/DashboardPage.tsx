@@ -12,7 +12,7 @@ const DashboardPage = () => {
 	return (
 		<div className="h-screen w-screen bg-blueGray-50 dark:bg-blueGray-800 flex flex-col overflow-hidden">
 			<Navbar />
-			<div className="w-3/5 mx-auto h-full flex">
+			<div className="w-full 2xl:w-3/5 mx-auto h-full flex">
 				<Sidebar />
 				<div className="h-full flex-grow flex pl-8 flex-col">
 					<BookmarksGrid />
