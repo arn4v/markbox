@@ -48,9 +48,6 @@ export default function RegisterPage() {
 					}
 				}
 			},
-			onError(error) {
-				console.log("error", error);
-			},
 		},
 	);
 

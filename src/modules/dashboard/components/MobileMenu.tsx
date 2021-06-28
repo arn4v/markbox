@@ -15,9 +15,6 @@ export default function MobileMenu(): JSX.Element {
 		onClose: onCreateClose,
 	} = useDisclosure();
 
-	React.useEffect(() => {
-		console.log(isCreateOpen);
-	}, [isCreateOpen]);
 
 	return (
 		<>

@@ -30,14 +30,18 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 		{},
 		{
 			onSuccess: (data) => {
-				if (typeof data.user !== "undefined" && typeof user === "undefined") {
+				if (
+					typeof data.user !== "undefined" &&
+					data.user !== null &&
+					typeof user === "undefined"
+				) {
 					setState({
 						isAuthenticated: true,
 						user: data.user,
 					});
 				}
 			},
-			onError() {
+			onError(error) {
 				if (isProtected) {
 					router.push(
 						"/login?" +
