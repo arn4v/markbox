@@ -10,6 +10,8 @@ import useBreakpoints from "~/hooks/use-breakpoints";
 import clsx from "clsx";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
+import { useRouter } from "next/router";
+import QueryString from "qs";
 
 interface Props {
 	className?: string;
@@ -25,6 +27,7 @@ export default function CreateBookmarkButton({
 	};
 	const [state, setState] = React.useState<typeof initialState>(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
+	const router = useRouter();
 
 	const {
 		isOpen: isDrawerOpen,
@@ -47,8 +50,22 @@ export default function CreateBookmarkButton({
 		},
 	});
 
+	const onOpen = () => {
+		router.push(
+			router.pathname + "?" + QueryString.stringify({ create: true }),
+			null,
+			{
+				shallow: true,
+			},
+		);
+		onDrawerOpen();
+	};
+
 	const onClose = () => {
 		primaryOnDrawerClose();
+		router.push(router.pathname, null, {
+			shallow: true,
+		});
 		setState(initialState);
 	};
 
@@ -61,9 +78,7 @@ export default function CreateBookmarkButton({
 				])}
 				aria-haspopup={true}
 				aria-expanded={isDrawerOpen}
-				onClick={() => {
-					onDrawerOpen();
-				}}>
+				onClick={onOpen}>
 				Create bookmark
 				<HiPlus className="h-5 w-5" />
 			</button>
