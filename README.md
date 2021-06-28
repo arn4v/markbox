@@ -1,9 +1,19 @@
-[![GitHub license](https://img.shields.io/github/license/arn4v/bookmarky)](https://github.com/arn4v/bookmarky/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/arn4v/bookmarky)](https://github.com/arn4v/bookmarky/issues)
-
 # Bookmarky
 
-Bookmarky is an open-source bookmarking app inspired by [Pinboard](https://pinboard.in) built with React, Next.js, TailwindCSS & Firebase.
+[![GitHub license](https://img.shields.io/github/license/arn4v/bookmarky)](https://github.com/arn4v/bookmarky/blob/main/LICENSE) [![GitHub issues](https://img.shields.io/github/issues/arn4v/bookmarky)](https://github.com/arn4v/bookmarky/issues)
+
+Bookmarky is an open-source bookmarking app inspired by [Pinboard](https://pinboard.in) built with React, Next.js, TailwindCSS, Prisma2 & GraphQL.
+
+## Roadmap
+
+- `Forgot password?` on login page
+- Change password from settings page
+- Generate API key from settings page
+- Public API
+  - Create/edit bookmark
+  - Create tag
+  - Get all bookmarks
+    - Filter by tag
 
 ## Why build another bookmarking tool?
 
