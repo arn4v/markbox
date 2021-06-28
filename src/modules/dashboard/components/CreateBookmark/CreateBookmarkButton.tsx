@@ -1,15 +1,6 @@
 import * as React from "react";
-import { HiPlus, HiX } from "react-icons/hi";
-import useDisclosure from "~/hooks/use-disclosure";
-import Drawer, { DrawerContent } from "~/components/Drawer";
-import {
-	useCreateBookmarkMutation,
-	useGetAllTagsQuery,
-} from "~/graphql/types.generated";
-import useBreakpoints from "~/hooks/use-breakpoints";
+import { HiPlus } from "react-icons/hi";
 import clsx from "clsx";
-import { useQueryClient } from "react-query";
-import Badge from "~/components/Badge";
 import { useRouter } from "next/router";
 import QueryString from "qs";
 import useStore from "./store";

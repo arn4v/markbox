@@ -42,11 +42,11 @@ const ProfileDropdown = () => {
 					</Link>
 				</li>
 				<li className="w-full">
-					<a
-						className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
-						href="/api/auth/logout">
-						Logout <HiLogout />
-					</a>
+					<Link href="/api/auth/logout">
+						<a className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none">
+							Logout <HiLogout />
+						</a>
+					</Link>
 				</li>
 			</ul>
 		</Popup>

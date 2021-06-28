@@ -40,7 +40,7 @@ const Hero = () => {
 			</div>
 			<div className="flex justify-center h-full overflow-hidden lg:w-2/3 xl:w-1/2 lg:absolute lg:justify-start lg:bottom-0 lg:right-0 lg:items-end">
 				<img
-					src="https://kitwind.io/assets/kometa/full-browser.png"
+					// src="https://kitwind.io/assets/kometa/full-browser.png"
 					className="object-cover object-top w-full h-64 max-w-xl -mb-16 rounded shadow-2xl lg:ml-64 xl:ml-8 lg:-mb-24 xl:-mb-28 lg:h-auto lg:max-w-screen-md"
 					alt=""
 				/>

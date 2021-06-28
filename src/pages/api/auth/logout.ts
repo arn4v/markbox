@@ -1,5 +1,5 @@
 import QueryString from "qs";
-import withCookies, { routeHandler } from "~/lib/utils.server";
+import { routeHandler, withCookies } from "~/lib/utils.server";
 import ApiResponse from "~/types/ApiResponse";
 
 export default withCookies(

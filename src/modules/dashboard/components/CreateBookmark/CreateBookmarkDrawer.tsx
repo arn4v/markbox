@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
-import create from "zustand";
 import Badge from "~/components/Badge";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
@@ -19,13 +18,13 @@ export default function CreateBookmarkDrawer() {
 		url: "",
 		tags: {} as Record<string, { name: string }>,
 	};
-	const { isOpen, onClose: _onClose } = useStore();
+	const { isOpen, onClose: _onClose, onOpen } = useStore();
 	const [state, setState] = React.useState<typeof initialState>(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
-	const { isLg: lg } = useBreakpoints();
+	const { isLg } = useBreakpoints();
 	const drawerPlacement = React.useMemo(() => {
-		return lg ? "right" : "bottom";
-	}, [lg]);
+		return isLg ? "right" : "bottom";
+	}, [isLg]);
 	const router = useRouter();
 
 	// Data fetching/mutation
@@ -53,7 +52,7 @@ export default function CreateBookmarkDrawer() {
 				placement={drawerPlacement}
 				className={clsx([
 					"p-8 bg-blueGray-700",
-					lg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
+					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 				])}>
 				<div className="w-full flex justify-between items-center">
 					<h1 className="text-lg font-bold">Create new bookmark</h1>

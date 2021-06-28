@@ -1,6 +1,7 @@
 import ms from "ms";
 import { isProd } from "~/constants";
-import withCookies, {
+import {
+	withCookies,
 	comparePassword,
 	jwtSign,
 	prisma,

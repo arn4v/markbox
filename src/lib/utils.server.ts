@@ -7,6 +7,8 @@ import nextConnect from "next-connect";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { CookieSerializeOptions, serialize } from "cookie";
 import ApiResponse from "~/types/ApiResponse";
+import { createTransport } from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Auth Utils                                 */
@@ -74,7 +76,7 @@ export const createSetCookie =
 /**
  * Adds `cookie` function on `res.cookie` to set cookies for response
  */
-const withCookies =
+export const withCookies =
 	(handler: NextApiHandler) => (req: NextApiRequest, res: ApiResponse) => {
 		res.setCookie = createSetCookie(res);
 		res.removeCookie = (name: string) =>
@@ -83,4 +85,18 @@ const withCookies =
 		return handler(req, res);
 	};
 
-export default withCookies;
+/* -------------------------------------------------------------------------- */
+/*                                   Mailer                                   */
+/* -------------------------------------------------------------------------- */
+
+const mailerConfig: Record<string, SMTPTransport.Options> = {
+	dev: {
+		host: "mailhog",
+		port: 1025,
+	},
+	prod: {},
+};
+
+export const mailer = createTransport(
+	isProd ? mailerConfig.prod : mailerConfig.dev,
+);

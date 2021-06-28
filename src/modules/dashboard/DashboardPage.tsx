@@ -6,9 +6,9 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
 const DashboardPage = () => {
-	const { isLoading } = useAuth(true);
+	const { isLoading, isAuthenticated } = useAuth(true);
 
-	if (isLoading) <LoadingPage />;
+	if (isLoading || !isAuthenticated) return <LoadingPage />;
 
 	return (
 		<>

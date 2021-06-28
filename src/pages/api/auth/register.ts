@@ -1,5 +1,6 @@
 import { NextApiRequest } from "next";
-import withCookies, {
+import {
+	withCookies,
 	hashPassword,
 	prisma,
 	routeHandler,

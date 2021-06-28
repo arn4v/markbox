@@ -40,6 +40,15 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 						user: data.user,
 					});
 				}
+
+				if (!data.user && !user && isProtected) {
+					router.push(
+						"/login?" +
+							QueryString.stringify({
+								message: "Could not verify user, please login again.",
+							}),
+					);
+				}
 			},
 			onError(error) {
 				if (isProtected) {
