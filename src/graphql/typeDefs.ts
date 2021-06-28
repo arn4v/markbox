@@ -15,6 +15,12 @@ export default gql`
 		name: String!
 	}
 
+	type APIKey {
+		id: ID!
+		name: String!
+		key: String!
+	}
+
 	input FilterBookmarksTagInput {
 		name: String!
 	}
@@ -75,5 +81,6 @@ export default gql`
 		renameTag(input: RenameTagInput): Tag!
 		deleteTag(id: ID!): Boolean!
 		deleteBookmark(id: ID!): Boolean!
+		generateApiKey(name: String!): APIKey!
 	}
 `;

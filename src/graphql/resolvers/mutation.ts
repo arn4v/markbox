@@ -2,7 +2,7 @@ import GQLContext from "~/types/GQLContext";
 import { MutationResolvers } from "../types.generated";
 import { pickKeys } from "~/lib/misc";
 import protectResolver from "../protect-resolver";
-import { Tag } from "@prisma/client";
+import { randomUUID } from "crypto";
 
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
@@ -117,6 +117,16 @@ const Mutation: MutationResolvers<GQLContext> = {
 			id: tag.id,
 			name: tag.name,
 		};
+	},
+	async generateApiKey(_, { name }, { prisma, req, res }) {
+		const userId = await protectResolver(req, res);
+		return await prisma.apiKey.create({
+			data: {
+				name,
+				key: randomUUID(),
+				userId,
+			},
+		});
 	},
 };
 

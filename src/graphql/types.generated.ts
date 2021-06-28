@@ -31,6 +31,13 @@ export type Scalars = {
 	Float: number;
 };
 
+export type ApiKey = {
+	__typename?: "APIKey";
+	id: Scalars["ID"];
+	name: Scalars["String"];
+	key: Scalars["String"];
+};
+
 export type AuthenticationMessage = {
 	__typename?: "AuthenticationMessage";
 	code: Scalars["String"];
@@ -76,6 +83,7 @@ export type Mutation = {
 	renameTag: Tag;
 	deleteTag: Scalars["Boolean"];
 	deleteBookmark: Scalars["Boolean"];
+	generateApiKey: ApiKey;
 };
 
 export type MutationCreateBookmarkArgs = {
@@ -96,6 +104,10 @@ export type MutationDeleteTagArgs = {
 
 export type MutationDeleteBookmarkArgs = {
 	id: Scalars["ID"];
+};
+
+export type MutationGenerateApiKeyArgs = {
+	name: Scalars["String"];
 };
 
 export type Query = {
@@ -396,10 +408,11 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-	AuthenticationMessage: ResolverTypeWrapper<AuthenticationMessage>;
-	String: ResolverTypeWrapper<Scalars["String"]>;
-	Bookmark: ResolverTypeWrapper<Bookmark>;
+	APIKey: ResolverTypeWrapper<ApiKey>;
 	ID: ResolverTypeWrapper<Scalars["ID"]>;
+	String: ResolverTypeWrapper<Scalars["String"]>;
+	AuthenticationMessage: ResolverTypeWrapper<AuthenticationMessage>;
+	Bookmark: ResolverTypeWrapper<Bookmark>;
 	CreateBookmarkInput: CreateBookmarkInput;
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
@@ -416,10 +429,11 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-	AuthenticationMessage: AuthenticationMessage;
-	String: Scalars["String"];
-	Bookmark: Bookmark;
+	APIKey: ApiKey;
 	ID: Scalars["ID"];
+	String: Scalars["String"];
+	AuthenticationMessage: AuthenticationMessage;
+	Bookmark: Bookmark;
 	CreateBookmarkInput: CreateBookmarkInput;
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
@@ -432,6 +446,16 @@ export type ResolversParentTypes = {
 	Tag: Tag;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	User: User;
+};
+
+export type ApiKeyResolvers<
+	ContextType = any,
+	ParentType extends ResolversParentTypes["APIKey"] = ResolversParentTypes["APIKey"],
+> = {
+	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	key?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AuthenticationMessageResolvers<
@@ -504,6 +528,12 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationDeleteBookmarkArgs, "id">
 	>;
+	generateApiKey?: Resolver<
+		ResolversTypes["APIKey"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationGenerateApiKeyArgs, "name">
+	>;
 };
 
 export type QueryResolvers<
@@ -559,6 +589,7 @@ export type UserResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+	APIKey?: ApiKeyResolvers<ContextType>;
 	AuthenticationMessage?: AuthenticationMessageResolvers<ContextType>;
 	Bookmark?: BookmarkResolvers<ContextType>;
 	LoginMessage?: LoginMessageResolvers<ContextType>;

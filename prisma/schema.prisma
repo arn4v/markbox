@@ -18,14 +18,15 @@ model User {
   updatedAt     DateTime   @updatedAt @map("updated_at")
   bookmarks     Bookmark[]
   tags          Tag[]
-  keys          APIKey[]
+  keys          ApiKey[]
 
   @@map("users")
 }
 
-model APIKey {
-  id  String @id @default(uuid())
-  key String
+model ApiKey {
+  id   String @id @default(uuid())
+  name String
+  key  String
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
