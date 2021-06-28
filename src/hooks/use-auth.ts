@@ -29,7 +29,6 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 	const { isLoading } = useUserQuery(
 		{},
 		{
-			refetchInterval: ms("5s"),
 			onSuccess: (data) => {
 				if (typeof data.user !== "undefined" && typeof user === "undefined") {
 					setState({
@@ -37,7 +36,6 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 						user: data.user,
 					});
 				}
-				console.log(data, user);
 			},
 			onError() {
 				if (isProtected) {

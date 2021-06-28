@@ -15,6 +15,7 @@ export default function RegisterPage() {
 		email: "",
 		password: "",
 	});
+	const [error, setError] = React.useState<string>("");
 	const router = useRouter();
 	const { mutate: handleRegister } = useMutation(
 		"register",
@@ -29,8 +30,10 @@ export default function RegisterPage() {
 		},
 		{
 			onSuccess(res) {
-				console.log(res)
 				switch (res.code) {
+					case "invalid_password":
+						setError(res.message);
+						break;
 					case "successful":
 						router.push("/login");
 						break;
@@ -44,6 +47,9 @@ export default function RegisterPage() {
 						break;
 					}
 				}
+			},
+			onError(error) {
+				console.log("error", error);
 			},
 		},
 	);
@@ -66,6 +72,7 @@ export default function RegisterPage() {
 					className="h-full w-full flex flex-col items-start justify-center gap-5"
 					onSubmit={(e) => {
 						e.preventDefault();
+						setError("");
 						handleRegister(state);
 					}}>
 					<label htmlFor="email">Email</label>
@@ -90,6 +97,14 @@ export default function RegisterPage() {
 						autoComplete="new-password"
 						required
 					/>
+					{error.length > 0 && (
+						<InfoBox
+							bgColor="red-200"
+							textColor="red-600"
+							text={error}
+							className="w-full"
+						/>
+					)}
 					<button
 						type="submit"
 						className="bg-blue-500 hover:bg-blue-600 w-20 rounded font-medium text-white py-2 ml-auto">
