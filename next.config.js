@@ -1,19 +1,15 @@
-const withPWA = require("next-pwa");
-
 let config = {
 	webpack: (config) => {
 		return config;
 	},
+	async rewrites() {
+		return [
+			{
+				source: "/register",
+				destination: "/signup",
+			},
+		];
+	},
 };
-
-if (process.env.NODE_ENV === "production") {
-	config = withPWA({
-		...config,
-		pwa: {
-			dest: "public",
-			disable: process.env.NODE_ENV !== "production",
-		},
-	});
-}
 
 module.exports = config;
