@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "~/components/Logo";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
@@ -9,8 +10,12 @@ export default function Navbar() {
 
 	return (
 		<header className="w-full h-20 border-b dark:border-blueGray-700">
-			<div className="h-full w-full px-6 2xl:px-0 2xl:w-3/5 mx-auto flex items-center justify-between">
-				<Logo className="fill-current text-black dark:text-white" />
+			<div className="flex items-center justify-between w-full h-full px-6 mx-auto 2xl:px-0 2xl:w-3/5">
+				<Link href="/dashboard">
+					<a>
+						<Logo className="text-black fill-current dark:text-white" />
+					</a>
+				</Link>
 				<nav>
 					<div className="flex items-center gap-4">
 						{isLg ? (
