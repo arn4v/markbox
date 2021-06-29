@@ -1,12 +1,12 @@
 import Footer from "~/modules/landing/components/Footer";
-import Hero from "~/modules/landing/components/Hero";
+import Header from "~/modules/landing/components/Header";
 import Navbar from "~/modules/landing/components/Navbar";
 
 export default function IndexPage() {
 	return (
-		<div className="h-screen w-screen bg-blueGray-50">
+		<div className="w-screen h-screen overflow-hidden bg-blueGray-50 dark:bg-blueGray-800">
 			<Navbar />
-			<Hero />
+			<Header />
 			<Footer />
 		</div>
 	);
