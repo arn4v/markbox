@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { isProd } from "~/constants";
+import { isProd } from "~/config";
 
 const queryClient = new QueryClient();
 

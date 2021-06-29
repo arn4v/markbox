@@ -2,7 +2,7 @@ import ms from "ms";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { createVerifier, createSigner } from "fast-jwt";
 import { hash, genSalt, compare } from "bcrypt";
-import { isProd } from "~/constants";
+import { isProd } from "~/config";
 import nextConnect from "next-connect";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { CookieSerializeOptions, serialize } from "cookie";

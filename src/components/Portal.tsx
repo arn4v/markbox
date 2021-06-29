@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { useIsomorphicLayoutEffect } from "react-use";
-import { isSsr } from "~/constants";
+import { isSsr } from "~/config";
 
 interface Props {
 	children?: React.ReactNode;

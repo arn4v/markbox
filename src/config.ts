@@ -1,3 +1,5 @@
+import { DefaultSeoProps } from "next-seo";
+
 export const isSsr = typeof window === "undefined";
 
 export const isProd = process.env.NODE_ENV === "production";
@@ -8,3 +10,9 @@ export const BASE_URL =
 
 export const PASSWORD_REGEX =
 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+
+	export const defaultSeoProps: DefaultSeoProps = {
+		
+
+	}

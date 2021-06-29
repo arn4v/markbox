@@ -1,5 +1,5 @@
 import ms from "ms";
-import { isProd } from "~/constants";
+import { isProd } from "~/config";
 import {
 	withCookies,
 	comparePassword,

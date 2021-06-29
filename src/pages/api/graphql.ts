@@ -1,5 +1,5 @@
 import { ApolloServer } from "apollo-server-micro";
-import { isProd } from "~/constants";
+import { isProd } from "~/config";
 import schema from "~/graphql/schema";
 import { withCookies, prisma, routeHandler } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
