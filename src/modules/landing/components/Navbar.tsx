@@ -2,41 +2,37 @@ import Link from "next/link";
 import { HiArrowRight, HiChevronRight } from "react-icons/hi";
 import { Logo } from "~/components/Logo";
 import { useAuth } from "~/hooks/use-auth";
+import NavLinks from "./NavLinks";
 
 export default function Navbar() {
 	const { isAuthenticated } = useAuth();
 	return (
-		<header className="text-gray-600 container mx-auto flex flex-wrap p-5 flex-col gap-3 md:flex-row items-center">
+		<header className="container flex flex-col flex-wrap items-center gap-3 p-5 mx-auto text-gray-600 md:flex-row">
 			<Link href="/">
-				<a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+				<a className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
 					<Logo className="text-black" />
 				</a>
 			</Link>
-			<nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-				<a className="mr-5 hover:text-gray-900">Docs</a>
-				<a className="mr-5 hover:text-gray-900">Features</a>
-				<a className="mr-5 hover:text-gray-900">FAQ</a>
-			</nav>
-
+			{/* <NavLinks /> */}
 			{isAuthenticated ? (
 				<Link href="/dashboard">
-					<a className="inline-flex items-center bg-indigo-500 text-white border-0 py-1 px-3 focus:outline-none hover:bg-indigo-600 transition rounded text-base mt-4 md:mt-0">
+					<a className="inline-flex items-center px-3 py-1 mt-4 text-base text-white transition bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600 md:mt-0">
 						Dashboard
-						<HiArrowRight className="h-3 w-3 ml-2" />
+						<HiArrowRight className="w-3 h-3 ml-2" />
 					</a>
 				</Link>
 			) : (
 				<>
 					<Link href="/login">
-						<a className="text-gray-800 hover:text-gray-900 transition hover:underline">
+						<a className="text-gray-800 transition hover:text-gray-900 hover:underline">
 							Login
 						</a>
 					</Link>
 					<div className="w-[1px] h-5 bg-gray-400"></div>
 					<Link href="/register">
-						<a className="inline-flex items-center bg-indigo-500 text-white border-0 py-1 px-3 focus:outline-none hover:bg-indigo-600 transition rounded text-base mt-4 md:mt-0">
+						<a className="inline-flex items-center px-3 py-1 mt-4 text-base text-white transition bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600 md:mt-0">
 							Sign up
-							<HiArrowRight className="h-3 w-3 ml-2" />
+							<HiArrowRight className="w-3 h-3 ml-2" />
 						</a>
 					</Link>
 				</>
