@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Logo } from "~/components/Logo";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
 import CreateBookmarkButton from "./CreateBookmark/CreateBookmarkButton";
-import MobileMenu from "./MobileMenu";
+import MenuDrawer from "./MenuDrawer";
+import TagsDrawer from "./TagsDrawer";
 
 export default function Navbar() {
 	const { isLg } = useBreakpoints();
+	const router = useRouter();
 
 	return (
 		<header className="w-full h-20 border-b dark:border-blueGray-700">
@@ -17,14 +20,18 @@ export default function Navbar() {
 					</a>
 				</Link>
 				<nav>
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-5">
 						{isLg ? (
 							<>
-								<CreateBookmarkButton />
+								{router.pathname === "/dashboard" && <CreateBookmarkButton />}
 								<ProfileDropdown />
 							</>
 						) : (
-							<MobileMenu />
+							<>
+								<CreateBookmarkButton />
+								<TagsDrawer />
+								<MenuDrawer />
+							</>
 						)}
 					</div>
 				</nav>

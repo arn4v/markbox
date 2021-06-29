@@ -5,13 +5,14 @@ import { useGetTagQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
 import EditTagPopup from "./EditTag";
 import DeleteTagPopup from "./DeleteTag";
+import useBreakpoints from "~/hooks/use-breakpoints";
 
 interface TagProps {
 	children: string;
 	redirect?: boolean;
 	active: boolean;
 	id: string;
-	isEditModeEnabled: boolean;
+	isEditModeEnabled?: boolean;
 }
 
 export default function Tag({
@@ -19,7 +20,7 @@ export default function Tag({
 	redirect = true,
 	active,
 	id,
-	isEditModeEnabled,
+	isEditModeEnabled = false,
 }: TagProps) {
 	const { data, refetch } = useGetTagQuery({ id });
 	const {
@@ -32,6 +33,7 @@ export default function Tag({
 		onClose: onEditClose,
 		onOpen: onEditOpen,
 	} = useDisclosure();
+	const { isLg } = useBreakpoints();
 
 	return (
 		<li className={clsx(["flex w-full gap-4 items-center"])}>
@@ -44,15 +46,21 @@ export default function Tag({
 						  }
 						: {},
 				}}
-				shallow={true}>
+				shallow={true}
+			>
 				<a
 					className={clsx([
 						"px-4 py-2 flex-grow transition rounded-md",
 						isDeleteOpen && "z-30",
 						active
-							? "bg-blueGray-600"
-							: "bg-blueGray-700 hover:bg-blueGray-600",
-					])}>
+							? isLg
+								? "bg-blueGray-600"
+								: "bg-blueGray-500"
+							: isLg
+							? "bg-blueGray-700 hover:bg-blueGray-600"
+							: "bg-blueGray-600 hover:bg-blueGray-500",
+					])}
+				>
 					{children}
 				</a>
 			</Link>

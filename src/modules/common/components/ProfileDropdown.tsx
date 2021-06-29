@@ -1,14 +1,20 @@
 import * as React from "react";
-import { HiLogout, HiOutlineChevronDown } from "react-icons/hi";
+import {
+	HiLogout,
+	HiOutlineChevronDown,
+	HiTemplate,
+	HiCog,
+} from "react-icons/hi";
 import Popup from "~/components/Popup";
 import useDisclosure from "~/hooks/use-disclosure";
-import { HiCog } from "react-icons/hi";
 import Link from "next/link";
 import { useAuth } from "~/hooks/use-auth";
+import { useRouter } from "next/router";
 
 const ProfileDropdown = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { user } = useAuth();
+	const router = useRouter();
 
 	return (
 		<Popup
@@ -23,27 +29,38 @@ const ProfileDropdown = () => {
 					data-toggle="dropdown"
 					aria-expanded={isOpen}
 					aria-haspopup={true}
-					className="w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2 focus:outline-none">
+					className="flex items-center justify-center w-full gap-2 px-2 py-2 font-medium text-white transition duration-150 ease-in-out rounded-lg hover:bg-blueGray-600 bg-blueGray-700 focus:outline-none"
+				>
 					Account
 					<HiOutlineChevronDown />
 				</button>
-			}>
+			}
+		>
 			<ul
 				aria-labelledby="dropdownMenuButton"
-				className="bg-blueGray-600 rounded-md mt-2 border border-blueGray-500 w-56">
-				<li className="px-4 py-2 border-b border-blueGray-400 whitespace-nowrap text-center">
+				className="w-56 mt-2 border rounded-md bg-blueGray-600 border-blueGray-500"
+			>
+				<li className="px-4 py-2 text-center border-b border-blueGray-400 whitespace-nowrap">
 					Signed in as <br /> {user?.email}
 				</li>
 				<li className="w-full">
-					<Link href="/settings">
-						<a className="py-2 border-b border-blueGray-400 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none">
-							Settings <HiCog />
-						</a>
-					</Link>
+					{router.pathname === "/dashboard" ? (
+						<Link href="/settings">
+							<a className="flex items-center justify-center w-full gap-2 py-2 transition border-b border-blueGray-400 dark:hover:bg-blueGray-500 focus:outline-none">
+								Settings <HiCog />
+							</a>
+						</Link>
+					) : (
+						<Link href="/dashboard">
+							<a className="flex items-center justify-center w-full gap-2 py-2 transition border-b border-blueGray-400 dark:hover:bg-blueGray-500 focus:outline-none">
+								Dashboard <HiTemplate />
+							</a>
+						</Link>
+					)}
 				</li>
 				<li className="w-full">
 					<Link href="/api/auth/logout">
-						<a className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none">
+						<a className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none">
 							Logout <HiLogout />
 						</a>
 					</Link>

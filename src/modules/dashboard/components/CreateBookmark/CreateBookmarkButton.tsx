@@ -1,9 +1,11 @@
 import * as React from "react";
-import { HiPlus } from "react-icons/hi";
+import { HiOutlinePlus, HiPlus, HiPlusCircle } from "react-icons/hi";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import QueryString from "qs";
 import useStore from "./store";
+import useBreakpoints from "~/hooks/use-breakpoints";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 interface Props {
 	className?: string;
@@ -16,6 +18,7 @@ export default function CreateBookmarkButton({
 }: Props): JSX.Element {
 	const { isOpen, onOpen: _onOpen } = useStore();
 	const router = useRouter();
+	const { isLg } = useBreakpoints();
 
 	const onOpen = () => {
 		_onOpen(() => {
@@ -33,14 +36,18 @@ export default function CreateBookmarkButton({
 	return (
 		<button
 			className={clsx([
-				"w-full text-white font-medium items-center justify-center hover:bg-blueGray-600 flex px-2 py-2 transition duration-150 ease-in-out bg-blueGray-700 rounded-lg gap-2 focus:outline-none",
+				"w-full text-white font-medium items-center justify-center flex transition duration-150 ease-in-out focus:outline-none",
+				isLg
+					? "hover:bg-blueGray-600 bg-blueGray-700 px-2 py-2 rounded-lg gap-2"
+					: "border rounded-full border-gray-200 h-[20px] w-[20px]",
 				className,
 			])}
 			aria-haspopup={true}
 			aria-expanded={isOpen}
-			onClick={onOpen}>
-			Create bookmark
-			<HiPlus className="h-5 w-5" />
+			onClick={onOpen}
+		>
+			<span className="hidden lg:block">Create bookmark</span>
+			<PlusIcon className="w-4 h-4" />
 		</button>
 	);
 }

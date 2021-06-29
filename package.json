@@ -31,6 +31,7 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^2.25.0",
+		"@radix-ui/react-icons": "^1.0.3",
 		"@reach/dialog": "^0.15.2",
 		"@reach/portal": "^0.15.2",
 		"apollo-server-micro": "^2.25.2",
