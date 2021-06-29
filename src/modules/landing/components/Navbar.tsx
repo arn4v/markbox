@@ -17,9 +17,9 @@ export default function Navbar() {
 				{/* <NavLinks /> */}
 				{isAuthenticated ? (
 					<Link href="/dashboard">
-						<a className="inline-flex items-center px-3 py-1 mt-4 text-base text-white transition bg-indigo-500 border-0 rounded focus:outline-none hover:bg-indigo-600 md:mt-0">
+						<a className="flex items-center px-2 py-2 mt-auto text-sm font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg lg:text-base lg:px-6 hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2">
 							Dashboard
-							<HiArrowRight className="w-3 h-3 ml-2" />
+							<HiArrowRight className="w-4 h-4 ml-2" />
 						</a>
 					</Link>
 				) : (
