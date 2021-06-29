@@ -49,30 +49,31 @@ export default function RegisterPage() {
 
 	return (
 		<>
-			<div className="min-h-screen w-screen flex flex-col items-center justify-center bg-blueGray-50 dark:bg-blueGray-800 gap-8 text-black dark:text-white">
-				<div className="w-5/6 lg:w-1/3 text-2xl font-bold grid place-items-center">
+			<div className="flex flex-col items-center justify-center w-screen min-h-screen gap-8 text-black bg-blueGray-50 dark:bg-blueGray-800 dark:text-white">
+				<div className="grid w-5/6 text-2xl font-bold lg:w-1/3 place-items-center">
 					Login
 				</div>
 				{router.query?.message && (
 					<InfoBox
-						className="w-5/6 mx-auto lg:w-1/3 justify-center"
+						className="justify-center w-5/6 mx-auto lg:w-1/3"
 						text={router.query?.message as string}
 						bgColor="indigo-200"
 						textColor="indigo-700"
 					/>
 				)}
-				<div className="w-5/6 lg:w-1/3 bg-white dark:bg-blueGray-700 rounded-lg shadow-lg py-6 px-10">
+				<div className="w-5/6 px-10 py-6 bg-white rounded-lg shadow-lg lg:w-1/3 dark:bg-blueGray-700">
 					<form
-						className="h-full w-full flex flex-col items-start justify-center gap-5"
+						className="flex flex-col items-start justify-center w-full h-full gap-5"
 						onSubmit={(e) => {
 							e.preventDefault();
 							handleLogin(state);
-						}}>
+						}}
+					>
 						<label htmlFor="email">Email</label>
 						<input
 							id="email"
 							type="email"
-							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
+							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
 							autoComplete="email"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, email: e.target.value }))
@@ -82,7 +83,7 @@ export default function RegisterPage() {
 						<label htmlFor="password">Password</label>
 						<input
 							id="password"
-							className="w-full focus:outline-none focus:ring-2 ring-blue-600 rounded border focus:border-transparent dark:border-gray-400 border-gray-200 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
+							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
 							type="password"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, password: e.target.value }))
@@ -92,7 +93,8 @@ export default function RegisterPage() {
 						/>
 						<button
 							type="submit"
-							className="bg-blue-500 hover:bg-blue-600 w-20 rounded font-medium py-2 ml-auto focus:outline-none focus:ring ring-black text-white">
+							className="w-20 py-2 ml-auto font-medium text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring ring-black"
+						>
 							Login
 						</button>
 					</form>
@@ -100,7 +102,7 @@ export default function RegisterPage() {
 				<div className="mx-auto">
 					Don&apos;t have an account? Register{" "}
 					<Link href="/register">
-						<a className="text-blue-600 hover:border-b border-blue-600 pb-[1px]">
+						<a className="text-blue-600 dark:text-blue-400 dark:hover:border-blue-600 hover:border-b dark:border-blue-400 pb-[1px]">
 							here
 						</a>
 					</Link>
