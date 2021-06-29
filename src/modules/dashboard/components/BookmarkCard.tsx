@@ -36,19 +36,27 @@ const BookmarkCard = ({ data }: Props) => {
 				<span className="text-xs text-white">
 					{format(new Date(data?.createdAt), "do MMMM, yyyy")}
 				</span>
-				<div className="text-sm font-medium w-5/6 break-words text-white">
+				<div className="w-5/6 text-sm font-medium text-white break-words">
 					{data?.title}
 				</div>
 				<a
 					href={data?.url}
 					target="_blank"
 					rel="noreferrer"
-					className="w-3/4 text-xs text-gray-400 truncate whitespace-nowrap">
+					className="w-3/4 text-xs text-gray-400 truncate whitespace-nowrap"
+				>
 					{data?.url}
 				</a>
 				<div className="flex gap-2 mt-1.5">
 					{Object.values(data?.tags).map((item) => {
-						return <Badge key={item.id} title={item.name} variant="solid" />;
+						return (
+							<Badge
+								key={item.id}
+								title={item.name}
+								variant="outline"
+								color="white"
+							/>
+						);
 					})}
 				</div>
 			</div>
@@ -63,28 +71,32 @@ const BookmarkCard = ({ data }: Props) => {
 								onClick={onDropdownToggle}
 								aria-expanded={isDropdownOpen}
 								aria-haspopup={true}
-								className="hover:bg-blueGray-600 rounded-full p-1 focus:outline-none transition">
-								<HiOutlineMenu className="h-5 w-5" />
+								className="p-1 transition rounded-full hover:bg-blueGray-600 focus:outline-none"
+							>
+								<HiOutlineMenu className="w-5 h-5" />
 							</button>
-						}>
-						<ul className="w-48 dark:bg-blueGray-600 overflow-hidden rounded-lg mt-1 flex flex-col">
+						}
+					>
+						<ul className="flex flex-col w-48 mt-1 overflow-hidden rounded-lg dark:bg-blueGray-600">
 							<li className="w-full border-b border-blueGray-400">
 								<button
-									className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none"
 									onClick={() => {
 										onOpen();
 										onDropdownClose();
-									}}>
+									}}
+								>
 									Edit <HiPencil />
 								</button>
 							</li>
 							<li className="w-full">
 								<button
-									className="py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center w-full justify-center focus:outline-none"
+									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none"
 									onClick={() => {
 										mutate({ id: data.id });
 										onDropdownClose();
-									}}>
+									}}
+								>
 									Delete <HiTrash />
 								</button>
 							</li>
@@ -96,12 +108,14 @@ const BookmarkCard = ({ data }: Props) => {
 							target="_blank"
 							rel="noreferrer"
 							href={data?.url}
-							className="focus:outline-none">
+							className="focus:outline-none"
+						>
 							<svg
 								width="14"
 								height="14"
 								fill="none"
-								xmlns="http://www.w3.org/2000/svg">
+								xmlns="http://www.w3.org/2000/svg"
+							>
 								<path
 									d="M13 1L5.5 8.5m0-6h-3A1.5 1.5 0 001 4v7.5A1.5 1.5 0 002.5 13H10a1.5 1.5 0 001.5-1.5v-3l-6-6zm3-1.5H13 8.5zM13 1v4.5V1z"
 									stroke="#EDF2F7"
@@ -114,7 +128,8 @@ const BookmarkCard = ({ data }: Props) => {
 						<button
 							type="button"
 							onClick={onOpen}
-							className="focus:outline-none">
+							className="focus:outline-none"
+						>
 							<HiPencil />
 						</button>
 					</>

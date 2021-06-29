@@ -28,8 +28,12 @@ export default function Navbar() {
 							</>
 						) : (
 							<>
-								<CreateBookmarkButton />
-								<TagsDrawer />
+								{router.pathname === "/dashboard" && (
+									<>
+										<CreateBookmarkButton />
+										<TagsDrawer />
+									</>
+								)}
 								<MenuDrawer />
 							</>
 						)}
