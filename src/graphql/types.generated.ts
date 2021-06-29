@@ -194,6 +194,20 @@ export type DeleteTagMutationVariables = Exact<{
 
 export type DeleteTagMutation = { __typename?: "Mutation"; deleteTag: boolean };
 
+export type GenerateApiKeyMutationVariables = Exact<{
+	name: Scalars["String"];
+}>;
+
+export type GenerateApiKeyMutation = {
+	__typename?: "Mutation";
+	generateApiKey: {
+		__typename?: "APIKey";
+		id: string;
+		name: string;
+		key: string;
+	};
+};
+
 export type RenameTagMutationVariables = Exact<{
 	input?: Maybe<RenameTagInput>;
 }>;
@@ -684,6 +698,36 @@ export const useDeleteTagMutation = <TError = unknown, TContext = unknown>(
 		(variables?: DeleteTagMutationVariables) =>
 			fetcher<DeleteTagMutation, DeleteTagMutationVariables>(
 				DeleteTagDocument,
+				variables,
+			)(),
+		options,
+	);
+export const GenerateApiKeyDocument = `
+    mutation GenerateApiKey($name: String!) {
+  generateApiKey(name: $name) {
+    id
+    name
+    key
+  }
+}
+    `;
+export const useGenerateApiKeyMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		GenerateApiKeyMutation,
+		TError,
+		GenerateApiKeyMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<
+		GenerateApiKeyMutation,
+		TError,
+		GenerateApiKeyMutationVariables,
+		TContext
+	>(
+		(variables?: GenerateApiKeyMutationVariables) =>
+			fetcher<GenerateApiKeyMutation, GenerateApiKeyMutationVariables>(
+				GenerateApiKeyDocument,
 				variables,
 			)(),
 		options,
