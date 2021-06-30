@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
+import QueryString from "qs";
 import * as React from "react";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
@@ -23,13 +24,11 @@ export default function TagList() {
 			},
 		},
 	);
-	const {
-		query: { tag },
-	} = useRouter();
+	const router = useRouter();
 
 	return (
-		<div className="flex flex-col w-full items-center">
-			<div className="w-full flex items-center justify-between my-2">
+		<div className="flex flex-col items-center w-full">
+			<div className="flex items-center justify-between w-full my-2">
 				<h2
 					className={clsx([
 						"text-gray-900 dark:text-gray-400 font-bold uppercase text-lg",
@@ -44,12 +43,12 @@ export default function TagList() {
 					{isEditModeEnabled ? "Dismiss" : "Edit"}
 				</button>
 			</div>
-			<div className="my-2 w-full flex flex-col items-center justify-start gap-2">
+			<div className="flex flex-col items-center justify-start w-full gap-2 my-2">
 				<Tag
-					id={undefined}
 					isEditModeEnabled={false}
-					redirect={false}
-					active={typeof tag === "undefined"}
+					active={typeof router.query.tag === "undefined"}
+					href="/dashboard"
+					data={{ id: undefined, name: "All" }}
 				>
 					All
 				</Tag>
@@ -57,9 +56,15 @@ export default function TagList() {
 					return (
 						<Tag
 							key={item.id}
-							id={item.id}
 							isEditModeEnabled={isEditModeEnabled}
-							active={tag === item.name.toLowerCase()}
+							data={item}
+							href={
+								"/dashboard?" +
+								QueryString.stringify({
+									tag: encodeURIComponent(item.name.toLowerCase()),
+								})
+							}
+							active={router.query?.tag === item.name.toLowerCase()}
 						>
 							{item.name}
 						</Tag>

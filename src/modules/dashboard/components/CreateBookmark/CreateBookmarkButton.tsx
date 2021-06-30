@@ -38,9 +38,13 @@ export default function CreateBookmarkButton({
 			className={clsx([
 				"w-full text-white font-medium items-center justify-center flex transition duration-150 ease-in-out focus:outline-none",
 				isLg
-					? "hover:bg-blueGray-600 bg-blueGray-700 px-2 py-2 rounded-lg gap-2"
+					? "px-2 py-2 rounded-lg gap-2"
 					: "border rounded-full border-gray-200 h-[20px] w-[20px]",
-				className,
+				className
+					? className
+					: isLg
+					? "hover:bg-blueGray-600 bg-blueGray-700"
+					: "",
 			])}
 			aria-haspopup={true}
 			aria-expanded={isOpen}

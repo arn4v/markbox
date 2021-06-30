@@ -21,7 +21,7 @@ export default function Token({ data }: Props) {
 			<div className="flex items-center justify-between px-4 py-4">
 				{data.name}
 				<button
-					className="px-2 py-1 text-sm font-medium text-red-400 transition border rounded dark:border-blueGray-400 hover:text-white bg-blueGray-600 hover:bg-red-500"
+					className="px-2 py-1 text-sm text-red-500 transition border rounded dark:border-blueGray-500 hover:text-white bg-blueGray-700 hover:bg-red-500"
 					onClick={onOpen}
 				>
 					Delete
@@ -34,17 +34,20 @@ export default function Token({ data }: Props) {
 				overlayProps={{ className: "bg-black/[0.75]" }}
 			>
 				<ModalContent
-					className="w-4/5 lg:h-[25%] lg:w-2/5 flex flex-col items-center justify-center bg-blueGray-700 p-6 gap-4 rounded-lg"
+					className="w-4/5 lg:h-[15%] lg:w-1/5 flex flex-col items-center justify-center bg-blueGray-700 p-6 gap-4 lg:gap-8 rounded-lg"
 					initial={{ opacity: 0, y: -20 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: -20 }}
 					transition={{ duration: 0.2 }}
 				>
-					<p className="mx-auto text-center">
+					<p className="mx-auto font-medium text-center lg:text-lg">
 						Do you really want to delete this token?
 					</p>
 					<div className="flex items-center justify-between w-full">
-						<button onClick={onClose} className="">
+						<button
+							onClick={onClose}
+							className="px-2 py-1 transition rounded bg-blueGray-600 hover:bg-blueGray-500"
+						>
 							Cancel
 						</button>
 						<button
