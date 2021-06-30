@@ -5,6 +5,7 @@ import qs from "qs";
 import InfoBox from "~/components/InfoBox";
 import { useMutation } from "react-query";
 import axios from "redaxios";
+import { NextSeo } from "next-seo";
 
 interface LoginBody {
 	email: string;
@@ -49,6 +50,7 @@ export default function RegisterPage() {
 
 	return (
 		<>
+			<NextSeo title="Login" />
 			<div className="flex flex-col items-center justify-center w-screen min-h-screen gap-8 text-black bg-blueGray-50 dark:bg-blueGray-800 dark:text-white">
 				<div className="grid w-5/6 text-2xl font-bold lg:w-1/3 place-items-center">
 					Login

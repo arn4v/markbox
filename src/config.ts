@@ -11,8 +11,19 @@ export const BASE_URL =
 export const PASSWORD_REGEX =
 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-
-	export const defaultSeoProps: DefaultSeoProps = {
-		
-
-	}
+export const defaultSeoProps: DefaultSeoProps = {
+	openGraph: {
+		title: "Bookmarky - API-First Bookmarking For Developers",
+		type: "website",
+		locale: "en_IE",
+		site_name: "Bookmarky",
+	},
+	twitter: {
+		handle: "@arn4v",
+		site: "@site",
+		cardType: "summary_large_image",
+	},
+	defaultTitle: "Bookmarky - API-First Bookmarking For Developers",
+	titleTemplate: "%s | Bookmarky",
+	canonical: "https://bookmarky.io",
+};

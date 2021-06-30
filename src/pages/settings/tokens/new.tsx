@@ -1,3 +1,4 @@
+import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import generate from "project-name-generator";
@@ -28,7 +29,8 @@ export default function NewTokenPage() {
 
 	return (
 		<SettingsPageWrapper>
-			<div className="flex flex-col flex-grow w-full gap-8 pl-0 mt-4 lg:mt-0 lg:pl-12 lg:w-3/4">
+			<NextSeo title="Generate Access Token" noindex />
+			<div className="flex flex-col flex-grow w-full gap-8 pl-0 mt-4 lg:mt-0 lg:pl-12">
 				<div className="flex items-center justify-between w-full pb-4 border-b border-blueGray-500">
 					<span className="text-xl font-bold">Generate new token</span>
 				</div>

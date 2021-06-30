@@ -1,3 +1,4 @@
+import { NextSeo } from "next-seo";
 import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
 import BookmarksGrid from "./components/BookmarksGrid";
@@ -12,9 +13,10 @@ const DashboardPage = () => {
 
 	return (
 		<>
-			<div className="h-screen w-screen bg-blueGray-50 dark:bg-blueGray-800 flex flex-col overflow-hidden">
+			<NextSeo title="Dashboard" noindex />
+			<div className="flex flex-col w-screen h-screen overflow-hidden bg-blueGray-50 dark:bg-blueGray-800">
 				<Navbar />
-				<div className="w-full 2xl:w-3/5 mx-auto h-full flex">
+				<div className="flex w-full h-full mx-auto 2xl:w-3/5">
 					<Sidebar />
 					<BookmarksGrid />
 				</div>
