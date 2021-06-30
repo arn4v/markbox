@@ -7,7 +7,7 @@ import Navbar from "~/modules/dashboard/components/Navbar";
 import Sidebar from "~/modules/settings/components/Sidebar";
 import useStore from "~/modules/settings/store";
 
-const SettingsPage: Component<{ children: React.ReactNode }> = ({
+const SettingsPageWrapper: Component<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const { isLoading, isAuthenticated } = useAuth(true);
@@ -26,4 +26,4 @@ const SettingsPage: Component<{ children: React.ReactNode }> = ({
 	);
 };
 
-export default dynamic(Promise.resolve(SettingsPage), { ssr: false });
+export default SettingsPageWrapper;
