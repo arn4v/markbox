@@ -47,10 +47,12 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 					className={clsx([
 						"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
 					])}
-					onClick={onOpen}>
+					onClick={onOpen}
+				>
 					<HiTrash />
 				</button>
-			}>
+			}
+		>
 			<div className="p-2 flex flex-col gap-4 w-56 bg-blueGray-700 rounded-lg">
 				<div className="text-center">
 					This tag is related to {countData?.tagBookmarksCount} bookmarks. Do
@@ -60,7 +62,8 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 					<button
 						type="button"
 						className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
-						onClick={onClose}>
+						onClick={onClose}
+					>
 						Dismiss
 					</button>
 					<button
@@ -68,7 +71,8 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 						className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
 						onClick={() => {
 							mutate({ id: data.id });
-						}}>
+						}}
+					>
 						Delete
 					</button>
 				</div>

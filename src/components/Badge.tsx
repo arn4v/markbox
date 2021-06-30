@@ -25,7 +25,8 @@ export default function Badge({
 				variant === "outline" &&
 					`border border-[${colors[color]}] bg-white dark:bg-blueGray-600`,
 				className,
-			])}>
+			])}
+		>
 			{title}
 			{children}
 		</div>

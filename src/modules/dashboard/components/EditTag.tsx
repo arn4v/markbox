@@ -39,17 +39,20 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 						"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
 						isOpen && "z-30",
 					])}
-					onClick={onOpen}>
+					onClick={onOpen}
+				>
 					<HiPencil />
 				</button>
-			}>
+			}
+		>
 			<div className="p-2 w-56 bg-blueGray-700 rounded-lg">
 				<form
 					className="w-full flex flex-col gap-4"
 					onSubmit={(e) => {
 						e.preventDefault();
 						mutate({ input: { id: data.id, name } });
-					}}>
+					}}
+				>
 					<div className="text-center">Rename tag</div>
 					<div className="grid gap-2 grid-flow-col">
 						<label htmlFor="name">Name</label>
@@ -65,13 +68,15 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 						<button
 							type="button"
 							className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
-							onClick={onClose}>
+							onClick={onClose}
+						>
 							Dismiss
 						</button>
 						<button
 							type="button"
 							className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
-							onClick={() => {}}>
+							onClick={() => {}}
+						>
 							Rename
 						</button>
 					</div>

@@ -33,12 +33,14 @@ export default function TagList() {
 				<h2
 					className={clsx([
 						"text-gray-900 dark:text-gray-400 font-bold uppercase text-lg",
-					])}>
+					])}
+				>
 					Tags
 				</h2>
 				<button
 					className="px-2 py-0.5 bg-blueGray-700 hover:bg-blueGray-600 transition rounded-md text-sm focus:outline-none"
-					onClick={onEditModeToggle}>
+					onClick={onEditModeToggle}
+				>
 					{isEditModeEnabled ? "Dismiss" : "Edit"}
 				</button>
 			</div>
@@ -47,7 +49,8 @@ export default function TagList() {
 					id={undefined}
 					isEditModeEnabled={false}
 					redirect={false}
-					active={typeof tag === "undefined"}>
+					active={typeof tag === "undefined"}
+				>
 					All
 				</Tag>
 				{data?.tags?.map((item) => {
@@ -56,7 +59,8 @@ export default function TagList() {
 							key={item.id}
 							id={item.id}
 							isEditModeEnabled={isEditModeEnabled}
-							active={tag === item.name.toLowerCase()}>
+							active={tag === item.name.toLowerCase()}
+						>
 							{item.name}
 						</Tag>
 					);

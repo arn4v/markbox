@@ -40,7 +40,8 @@ const Drawer: DrawerComponent = ({
 						className={clsx([
 							"h-screen w-screen fixed inset-0 overflow-none",
 							containerProps?.className ?? "z-[100]",
-						])}>
+						])}
+					>
 						<motion.div
 							className={clsx([
 								"z-10 fixed inset-0 bg-black",
@@ -146,7 +147,8 @@ export const DrawerContent = React.forwardRef<
 				open: { opacity: 1, ...openVariant },
 				closed: { opacity: 0, ...closeVariant },
 			}}
-			transition={{ type: "spring", stiffness: 350, damping: 40 }}>
+			transition={{ type: "spring", stiffness: 350, damping: 40 }}
+		>
 			{children}
 		</motion.div>
 	);

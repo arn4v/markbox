@@ -22,13 +22,15 @@ const SearchBar = () => {
 			/>
 			<button
 				className="flex items-center justify-center h-full gap-2 px-2 rounded-lg dark:bg-blueGray-700 focus:outline-none"
-				onClick={toggleFilter}>
+				onClick={toggleFilter}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
-					className="w-4 h-4 text-white stroke-1">
+					className="w-4 h-4 text-white stroke-1"
+				>
 					<path
 						strokeLinecap="round"
 						strokeLinejoin="round"

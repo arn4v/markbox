@@ -52,7 +52,8 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 				ref={(node) => {
 					mergeRefs(node, internalRef, ref);
 				}}
-				className="relative">
+				className="relative"
+			>
 				{button}
 				<AnimatePresence exitBeforeEnter>
 					{isOpen && showOverlay && (
@@ -94,7 +95,8 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 								placement === "top" && "bottom-full left-1/2 -translate-x-1/2",
 								className,
 							])}
-							{...props}>
+							{...props}
+						>
 							{children}
 						</div>
 					)}

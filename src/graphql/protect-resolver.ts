@@ -45,7 +45,7 @@ export default async function protectResolver(
 					throw new AuthenticationError("Unable to decode jwt");
 				}
 			} catch (err) {
-				res.removeCookie("access_token")
+				res.removeCookie("access_token");
 				throw new AuthenticationError(err.toString());
 			}
 		}

@@ -53,12 +53,14 @@ export default function CreateBookmarkDrawer() {
 				className={clsx([
 					"p-8 bg-blueGray-700",
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
-				])}>
+				])}
+			>
 				<div className="w-full flex justify-between items-center">
 					<h1 className="text-lg font-bold">Create new bookmark</h1>
 					<button
 						onClick={onClose}
-						className="p-2 rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500 transition">
+						className="p-2 rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500 transition"
+					>
 						<HiX />
 						<span className="sr-only">Close drawer</span>
 					</button>
@@ -82,7 +84,8 @@ export default function CreateBookmarkDrawer() {
 							}, []);
 							mutate({ input: { title, url, tags } });
 							onClose();
-						}}>
+						}}
+					>
 						<div className="w-full">
 							<label htmlFor="title" className="block">
 								Name
@@ -158,14 +161,16 @@ export default function CreateBookmarkDrawer() {
 										}));
 										newTagInputRef.current.value = "";
 									}}
-									className="px-4 h-10 whitespace-nowrap text-sm grid place-items-center bg-blueGray-600 rounded-md">
+									className="px-4 h-10 whitespace-nowrap text-sm grid place-items-center bg-blueGray-600 rounded-md"
+								>
 									Add tag
 								</button>
 							</div>
 						</div>
 						<button
 							type="submit"
-							className="ml-auto px-4 py-2 bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none rounded-md mt-4 transition">
+							className="ml-auto px-4 py-2 bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none rounded-md mt-4 transition"
+						>
 							Submit
 						</button>
 					</form>
