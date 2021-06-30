@@ -1,23 +1,6 @@
-import { useRouter } from "next/router";
-import generate from "project-name-generator";
-import * as React from "react";
-import { useGenerateTokenMutation } from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
-export default function NewTokenPage() {
-	const router = useRouter();
-	const { mutate } = useGenerateTokenMutation({
-		onSuccess(data) {
-			if (data) {
-				router.push("/settings/tokens");
-			}
-		},
-	});
-	const [state, setState] = React.useState({
-		name: generate().dashed,
-		scopes: ["all"],
-	});
-
+export default function AccountSecurityPage() {
 	return (
 		<SettingsPageWrapper>
 			<div className="flex flex-col flex-grow gap-8 pl-12">
@@ -27,7 +10,6 @@ export default function NewTokenPage() {
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
-						mutate(state);
 					}}
 				>
 					<div className="w-full">
@@ -38,10 +20,6 @@ export default function NewTokenPage() {
 							id="title"
 							type="text"
 							className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
-							value={state.name}
-							onChange={(e) =>
-								setState((prev) => ({ ...prev, name: e.target.value }))
-							}
 							required
 						/>
 					</div>

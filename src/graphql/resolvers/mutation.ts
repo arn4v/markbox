@@ -4,6 +4,7 @@ import { pickKeys } from "~/lib/misc";
 import protectResolver from "../protect-resolver";
 import { randomUUID } from "crypto";
 import generateToken from "../mutations/generateToken";
+import { Prisma } from "@prisma/client";
 
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
@@ -121,30 +122,40 @@ const Mutation: MutationResolvers<GQLContext> = {
 	},
 	async generateToken(_, { name, scopes }, { prisma, req, res }) {
 		const userId = await protectResolver(req, res);
-		const {
-			id,
-			name: _name,
-			scopes: _scopes,
-			lastUsed,
-		} = await prisma.accessToken.create({
-			data: {
+		console.log(name, scopes);
+		try {
+			const {
+				id,
+				name: _name,
+				scopes: _scopes,
+				lastUsed,
+			} = await prisma.accessToken.create({
+				data: {
+					name,
+					User: {
+						connect: {
+							id: userId,
+						},
+					},
+				},
+				select: {
+					id: true,
+					name: true,
+					scopes: true,
+					lastUsed: true,
+				},
+			});
+			console.log(id);
+			return {
+				id,
 				name,
-				scopes: JSON.stringify(scopes),
-				userId,
-			},
-			select: {
-				id: true,
-				name: true,
-				scopes: true,
-				lastUsed: true,
-			},
-		});
-		return {
-			id,
-			name,
-			scopes: _scopes as string[],
-			lastUsed: lastUsed.toISOString(),
-		};
+				scopes: [],
+				lastUsed: lastUsed.toISOString(),
+			};
+		} catch (err) {
+			console.log(err);
+			throw err;
+		}
 	},
 	async deleteToken(_, { id }, { req, res, prisma }) {
 		await protectResolver(req, res);

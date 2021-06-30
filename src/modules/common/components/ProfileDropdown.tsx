@@ -45,7 +45,7 @@ const ProfileDropdown = () => {
 				</li>
 				<li className="w-full">
 					{router.pathname === "/dashboard" ? (
-						<Link href="/settings">
+						<Link href="/settings/account">
 							<a className="flex items-center justify-center w-full gap-2 py-2 transition border-b border-blueGray-400 dark:hover:bg-blueGray-500 focus:outline-none">
 								Settings <HiCog />
 							</a>

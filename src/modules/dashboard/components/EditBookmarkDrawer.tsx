@@ -68,7 +68,6 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		{
 			onSuccess(data) {
 				const { title, url, tags } = data.bookmark;
-				console.log(tags)
 				setState({
 					title,
 					url,
@@ -113,13 +112,15 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 				className={clsx([
 					"p-8 bg-blueGray-700",
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
-				])}>
+				])}
+			>
 				<div className="flex flex-col w-full gap-6">
 					<div className="flex items-center justify-between w-full">
 						<h1 className="text-lg font-bold">Edit bookmark</h1>
 						<button
 							onClick={internalOnClose}
-							className="p-2 transition rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500">
+							className="p-2 transition rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500"
+						>
 							<HiX />
 							<span className="sr-only">Close drawer</span>
 						</button>
@@ -201,14 +202,16 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 											}));
 											newTagInputRef.current.value = "";
 										}}
-										className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-blueGray-600">
+										className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-blueGray-600"
+									>
 										Add tag
 									</button>
 								</div>
 							</div>
 							<button
 								type="submit"
-								className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none">
+								className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none"
+							>
 								Submit
 							</button>
 						</form>

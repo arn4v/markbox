@@ -19,6 +19,10 @@ export const fetcher = <TData, TVariables>(
 			},
 		);
 
+		if (res.data.errors) {
+			throw res.data.errors;
+		}
+
 		return res.data.data;
 	};
 };

@@ -8,17 +8,28 @@ export default function TokensPage() {
 
 	return (
 		<SettingsPageWrapper>
-			<div className="flex flex-col flex-grow gap-8">
-				<div className="flex items-center justify-between w-full">
-					<span>Personal access tokens</span>
+			<div className="flex flex-col flex-grow gap-8 pl-12">
+				<div className="flex items-center justify-between w-full pb-4 border-b border-blueGray-500">
+					<span className="text-xl font-bold">Personal access tokens</span>
 					<button
-						className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
+						className="flex items-center px-4 py-1 mt-auto text-sm font-medium text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
 						onClick={() => router.push("/settings/tokens/new")}
 					>
 						Generate new token
 					</button>
 				</div>
-				<div></div>
+				<div className="flex flex-col divide-y rounded-lg dark:divide-blueGray-400 dark:bg-blueGray-700">
+					{data?.tokens.map((item) => {
+						return (
+							<div
+								key={item.id}
+								className="flex items-center justify-between px-4 py-4"
+							>
+								{item.name}
+							</div>
+						);
+					})}
+				</div>
 			</div>
 		</SettingsPageWrapper>
 	);
