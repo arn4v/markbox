@@ -40,6 +40,14 @@ export default gql`
 		scopes: [String!]!
 	}
 
+	type GeneratedAccessToken {
+		id: ID!
+		name: String!
+		token: String!
+		lastUsed: String!
+		scopes: [String!]!
+	}
+
 	input FilterBookmarksTagInput {
 		name: String!
 	}
@@ -84,8 +92,8 @@ export default gql`
 		renameTag(input: RenameTagInput): Tag!
 		deleteTag(id: ID!): Boolean!
 		deleteBookmark(id: ID!): Boolean!
-		generateToken(name: String!, scopes: [String!]!): AccessToken!
-		updateToken(id: ID!, scopes: [String!]!): AccessToken
+		generateToken(name: String!, scopes: [String!]!): GeneratedAccessToken!
+		updateToken(id: ID!, scopes: [String!]!): AccessToken!
 		deleteToken(id: ID!): Boolean!
 	}
 `;

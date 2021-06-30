@@ -5,7 +5,9 @@ export default gql`
 		generateToken(name: $name, scopes: $scopes) {
 			id
 			name
+			token
 			lastUsed
+			scopes
 		}
 	}
 `;

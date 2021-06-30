@@ -100,3 +100,17 @@ const mailerConfig: Record<string, SMTPTransport.Options> = {
 export const mailer = createTransport(
 	isProd ? mailerConfig.prod : mailerConfig.dev,
 );
+
+/* -------------------------------------------------------------------------- */
+/*                              Public API Utils                              */
+/* -------------------------------------------------------------------------- */
+
+// PAT - Personal Access Token
+
+export const jwtSignPat = createSigner({
+	key: async () => process.env.JWT_SECRET_PAT,
+});
+
+export const jwtVerifyPath = createVerifier({
+	key: async () => process.env.JWT_SECRET_PAT,
+});

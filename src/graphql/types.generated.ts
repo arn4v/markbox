@@ -70,6 +70,15 @@ export type FilterBookmarksTagInput = {
 	name: Scalars["String"];
 };
 
+export type GeneratedAccessToken = {
+	__typename?: "GeneratedAccessToken";
+	id: Scalars["ID"];
+	name: Scalars["String"];
+	token: Scalars["String"];
+	lastUsed: Scalars["String"];
+	scopes: Array<Scalars["String"]>;
+};
+
 export type LoginMessage = {
 	__typename?: "LoginMessage";
 	code: Scalars["String"];
@@ -84,8 +93,8 @@ export type Mutation = {
 	renameTag: Tag;
 	deleteTag: Scalars["Boolean"];
 	deleteBookmark: Scalars["Boolean"];
-	generateToken: AccessToken;
-	updateToken?: Maybe<AccessToken>;
+	generateToken: GeneratedAccessToken;
+	updateToken: AccessToken;
 	deleteToken: Scalars["Boolean"];
 };
 
@@ -213,6 +222,15 @@ export type DeleteTagMutationVariables = Exact<{
 
 export type DeleteTagMutation = { __typename?: "Mutation"; deleteTag: boolean };
 
+export type DeleteTokenMutationVariables = Exact<{
+	id: Scalars["ID"];
+}>;
+
+export type DeleteTokenMutation = {
+	__typename?: "Mutation";
+	deleteToken: boolean;
+};
+
 export type GenerateTokenMutationVariables = Exact<{
 	name: Scalars["String"];
 	scopes: Array<Scalars["String"]> | Scalars["String"];
@@ -221,10 +239,12 @@ export type GenerateTokenMutationVariables = Exact<{
 export type GenerateTokenMutation = {
 	__typename?: "Mutation";
 	generateToken: {
-		__typename?: "AccessToken";
+		__typename?: "GeneratedAccessToken";
 		id: string;
 		name: string;
+		token: string;
 		lastUsed: string;
+		scopes: Array<string>;
 	};
 };
 
@@ -251,6 +271,22 @@ export type UpdateBookmarkMutation = {
 		createdAt: string;
 		updatedAt: string;
 		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
+	};
+};
+
+export type UpdateTokenMutationVariables = Exact<{
+	id: Scalars["ID"];
+	scopes: Array<Scalars["String"]> | Scalars["String"];
+}>;
+
+export type UpdateTokenMutation = {
+	__typename?: "Mutation";
+	updateToken: {
+		__typename?: "AccessToken";
+		id: string;
+		name: string;
+		lastUsed: string;
+		scopes: Array<string>;
 	};
 };
 
@@ -478,6 +514,7 @@ export type ResolversTypes = {
 	CreateBookmarkInput: CreateBookmarkInput;
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
+	GeneratedAccessToken: ResolverTypeWrapper<GeneratedAccessToken>;
 	LoginMessage: ResolverTypeWrapper<LoginMessage>;
 	Mutation: ResolverTypeWrapper<{}>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
@@ -499,6 +536,7 @@ export type ResolversParentTypes = {
 	CreateBookmarkInput: CreateBookmarkInput;
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
+	GeneratedAccessToken: GeneratedAccessToken;
 	LoginMessage: LoginMessage;
 	Mutation: {};
 	Boolean: Scalars["Boolean"];
@@ -540,6 +578,18 @@ export type BookmarkResolvers<
 	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GeneratedAccessTokenResolvers<
+	ContextType = any,
+	ParentType extends ResolversParentTypes["GeneratedAccessToken"] = ResolversParentTypes["GeneratedAccessToken"],
+> = {
+	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	scopes?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -592,13 +642,13 @@ export type MutationResolvers<
 		RequireFields<MutationDeleteBookmarkArgs, "id">
 	>;
 	generateToken?: Resolver<
-		ResolversTypes["AccessToken"],
+		ResolversTypes["GeneratedAccessToken"],
 		ParentType,
 		ContextType,
 		RequireFields<MutationGenerateTokenArgs, "name" | "scopes">
 	>;
 	updateToken?: Resolver<
-		Maybe<ResolversTypes["AccessToken"]>,
+		ResolversTypes["AccessToken"],
 		ParentType,
 		ContextType,
 		RequireFields<MutationUpdateTokenArgs, "id" | "scopes">
@@ -678,6 +728,7 @@ export type Resolvers<ContextType = any> = {
 	AccessToken?: AccessTokenResolvers<ContextType>;
 	AuthenticationMessage?: AuthenticationMessageResolvers<ContextType>;
 	Bookmark?: BookmarkResolvers<ContextType>;
+	GeneratedAccessToken?: GeneratedAccessTokenResolvers<ContextType>;
 	LoginMessage?: LoginMessageResolvers<ContextType>;
 	Mutation?: MutationResolvers<ContextType>;
 	Query?: QueryResolvers<ContextType>;
@@ -774,12 +825,40 @@ export const useDeleteTagMutation = <TError = unknown, TContext = unknown>(
 			)(),
 		options,
 	);
+export const DeleteTokenDocument = `
+    mutation DeleteToken($id: ID!) {
+  deleteToken(id: $id)
+}
+    `;
+export const useDeleteTokenMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		DeleteTokenMutation,
+		TError,
+		DeleteTokenMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<
+		DeleteTokenMutation,
+		TError,
+		DeleteTokenMutationVariables,
+		TContext
+	>(
+		(variables?: DeleteTokenMutationVariables) =>
+			fetcher<DeleteTokenMutation, DeleteTokenMutationVariables>(
+				DeleteTokenDocument,
+				variables,
+			)(),
+		options,
+	);
 export const GenerateTokenDocument = `
     mutation GenerateToken($name: String!, $scopes: [String!]!) {
   generateToken(name: $name, scopes: $scopes) {
     id
     name
+    token
     lastUsed
+    scopes
   }
 }
     `;
@@ -859,6 +938,37 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		(variables?: UpdateBookmarkMutationVariables) =>
 			fetcher<UpdateBookmarkMutation, UpdateBookmarkMutationVariables>(
 				UpdateBookmarkDocument,
+				variables,
+			)(),
+		options,
+	);
+export const UpdateTokenDocument = `
+    mutation UpdateToken($id: ID!, $scopes: [String!]!) {
+  updateToken(id: $id, scopes: $scopes) {
+    id
+    name
+    lastUsed
+    scopes
+  }
+}
+    `;
+export const useUpdateTokenMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		UpdateTokenMutation,
+		TError,
+		UpdateTokenMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<
+		UpdateTokenMutation,
+		TError,
+		UpdateTokenMutationVariables,
+		TContext
+	>(
+		(variables?: UpdateTokenMutationVariables) =>
+			fetcher<UpdateTokenMutation, UpdateTokenMutationVariables>(
+				UpdateTokenDocument,
 				variables,
 			)(),
 		options,

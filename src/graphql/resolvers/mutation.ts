@@ -5,6 +5,7 @@ import protectResolver from "../protect-resolver";
 import { randomUUID } from "crypto";
 import generateToken from "../mutations/generateToken";
 import { Prisma } from "@prisma/client";
+import { jwtSignPat } from "~/lib/utils.server";
 
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
@@ -123,39 +124,34 @@ const Mutation: MutationResolvers<GQLContext> = {
 	async generateToken(_, { name, scopes }, { prisma, req, res }) {
 		const userId = await protectResolver(req, res);
 		console.log(name, scopes);
-		try {
-			const {
-				id,
-				name: _name,
-				scopes: _scopes,
-				lastUsed,
-			} = await prisma.accessToken.create({
-				data: {
-					name,
-					User: {
-						connect: {
-							id: userId,
-						},
+		const {
+			id,
+			name: _name,
+			scopes: _scopes,
+			lastUsed,
+		} = await prisma.accessToken.create({
+			data: {
+				name,
+				User: {
+					connect: {
+						id: userId,
 					},
 				},
-				select: {
-					id: true,
-					name: true,
-					scopes: true,
-					lastUsed: true,
-				},
-			});
-			console.log(id);
-			return {
-				id,
-				name,
-				scopes: [],
-				lastUsed: lastUsed.toISOString(),
-			};
-		} catch (err) {
-			console.log(err);
-			throw err;
-		}
+			},
+			select: {
+				id: true,
+				name: true,
+				scopes: true,
+				lastUsed: true,
+			},
+		});
+		return {
+			id,
+			name,
+			token: await jwtSignPat({ sub: id, iss: "https://bookmarky.io", scopes }),
+			scopes: [],
+			lastUsed: lastUsed.toISOString(),
+		};
 	},
 	async deleteToken(_, { id }, { req, res, prisma }) {
 		await protectResolver(req, res);

@@ -13,6 +13,7 @@ export default function NewTokenPage() {
 			}
 		},
 	});
+
 	const [state, setState] = React.useState({
 		name: generate().dashed,
 		scopes: ["all"],
