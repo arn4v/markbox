@@ -14,9 +14,6 @@ export default function TokensPage() {
 		onSuccess(data) {
 			queryClient.invalidateQueries("GetAllTokens");
 		},
-		onError(error) {
-			console.log(error);
-		},
 	});
 
 	return (

@@ -11,7 +11,6 @@ export default function NewTokenPage() {
 	const [isCopied, setCopied] = React.useState<boolean>(false);
 	const { mutate } = useGenerateTokenMutation({
 		onSuccess(data) {
-			console.log(data);
 			setToken(data.generateToken.token);
 		},
 	});
