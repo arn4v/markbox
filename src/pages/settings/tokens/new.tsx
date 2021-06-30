@@ -23,7 +23,7 @@ export default function NewTokenPage() {
 
 	return (
 		<SettingsPageWrapper>
-			<div className="flex flex-col flex-grow gap-8 pl-12 lg:w-3/4">
+			<div className="flex flex-col flex-grow w-full gap-8 pl-0 mt-4 lg:mt-0 lg:pl-12 lg:w-3/4">
 				<div className="flex items-center justify-between w-full pb-4 border-b border-blueGray-500">
 					<span className="text-xl font-bold">Generate new token</span>
 				</div>

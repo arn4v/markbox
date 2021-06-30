@@ -9,9 +9,7 @@ type ModalProps = {
 	containerProps?: {
 		className?: string;
 	};
-	overlayProps?: {
-		className?: string;
-	};
+	overlayProps?: HTMLMotionProps<"div">;
 	isOpen: boolean;
 	onClose: () => void;
 	children: React.ReactNode;
@@ -62,11 +60,6 @@ const Modal: Modal = ({
 								"z-10 fixed inset-0 bg-black",
 								overlayProps?.className,
 							])}
-							style={
-								{
-									"--tw-bg-opacity": 0.4,
-								} as any
-							}
 							variants={{
 								open: { opacity: 1, pointerEvents: "auto" },
 								closed: { opacity: 0, pointerEvents: "none" },

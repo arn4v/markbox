@@ -149,7 +149,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 			iss: "https://bookmarky.io",
 			scopes,
 		});
-		console.log(token);
 		return {
 			id,
 			name,
@@ -169,7 +168,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 			});
 			return true;
 		} catch (err) {
-			console.log(err);
 			return false;
 		}
 	},

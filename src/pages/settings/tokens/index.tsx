@@ -1,24 +1,15 @@
 import { useRouter } from "next/router";
-import { useQueryClient } from "react-query";
-import {
-	useDeleteTokenMutation,
-	useGetAllTokensQuery,
-} from "~/graphql/types.generated";
+import { useGetAllTokensQuery } from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
+import Token from "~/modules/settings/components/Token";
 
 export default function TokensPage() {
 	const router = useRouter();
-	const queryClient = useQueryClient();
 	const { data } = useGetAllTokensQuery();
-	const { mutate } = useDeleteTokenMutation({
-		onSuccess(data) {
-			queryClient.invalidateQueries("GetAllTokens");
-		},
-	});
 
 	return (
 		<SettingsPageWrapper>
-			<div className="flex flex-col flex-grow gap-8 pl-12">
+			<div className="flex flex-col flex-grow gap-8 pl-0 mt-4 lg:mt-0 lg:pl-12">
 				<div className="flex items-center justify-between w-full pb-4 border-b border-blueGray-500">
 					<span className="text-xl font-bold">Personal access tokens</span>
 					<button
@@ -29,21 +20,8 @@ export default function TokensPage() {
 					</button>
 				</div>
 				<div className="flex flex-col divide-y rounded-lg dark:divide-blueGray-400 dark:bg-blueGray-700">
-					{data?.tokens.map((item) => {
-						return (
-							<div
-								key={item.id}
-								className="flex items-center justify-between px-4 py-4"
-							>
-								{item.name}
-								<button
-									className="px-2 py-1 text-sm font-medium text-red-500 transition rounded hover:text-white bg-blueGray-600 hover:bg-red-500"
-									onClick={() => mutate({ id: item.id })}
-								>
-									Delete
-								</button>
-							</div>
-						);
+					{data?.tokens.map((data) => {
+						return <Token key={data.id} data={data} />;
 					})}
 				</div>
 			</div>
