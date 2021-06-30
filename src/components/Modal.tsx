@@ -1,87 +1,112 @@
 import * as React from "react";
-import { AnimatePresence, motion, Variants } from "framer-motion";
-import {
-	DialogOverlay,
-	DialogContent,
-	DialogContentProps,
-	DialogOverlayProps,
-} from "@reach/dialog";
+import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
+import clsx from "clsx";
+import { getTargetChildren } from "~/lib/react";
+import { Portal, PortalProps } from "@reach/portal";
 
-interface ModalType {
-	(props: ModalProps): JSX.Element;
-	Content: typeof ModalContent;
-}
-
-export type ModalProps = {
+type ModalProps = {
+	portalProps?: PortalProps;
+	containerProps?: {
+		className?: string;
+	};
+	overlayProps?: {
+		className?: string;
+	};
 	isOpen: boolean;
 	onClose: () => void;
-	children: ModalChildren | Array<ModalChildren>;
-	overlayTransitionDuration?: number;
-} & React.ComponentProps<typeof MotionOverlay>;
-
-type ModalChildren = React.ReactElement<ModalContentProps>;
-
-const MotionOverlay = motion(DialogOverlay);
-
-const overlayVariants: Variants = {
-	initial: {
-		opacity: 0,
-	},
-	animate: {
-		opacity: 0.5,
-	},
+	children: React.ReactNode;
 };
 
-const Modal: ModalType = ({
+interface Modal extends Component<ModalProps> {}
+
+const Modal: Modal = ({
 	children,
 	isOpen,
 	onClose,
-	overlayTransitionDuration,
-	...props
-}: ModalProps) => {
+	containerProps,
+	overlayProps,
+	portalProps,
+}) => {
+	const [withTarget] = React.useMemo(
+		() => getTargetChildren(children, ModalContent),
+		[children],
+	);
+
+	const onEscape = React.useCallback(
+		(event: KeyboardEvent) => {
+			if (event.key === "Escape") onClose();
+		},
+		[onClose],
+	);
+
+	React.useEffect(() => {
+		if (isOpen) {
+			document.addEventListener("keydown", onEscape, false);
+		} else {
+			document.removeEventListener("keydown", onEscape, false);
+		}
+	}, [onEscape, isOpen]);
+
 	return (
-		<AnimatePresence exitBeforeEnter>
-			{isOpen && (
-				<MotionOverlay
-					as="div"
-					style={{ backgroundColor: "black" }}
-					onDismiss={onClose}
-					transition={{
-						ease: "easeInOut",
-						duration: overlayTransitionDuration ?? 0.3,
-					}}
-					variants={overlayVariants}
-					initial="initial"
-					animate="animate"
-					exit="initial"
-					{...props}>
-					{children}
-				</MotionOverlay>
-			)}
-		</AnimatePresence>
+		<Portal {...portalProps}>
+			<AnimatePresence>
+				{isOpen && (
+					<div
+						className={clsx([
+							"h-screen w-screen fixed inset-0 overflow-none",
+							containerProps?.className ?? "z-[100]",
+						])}
+					>
+						<motion.div
+							className={clsx([
+								"z-10 fixed inset-0 bg-black",
+								overlayProps?.className,
+							])}
+							style={
+								{
+									"--tw-bg-opacity": 0.4,
+								} as any
+							}
+							variants={{
+								open: { opacity: 1, pointerEvents: "auto" },
+								closed: { opacity: 0, pointerEvents: "none" },
+							}}
+							initial="closed"
+							animate="open"
+							exit="closed"
+							transition={{ type: "tween" }}
+							onClick={onClose}
+						/>
+						{withTarget}
+					</div>
+				)}
+			</AnimatePresence>
+		</Portal>
 	);
 };
 
-/* -------------------------------------------------------------------------- */
-/*                           Modal Content Component                          */
-/* -------------------------------------------------------------------------- */
+Modal.displayName = "Drawer";
 
-const MotionContent = motion(DialogContent);
+interface DrawerContentProps extends HTMLMotionProps<"div"> {
+	children: React.ReactNode;
+}
 
-export type ModalContentProps = React.ComponentProps<typeof MotionContent> & {
-	children?: React.ReactNode;
-};
+export const ModalContent = React.forwardRef<
+	HTMLDivElement,
+	DrawerContentProps
+>(({ children, className, ...props }, ref) => {
+	return (
+		<motion.div
+			ref={ref}
+			className={clsx(["absolute z-30", className])}
+			transition={{ type: "spring", stiffness: 350, damping: 40 }}
+			{...props}
+		>
+			{children}
+		</motion.div>
+	);
+});
 
-const ModalContent = ({
-	children,
-	...props
-}: ModalContentProps): JSX.Element => {
-	// TODO: Wrap in motion()
-	// Currently throws error
-	// Type '{ children: ReactNode; as: "div"; }' is not assignable to type 'IntrinsicAttributes & Pick<{ as?: "div"; } & Omit<Pick<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof HTMLAttributes<...>> & { ...; }, "children" | "as"> & MotionProps, "title" | ... 250 more ... | "css"> & RefAttributes<...>'. Property 'children' does not exist on type 'IntrinsicAttributes & Pick<{ as?: "div"; } & Omit<Pick<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof HTMLAttributes<...>> & { ...; }, "children" | "as"> & MotionProps, "title" | ... 250 more ... | "css"> & RefAttributes<...>'.
+ModalContent.displayName = "ModalContent";
 
-	return <MotionContent as="div" {...props} />;
-};
-
-Modal.Content = ModalContent;
 export default Modal;
