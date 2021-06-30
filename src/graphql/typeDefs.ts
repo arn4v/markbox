@@ -15,10 +15,29 @@ export default gql`
 		name: String!
 	}
 
-	type APIKey {
+	type AuthenticationMessage {
+		code: String!
+		message: String!
+	}
+
+	type LoginMessage {
+		code: String!
+		message: String!
+		accessToken: String
+	}
+
+	type User {
+		id: ID!
+		email: String!
+		emailVerified: Boolean!
+		createdAt: String!
+	}
+
+	type AccessToken {
 		id: ID!
 		name: String!
-		key: String!
+		lastUsed: String!
+		scopes: [String!]!
 	}
 
 	input FilterBookmarksTagInput {
@@ -43,24 +62,6 @@ export default gql`
 		tags: [CreateOrUpdateBookmarkTagInput!]
 	}
 
-	type AuthenticationMessage {
-		code: String!
-		message: String!
-	}
-
-	type LoginMessage {
-		code: String!
-		message: String!
-		accessToken: String
-	}
-
-	type User {
-		id: ID!
-		email: String!
-		emailVerified: Boolean!
-		createdAt: String!
-	}
-
 	input RenameTagInput {
 		id: ID!
 		name: String!
@@ -73,6 +74,8 @@ export default gql`
 		tagBookmarksCount(id: ID!): Int!
 		tags: [Tag!]
 		user: User
+		tokens: [AccessToken!]!
+		token(id: ID!): AccessToken!
 	}
 
 	type Mutation {
@@ -81,6 +84,8 @@ export default gql`
 		renameTag(input: RenameTagInput): Tag!
 		deleteTag(id: ID!): Boolean!
 		deleteBookmark(id: ID!): Boolean!
-		generateApiKey(name: String!): APIKey!
+		generateToken(name: String!): AccessToken!
+		updateToken(id: ID!, scopes: [String!]!): AccessToken
+		deleteToken(id: ID!): Boolean!
 	}
 `;

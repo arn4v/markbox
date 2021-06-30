@@ -31,11 +31,12 @@ export type Scalars = {
 	Float: number;
 };
 
-export type ApiKey = {
-	__typename?: "APIKey";
+export type AccessToken = {
+	__typename?: "AccessToken";
 	id: Scalars["ID"];
 	name: Scalars["String"];
-	key: Scalars["String"];
+	lastUsed: Scalars["String"];
+	scopes: Array<Scalars["String"]>;
 };
 
 export type AuthenticationMessage = {
@@ -83,7 +84,9 @@ export type Mutation = {
 	renameTag: Tag;
 	deleteTag: Scalars["Boolean"];
 	deleteBookmark: Scalars["Boolean"];
-	generateApiKey: ApiKey;
+	generateToken: AccessToken;
+	updateToken?: Maybe<AccessToken>;
+	deleteToken: Scalars["Boolean"];
 };
 
 export type MutationCreateBookmarkArgs = {
@@ -106,8 +109,17 @@ export type MutationDeleteBookmarkArgs = {
 	id: Scalars["ID"];
 };
 
-export type MutationGenerateApiKeyArgs = {
+export type MutationGenerateTokenArgs = {
 	name: Scalars["String"];
+};
+
+export type MutationUpdateTokenArgs = {
+	id: Scalars["ID"];
+	scopes: Array<Scalars["String"]>;
+};
+
+export type MutationDeleteTokenArgs = {
+	id: Scalars["ID"];
 };
 
 export type Query = {
@@ -118,6 +130,8 @@ export type Query = {
 	tagBookmarksCount: Scalars["Int"];
 	tags?: Maybe<Array<Tag>>;
 	user?: Maybe<User>;
+	tokens: Array<AccessToken>;
+	token: AccessToken;
 };
 
 export type QueryBookmarkArgs = {
@@ -133,6 +147,10 @@ export type QueryTagArgs = {
 };
 
 export type QueryTagBookmarksCountArgs = {
+	id: Scalars["ID"];
+};
+
+export type QueryTokenArgs = {
 	id: Scalars["ID"];
 };
 
@@ -194,17 +212,17 @@ export type DeleteTagMutationVariables = Exact<{
 
 export type DeleteTagMutation = { __typename?: "Mutation"; deleteTag: boolean };
 
-export type GenerateApiKeyMutationVariables = Exact<{
+export type GenerateTokenMutationVariables = Exact<{
 	name: Scalars["String"];
 }>;
 
-export type GenerateApiKeyMutation = {
+export type GenerateTokenMutation = {
 	__typename?: "Mutation";
-	generateApiKey: {
-		__typename?: "APIKey";
+	generateToken: {
+		__typename?: "AccessToken";
 		id: string;
 		name: string;
-		key: string;
+		lastUsed: string;
 	};
 };
 
@@ -258,6 +276,19 @@ export type GetAllTagsQuery = {
 	tags?: Maybe<Array<{ __typename?: "Tag"; id: string; name: string }>>;
 };
 
+export type GetAllTokensQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllTokensQuery = {
+	__typename?: "Query";
+	tokens: Array<{
+		__typename?: "AccessToken";
+		id: string;
+		name: string;
+		scopes: Array<string>;
+		lastUsed: string;
+	}>;
+};
+
 export type GetBookmarkQueryVariables = Exact<{
 	id: Scalars["ID"];
 }>;
@@ -291,6 +322,21 @@ export type GetTagBookmarksCountQueryVariables = Exact<{
 export type GetTagBookmarksCountQuery = {
 	__typename?: "Query";
 	tagBookmarksCount: number;
+};
+
+export type GetTokenQueryVariables = Exact<{
+	id: Scalars["ID"];
+}>;
+
+export type GetTokenQuery = {
+	__typename?: "Query";
+	token: {
+		__typename?: "AccessToken";
+		id: string;
+		name: string;
+		scopes: Array<string>;
+		lastUsed: string;
+	};
 };
 
 export type UserQueryVariables = Exact<{ [key: string]: never }>;
@@ -422,7 +468,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-	APIKey: ResolverTypeWrapper<ApiKey>;
+	AccessToken: ResolverTypeWrapper<AccessToken>;
 	ID: ResolverTypeWrapper<Scalars["ID"]>;
 	String: ResolverTypeWrapper<Scalars["String"]>;
 	AuthenticationMessage: ResolverTypeWrapper<AuthenticationMessage>;
@@ -443,7 +489,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-	APIKey: ApiKey;
+	AccessToken: AccessToken;
 	ID: Scalars["ID"];
 	String: Scalars["String"];
 	AuthenticationMessage: AuthenticationMessage;
@@ -462,13 +508,14 @@ export type ResolversParentTypes = {
 	User: User;
 };
 
-export type ApiKeyResolvers<
+export type AccessTokenResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["APIKey"] = ResolversParentTypes["APIKey"],
+	ParentType extends ResolversParentTypes["AccessToken"] = ResolversParentTypes["AccessToken"],
 > = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	key?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	scopes?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -542,11 +589,23 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationDeleteBookmarkArgs, "id">
 	>;
-	generateApiKey?: Resolver<
-		ResolversTypes["APIKey"],
+	generateToken?: Resolver<
+		ResolversTypes["AccessToken"],
 		ParentType,
 		ContextType,
-		RequireFields<MutationGenerateApiKeyArgs, "name">
+		RequireFields<MutationGenerateTokenArgs, "name">
+	>;
+	updateToken?: Resolver<
+		Maybe<ResolversTypes["AccessToken"]>,
+		ParentType,
+		ContextType,
+		RequireFields<MutationUpdateTokenArgs, "id" | "scopes">
+	>;
+	deleteToken?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationDeleteTokenArgs, "id">
 	>;
 };
 
@@ -580,6 +639,17 @@ export type QueryResolvers<
 	>;
 	tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>;
 	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+	tokens?: Resolver<
+		Array<ResolversTypes["AccessToken"]>,
+		ParentType,
+		ContextType
+	>;
+	token?: Resolver<
+		ResolversTypes["AccessToken"],
+		ParentType,
+		ContextType,
+		RequireFields<QueryTokenArgs, "id">
+	>;
 };
 
 export type TagResolvers<
@@ -603,7 +673,7 @@ export type UserResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
-	APIKey?: ApiKeyResolvers<ContextType>;
+	AccessToken?: AccessTokenResolvers<ContextType>;
 	AuthenticationMessage?: AuthenticationMessageResolvers<ContextType>;
 	Bookmark?: BookmarkResolvers<ContextType>;
 	LoginMessage?: LoginMessageResolvers<ContextType>;
@@ -702,32 +772,32 @@ export const useDeleteTagMutation = <TError = unknown, TContext = unknown>(
 			)(),
 		options,
 	);
-export const GenerateApiKeyDocument = `
-    mutation GenerateApiKey($name: String!) {
-  generateApiKey(name: $name) {
+export const GenerateTokenDocument = `
+    mutation GenerateToken($name: String!) {
+  generateToken(name: $name) {
     id
     name
-    key
+    lastUsed
   }
 }
     `;
-export const useGenerateApiKeyMutation = <TError = unknown, TContext = unknown>(
+export const useGenerateTokenMutation = <TError = unknown, TContext = unknown>(
 	options?: UseMutationOptions<
-		GenerateApiKeyMutation,
+		GenerateTokenMutation,
 		TError,
-		GenerateApiKeyMutationVariables,
+		GenerateTokenMutationVariables,
 		TContext
 	>,
 ) =>
 	useMutation<
-		GenerateApiKeyMutation,
+		GenerateTokenMutation,
 		TError,
-		GenerateApiKeyMutationVariables,
+		GenerateTokenMutationVariables,
 		TContext
 	>(
-		(variables?: GenerateApiKeyMutationVariables) =>
-			fetcher<GenerateApiKeyMutation, GenerateApiKeyMutationVariables>(
-				GenerateApiKeyDocument,
+		(variables?: GenerateTokenMutationVariables) =>
+			fetcher<GenerateTokenMutation, GenerateTokenMutationVariables>(
+				GenerateTokenDocument,
 				variables,
 			)(),
 		options,
@@ -841,6 +911,31 @@ export const useGetAllTagsQuery = <TData = GetAllTagsQuery, TError = unknown>(
 		),
 		options,
 	);
+export const GetAllTokensDocument = `
+    query GetAllTokens {
+  tokens {
+    id
+    name
+    scopes
+    lastUsed
+  }
+}
+    `;
+export const useGetAllTokensQuery = <
+	TData = GetAllTokensQuery,
+	TError = unknown,
+>(
+	variables?: GetAllTokensQueryVariables,
+	options?: UseQueryOptions<GetAllTokensQuery, TError, TData>,
+) =>
+	useQuery<GetAllTokensQuery, TError, TData>(
+		["GetAllTokens", variables],
+		fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(
+			GetAllTokensDocument,
+			variables,
+		),
+		options,
+	);
 export const GetBookmarkDocument = `
     query GetBookmark($id: ID!) {
   bookmark(id: $id) {
@@ -903,6 +998,25 @@ export const useGetTagBookmarksCountQuery = <
 			GetTagBookmarksCountDocument,
 			variables,
 		),
+		options,
+	);
+export const GetTokenDocument = `
+    query GetToken($id: ID!) {
+  token(id: $id) {
+    id
+    name
+    scopes
+    lastUsed
+  }
+}
+    `;
+export const useGetTokenQuery = <TData = GetTokenQuery, TError = unknown>(
+	variables: GetTokenQueryVariables,
+	options?: UseQueryOptions<GetTokenQuery, TError, TData>,
+) =>
+	useQuery<GetTokenQuery, TError, TData>(
+		["GetToken", variables],
+		fetcher<GetTokenQuery, GetTokenQueryVariables>(GetTokenDocument, variables),
 		options,
 	);
 export const UserDocument = `

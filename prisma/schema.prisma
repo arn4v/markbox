@@ -8,29 +8,33 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(uuid())
-  type          String     @default("email")
-  name          String     @default("")
-  email         String     @unique
-  emailVerified Boolean    @default(false) @map("email_verified")
+  id            String        @id @default(uuid())
+  type          String        @default("email")
+  name          String        @default("")
+  email         String        @unique
+  emailVerified Boolean       @default(false) @map("email_verified")
   password      String
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
   bookmarks     Bookmark[]
   tags          Tag[]
-  keys          ApiKey[]
+  keys          AccessToken[]
 
   @@map("users")
 }
 
-model ApiKey {
-  id   String @id @default(uuid())
-  name String
-  key  String
+model AccessToken {
+  id        String   @id @default(uuid())
+  name      String
+  key       String
+  scopes    Json     @default("[]")
+  lastUsed  DateTime @map("last_used")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
-  @@map("api_keys")
+  @@map("access_tokens")
 }
 
 model Tag {

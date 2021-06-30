@@ -123,7 +123,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 		return await prisma.apiKey.create({
 			data: {
 				name,
-				key: randomUUID(),
 				userId,
 			},
 		});
