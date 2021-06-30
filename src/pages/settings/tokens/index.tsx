@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
+import { useGetAllTokensQuery } from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
 export default function TokensPage() {
 	const router = useRouter();
+	const { data } = useGetAllTokensQuery();
 
 	return (
 		<SettingsPageWrapper>

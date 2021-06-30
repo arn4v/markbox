@@ -84,7 +84,7 @@ export default gql`
 		renameTag(input: RenameTagInput): Tag!
 		deleteTag(id: ID!): Boolean!
 		deleteBookmark(id: ID!): Boolean!
-		generateToken(name: String!): AccessToken!
+		generateToken(name: String!, scopes: [String!]!): AccessToken!
 		updateToken(id: ID!, scopes: [String!]!): AccessToken
 		deleteToken(id: ID!): Boolean!
 	}

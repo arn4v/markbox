@@ -26,9 +26,8 @@ model User {
 model AccessToken {
   id        String   @id @default(uuid())
   name      String
-  key       String
   scopes    Json     @default("[]")
-  lastUsed  DateTime @map("last_used")
+  lastUsed  DateTime @default(now()) @map("last_used")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

@@ -111,6 +111,7 @@ export type MutationDeleteBookmarkArgs = {
 
 export type MutationGenerateTokenArgs = {
 	name: Scalars["String"];
+	scopes: Array<Scalars["String"]>;
 };
 
 export type MutationUpdateTokenArgs = {
@@ -214,6 +215,7 @@ export type DeleteTagMutation = { __typename?: "Mutation"; deleteTag: boolean };
 
 export type GenerateTokenMutationVariables = Exact<{
 	name: Scalars["String"];
+	scopes: Array<Scalars["String"]> | Scalars["String"];
 }>;
 
 export type GenerateTokenMutation = {
@@ -593,7 +595,7 @@ export type MutationResolvers<
 		ResolversTypes["AccessToken"],
 		ParentType,
 		ContextType,
-		RequireFields<MutationGenerateTokenArgs, "name">
+		RequireFields<MutationGenerateTokenArgs, "name" | "scopes">
 	>;
 	updateToken?: Resolver<
 		Maybe<ResolversTypes["AccessToken"]>,
@@ -773,8 +775,8 @@ export const useDeleteTagMutation = <TError = unknown, TContext = unknown>(
 		options,
 	);
 export const GenerateTokenDocument = `
-    mutation GenerateToken($name: String!) {
-  generateToken(name: $name) {
+    mutation GenerateToken($name: String!, $scopes: [String!]!) {
+  generateToken(name: $name, scopes: $scopes) {
     id
     name
     lastUsed

@@ -3,6 +3,7 @@ import { MutationResolvers } from "../types.generated";
 import { pickKeys } from "~/lib/misc";
 import protectResolver from "../protect-resolver";
 import { randomUUID } from "crypto";
+import generateToken from "../mutations/generateToken";
 
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
@@ -118,14 +119,67 @@ const Mutation: MutationResolvers<GQLContext> = {
 			name: tag.name,
 		};
 	},
-	async generateApiKey(_, { name }, { prisma, req, res }) {
+	async generateToken(_, { name, scopes }, { prisma, req, res }) {
 		const userId = await protectResolver(req, res);
-		return await prisma.apiKey.create({
+		const {
+			id,
+			name: _name,
+			scopes: _scopes,
+			lastUsed,
+		} = await prisma.accessToken.create({
 			data: {
 				name,
+				scopes: JSON.stringify(scopes),
 				userId,
 			},
+			select: {
+				id: true,
+				name: true,
+				scopes: true,
+				lastUsed: true,
+			},
 		});
+		return {
+			id,
+			name,
+			scopes: _scopes as string[],
+			lastUsed: lastUsed.toISOString(),
+		};
+	},
+	async deleteToken(_, { id }, { req, res, prisma }) {
+		await protectResolver(req, res);
+		try {
+			await prisma.accessToken.delete({
+				where: {
+					id,
+				},
+				select: {},
+			});
+			return true;
+		} catch (err) {
+			return false;
+		}
+	},
+	async updateToken(_, { id, scopes }, { req, res, prisma }) {
+		const userId = await protectResolver(req, res);
+		const updated = await prisma.accessToken.update({
+			data: {
+				scopes,
+			},
+			where: { id },
+			select: {
+				id: true,
+				name: true,
+				scopes: true,
+				lastUsed: true,
+			},
+		});
+		return {
+			id: updated.id,
+			name: updated.name,
+			scopes: updated.scopes as string[],
+			lastUsed: updated.lastUsed.toISOString(),
+		};
 	},
 };
 

@@ -1,7 +1,8 @@
-import { pickKeys } from "~/lib/misc";
+import { omitKeys, pickKeys } from "~/lib/misc";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { QueryResolvers, Tag } from "../types.generated";
+import { Prisma } from "@prisma/client";
 
 const Query: QueryResolvers<GQLContext> = {
 	async bookmark(_, { id }, { prisma, req, res }) {
@@ -106,6 +107,52 @@ const Query: QueryResolvers<GQLContext> = {
 			},
 		});
 		return count;
+	},
+	async token(_, { id }, { req, res, prisma }) {
+		await protectResolver(req, res);
+		const {
+			id: _id,
+			name,
+			lastUsed,
+			scopes,
+		} = await prisma.accessToken.findUnique({
+			where: {
+				id,
+			},
+			select: {
+				id: true,
+				name: true,
+				lastUsed: true,
+				scopes: true,
+			},
+		});
+		return {
+			id: _id,
+			name,
+			scopes: scopes as Prisma.JsonArray as string[],
+			lastUsed: lastUsed.toISOString(),
+		};
+	},
+	async tokens(_, __, { req, res, prisma }) {
+		const userId = await protectResolver(req, res);
+		const _tokens = await prisma.accessToken.findMany({
+			where: {
+				userId,
+			},
+			select: {
+				id: true,
+				name: true,
+				lastUsed: true,
+				scopes: true,
+			},
+		});
+		return _tokens.map((item) => {
+			return {
+				...item,
+				scopes: item.scopes as string[],
+				lastUsed: item.lastUsed.toISOString(),
+			};
+		});
 	},
 };
 
