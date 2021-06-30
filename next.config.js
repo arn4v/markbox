@@ -8,6 +8,10 @@ let config = {
 				source: "/register",
 				destination: "/signup",
 			},
+			{
+				source: "/settings",
+				destination: "/settings/account",
+			},
 		];
 	},
 };

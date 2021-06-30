@@ -48,8 +48,8 @@ export const prisma = global.prisma as PrismaClient;
 /*                                Next Connect                                */
 /* -------------------------------------------------------------------------- */
 
-export const routeHandler = () =>
-	nextConnect<NextApiRequest, NextApiResponse>();
+export const routeHandler = <Res extends NextApiResponse>() =>
+	nextConnect<NextApiRequest, Res>();
 
 /* -------------------------------------------------------------------------- */
 /*                                Cookie utils                                */
