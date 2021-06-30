@@ -1,10 +1,23 @@
 import { useRouter } from "next/router";
-import { useGetAllTokensQuery } from "~/graphql/types.generated";
+import { useQueryClient } from "react-query";
+import {
+	useDeleteTokenMutation,
+	useGetAllTokensQuery,
+} from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
 export default function TokensPage() {
 	const router = useRouter();
+	const queryClient = useQueryClient();
 	const { data } = useGetAllTokensQuery();
+	const { mutate } = useDeleteTokenMutation({
+		onSuccess(data) {
+			queryClient.invalidateQueries("GetAllTokens");
+		},
+		onError(error) {
+			console.log(error);
+		},
+	});
 
 	return (
 		<SettingsPageWrapper>
@@ -26,6 +39,12 @@ export default function TokensPage() {
 								className="flex items-center justify-between px-4 py-4"
 							>
 								{item.name}
+								<button
+									className="px-2 py-1 text-sm font-medium text-red-500 transition rounded hover:text-white bg-blueGray-600 hover:bg-red-500"
+									onClick={() => mutate({ id: item.id })}
+								>
+									Delete
+								</button>
 							</div>
 						);
 					})}

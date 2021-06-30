@@ -123,7 +123,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 	},
 	async generateToken(_, { name, scopes }, { prisma, req, res }) {
 		const userId = await protectResolver(req, res);
-		console.log(name, scopes);
 		const {
 			id,
 			name: _name,
@@ -145,10 +144,16 @@ const Mutation: MutationResolvers<GQLContext> = {
 				lastUsed: true,
 			},
 		});
+		const token = await jwtSignPat({
+			sub: id,
+			iss: "https://bookmarky.io",
+			scopes,
+		});
+		console.log(token);
 		return {
 			id,
 			name,
-			token: await jwtSignPat({ sub: id, iss: "https://bookmarky.io", scopes }),
+			token,
 			scopes: [],
 			lastUsed: lastUsed.toISOString(),
 		};
@@ -160,10 +165,11 @@ const Mutation: MutationResolvers<GQLContext> = {
 				where: {
 					id,
 				},
-				select: {},
+				select: { id: true },
 			});
 			return true;
 		} catch (err) {
+			console.log(err);
 			return false;
 		}
 	},
