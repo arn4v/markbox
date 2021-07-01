@@ -31,6 +31,7 @@ model AccessToken {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
   @@map("access_tokens")
@@ -41,11 +42,10 @@ model Tag {
   name      String
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
-  userId    String?
-  User      User?      @relation(fields: [userId], references: [id])
   bookmarks Bookmark[]
 
-  @@index([userId], name: "userId")
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
   @@map("tags")
 }
 
@@ -55,10 +55,9 @@ model Bookmark {
   url       String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  userId    String?
-  User      User?    @relation(fields: [userId], references: [id])
   tags      Tag[]
 
-  @@index([userId], name: "userId")
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
   @@map("bookmarks")
 }

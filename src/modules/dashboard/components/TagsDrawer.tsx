@@ -11,6 +11,8 @@ import CreateBookmarkButton from "./CreateBookmark";
 import { CardStackIcon } from "@radix-ui/react-icons";
 import Tag from "./Tag";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
+import QueryString from "qs";
+import { omitKeys } from "~/lib/misc";
 
 export default function TagsDrawer(): JSX.Element {
 	const { user } = useAuth();
@@ -42,22 +44,25 @@ export default function TagsDrawer(): JSX.Element {
 						<h1 className="text-lg font-bold">Tags</h1>
 						<div className="flex flex-col items-center justify-start w-full gap-4 my-2">
 							<Tag
-								id={undefined}
 								isEditModeEnabled={false}
-								redirect={false}
+								data={{ id: "", name: "All" }}
+								href={`/dashboard?${QueryString.stringify(
+									omitKeys(router.query, "tag"),
+								)}`}
 								active={typeof tag === "undefined"}
-							>
-								All
-							</Tag>
+							/>
 							{data?.tags?.map((item) => {
 								return (
 									<Tag
 										key={item.id}
-										id={item.id}
+										data={item}
 										active={tag === item.name.toLowerCase()}
-									>
-										{item.name}
-									</Tag>
+										isEditModeEnabled={false}
+										href={`/dashboard?${QueryString.stringify({
+											...router.query,
+											tag: item.name,
+										})}`}
+									/>
 								);
 							})}
 						</div>

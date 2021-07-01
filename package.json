@@ -21,7 +21,7 @@
 		"db-push": "prisma db push --skip-generate",
 		"db-seed-users": "prisma db seed --preview-feature",
 		"db-dev": "nodemon -w ./prisma -e prisma --exec npx prisma generate && npx prisma db push",
-		"db-migrate-create": "prisma migrate dev --create-only --skip-generate",
+		"db-migrate-create": "prisma migrate dev --create-only --skip-generate --skip-seed",
 		"db-migrate-dev": "prisma migrate dev --skip-generate",
 		"db-migrate-deploy": "prisma migrate deploy",
 		"storybook": "start-storybook -p 6006",
@@ -62,6 +62,7 @@
 		"react-query": "^3.18.1",
 		"react-use": "^17.2.4",
 		"redaxios": "^0.4.1",
+		"yup": "^0.32.9",
 		"zustand": "^3.5.5"
 	},
 	"devDependencies": {

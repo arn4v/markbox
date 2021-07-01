@@ -1,6 +1,5 @@
 import * as React from "react";
 import "~/styles/index.css";
-import "@reach/dialog/styles.css";
 import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";

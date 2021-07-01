@@ -8,7 +8,6 @@ import useBreakpoints from "~/hooks/use-breakpoints";
 import Link from "next/link";
 
 interface TagProps {
-	children: React.ReactNode;
 	data: TagType;
 	href: string;
 	active: boolean;
@@ -19,7 +18,6 @@ export default function Tag({
 	active,
 	isEditModeEnabled = false,
 	data,
-	children,
 	href,
 }: TagProps) {
 	const {

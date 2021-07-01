@@ -146,7 +146,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 		});
 		const token = await jwtSignPat({
 			sub: id,
-			iss: "https://bookmarky.io",
 			scopes,
 		});
 		return {

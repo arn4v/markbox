@@ -3,12 +3,14 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { createVerifier, createSigner } from "fast-jwt";
 import { hash, genSalt, compare } from "bcrypt";
 import { isProd } from "~/config";
-import nextConnect from "next-connect";
+import nextConnect, { ErrorHandler, Middleware } from "next-connect";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { CookieSerializeOptions, serialize } from "cookie";
 import ApiResponse from "~/types/ApiResponse";
 import { createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import ApiRequest from "~/types/ApiRequest";
+import DecodedPat from "~/types/DecodedPat";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Auth Utils                                 */
@@ -48,8 +50,8 @@ export const prisma = global.prisma as PrismaClient;
 /*                                Next Connect                                */
 /* -------------------------------------------------------------------------- */
 
-export const routeHandler = <Res extends NextApiResponse>() =>
-	nextConnect<NextApiRequest, Res>();
+export const routeHandler = <Req = NextApiRequest, Res = NextApiResponse>() =>
+	nextConnect<Req, Res>();
 
 /* -------------------------------------------------------------------------- */
 /*                                Cookie utils                                */
@@ -111,6 +113,60 @@ export const jwtSignPat = createSigner({
 	key: async () => process.env.JWT_SECRET_PAT,
 });
 
-export const jwtVerifyPath = createVerifier({
+export const createPat = async (id: string, scopes: string[]) => {
+	return await jwtSignPat({
+		sub: id,
+		scopes,
+	});
+};
+
+export const jwtVerifyPat = createVerifier({
 	key: async () => process.env.JWT_SECRET_PAT,
 });
+
+export const ncOnError: ErrorHandler<NextApiRequest, ApiResponse> = async (
+	err,
+	req,
+	res,
+	next,
+) => {};
+
+export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
+	req,
+	res,
+	next,
+) => {
+	const auth = req.headers.authorization;
+	if (!auth)
+		res.status(400).send({ message: "Authorization header not found." });
+	const isMatching = /^Bearer\s+(.+)/.exec(auth);
+	if (isMatching) {
+		try {
+			const decoded = (await jwtVerifyPat(auth.split(" ")[1])) as DecodedPat;
+			try {
+				const { userId } = await prisma.accessToken.findUnique({
+					where: {
+						id: decoded.sub,
+					},
+					select: {
+						userId: true,
+					},
+				});
+				req.ctx = {
+					decodedJwt: decoded,
+					userId,
+				};
+				next();
+			} catch (err) {
+				res.status(500).send({ message: "Unable to get userId for token." });
+			}
+		} catch (err) {
+			res.status(400).send({ message: "Invalid token." });
+		}
+		return;
+	} else {
+		res.status(400).send({
+			message: 'Invalid Authorization header format. Valid: "Bearer <token>"',
+		});
+	}
+};

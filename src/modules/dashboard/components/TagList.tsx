@@ -49,9 +49,7 @@ export default function TagList() {
 					active={typeof router.query.tag === "undefined"}
 					href="/dashboard"
 					data={{ id: undefined, name: "All" }}
-				>
-					All
-				</Tag>
+				/>
 				{data?.tags?.map((item) => {
 					return (
 						<Tag
@@ -65,9 +63,7 @@ export default function TagList() {
 								})
 							}
 							active={router.query?.tag === item.name.toLowerCase()}
-						>
-							{item.name}
-						</Tag>
+						/>
 					);
 				})}
 			</div>
