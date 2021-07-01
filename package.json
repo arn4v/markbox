@@ -28,7 +28,7 @@
 		"start-docker": "docker-compose up -d",
 		"lint": "next lint",
 		"lint-fix": "next lint --fix",
-		"add-user": "node ./scripts/add-user.js"
+		"add-user": "node ./scripts/add-user.mjs"
 	},
 	"dependencies": {
 		"@prisma/client": "^2.25.0",

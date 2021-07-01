@@ -68,6 +68,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		{
 			onSuccess(data) {
 				const { title, url, tags } = data.bookmark;
+				console.log(transformTags(tags));
 				setState({
 					title,
 					url,

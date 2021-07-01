@@ -1,5 +1,8 @@
+import { PrismaClient } from "@prisma/client";
+
 export default class DataService {
 	private _instance: DataService;
+	private static prisma = new PrismaClient();
 
 	private constructor() {}
 

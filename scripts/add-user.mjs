@@ -1,7 +1,8 @@
-const { PrismaClient } = require("@prisma/client");
-const { hashSync } = require("bcrypt");
-const dotenv = require("dotenv");
-const arg = require("arg");
+/* eslint-disable */
+import Prisma from "@prisma/client";
+import { hashSync } from "bcrypt";
+import arg from "arg";
+import dotenv from "dotenv";
 
 dotenv.config();
 const args = arg({
@@ -11,14 +12,12 @@ const args = arg({
 	"-p": "--password",
 });
 
-const prisma = new PrismaClient();
-
 if (!args["--email"] || !args["--password"]) {
 	console.log("USAGE: node add-user.js --email <email> --password <password>");
 	process.exit(1);
-}
+} else {
+	const prisma = new Prisma.PrismaClient();
 
-(async () => {
 	await prisma.user.upsert({
 		where: {
 			email: args["--email"],
@@ -31,4 +30,4 @@ if (!args["--email"] || !args["--password"]) {
 		select: { email: true },
 	});
 	await prisma.$disconnect();
-})();
+}
