@@ -16,7 +16,10 @@ const passwordSchema = Joi.string().min(6).max(16).required();
 
 export default withCookies(
 	routeHandler().post(async (req: NextApiRequest, res) => {
-		const { email, password } = req.body as { email: string; password: string };
+		const { email, password } = req.body as {
+			email: string;
+			password: string;
+		};
 		try {
 			try {
 				await bodySchema.validateAsync(req.body);

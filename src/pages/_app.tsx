@@ -1,3 +1,4 @@
+import * as React from "react";
 import "~/styles/index.css";
 import "@reach/dialog/styles.css";
 import "inter-ui/inter.css";

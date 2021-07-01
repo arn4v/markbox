@@ -31,9 +31,8 @@
 		"add-user": "node ./scripts/add-user.mjs"
 	},
 	"dependencies": {
-		"@prisma/client": "^2.25.0",
+		"@prisma/client": "^2.26.0",
 		"@radix-ui/react-icons": "^1.0.3",
-		"@reach/dialog": "^0.15.2",
 		"@reach/portal": "^0.15.2",
 		"apollo-server-micro": "^2.25.2",
 		"arg": "^5.0.0",
@@ -50,7 +49,7 @@
 		"inter-ui": "^3.19.2",
 		"joi": "^17.4.0",
 		"ms": "^2.1.3",
-		"next": "10",
+		"next": "11",
 		"next-connect": "^0.10.1",
 		"next-seo": "^4.26.0",
 		"next-themes": "^0.0.15",
@@ -63,15 +62,15 @@
 		"react-query": "^3.18.1",
 		"react-use": "^17.2.4",
 		"redaxios": "^0.4.1",
-		"zustand": "^3.5.4"
+		"zustand": "^3.5.5"
 	},
 	"devDependencies": {
 		"@graphql-codegen/add": "^2.0.2",
-		"@graphql-codegen/cli": "^1.21.5",
-		"@graphql-codegen/typescript": "^1.22.3",
-		"@graphql-codegen/typescript-operations": "^1.18.2",
-		"@graphql-codegen/typescript-react-query": "^1.3.3",
-		"@graphql-codegen/typescript-resolvers": "^1.19.4",
+		"@graphql-codegen/cli": "^1.21.6",
+		"@graphql-codegen/typescript": "^1.22.4",
+		"@graphql-codegen/typescript-operations": "^1.18.3",
+		"@graphql-codegen/typescript-react-query": "^1.3.4",
+		"@graphql-codegen/typescript-resolvers": "^1.19.5",
 		"@next/bundle-analyzer": "^11.0.1",
 		"@tailwindcss/forms": "^0.3.3",
 		"@types/bcrypt": "^5.0.0",
@@ -82,17 +81,17 @@
 		"@types/nodemailer": "^6.4.2",
 		"@types/project-name-generator": "^2.1.0",
 		"@types/qs": "^6.9.6",
-		"@types/react": "^17.0.11",
+		"@types/react": "^17.0.12",
 		"@types/react-dom": "^17.0.8",
 		"autoprefixer": "^10.2.6",
 		"concurrently": "^6.2.0",
 		"eslint": "^7.29.0",
-		"eslint-config-next": "10",
-		"nodemon": "^2.0.7",
+		"eslint-config-next": "11",
+		"nodemon": "^2.0.9",
 		"postcss": "^8.3.5",
 		"prettier": "^2.3.2",
-		"prisma": "^2.25.0",
+		"prisma": "^2.26.0",
 		"tailwindcss": "^2.2.4",
-		"typescript": "^4.3.4"
+		"typescript": "^4.3.5"
 	}
 }
