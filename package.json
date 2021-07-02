@@ -76,6 +76,7 @@
 		"@graphql-codegen/typescript-resolvers": "^1.19.5",
 		"@next/bundle-analyzer": "^11.0.1",
 		"@tailwindcss/forms": "^0.3.3",
+		"@tailwindcss/typography": "^0.4.1",
 		"@types/bcrypt": "^5.0.0",
 		"@types/cookie": "^0.4.0",
 		"@types/joi": "^17.2.3",
