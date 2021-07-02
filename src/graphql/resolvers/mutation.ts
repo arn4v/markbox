@@ -1,11 +1,8 @@
-import GQLContext from "~/types/GQLContext";
-import { MutationResolvers } from "../types.generated";
 import { pickKeys } from "~/lib/misc";
-import protectResolver from "../protect-resolver";
-import { randomUUID } from "crypto";
-import generateToken from "../mutations/generateToken";
-import { Prisma } from "@prisma/client";
 import { jwtSignPat } from "~/lib/utils.server";
+import GQLContext from "~/types/GQLContext";
+import protectResolver from "../protect-resolver";
+import { MutationResolvers } from "../types.generated";
 
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
@@ -80,12 +77,54 @@ const Mutation: MutationResolvers<GQLContext> = {
 	},
 	async deleteBookmark(_, { id }, { prisma, req, res }) {
 		await protectResolver(req, res);
-		const deleted = await prisma.bookmark.delete({
+
+		/**
+		 * Deleting a bookmark should also delete tags that were only
+		 * associated with that one bookmark
+		 *
+		 * Currently prisma does not have support for referential actions
+		 * Hence, we need to fetch tags associated with that bookmark
+		 * Then filter tags to find orphan tags and delete them
+		 */
+		const tags = await prisma.tag.findMany({
+			where: {
+				bookmarks: {
+					every: {
+						id,
+					},
+				},
+			},
+			select: {
+				id: true,
+				bookmarks: {
+					select: {
+						id: true,
+					},
+				},
+			},
+		});
+
+		const toDelete = tags.filter((item) => {
+			if (item.bookmarks.length === 1 && item.bookmarks[0].id === id) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		const _bookmark = await prisma.bookmark.delete({
 			where: {
 				id,
 			},
 		});
-		return !!deleted;
+
+		const _tags = await prisma.tag.deleteMany({
+			where: {
+				AND: toDelete.map(({ id }) => ({ id })),
+			},
+		});
+
+		return !!_bookmark && !!_tags;
 	},
 	async deleteTag(_, { id }, { req, res, prisma }) {
 		await protectResolver(req, res);
