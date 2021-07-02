@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { HiArrowRight } from "react-icons/hi";
 import { Logo } from "~/components/Logo";
+import { useAuth } from "~/hooks/use-auth";
 import { getDocsSlugs, getSourceFromSlugArray } from "~/lib/docs-mdx";
 
 interface Props {
@@ -59,6 +60,7 @@ const sidebarData: Category[] = [
 ];
 
 export default function DocsPage({ code, metadata }: Props) {
+	const { isAuthenticated, isLoading, user } = useAuth();
 	const Component = React.useMemo(() => getMDXComponent(code), [code]);
 	const router = useRouter();
 	const slug = "/docs/" + (router.query.slug as string[]).join("/");
@@ -66,10 +68,10 @@ export default function DocsPage({ code, metadata }: Props) {
 	return (
 		<>
 			<NextSeo title={metadata.seo_title} />
-			<div className="w-screen h-screen bg-white">
+			<div className="w-screen h-screen text-black bg-white dark:text-white dark:bg-black">
 				<div className="flex w-3/5 h-full mx-auto">
-					<div className="sticky flex flex-col items-start justify-start w-1/5 h-full gap-8 pt-8 border-r border-gray-300">
-						<Logo className="text-black" />
+					<div className="sticky flex flex-col items-start justify-start w-1/5 h-full gap-8 pt-8 border-r border-gray-300 dark:border-gray-600">
+						<Logo className="text-black dark:text-white" />
 						<div className="flex flex-col w-full gap-8">
 							{sidebarData.map((item) => {
 								return (
@@ -87,10 +89,10 @@ export default function DocsPage({ code, metadata }: Props) {
 													>
 														<a
 															className={clsx([
-																"block py-1 px-2 rounded-l-md",
+																"block py-1 px-2 rounded-l-md transition",
 																slug === child.href
-																	? "bg-cyan-100 text-black border-r-2 border-cyan-600 font-medium"
-																	: "hover:bg-cyan-100",
+																	? "bg-cyan-100 dark:bg-cyan-200 dark:mix-blend-multiply border-r-4 border-cyan-600 dark:border-cyan-700 font-medium text-black"
+																	: "hover:bg-cyan-100 dark:hover:bg-cyan-200 dark:hover:text-black dark:text-white",
 															])}
 														>
 															{child.title}
@@ -105,13 +107,13 @@ export default function DocsPage({ code, metadata }: Props) {
 						</div>
 					</div>
 					<div className="flex flex-col flex-grow pt-8">
-						<Link href="/login">
-							<a className="flex items-center gap-2 ml-auto">
-								Login <HiArrowRight />
+						<Link href={isAuthenticated ? "/dashboard" : "/login"}>
+							<a className="flex items-center gap-2 pb-px ml-auto transition border-gray-400 hover:border-b">
+								{isAuthenticated ? "Dashboard" : "Login"} <HiArrowRight />
 							</a>
 						</Link>
-						<article className="px-8 pt-8 flex-grow-1">
-							<h1 className="mb-8 text-2xl font-bold">{metadata.title}</h1>
+						<article className="px-8 pt-8 prose dark:prose-dark flex-grow-1">
+							<h1 className="mb-8">{metadata.title}</h1>
 							<Component />
 						</article>
 					</div>

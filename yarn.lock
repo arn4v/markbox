@@ -1692,6 +1692,11 @@
   dependencies:
     source-map "*"
 
+"@types/tailwindcss@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/@types/tailwindcss/-/tailwindcss-2.2.0.tgz#db107d3e4909046ff17e1a72595ab74660fadfd8"
+  integrity sha512-cqWRvax3s3ZcbBSPPxWeUjBUF4ciNgN5Q5FOYCtEN83K5IMCsrUk+PUI++UBW+QA0YwnH4GTui7vQKCs7MEKYg==
+
 "@types/tapable@^1":
   version "1.0.7"
   resolved "https://registry.npmjs.org/@types/tapable/-/tapable-1.0.7.tgz#545158342f949e8fd3bfd813224971ecddc3fac4"

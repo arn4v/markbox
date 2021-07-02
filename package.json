@@ -87,6 +87,7 @@
 		"@types/qs": "^6.9.6",
 		"@types/react": "^17.0.12",
 		"@types/react-dom": "^17.0.8",
+		"@types/tailwindcss": "^2.2.0",
 		"autoprefixer": "^10.2.6",
 		"concurrently": "^6.2.0",
 		"eslint": "^7.29.0",
