@@ -51,15 +51,15 @@ export default function CreateBookmarkDrawer() {
 			<DrawerContent
 				placement={drawerPlacement}
 				className={clsx([
-					"p-8 bg-blueGray-700",
-					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
+					"p-8 bg-white dark:bg-blueGray-700 dark:text-white",
+					"lg:h-screen lg:w-1/3 lg:rounded-l-lg w-screen h-auto rounded-t-lg",
 				])}
 			>
 				<div className="flex items-center justify-between w-full">
 					<h1 className="text-lg font-bold">Create new bookmark</h1>
 					<button
 						onClick={onClose}
-						className="p-2 transition rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500"
+						className="p-2 transition bg-gray-100 rounded-lg dark:bg-blueGray-600 focus:outline-none focus:ring ring-black dark:hover:bg-blueGray-500"
 					>
 						<HiX />
 						<span className="sr-only">Close drawer</span>
@@ -93,7 +93,7 @@ export default function CreateBookmarkDrawer() {
 							<input
 								id="title"
 								type="text"
-								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-gray-300 dark:ring-black caret-black"
 								onChange={(e) =>
 									setState((prev) => ({ ...prev, title: e.target.value }))
 								}
@@ -109,7 +109,7 @@ export default function CreateBookmarkDrawer() {
 							<input
 								id="url"
 								type="url"
-								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-gray-300 dark:ring-black caret-black"
 								value={state.url}
 								autoComplete="off"
 								onChange={(e) =>
@@ -154,19 +154,21 @@ export default function CreateBookmarkDrawer() {
 									type="button"
 									onClick={() => {
 										const tagName = newTagInputRef.current.value.trim();
-										setState((prev) => ({
-											...prev,
-											newTag: "",
-											tags: {
-												...prev.tags,
-												[tagName]: {
-													name: tagName,
-												},
-											},
-										}));
 										newTagInputRef.current.value = "";
+										if (tagName.length > 0) {
+											setState((prev) => ({
+												...prev,
+												newTag: "",
+												tags: {
+													...prev.tags,
+													[tagName]: {
+														name: tagName,
+													},
+												},
+											}));
+										}
 									}}
-									className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-blueGray-600"
+									className="grid h-10 px-4 text-sm font-medium transition bg-gray-100 border border-gray-300 rounded-md whitespace-nowrap place-items-center hover:bg-gray-200 dark:bg-blueGray-600 dark:border-transparent"
 								>
 									Add tag
 								</button>
@@ -174,7 +176,7 @@ export default function CreateBookmarkDrawer() {
 						</div>
 						<button
 							type="submit"
-							className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none"
+							className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-blueGray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-blueGray-500 focus:ring ring-black focus:outline-none"
 						>
 							Submit
 						</button>

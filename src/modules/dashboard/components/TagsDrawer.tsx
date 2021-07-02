@@ -1,18 +1,15 @@
+import { CardStackIcon } from "@radix-ui/react-icons";
 import clsx from "clsx";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import QueryString from "qs";
 import React from "react";
-import { HiCog, HiLogout, HiMenu, HiOutlineTemplate } from "react-icons/hi";
 import Drawer, { DrawerContent } from "~/components/Drawer";
+import { useGetAllTagsQuery } from "~/graphql/types.generated";
 import { useAuth } from "~/hooks/use-auth";
 import useDisclosure from "~/hooks/use-disclosure";
-import useStore from "./CreateBookmark";
-import CreateBookmarkButton from "./CreateBookmark";
-import { CardStackIcon } from "@radix-ui/react-icons";
-import Tag from "./Tag";
-import { useGetAllTagsQuery } from "~/graphql/types.generated";
-import QueryString from "qs";
 import { omitKeys } from "~/lib/misc";
+import useStore from "./CreateBookmark";
+import Tag from "./Tag";
 
 export default function TagsDrawer(): JSX.Element {
 	const { user } = useAuth();
@@ -38,7 +35,7 @@ export default function TagsDrawer(): JSX.Element {
 			<Drawer isOpen={isOpen} onClose={onClose}>
 				<DrawerContent
 					placement="bottom"
-					className="w-full h-auto py-8 rounded-t-lg dark:bg-blueGray-700"
+					className="w-full h-auto py-8 bg-white rounded-t-lg dark:bg-blueGray-700"
 				>
 					<ul className={clsx(["flex flex-col w-full gap-4 px-6 text-base"])}>
 						<h1 className="text-lg font-bold">Tags</h1>

@@ -1,11 +1,11 @@
-import * as React from "react";
 import clsx from "clsx";
-import { Tag as TagType, useGetTagQuery } from "~/graphql/types.generated";
-import useDisclosure from "~/hooks/use-disclosure";
-import EditTagPopup from "./EditTag";
-import DeleteTagPopup from "./DeleteTag";
-import useBreakpoints from "~/hooks/use-breakpoints";
 import Link from "next/link";
+import * as React from "react";
+import { Tag as TagType } from "~/graphql/types.generated";
+import useBreakpoints from "~/hooks/use-breakpoints";
+import useDisclosure from "~/hooks/use-disclosure";
+import DeleteTagPopup from "./DeleteTag";
+import EditTagPopup from "./EditTag";
 
 interface TagProps {
 	data: TagType;
@@ -37,15 +37,11 @@ export default function Tag({
 			<Link href={href}>
 				<a
 					className={clsx([
-						"px-4 py-2 flex-grow transition rounded-md",
+						"px-4 py-2 flex-grow transition rounded-md dark:text-white",
 						isDeleteOpen && "z-30",
 						active
-							? isLg
-								? "bg-blueGray-600"
-								: "bg-blueGray-500"
-							: isLg
-							? "bg-blueGray-700 hover:bg-blueGray-600"
-							: "bg-blueGray-600 hover:bg-blueGray-500",
+							? "dark:bg-blueGray-500 lg:dark:bg-blueGray-600 bg-gray-200 font-medium"
+							: "lg:dark:bg-blueGray-700 lg:dark:hover:bg-blueGray-600 dark:bg-blueGray-600 dark:hover:bg-blueGray-500 bg-gray-100 hover:bg-gray-200",
 					])}
 				>
 					{data.name}

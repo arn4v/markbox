@@ -21,7 +21,7 @@ export default function Token({ data }: Props) {
 			<div className="flex items-center justify-between px-4 py-4">
 				{data.name}
 				<button
-					className="px-2 py-1 text-sm text-red-500 transition border rounded dark:border-blueGray-500 hover:text-white bg-blueGray-700 hover:bg-red-500"
+					className="px-2 py-1 text-sm text-red-500 transition border border-red-500 rounded hover:bg-red-500 hover:text-white dark:border-none dark:bg-red-500 dark:text-white dark:hover:bg-red-600"
 					onClick={onOpen}
 				>
 					Delete
@@ -34,19 +34,19 @@ export default function Token({ data }: Props) {
 				overlayProps={{ className: "bg-black/[0.75]" }}
 			>
 				<ModalContent
-					className="w-4/5 lg:h-[15%] lg:w-1/5 flex flex-col items-center justify-center bg-blueGray-700 p-6 gap-4 lg:gap-8 rounded-lg"
+					className="w-4/5 lg:h-[15%] lg:w-1/5 flex flex-col items-center justify-center bg-white dark:bg-blueGray-700 p-6 gap-4 lg:gap-8 rounded-lg"
 					initial={{ opacity: 0, y: -20 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: -20 }}
 					transition={{ duration: 0.2 }}
 				>
-					<p className="mx-auto font-medium text-center lg:text-lg">
+					<p className="mx-auto font-medium text-center lg:text-lg dark:text-white">
 						Do you really want to delete this token?
 					</p>
 					<div className="flex items-center justify-between w-full">
 						<button
 							onClick={onClose}
-							className="px-2 py-1 transition rounded bg-blueGray-600 hover:bg-blueGray-500"
+							className="px-2 py-1 transition bg-gray-100 border border-gray-300 rounded hover:border-gray-200 dark:text-white dark:bg-blueGray-600 dark:border-none dark:hover:bg-blueGray-500"
 						>
 							Cancel
 						</button>
@@ -54,7 +54,7 @@ export default function Token({ data }: Props) {
 							onClick={() => {
 								mutate({ id: data.id });
 							}}
-							className="px-2 py-1 transition bg-red-500 rounded hover:bg-red-600"
+							className="px-2 py-1 text-red-500 transition border border-red-500 rounded hover:bg-red-500 hover:text-white dark:border-none dark:bg-red-500 dark:text-white dark:hover:bg-red-600"
 						>
 							Delete
 						</button>

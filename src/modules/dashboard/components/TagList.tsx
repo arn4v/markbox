@@ -36,12 +36,14 @@ export default function TagList() {
 				>
 					Tags
 				</h2>
-				<button
-					className="px-2 py-0.5 bg-blueGray-700 hover:bg-blueGray-600 transition rounded-md text-sm focus:outline-none"
-					onClick={onEditModeToggle}
-				>
-					{isEditModeEnabled ? "Dismiss" : "Edit"}
-				</button>
+				{data?.tags.length > 0 && (
+					<button
+						className="px-2 py-0.5 dark:bg-blueGray-700 bg-gray-200 hover:bg-gray-300 dark:hover:bg-blueGray-600 transition rounded-md text-sm focus:outline-none"
+						onClick={onEditModeToggle}
+					>
+						{isEditModeEnabled ? "Dismiss" : "Edit"}
+					</button>
+				)}
 			</div>
 			<div className="flex flex-col items-center justify-start w-full gap-2 my-2">
 				<Tag

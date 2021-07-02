@@ -30,12 +30,12 @@ const BookmarkCard = ({ data }: Props) => {
 	const queryClient = useQueryClient();
 
 	return (
-		<div className="flex items-center justify-between w-full p-3 rounded-lg bg-blueGray-700">
+		<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-blueGray-700">
 			<div className="flex flex-col items-start justify-center w-5/6 gap-1">
-				<span className="text-xs text-white">
+				<span className="text-xs">
 					{format(new Date(data?.createdAt), "do MMMM, yyyy")}
 				</span>
-				<div className="w-5/6 text-sm font-medium text-white break-words">
+				<div className="w-5/6 text-sm font-medium break-words">
 					{data?.title}
 				</div>
 				<a
@@ -70,16 +70,16 @@ const BookmarkCard = ({ data }: Props) => {
 								onClick={onDropdownToggle}
 								aria-expanded={isDropdownOpen}
 								aria-haspopup={true}
-								className="p-1 transition rounded-full hover:bg-blueGray-600 focus:outline-none"
+								className="p-1 transition rounded-full hover:bg-gray-300 dark:hover:bg-blueGray-600 focus:outline-none"
 							>
 								<HiOutlineMenu className="w-5 h-5" />
 							</button>
 						}
 					>
-						<ul className="flex flex-col w-48 mt-1 overflow-hidden rounded-lg dark:bg-blueGray-600">
-							<li className="w-full border-b border-blueGray-400">
+						<ul className="flex flex-col w-48 mt-1 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg dark:border-none dark:bg-blueGray-600">
+							<li className="w-full border-b border-gray-300 dark:border-blueGray-400">
 								<button
-									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none"
+									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none hover:bg-gray-300"
 									onClick={() => {
 										onOpen();
 										onDropdownClose();
@@ -90,7 +90,7 @@ const BookmarkCard = ({ data }: Props) => {
 							</li>
 							<li className="w-full">
 								<button
-									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none"
+									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-blueGray-500 focus:outline-none hover:bg-gray-300"
 									onClick={() => {
 										mutate({ id: data.id });
 										onDropdownClose();

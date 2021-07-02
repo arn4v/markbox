@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import Spinner from "~/components/Spinner";
 import {
-	useGetAllBookmarksQuery,
-	useGetAllTagsQuery,
+	useGetAllBookmarksQuery
 } from "~/graphql/types.generated";
 import BookmarkCard from "./BookmarkCard";
 import { CreateBookmarkButton } from "./CreateBookmark";
@@ -32,12 +31,15 @@ export default function BookmarksGrid() {
 					})}
 				</div>
 			) : (
-				<div className="flex flex-col items-center justify-center gap-8 py-8 rounded-lg bg-blueGray-700">
+				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-blueGray-700 dark:text-white">
 					<span className="text-xl font-medium">
 						You don't have any bookmarks yet.
 					</span>
 					<div>
-						<CreateBookmarkButton className="block mx-auto bg-blueGray-600 hover:bg-blueGray-500" />
+						<CreateBookmarkButton
+							className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-blueGray-500 dark:hover:bg-blueGray-600"
+							showText
+						/>
 					</div>
 				</div>
 			)}

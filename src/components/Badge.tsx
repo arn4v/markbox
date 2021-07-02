@@ -20,7 +20,7 @@ export default function Badge({
 	return (
 		<div
 			className={clsx([
-				"flex gap-1.5 px-2 py-1 text-xs font-medium text-white items-center justify-center uppercase rounded-full",
+				"flex gap-1.5 px-2 py-1 text-xs font-medium dark:text-white items-center justify-center uppercase rounded-full",
 				variant === "solid" && `bg-[${colors[color]}]`,
 				variant === "outline" &&
 					`border border-[${colors[color]}] bg-white dark:bg-blueGray-600`,
