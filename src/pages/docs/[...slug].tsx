@@ -1,18 +1,20 @@
 import clsx from "clsx";
-import { bundleMDX } from "mdx-bundler";
-import { getMDXComponent } from "mdx-bundler/client";
+import matter from "gray-matter";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import * as React from "react";
 import { HiArrowRight } from "react-icons/hi";
 import { Logo } from "~/components/Logo";
 import { useAuth } from "~/hooks/use-auth";
 import { getDocsSlugs, getSourceFromSlugArray } from "~/lib/docs-mdx";
+import { Awaited } from "~/types";
 
 interface Props {
-	code: string;
+	code: Awaited<ReturnType<typeof serialize>>;
 	metadata: Metadata;
 }
 
@@ -61,7 +63,6 @@ const sidebarData: Category[] = [
 
 export default function DocsPage({ code, metadata }: Props) {
 	const { isAuthenticated, isLoading, user } = useAuth();
-	const Component = React.useMemo(() => getMDXComponent(code), [code]);
 	const router = useRouter();
 	const slug = "/docs/" + (router.query.slug as string[]).join("/");
 
@@ -114,7 +115,7 @@ export default function DocsPage({ code, metadata }: Props) {
 						</Link>
 						<article className="px-8 pt-8 prose dark:prose-dark flex-grow-1">
 							<h1 className="mb-8">{metadata.title}</h1>
-							<Component />
+							<MDXRemote {...code} />
 						</article>
 					</div>
 				</div>
@@ -127,28 +128,29 @@ export const getStaticProps: GetStaticProps<Props, { slug: string[] }> = async (
 	ctx,
 ) => {
 	const source = getSourceFromSlugArray(ctx.params.slug);
-	const { code, frontmatter } = await bundleMDX(source, {
-		xdmOptions(options) {
-			options.rehypePlugins = [
-				...(options.rehypePlugins ?? []),
-				require("mdx-prism"),
-			];
-
-			options.remarkPlugins = [
-				...(options.remarkPlugins ?? []),
-				require("remark-autolink-headings"),
+	const { content, data } = matter(source);
+	const code = await serialize(content, {
+		mdxOptions: {
+			remarkPlugins: [
 				require("remark-code-titles"),
+				[
+					require("remark-autolink-headings"),
+					{
+						linkProperties: {
+							className: ["anchor"],
+						},
+					},
+				],
 				require("remark-slug"),
-			];
-
-			return options;
+			],
+			rehypePlugins: [require("mdx-prism")],
 		},
 	});
 
 	return {
 		props: {
 			code,
-			metadata: frontmatter as Metadata,
+			metadata: data as Metadata,
 		},
 	};
 };
@@ -159,7 +161,7 @@ export const getStaticPaths: GetStaticPaths<{ slug: string[] }> = async () => {
 	return {
 		paths: slugs.map((item) => {
 			return {
-				params: { slug: item.replace(/\.mdx/, "").split("/") },
+				params: { slug: item.replace(/\.mdx?/, "").split("/") },
 			};
 		}),
 		fallback: false,

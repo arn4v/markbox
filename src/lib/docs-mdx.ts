@@ -16,7 +16,7 @@ export const getMdxFiles = (
 	const folders = [];
 
 	fs.readdirSync(folderPath).forEach((item) => {
-		if (/\.mdx/.exec(item)) {
+		if (/\.mdx?/.test(item)) {
 			mdxFiles.push(
 				`${folderSlugPath.length > 0 ? folderSlugPath + "/" : ""}${item}`,
 			);
@@ -40,7 +40,12 @@ export const getMdxFiles = (
 };
 
 export const getSourceFromSlugArray = (slug: string[]) => {
-	return fs.readFileSync(path.resolve(DOCS_PATH, slug.join("/") + ".mdx"), {
+	let filePath = path.resolve(DOCS_PATH, slug.join("/") + ".md");
+	if (!fs.existsSync(filePath)) {
+		filePath += "x";
+	}
+
+	return fs.readFileSync(filePath, {
 		encoding: "utf-8",
 	});
 };

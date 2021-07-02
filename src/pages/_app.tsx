@@ -1,12 +1,13 @@
-import * as React from "react";
-import "~/styles/index.css";
 import "inter-ui/inter.css";
+import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import { QueryClientProvider, QueryClient } from "react-query";
+import "prism-themes/themes/prism-gruvbox-dark.css";
+import * as React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { defaultSeoProps, isProd } from "~/config";
-import { DefaultSeo } from "next-seo";
+import "~/styles/index.css";
 
 const queryClient = new QueryClient();
 

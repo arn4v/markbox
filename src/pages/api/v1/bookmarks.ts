@@ -1,12 +1,12 @@
+import * as yup from "yup";
+import { omitKeys } from "~/lib/misc";
 import {
 	patAuthMiddleware,
 	prisma,
 	routeHandler,
-	withCookies,
+	withCookies
 } from "~/lib/utils.server";
-import * as yup from "yup";
 import ApiRequest from "~/types/ApiRequest";
-import { omitKeys } from "~/lib/misc";
 
 interface GetBody {
 	id?: string;
