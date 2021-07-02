@@ -31,6 +31,10 @@ let config = {
 				source: "/settings",
 				destination: "/settings/account",
 			},
+			{
+				source: "/docs",
+				destination: "/docs/introduction",
+			},
 		];
 	},
 };
