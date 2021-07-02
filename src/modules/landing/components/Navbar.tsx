@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { HiArrowRight, HiChevronRight } from "react-icons/hi";
+import { HiArrowRight } from "react-icons/hi";
 import { Logo } from "~/components/Logo";
 import { useAuth } from "~/hooks/use-auth";
-import NavLinks from "./NavLinks";
 
 export default function Navbar() {
 	const { isAuthenticated } = useAuth();
 	return (
-		<header className="container flex items-center justify-between gap-3 p-5 mx-auto text-gray-600">
+		<header className="container flex items-center justify-between w-full gap-3 p-5 mx-auto text-gray-600 bg-white shadow-md dark:shadow-none dark:bg-transparent">
 			<Link href="/">
 				<a className="flex items-center font-medium text-gray-900 title-font">
 					<Logo className="text-black dark:text-white" />

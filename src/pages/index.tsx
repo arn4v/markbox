@@ -1,4 +1,3 @@
-import { NextSeo } from "next-seo";
 import Footer from "~/modules/landing/components/Footer";
 import Header from "~/modules/landing/components/Header";
 import Navbar from "~/modules/landing/components/Navbar";
