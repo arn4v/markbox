@@ -1,4 +1,7 @@
-let config = {
+const withPWA = require("next-pwa");
+const runtimeCaching = require("next-pwa/cache");
+
+let config = withPWA({
 	webpack: (config) => {
 		return config;
 	},
@@ -18,6 +21,11 @@ let config = {
 			},
 		];
 	},
-};
+	pwa: {
+		dest: "public",
+		disable: process.env.NODE_ENV !== "production",
+		runtimeCaching,
+	},
+});
 
 module.exports = config;
