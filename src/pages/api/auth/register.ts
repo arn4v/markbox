@@ -1,18 +1,18 @@
 import { NextApiRequest } from "next";
+import * as yup from "yup";
 import {
-	withCookies,
 	hashPassword,
 	prisma,
 	routeHandler,
+	withCookies
 } from "~/lib/utils.server";
-import Joi from "joi";
 
-const bodySchema = Joi.object({
-	email: Joi.string().email().required(),
-	password: Joi.string().required(),
+const bodySchema = yup.object().shape({
+	email: yup.string().email().required(),
+	password: yup.string().required(),
 });
 
-const passwordSchema = Joi.string().min(6).max(16).required();
+const passwordSchema = yup.string().min(6).max(16).required();
 
 export default withCookies(
 	routeHandler().post(async (req: NextApiRequest, res) => {
@@ -22,7 +22,7 @@ export default withCookies(
 		};
 		try {
 			try {
-				await bodySchema.validateAsync(req.body);
+				await bodySchema.validate(req.body);
 
 				const user = await prisma.user.findUnique({
 					where: {
@@ -31,7 +31,7 @@ export default withCookies(
 				});
 
 				if (!user) {
-					await passwordSchema.validateAsync(password);
+					await passwordSchema.validate(password);
 					const hashedPassword = await hashPassword(password);
 
 					await prisma.user.create({

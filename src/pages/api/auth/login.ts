@@ -1,24 +1,24 @@
 import ms from "ms";
+import * as yup from "yup";
 import { isProd } from "~/config";
 import {
-	withCookies,
 	comparePassword,
 	jwtSign,
 	prisma,
 	routeHandler,
+	withCookies
 } from "~/lib/utils.server";
 import ApiResponse from "~/types/ApiResponse";
-import Joi from "joi";
 
-const bodySchema = Joi.object({
-	email: Joi.string().email().required(),
-	password: Joi.string().required(),
+const bodySchema = yup.object().shape({
+	email: yup.string().email().required(),
+	password: yup.string().required(),
 });
 
 const handler = routeHandler().post(async (req, res: ApiResponse) => {
 	const { email, password } = req.body as { email: string; password: string };
 	try {
-		await bodySchema.validateAsync(req.body);
+		await bodySchema.validate(req.body);
 		const user = await prisma.user.findFirst({
 			where: {
 				email,
