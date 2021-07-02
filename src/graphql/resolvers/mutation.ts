@@ -120,7 +120,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 
 		const _tags = await prisma.tag.deleteMany({
 			where: {
-				AND: toDelete.map(({ id }) => ({ id })),
+				OR: toDelete.map(({ id }) => ({ id: { equals: id } })),
 			},
 		});
 

@@ -9,10 +9,9 @@ import {
 	CreateOrUpdateBookmarkTagInput,
 	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useUpdateBookmarkMutation,
+	useUpdateBookmarkMutation
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
-import { omitKeys, pickKeys } from "~/lib/misc";
 
 interface Props {
 	isOpen: boolean;
@@ -68,6 +67,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		{
 			onSuccess(data) {
 				const { title, url, tags } = data.bookmark;
+				console.log(tags);
 				console.log(transformTags(tags));
 				setState({
 					title,
@@ -134,6 +134,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 								</label>
 								<input
 									id="title"
+									autoComplete="off"
 									type="text"
 									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 									onChange={(e) =>
@@ -152,6 +153,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 									type="url"
 									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 									value={state.url}
+									autoComplete="off"
 									onChange={(e) =>
 										setState((prev) => ({ ...prev, url: e.target.value }))
 									}
@@ -179,6 +181,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 										id="tag"
 										ref={newTagInputRef}
 										type="text"
+										autoComplete="off"
 										className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 										list="tags"
 									/>

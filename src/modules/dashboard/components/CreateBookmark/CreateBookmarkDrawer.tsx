@@ -7,7 +7,7 @@ import Badge from "~/components/Badge";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
 	useCreateBookmarkMutation,
-	useGetAllTagsQuery,
+	useGetAllTagsQuery
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useStore from "./store";
@@ -55,11 +55,11 @@ export default function CreateBookmarkDrawer() {
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 				])}
 			>
-				<div className="w-full flex justify-between items-center">
+				<div className="flex items-center justify-between w-full">
 					<h1 className="text-lg font-bold">Create new bookmark</h1>
 					<button
 						onClick={onClose}
-						className="p-2 rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500 transition"
+						className="p-2 transition rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500"
 					>
 						<HiX />
 						<span className="sr-only">Close drawer</span>
@@ -93,11 +93,12 @@ export default function CreateBookmarkDrawer() {
 							<input
 								id="title"
 								type="text"
-								className="rounded-lg block mt-2 w-full focus:outline-none focus:ring ring-black caret-black text-black h-10"
+								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 								onChange={(e) =>
 									setState((prev) => ({ ...prev, title: e.target.value }))
 								}
 								value={state.title}
+								autoComplete="off"
 								required
 							/>
 						</div>
@@ -108,8 +109,9 @@ export default function CreateBookmarkDrawer() {
 							<input
 								id="url"
 								type="url"
-								className="rounded-lg block mt-2 w-full focus:outline-none focus:ring ring-black caret-black text-black h-10"
+								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 								value={state.url}
+								autoComplete="off"
 								onChange={(e) =>
 									setState((prev) => ({ ...prev, url: e.target.value }))
 								}
@@ -120,7 +122,7 @@ export default function CreateBookmarkDrawer() {
 							<label htmlFor="url" className="block">
 								Tags
 							</label>
-							<div className="mt-2 flex flex-wrap gap-2">
+							<div className="flex flex-wrap gap-2 mt-2">
 								{Object.values(state.tags).map((item) => {
 									return (
 										<Badge
@@ -132,19 +134,22 @@ export default function CreateBookmarkDrawer() {
 									);
 								})}
 							</div>
-							<div className="mt-2 flex gap-6 w-full">
+							<div className="flex w-full gap-6 mt-2">
 								<input
 									id="tag"
 									ref={newTagInputRef}
 									type="text"
-									className="rounded-lg block w-full focus:outline-none focus:ring ring-black caret-black text-black h-10"
+									autoComplete="off"
+									className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 									list="tags"
 								/>
-								<datalist id="tags">
-									{data?.tags?.map((item) => {
-										return <option key={item.id} value={item.name} />;
-									})}
-								</datalist>
+								{data?.tags.length > 0 && (
+									<datalist id="tags">
+										{data?.tags?.map((item) => {
+											return <option key={item.id} value={item.name} />;
+										})}
+									</datalist>
+								)}
 								<button
 									type="button"
 									onClick={() => {
@@ -161,7 +166,7 @@ export default function CreateBookmarkDrawer() {
 										}));
 										newTagInputRef.current.value = "";
 									}}
-									className="px-4 h-10 whitespace-nowrap text-sm grid place-items-center bg-blueGray-600 rounded-md"
+									className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-blueGray-600"
 								>
 									Add tag
 								</button>
@@ -169,7 +174,7 @@ export default function CreateBookmarkDrawer() {
 						</div>
 						<button
 							type="submit"
-							className="ml-auto px-4 py-2 bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none rounded-md mt-4 transition"
+							className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none"
 						>
 							Submit
 						</button>

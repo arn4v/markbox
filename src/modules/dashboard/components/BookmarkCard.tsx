@@ -1,14 +1,12 @@
-import * as React from "react";
-import Badge from "~/components/Badge";
-import Drawer, { DrawerContent } from "~/components/Drawer";
-import Popup from "~/components/Popup";
-import clsx from "clsx";
 import format from "date-fns/format";
+import * as React from "react";
+import { HiOutlineMenu, HiPencil, HiTrash } from "react-icons/hi";
+import { useQueryClient } from "react-query";
+import Badge from "~/components/Badge";
+import Popup from "~/components/Popup";
+import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
-import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
-import { HiOutlineMenu, HiPencil, HiTrash, HiX } from "react-icons/hi";
-import { useQueryClient } from "react-query";
 import EditBookmarkDrawer from "./EditBookmarkDrawer";
 
 interface Props {
@@ -26,6 +24,7 @@ const BookmarkCard = ({ data }: Props) => {
 	const { mutate } = useDeleteBookmarkMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries("GetAllBookmarks");
+			queryClient.invalidateQueries("GetAllTags");
 		},
 	});
 	const queryClient = useQueryClient();

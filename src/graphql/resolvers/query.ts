@@ -1,8 +1,8 @@
-import { omitKeys, pickKeys } from "~/lib/misc";
+import { Prisma } from "@prisma/client";
+import { pickKeys } from "~/lib/misc";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { QueryResolvers, Tag } from "../types.generated";
-import { Prisma } from "@prisma/client";
 
 const Query: QueryResolvers<GQLContext> = {
 	async bookmark(_, { id }, { prisma, req, res }) {
@@ -13,16 +13,25 @@ const Query: QueryResolvers<GQLContext> = {
 			createdAt,
 			updatedAt,
 			url,
+			tags,
 		} = await prisma.bookmark.findFirst({
 			where: {
 				id,
+			},
+			include: {
+				tags: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
 			},
 		});
 		return {
 			id: _id,
 			title,
 			url,
-			tags: [],
+			tags,
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
 		};
