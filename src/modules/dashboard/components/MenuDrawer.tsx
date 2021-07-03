@@ -43,7 +43,7 @@ export default function MenuDrawer(): JSX.Element {
 				}}
 				className="focus:outline-none dark:text-white"
 			>
-				<HiMenu className="w-6 h-6" />
+				<HiMenu className="h-[20px] w-[20px]" />
 			</button>
 			<Drawer isOpen={isOpen} onClose={onClose}>
 				<DrawerContent
