@@ -4,9 +4,9 @@ import { HiTrash } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Popup from "~/components/Popup";
 import {
-	Tag,
-	useDeleteTagMutation,
-	useGetTagBookmarksCountQuery,
+    Tag,
+    useDeleteTagMutation,
+    useGetTagBookmarksCountQuery
 } from "~/graphql/types.generated";
 
 interface DeleteTagProps {
@@ -45,7 +45,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 							: {}
 					}
 					className={clsx([
-						"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
+						"py-2 dark:hover:bg-gray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
 					])}
 					onClick={onOpen}
 				>
@@ -53,7 +53,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 				</button>
 			}
 		>
-			<div className="p-2 flex flex-col gap-4 w-56 bg-blueGray-700 rounded-lg">
+			<div className="p-2 flex flex-col gap-4 w-56 bg-gray-900 rounded-lg">
 				<div className="text-center">
 					This tag is related to {countData?.tagBookmarksCount} bookmarks. Do
 					you really want to delete it?

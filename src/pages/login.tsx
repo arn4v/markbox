@@ -1,11 +1,11 @@
-import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import Link from "next/link";
-import * as React from "react";
+import { useRouter } from "next/router";
 import qs from "qs";
-import InfoBox from "~/components/InfoBox";
+import * as React from "react";
 import { useMutation } from "react-query";
 import axios from "redaxios";
-import { NextSeo } from "next-seo";
+import InfoBox from "~/components/InfoBox";
 
 interface LoginBody {
 	email: string;
@@ -51,7 +51,7 @@ export default function RegisterPage() {
 	return (
 		<>
 			<NextSeo title="Login" />
-			<div className="flex flex-col items-center justify-center w-screen min-h-screen gap-8 text-black bg-blueGray-50 dark:bg-blueGray-800 dark:text-white">
+			<div className="flex flex-col items-center justify-center w-screen min-h-screen gap-8 text-black bg-gray-50 dark:bg-black dark:text-white">
 				<div className="grid w-5/6 text-2xl font-bold lg:w-1/3 place-items-center">
 					Login
 				</div>
@@ -63,7 +63,7 @@ export default function RegisterPage() {
 						textColor="indigo-700"
 					/>
 				)}
-				<div className="w-5/6 px-10 py-6 bg-white rounded-lg shadow-lg lg:w-1/3 dark:bg-blueGray-700">
+				<div className="w-5/6 px-10 py-6 bg-white rounded-lg shadow-lg lg:w-1/3 dark:bg-gray-900">
 					<form
 						className="flex flex-col items-start justify-center w-full h-full gap-5"
 						onSubmit={(e) => {
@@ -75,7 +75,7 @@ export default function RegisterPage() {
 						<input
 							id="email"
 							type="email"
-							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
+							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-gray-600 dark:focus:bg-gray-500"
 							autoComplete="email"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, email: e.target.value }))
@@ -85,7 +85,7 @@ export default function RegisterPage() {
 						<label htmlFor="password">Password</label>
 						<input
 							id="password"
-							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-blueGray-600 dark:focus:bg-blueGray-500"
+							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-gray-600 dark:focus:bg-gray-500"
 							type="password"
 							onChange={(e) =>
 								setState((prev) => ({ ...prev, password: e.target.value }))

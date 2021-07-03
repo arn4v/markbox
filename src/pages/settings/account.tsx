@@ -9,7 +9,7 @@ export default function AccountSettingsPage() {
 				<div className="flex items-center justify-between w-full pb-4 border-b border-blueGray-500">
 					<span className="text-xl font-bold">Profile settings</span>
 				</div>
-				<div className="flex flex-col divide-y rounded-lg dark:divide-blueGray-400 dark:bg-blueGray-700"></div>
+				<div className="flex flex-col divide-y rounded-lg dark:divide-blueGray-400 dark:bg-gray-900"></div>
 			</div>
 		</SettingsPageWrapper>
 	);

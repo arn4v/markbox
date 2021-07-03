@@ -14,7 +14,7 @@ const DashboardPage = () => {
 	return (
 		<>
 			<NextSeo title="Dashboard" noindex />
-			<div className="flex flex-col w-screen h-screen overflow-hidden bg-white dark:bg-blueGray-800">
+			<div className="flex flex-col w-screen h-screen overflow-hidden bg-white dark:bg-black">
 				<Navbar />
 				<div className="flex w-full h-full mx-auto 2xl:w-3/5">
 					<Sidebar />

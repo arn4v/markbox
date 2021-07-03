@@ -36,7 +36,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 			trigger={
 				<button
 					className={clsx([
-						"py-2 dark:hover:bg-blueGray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
+						"py-2 dark:hover:bg-gray-500 flex transition gap-2 items-center justify-center focus:outline-none rounded-full h-6 w-6",
 						isOpen && "z-30",
 					])}
 					onClick={onOpen}
@@ -45,7 +45,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 				</button>
 			}
 		>
-			<div className="p-2 w-56 bg-blueGray-700 rounded-lg">
+			<div className="p-2 w-56 bg-gray-900 rounded-lg">
 				<form
 					className="w-full flex flex-col gap-4"
 					onSubmit={(e) => {

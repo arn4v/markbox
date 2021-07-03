@@ -34,7 +34,7 @@ export default function Token({ data }: Props) {
 				overlayProps={{ className: "bg-black/[0.75]" }}
 			>
 				<ModalContent
-					className="w-4/5 lg:h-[15%] lg:w-1/5 flex flex-col items-center justify-center bg-white dark:bg-blueGray-700 p-6 gap-4 lg:gap-8 rounded-lg"
+					className="w-4/5 lg:h-[15%] lg:w-1/5 flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
 					initial={{ opacity: 0, y: -20 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: -20 }}
@@ -46,7 +46,7 @@ export default function Token({ data }: Props) {
 					<div className="flex items-center justify-between w-full">
 						<button
 							onClick={onClose}
-							className="px-2 py-1 transition bg-gray-100 border border-gray-300 rounded hover:border-gray-200 dark:text-white dark:bg-blueGray-600 dark:border-none dark:hover:bg-blueGray-500"
+							className="px-2 py-1 transition bg-gray-100 border border-gray-300 rounded hover:border-gray-200 dark:text-white dark:bg-gray-600 dark:border-none dark:hover:bg-gray-500"
 						>
 							Cancel
 						</button>

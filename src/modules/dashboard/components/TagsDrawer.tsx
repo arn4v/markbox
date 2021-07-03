@@ -35,10 +35,10 @@ export default function TagsDrawer(): JSX.Element {
 			<Drawer isOpen={isOpen} onClose={onClose}>
 				<DrawerContent
 					placement="bottom"
-					className="w-full h-auto py-8 bg-white rounded-t-lg dark:bg-blueGray-700"
+					className="w-full h-auto py-8 bg-white rounded-t-lg dark:bg-gray-900"
 				>
 					<ul className={clsx(["flex flex-col w-full gap-4 px-6 text-base"])}>
-						<h1 className="text-lg font-bold">Tags</h1>
+						<h1 className="text-lg font-bold dark:text-white">Tags</h1>
 						<div className="flex flex-col items-center justify-start w-full gap-4 my-2">
 							<Tag
 								isEditModeEnabled={false}

@@ -21,7 +21,7 @@ const SearchBar = () => {
 				className="w-full placeholder-gray-500 border-0 border-transparent transition duration-150 ease-in-out text-gray-700 px-3 py-1.5 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:border-0 focus:outline-none"
 			/>
 			<button
-				className="flex items-center justify-center h-full gap-2 px-2 rounded-lg dark:bg-blueGray-700 focus:outline-none"
+				className="flex items-center justify-center h-full gap-2 px-2 rounded-lg dark:bg-gray-900 focus:outline-none"
 				onClick={toggleFilter}
 			>
 				<svg

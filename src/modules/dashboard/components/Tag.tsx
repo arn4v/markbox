@@ -40,8 +40,8 @@ export default function Tag({
 						"px-4 py-2 flex-grow transition rounded-md dark:text-white",
 						isDeleteOpen && "z-30",
 						active
-							? "dark:bg-blueGray-500 lg:dark:bg-blueGray-600 bg-gray-200 font-medium"
-							: "lg:dark:bg-blueGray-700 lg:dark:hover:bg-blueGray-600 dark:bg-blueGray-600 dark:hover:bg-blueGray-500 bg-gray-100 hover:bg-gray-200",
+							? "dark:bg-gray-500 lg:dark:bg-gray-600 bg-gray-200 font-medium"
+							: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200",
 					])}
 				>
 					{data.name}

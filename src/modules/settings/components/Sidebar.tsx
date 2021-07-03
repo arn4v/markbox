@@ -9,9 +9,9 @@ const SidebarItem = ({ href, children }) => {
 		<Link href={href}>
 			<a
 				className={clsx([
-					"px-4 py-2 w-full transition focus:outline-none hover:bg-gray-300 dark:text-white dark:hover:bg-blueGray-600 font-medium",
+					"px-4 py-2 w-full transition focus:outline-none hover:bg-gray-300 dark:text-white dark:hover:bg-gray-600 font-medium",
 					active &&
-						"border-l-4 border-gray-400 bg-gray-300 dark:bg-blueGray-600 dark:border-blueGray-400",
+						"border-l-4 border-gray-400 bg-gray-300 dark:bg-gray-600 dark:border-blueGray-400",
 				])}
 			>
 				{children}
@@ -27,33 +27,33 @@ const Sidebar: Component = () => {
 		<div className="w-full lg:w-1/4">
 			<div
 				id="wrapper"
-				className="flex flex-col w-full mb-4 overflow-hidden text-sm bg-gray-100 rounded-lg dark:bg-blueGray-700"
+				className="flex flex-col w-full mb-4 overflow-hidden text-sm bg-gray-100 rounded-lg dark:bg-gray-900"
 			>
 				<div className="w-full px-4 py-2">
 					<span className="font-medium dark:text-gray-200">
 						Account settings
 					</span>
 				</div>
-				<span className="w-full h-px dark:bg-blueGray-500" />
+				<span className="w-full h-px dark:bg-gray-500" />
 				<div className="flex flex-col w-full">
 					<SidebarItem href="/settings/account">Profile</SidebarItem>
-					<span className="h-px dark:bg-blueGray-500" />
+					<span className="h-px dark:bg-gray-500" />
 					<SidebarItem href="/settings/security">Security</SidebarItem>
 				</div>
 			</div>
 			<div
 				id="wrapper"
-				className="flex flex-col w-full mb-4 overflow-hidden text-sm bg-gray-100 rounded-lg dark:bg-blueGray-700"
+				className="flex flex-col w-full mb-4 overflow-hidden text-sm bg-gray-100 rounded-lg dark:bg-gray-900"
 			>
 				<div className="w-full px-4 py-2">
 					<span className="font-medium dark:text-gray-200">
 						Developer settings
 					</span>
 				</div>
-				<span className="w-full h-px dark:bg-blueGray-500" />
+				<span className="w-full h-px dark:bg-gray-500" />
 				<div className="flex flex-col w-full">
 					<SidebarItem href="/settings/tokens">Tokens</SidebarItem>
-					<span className="h-px dark:bg-blueGray-500" />
+					<span className="h-px dark:bg-gray-500" />
 					<SidebarItem href="/settings/tokens/new">
 						Generate new token
 					</SidebarItem>

@@ -19,7 +19,7 @@ import useStore from "./CreateBookmark";
 const MenuItem = ({ href, children }) => {
 	return (
 		<Link href={href}>
-			<a className="flex items-center justify-center gap-2 px-2 py-2 text-center transition bg-gray-100 rounded-lg dark:bg-blueGray-600 whitespace-nowrap hover:bg-gray-200 dark:hover:bg-current">
+			<a className="flex items-center justify-center gap-2 px-2 py-2 text-center transition bg-gray-100 rounded-lg dark:bg-gray-600 whitespace-nowrap hover:bg-gray-200 dark:hover:bg-current">
 				{children}
 			</a>
 		</Link>
@@ -47,10 +47,10 @@ export default function MenuDrawer(): JSX.Element {
 			<Drawer isOpen={isOpen} onClose={onClose}>
 				<DrawerContent
 					placement="bottom"
-					className="w-full h-auto py-8 text-black bg-white rounded-t-lg dark:bg-blueGray-700 dark:text-white"
+					className="w-full h-auto py-8 text-black bg-white rounded-t-lg dark:bg-gray-900 dark:text-white"
 				>
 					<ul className={clsx(["flex flex-col w-full gap-4 px-6 text-base"])}>
-						<li className="px-2 py-2 text-center bg-gray-100 rounded-lg dark:bg-blueGray-600 whitespace-nowrap">
+						<li className="px-2 py-2 text-center bg-gray-100 rounded-lg dark:bg-gray-600 whitespace-nowrap">
 							Signed in as <br />
 							{user?.email}
 						</li>
@@ -67,7 +67,7 @@ export default function MenuDrawer(): JSX.Element {
 						</li>
 						<li className="w-full">
 							<button
-								className="flex items-center justify-center w-full gap-2 py-2 transition bg-gray-100 rounded-md dark:bg-blueGray-600 focus:outline-none hover:bg-gray-200"
+								className="flex items-center justify-center w-full gap-2 py-2 transition bg-gray-100 rounded-md dark:bg-gray-600 focus:outline-none hover:bg-gray-200"
 								onClick={() => {
 									setTheme(theme === "dark" ? "light" : "dark");
 								}}

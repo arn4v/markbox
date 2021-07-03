@@ -5,11 +5,11 @@ import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
-	Bookmark,
-	CreateOrUpdateBookmarkTagInput,
-	useGetAllTagsQuery,
-	useGetBookmarkQuery,
-	useUpdateBookmarkMutation
+    Bookmark,
+    CreateOrUpdateBookmarkTagInput,
+    useGetAllTagsQuery,
+    useGetBookmarkQuery,
+    useUpdateBookmarkMutation
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 
@@ -111,7 +111,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 			<DrawerContent
 				placement={drawerPlacement}
 				className={clsx([
-					"p-8 bg-blueGray-700",
+					"p-8 bg-gray-900",
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 				])}
 			>
@@ -120,7 +120,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 						<h1 className="text-lg font-bold">Edit bookmark</h1>
 						<button
 							onClick={internalOnClose}
-							className="p-2 transition rounded-lg bg-blueGray-600 focus:outline-none focus:ring ring-black hover:bg-blueGray-500"
+							className="p-2 transition rounded-lg bg-gray-600 focus:outline-none focus:ring ring-black hover:bg-gray-500"
 						>
 							<HiX />
 							<span className="sr-only">Close drawer</span>
@@ -206,7 +206,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 											}));
 											newTagInputRef.current.value = "";
 										}}
-										className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-blueGray-600"
+										className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-gray-600"
 									>
 										Add tag
 									</button>
@@ -214,7 +214,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 							</div>
 							<button
 								type="submit"
-								className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-blueGray-600 hover:bg-blueGray-500 focus:ring ring-black focus:outline-none"
+								className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-gray-600 hover:bg-gray-500 focus:ring ring-black focus:outline-none"
 							>
 								Submit
 							</button>

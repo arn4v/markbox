@@ -16,7 +16,7 @@ export default function TokensPage() {
 					<span className="text-xl font-bold">Personal access tokens</span>
 					{!!data?.tokens.length && <GenerateTokenButton />}
 				</div>
-				<div className="flex flex-col bg-gray-100 divide-y rounded-lg dark:divide-blueGray-400 dark:bg-blueGray-700">
+				<div className="flex flex-col bg-gray-100 divide-y rounded-lg dark:divide-blueGray-400 dark:bg-gray-900">
 					{data?.tokens.length ? (
 						data?.tokens.map((data) => {
 							return <Token key={data.id} data={data} />;

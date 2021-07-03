@@ -31,13 +31,13 @@ export default function BookmarksGrid() {
 					})}
 				</div>
 			) : (
-				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-blueGray-700 dark:text-white">
+				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
 					<span className="text-xl font-medium">
 						You don't have any bookmarks yet.
 					</span>
 					<div>
 						<CreateBookmarkButton
-							className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-blueGray-500 dark:hover:bg-blueGray-600"
+							className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-gray-500 dark:hover:bg-gray-600"
 							showText
 						/>
 					</div>

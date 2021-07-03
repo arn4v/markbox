@@ -6,8 +6,8 @@ import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
-	useCreateBookmarkMutation,
-	useGetAllTagsQuery
+    useCreateBookmarkMutation,
+    useGetAllTagsQuery
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useStore from "./store";
@@ -51,7 +51,7 @@ export default function CreateBookmarkDrawer() {
 			<DrawerContent
 				placement={drawerPlacement}
 				className={clsx([
-					"p-8 bg-white dark:bg-blueGray-700 dark:text-white",
+					"p-8 bg-white dark:bg-gray-900 dark:text-white",
 					"lg:h-screen lg:w-1/3 lg:rounded-l-lg w-screen h-auto rounded-t-lg",
 				])}
 			>
@@ -59,7 +59,7 @@ export default function CreateBookmarkDrawer() {
 					<h1 className="text-lg font-bold">Create new bookmark</h1>
 					<button
 						onClick={onClose}
-						className="p-2 transition bg-gray-100 rounded-lg dark:bg-blueGray-600 focus:outline-none focus:ring ring-black dark:hover:bg-blueGray-500"
+						className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring ring-black dark:hover:bg-gray-500"
 					>
 						<HiX />
 						<span className="sr-only">Close drawer</span>
@@ -168,7 +168,7 @@ export default function CreateBookmarkDrawer() {
 											}));
 										}
 									}}
-									className="grid h-10 px-4 text-sm font-medium transition bg-gray-100 border border-gray-300 rounded-md whitespace-nowrap place-items-center hover:bg-gray-200 dark:bg-blueGray-600 dark:border-transparent"
+									className="grid h-10 px-4 text-sm font-medium transition bg-gray-100 border border-gray-300 rounded-md whitespace-nowrap place-items-center hover:bg-gray-200 dark:bg-gray-600 dark:border-transparent"
 								>
 									Add tag
 								</button>
@@ -176,7 +176,7 @@ export default function CreateBookmarkDrawer() {
 						</div>
 						<button
 							type="submit"
-							className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-blueGray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-blueGray-500 focus:ring ring-black focus:outline-none"
+							className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-gray-500 focus:ring ring-black focus:outline-none"
 						>
 							Submit
 						</button>

@@ -2,7 +2,7 @@ import { Logo } from "~/components/Logo";
 
 export default function Footer() {
 	return (
-		<footer className="fixed bottom-0 flex items-center justify-between w-full p-3 text-gray-400 bg-gray-900 dark:bg-blueGray-900 body-font">
+		<footer className="fixed bottom-0 flex items-center justify-between w-full p-3 text-gray-400 bg-black dark:bg-gray-900 body-font">
 			<div className="flex flex-col items-start justify-start md:items-center md:flex-row">
 				<a className="flex items-center justify-center font-medium text-white title-font md:justify-start">
 					<Logo className="text-white" />
