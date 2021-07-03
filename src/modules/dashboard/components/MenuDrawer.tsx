@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import {
-	HiCog,
-	HiLogout,
 	HiMenu,
+	HiOutlineCog,
+	HiOutlineDocumentText,
+	HiOutlineLogout,
 	HiOutlineMoon,
 	HiOutlineSun,
 	HiOutlineTemplate
@@ -54,10 +55,13 @@ export default function MenuDrawer(): JSX.Element {
 							Signed in as <br />
 							{user?.email}
 						</li>
+						<MenuItem href="/docs">
+							Docs <HiOutlineDocumentText />
+						</MenuItem>
 						<li className="w-full">
 							{router.pathname === "/dashboard" ? (
 								<MenuItem href="/settings">
-									Settings <HiCog />
+									Settings <HiOutlineCog />
 								</MenuItem>
 							) : (
 								<MenuItem href="/dashboard">
@@ -78,7 +82,7 @@ export default function MenuDrawer(): JSX.Element {
 						</li>
 						<li className="w-full">
 							<MenuItem href="/api/auth/logout">
-								Logout <HiLogout />
+								Logout <HiOutlineLogout />
 							</MenuItem>
 						</li>
 					</ul>

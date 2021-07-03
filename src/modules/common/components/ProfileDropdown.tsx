@@ -3,12 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import {
-	HiCog,
-	HiLogout,
 	HiOutlineChevronDown,
+	HiOutlineCog,
+	HiOutlineDocumentText,
+	HiOutlineLogout,
 	HiOutlineMoon,
 	HiOutlineSun,
-	HiTemplate
+	HiOutlineTemplate
 } from "react-icons/hi";
 import Popup from "~/components/Popup";
 import { useAuth } from "~/hooks/use-auth";
@@ -57,14 +58,17 @@ const ProfileDropdown = () => {
 				<li className="px-4 py-2 text-center bg-gray-200 border-b border-gray-300 dark:bg-transparent dark:border-blueGray-400 whitespace-nowrap dark:text-white">
 					Signed in as <br /> {user?.email}
 				</li>
+				<Item href="/docs">
+					Docs <HiOutlineDocumentText />
+				</Item>
 				<li className="w-full">
 					{router.pathname === "/dashboard" ? (
 						<Item href="/settings/account">
-							Settings <HiCog />
+							Settings <HiOutlineCog />
 						</Item>
 					) : (
 						<Item href="/dashboard">
-							Dashboard <HiTemplate />
+							Dashboard <HiOutlineTemplate />
 						</Item>
 					)}
 				</li>
@@ -82,7 +86,7 @@ const ProfileDropdown = () => {
 				<li className="w-full">
 					<Link href="/api/auth/logout">
 						<a className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-200 dark:text-white">
-							Logout <HiLogout />
+							Logout <HiOutlineLogout />
 						</a>
 					</Link>
 				</li>

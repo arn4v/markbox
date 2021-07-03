@@ -16,7 +16,7 @@ const SettingsPageWrapper: Component<{ children: React.ReactNode }> = ({
 	return (
 		<div className="w-screen h-screen overflow-hidden dark:bg-black dark:text-white">
 			<Navbar />
-			<div className="flex flex-col items-start w-full h-full px-4 pt-8 pb-4 mx-auto antialiased lg:px-0 lg:flex-row 2xl:w-3/5">
+			<div className="flex flex-col items-start w-full h-full px-4 pt-8 pb-4 mx-auto antialiased 2xl:px-0 lg:flex-row 2xl:w-3/5">
 				<Sidebar />
 				{children}
 			</div>

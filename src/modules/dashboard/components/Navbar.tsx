@@ -23,7 +23,12 @@ export default function Navbar() {
 					<div className="flex items-center gap-5">
 						{isLg ? (
 							<>
-								{router.pathname === "/dashboard" && <CreateBookmarkButton />}
+								{router.pathname === "/dashboard" && (
+									<CreateBookmarkButton
+										className="text-white border-none"
+										showText
+									/>
+								)}
 								<ProfileDropdown />
 							</>
 						) : (
