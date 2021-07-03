@@ -120,7 +120,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 						<h1 className="text-lg font-bold">Edit bookmark</h1>
 						<button
 							onClick={internalOnClose}
-							className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring ring-black dark:hover:bg-gray-500"
+							className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  dark:hover:bg-gray-500"
 						>
 							<HiX />
 							<span className="sr-only">Close drawer</span>
@@ -136,7 +136,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 									id="title"
 									autoComplete="off"
 									type="text"
-									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black focus:shadow-outline"
+									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black"
 									onChange={(e) =>
 										setState((prev) => ({ ...prev, title: e.target.value }))
 									}
@@ -151,7 +151,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 								<input
 									id="url"
 									type="url"
-									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black focus:shadow-outline"
+									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black"
 									value={state.url}
 									autoComplete="off"
 									onChange={(e) =>

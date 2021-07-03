@@ -48,7 +48,7 @@ export default function NewTokenPage() {
 							<input
 								id="title"
 								type="text"
-								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  caret-black"
 								value={state.name}
 								onChange={(e) =>
 									setState((prev) => ({ ...prev, name: e.target.value }))
@@ -58,7 +58,7 @@ export default function NewTokenPage() {
 						</div>
 						<button
 							type="submit"
-							className="px-4 py-2 mt-4 transition bg-gray-100 border border-gray-300 rounded-md dark:border-none dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 focus:ring ring-black focus:outline-none"
+							className="px-4 py-2 mt-4 transition bg-gray-100 border border-gray-300 rounded-md dark:border-none dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 focus:ring-2 ring-offset-current ring-offset-2  focus:outline-none"
 						>
 							Submit
 						</button>
@@ -90,7 +90,7 @@ export default function NewTokenPage() {
 							</button>
 						</div>
 						<Link href="/settings/tokens">
-							<a className="flex items-center px-4 py-2 mx-auto text-sm font-medium text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2">
+							<a className="flex items-center px-4 py-2 mx-auto text-sm font-medium text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2">
 								<HiArrowLeft className="mr-2" />
 								Saved token? Go back to tokens list
 							</a>

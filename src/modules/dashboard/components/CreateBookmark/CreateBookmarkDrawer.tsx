@@ -59,7 +59,7 @@ export default function CreateBookmarkDrawer() {
 					<h1 className="text-lg font-bold">Create new bookmark</h1>
 					<button
 						onClick={onClose}
-						className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring ring-black dark:hover:bg-gray-500"
+						className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  dark:hover:bg-gray-500"
 					>
 						<HiX />
 						<span className="sr-only">Close drawer</span>
@@ -158,7 +158,7 @@ export default function CreateBookmarkDrawer() {
 											newTagInputRef.current.value = "";
 										}
 									}}
-									className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+									className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  caret-black"
 									list="tags"
 								/>
 								<datalist id="tags">
@@ -170,7 +170,7 @@ export default function CreateBookmarkDrawer() {
 						</div>
 						<button
 							type="submit"
-							className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-gray-500 focus:ring ring-black focus:outline-none"
+							className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-gray-500 focus:ring-2 ring-offset-current ring-offset-2  focus:outline-none"
 						>
 							Submit
 						</button>

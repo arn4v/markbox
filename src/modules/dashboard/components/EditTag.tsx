@@ -58,7 +58,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 						<label htmlFor="name">Name</label>
 						<input
 							id="name"
-							className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+							className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  caret-black"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 							required

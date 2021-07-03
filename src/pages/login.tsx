@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import qs from "qs";
 import * as React from "react";
 import { useMutation } from "react-query";
-import axios from "redaxios";
+import axios, { Response } from "redaxios";
 import InfoBox from "~/components/InfoBox";
 
 interface LoginBody {
@@ -45,8 +45,21 @@ export default function RegisterPage() {
 					}
 				}
 			},
+			onError(error: Response<any>) {
+				if (error?.data?.code === "invalid_password") {
+					setError("The password you entered is wrong, please try again.");
+				}
+			},
 		},
 	);
+
+	const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		setError(undefined);
+		setState((prev) => ({
+			...prev,
+			[e.target.id]: e.target.value,
+		}));
+	};
 
 	return (
 		<>
@@ -63,7 +76,7 @@ export default function RegisterPage() {
 						textColor="indigo-700"
 					/>
 				)}
-				<div className="w-5/6 px-10 py-6 bg-white rounded-lg shadow-lg lg:w-1/3 dark:bg-gray-900">
+				<div className="w-5/6 px-6 py-6 bg-white rounded-lg shadow-lg lg:px-10 lg:w-1/3 dark:bg-gray-900">
 					<form
 						className="flex flex-col items-start justify-center w-full h-full gap-5"
 						onSubmit={(e) => {
@@ -77,9 +90,7 @@ export default function RegisterPage() {
 							type="email"
 							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-gray-600 dark:focus:bg-gray-500"
 							autoComplete="email"
-							onChange={(e) =>
-								setState((prev) => ({ ...prev, email: e.target.value }))
-							}
+							onChange={onChange}
 							required
 						/>
 						<label htmlFor="password">Password</label>
@@ -87,15 +98,21 @@ export default function RegisterPage() {
 							id="password"
 							className="w-full border border-gray-200 rounded focus:outline-none focus:ring-2 ring-blue-600 focus:border-transparent dark:border-gray-400 dark:bg-gray-600 dark:focus:bg-gray-500"
 							type="password"
-							onChange={(e) =>
-								setState((prev) => ({ ...prev, password: e.target.value }))
-							}
+							onChange={onChange}
 							autoComplete="current-password"
 							required
 						/>
+						{error && (
+							<InfoBox
+								text={error}
+								bgColor="red-200"
+								textColor="red-800"
+								className="w-full text-sm lg:text-base"
+							/>
+						)}
 						<button
 							type="submit"
-							className="w-20 py-2 ml-auto font-medium text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:ring ring-black"
+							className="px-6 py-2 ml-auto text-sm font-medium text-white transition bg-blue-600 rounded lg:w-auto lg:text-base hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
 						>
 							Login
 						</button>
