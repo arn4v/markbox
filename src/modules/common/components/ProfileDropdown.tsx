@@ -44,7 +44,7 @@ const ProfileDropdown = () => {
 					data-toggle="dropdown"
 					aria-expanded={isOpen}
 					aria-haspopup={true}
-					className="flex items-center justify-center w-full gap-2 px-2 py-2 font-medium text-black transition duration-150 ease-in-out bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 dark:bg-gray-900 focus:outline-none dark:text-white dark:border-none"
+					className="flex items-center justify-center w-full gap-2 px-2 py-2 font-medium text-black transition duration-150 ease-in-out bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 dark:bg-gray-800 focus:outline-none dark:text-white dark:border-none"
 				>
 					Account
 					<HiOutlineChevronDown />
@@ -53,7 +53,7 @@ const ProfileDropdown = () => {
 		>
 			<ul
 				aria-labelledby="dropdownMenuButton"
-				className="w-56 mt-2 bg-white border border-gray-200 rounded-md dark:bg-gray-600 dark:border-blueGray-500 dark:text-white"
+				className="w-56 mt-2 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
 			>
 				<li className="px-4 py-2 text-center bg-gray-200 border-b border-gray-300 dark:bg-transparent dark:border-blueGray-400 whitespace-nowrap dark:text-white">
 					Signed in as <br /> {user?.email}

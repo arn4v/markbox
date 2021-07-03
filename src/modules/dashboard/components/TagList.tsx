@@ -27,7 +27,7 @@ export default function TagList() {
 	const router = useRouter();
 
 	return (
-		<div className="flex flex-col items-center w-full">
+		<div className="flex flex-col items-center w-full dark:text-white">
 			<div className="flex items-center justify-between w-full my-2">
 				<h2
 					className={clsx([

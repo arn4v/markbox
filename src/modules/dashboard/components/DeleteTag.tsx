@@ -4,9 +4,9 @@ import { HiTrash } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Popup from "~/components/Popup";
 import {
-    Tag,
-    useDeleteTagMutation,
-    useGetTagBookmarksCountQuery
+	Tag,
+	useDeleteTagMutation,
+	useGetTagBookmarksCountQuery
 } from "~/graphql/types.generated";
 
 interface DeleteTagProps {
@@ -31,7 +31,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 		<Popup
 			isOpen={isOpen}
 			onDismiss={onClose}
-			className="left-full ml-2 top-0"
+			className="top-0 ml-2 left-full"
 			placement="custom"
 			showOverlay
 			trigger={
@@ -53,15 +53,16 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 				</button>
 			}
 		>
-			<div className="p-2 flex flex-col gap-4 w-56 bg-gray-900 rounded-lg">
-				<div className="text-center">
-					This tag is related to {countData?.tagBookmarksCount} bookmarks. Do
-					you really want to delete it?
+			<div className="flex flex-col gap-4 p-6 bg-white border border-gray-300 rounded-lg w-72 dark:border-none dark:bg-gray-900">
+				<div className="text-center whitespace-no-wrap">
+					This tag is related to {countData?.tagBookmarksCount} bookmarks.
+					<br />
+					Do you really want to delete it?
 				</div>
-				<div className="w-full items-center flex justify-between">
+				<div className="flex items-center justify-between w-full">
 					<button
 						type="button"
-						className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"
+						className="px-1 py-0.5 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition rounded"
 						onClick={onClose}
 					>
 						Dismiss

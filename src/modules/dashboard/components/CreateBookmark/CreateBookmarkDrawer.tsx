@@ -6,8 +6,8 @@ import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
-    useCreateBookmarkMutation,
-    useGetAllTagsQuery
+	useCreateBookmarkMutation,
+	useGetAllTagsQuery
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useStore from "./store";
@@ -140,38 +140,32 @@ export default function CreateBookmarkDrawer() {
 									ref={newTagInputRef}
 									type="text"
 									autoComplete="off"
-									className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
-									list="tags"
-								/>
-								{data?.tags.length > 0 && (
-									<datalist id="tags">
-										{data?.tags?.map((item) => {
-											return <option key={item.id} value={item.name} />;
-										})}
-									</datalist>
-								)}
-								<button
-									type="button"
-									onClick={() => {
-										const tagName = newTagInputRef.current.value.trim();
-										newTagInputRef.current.value = "";
-										if (tagName.length > 0) {
+									onChange={(e) => {
+										let trimmedValue = e.target.value.trim();
+										const lastIdx = trimmedValue.length - 1;
+										if (trimmedValue.charAt(lastIdx) === ",") {
+											trimmedValue = trimmedValue.slice(0, -1);
 											setState((prev) => ({
 												...prev,
 												newTag: "",
 												tags: {
 													...prev.tags,
-													[tagName]: {
-														name: tagName,
+													[trimmedValue]: {
+														name: trimmedValue,
 													},
 												},
 											}));
+											newTagInputRef.current.value = "";
 										}
 									}}
-									className="grid h-10 px-4 text-sm font-medium transition bg-gray-100 border border-gray-300 rounded-md whitespace-nowrap place-items-center hover:bg-gray-200 dark:bg-gray-600 dark:border-transparent"
-								>
-									Add tag
-								</button>
+									className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+									list="tags"
+								/>
+								<datalist id="tags">
+									{data?.tags?.map((item) => {
+										return <option key={item.id} value={item.name} />;
+									})}
+								</datalist>
 							</div>
 						</div>
 						<button

@@ -1,15 +1,15 @@
 import clsx from "clsx";
 import React from "react";
-import { HiX } from "react-icons/hi";
+import { HiOutlineXCircle, HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import {
-    Bookmark,
-    CreateOrUpdateBookmarkTagInput,
-    useGetAllTagsQuery,
-    useGetBookmarkQuery,
-    useUpdateBookmarkMutation
+	Bookmark,
+	CreateOrUpdateBookmarkTagInput,
+	useGetAllTagsQuery,
+	useGetBookmarkQuery,
+	useUpdateBookmarkMutation
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 
@@ -67,13 +67,13 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		{
 			onSuccess(data) {
 				const { title, url, tags } = data.bookmark;
-				console.log(tags);
-				console.log(transformTags(tags));
-				setState({
-					title,
-					url,
-					tags: transformTags(tags),
-				});
+				if (JSON.stringify(state) === JSON.stringify(initialState)) {
+					setState({
+						title,
+						url,
+						tags: transformTags(tags),
+					});
+				}
 			},
 		},
 	);
@@ -111,7 +111,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 			<DrawerContent
 				placement={drawerPlacement}
 				className={clsx([
-					"p-8 bg-gray-900",
+					"p-8 bg-white dark:bg-gray-900",
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 				])}
 			>
@@ -120,7 +120,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 						<h1 className="text-lg font-bold">Edit bookmark</h1>
 						<button
 							onClick={internalOnClose}
-							className="p-2 transition rounded-lg bg-gray-600 focus:outline-none focus:ring ring-black hover:bg-gray-500"
+							className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring ring-black dark:hover:bg-gray-500"
 						>
 							<HiX />
 							<span className="sr-only">Close drawer</span>
@@ -136,7 +136,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 									id="title"
 									autoComplete="off"
 									type="text"
-									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black focus:shadow-outline"
 									onChange={(e) =>
 										setState((prev) => ({ ...prev, title: e.target.value }))
 									}
@@ -151,7 +151,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 								<input
 									id="url"
 									type="url"
-									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+									className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black focus:shadow-outline"
 									value={state.url}
 									autoComplete="off"
 									onChange={(e) =>
@@ -172,7 +172,20 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 												title={item?.name}
 												variant="outline"
 												color="white"
-											/>
+												className="z-50"
+											>
+												<button
+													type="button"
+													onClick={() => {
+														setState((prev) => {
+															delete prev.tags[item?.name];
+															return prev;
+														});
+													}}
+												>
+													<HiOutlineXCircle />
+												</button>
+											</Badge>
 										);
 									})}
 								</div>
@@ -182,7 +195,25 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 										ref={newTagInputRef}
 										type="text"
 										autoComplete="off"
-										className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
+										onChange={(e) => {
+											let trimmedValue = e.target.value.trim();
+											const lastIdx = trimmedValue.length - 1;
+											if (trimmedValue.charAt(lastIdx) === ",") {
+												trimmedValue = trimmedValue.slice(0, -1);
+												setState((prev) => ({
+													...prev,
+													newTag: "",
+													tags: {
+														...prev.tags,
+														[trimmedValue]: {
+															name: trimmedValue,
+														},
+													},
+												}));
+												newTagInputRef.current.value = "";
+											}
+										}}
+										className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-blue-600 ring-offset-2 caret-black"
 										list="tags"
 									/>
 									<datalist id="tags">
@@ -190,31 +221,11 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 											return <option key={item.id} value={item.name} />;
 										})}
 									</datalist>
-									<button
-										type="button"
-										onClick={() => {
-											const tagName = newTagInputRef.current.value.trim();
-											setState((prev) => ({
-												...prev,
-												newTag: "",
-												tags: {
-													...prev.tags,
-													[tagName]: {
-														name: tagName,
-													},
-												},
-											}));
-											newTagInputRef.current.value = "";
-										}}
-										className="grid h-10 px-4 text-sm rounded-md whitespace-nowrap place-items-center bg-gray-600"
-									>
-										Add tag
-									</button>
 								</div>
 							</div>
 							<button
 								type="submit"
-								className="px-4 py-2 mt-4 ml-auto transition rounded-md bg-gray-600 hover:bg-gray-500 focus:ring ring-black focus:outline-none"
+								className="px-4 py-2 mt-4 ml-auto text-white transition bg-blue-600 rounded-md ring-offset-current ring-offset-2 focus:ring-2 hover:bg-blue-700 dark:bg-gray-600 dark:hover:bg-gray-500 focus:outline-none"
 							>
 								Submit
 							</button>

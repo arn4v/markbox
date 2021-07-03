@@ -30,7 +30,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 		<Popup
 			isOpen={isOpen}
 			onDismiss={onClose}
-			className="left-full ml-2 top-0"
+			className="top-0 ml-2 left-full"
 			placement="custom"
 			showOverlay
 			trigger={
@@ -45,26 +45,26 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 				</button>
 			}
 		>
-			<div className="p-2 w-56 bg-gray-900 rounded-lg">
+			<div className="w-56 p-2 bg-white rounded-lg dark:bg-gray-900">
 				<form
-					className="w-full flex flex-col gap-4"
+					className="flex flex-col w-full gap-4"
 					onSubmit={(e) => {
 						e.preventDefault();
 						mutate({ input: { id: data.id, name } });
 					}}
 				>
 					<div className="text-center">Rename tag</div>
-					<div className="grid gap-2 grid-flow-col">
+					<div className="grid grid-flow-col gap-2">
 						<label htmlFor="name">Name</label>
 						<input
 							id="name"
-							className="rounded-lg block mt-2 w-full focus:outline-none focus:ring ring-black caret-black text-black"
+							className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring ring-black caret-black"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 							required
 						/>
 					</div>
-					<div className="w-full items-center flex justify-between">
+					<div className="flex items-center justify-between w-full">
 						<button
 							type="button"
 							className="px-1 py-0.5 text-sm bg-red-500 hover:bg-red-600 rounded"

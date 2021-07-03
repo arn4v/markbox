@@ -23,7 +23,7 @@ export default function BookmarksGrid() {
 		);
 
 	return (
-		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:pt-8 lg:pl-8">
+		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:pt-8 lg:px-8 2xl:pr-0">
 			{data?.bookmarks.length > 0 ? (
 				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-x-6">
 					{data?.bookmarks.map((item) => {

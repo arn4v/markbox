@@ -30,7 +30,7 @@ const BookmarkCard = ({ data }: Props) => {
 	const queryClient = useQueryClient();
 
 	return (
-		<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900">
+		<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
 			<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 				<span className="text-xs">
 					{format(new Date(data?.createdAt), "do MMMM, yyyy")}
