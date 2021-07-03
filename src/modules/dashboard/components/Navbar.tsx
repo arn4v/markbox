@@ -30,7 +30,7 @@ export default function Navbar() {
 							<>
 								{router.pathname === "/dashboard" && (
 									<>
-										<CreateBookmarkButton className="text-black bg-transparent hover:bg-transparent" />
+										<CreateBookmarkButton className="text-black bg-transparent dark:text-white hover:bg-transparent" />
 										<TagsDrawer />
 									</>
 								)}

@@ -70,8 +70,8 @@ export default function DocsPage({ code, metadata }: Props) {
 		<>
 			<NextSeo title={metadata.seo_title} />
 			<div className="w-screen h-screen text-black bg-white dark:text-white dark:bg-black">
-				<div className="flex w-3/5 h-full mx-auto">
-					<div className="sticky flex flex-col items-start justify-start w-1/5 h-full gap-8 pt-8 border-r border-gray-300 dark:border-gray-600">
+				<div className="flex flex-col w-full h-full mx-auto lg:w-3/5 lg:flex-row">
+					<div className="sticky flex flex-col items-start justify-start w-full h-full gap-8 pt-8 border-gray-300 lg:border-r lg:w-1/5 dark:border-gray-600">
 						<Logo className="text-black dark:text-white" />
 						<div className="flex flex-col w-full gap-8">
 							{sidebarData.map((item) => {
@@ -81,7 +81,7 @@ export default function DocsPage({ code, metadata }: Props) {
 										className="flex flex-col items-start justify-start gap-2"
 									>
 										<h2 className="block font-semibold">{item.title}</h2>
-										<div className="flex flex-col w-full gap-2 pl-4">
+										<div className="flex flex-col w-full gap-2 lg:pl-4">
 											{item.children.map((child) => {
 												return (
 													<Link
@@ -107,13 +107,13 @@ export default function DocsPage({ code, metadata }: Props) {
 							})}
 						</div>
 					</div>
-					<div className="flex flex-col flex-grow pt-8">
+					<div className="flex flex-col flex-grow px-4 py-8 lg:px-8">
 						<Link href={isAuthenticated ? "/dashboard" : "/login"}>
 							<a className="flex items-center gap-2 pb-px ml-auto transition border-gray-400 hover:border-b">
 								{isAuthenticated ? "Dashboard" : "Login"} <HiArrowRight />
 							</a>
 						</Link>
-						<article className="px-8 pt-8 prose dark:prose-dark flex-grow-1">
+						<article className="pt-8 prose dark:prose-dark flex-grow-1">
 							<h1 className="mb-8">{metadata.title}</h1>
 							<MDXRemote {...code} />
 						</article>

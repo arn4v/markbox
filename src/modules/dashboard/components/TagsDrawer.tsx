@@ -28,7 +28,7 @@ export default function TagsDrawer(): JSX.Element {
 					if (isCreateOpen) onCreateClose();
 					onOpen();
 				}}
-				className="focus:outline-none"
+				className="focus:outline-none dark:text-white"
 			>
 				<CardStackIcon className="w-5 h-5" />
 			</button>
