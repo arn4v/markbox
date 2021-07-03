@@ -21,3 +21,32 @@ html.light:not(html.dark) input:-webkit-autofill:focus {
 	-webkit-box-shadow: 0 0 0 1000px #e5e7eb inset !important;
 	-webkit-text-fill-color: #1b1b1b !important;
 } */
+
+pre {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+	overflow: hidden;
+}
+
+.prose .anchor {
+	@apply absolute invisible;
+
+	margin-left: -1em;
+	padding-right: 0.5em;
+	width: 80%;
+	max-width: 700px;
+	cursor: pointer;
+}
+
+.anchor:hover {
+	@apply visible no-underline;
+}
+
+.prose .anchor:after {
+	@apply text-gray-300 dark:text-gray-700;
+	content: "#";
+}
+
+.prose *:hover > .anchor {
+	@apply visible no-underline;
+}

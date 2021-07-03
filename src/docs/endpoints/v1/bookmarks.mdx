@@ -1,4 +1,111 @@
 ---
 title: /api/v1/bookmarks
-seo_title: /api/v1/bookmarks | Bookmarky API
+seo_title: /api/v1/bookmarks | API Docs
 ---
+
+## Endpoint URL
+
+```
+https://bookmarky.io/api/v1/bookmarks
+```
+
+---
+
+## How do I get an access token?
+
+[Learn more here](/docs/generating-tokens)
+
+---
+
+## Common headers schema
+
+```ts
+type Token = string;
+
+type headers = {
+	Authorization: `Bearer ${Token}`;
+};
+```
+
+---
+
+## Get bookmarks
+
+### Response
+
+```ts
+type GetAllBookmarksData = {
+	data: Array<Bookmark>;
+	messaeg: string;
+};
+```
+
+### Fetch all bookmarks
+
+```js
+const res = await fetch("https://bookmarky.io/api/v1/bookmarks", {
+	method: "GET",
+	headers: {
+		Authorization: `Bearer ${token}`,
+	},
+});
+const json = await res.json();
+const bookmarks = json.data;
+```
+
+### Fetch bookmarks and filter by tags
+
+```js
+import qs from "querystring";
+const res = await fetch(
+	"https://bookmarky/api/v1/bookmarks" +
+		qs.stringify({
+			tags: ["React", "Next.js"],
+		}),
+	{
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	},
+);
+```
+
+## Create bookmark
+
+### Response
+
+```ts
+type ResponseData = {
+	data: Bookmark;
+};
+```
+
+### JavaScript
+
+```js
+import qs from "querystring";
+const res = await fetch(
+	"https://bookmarky/api/v1/bookmarks" +
+		qs.stringify({
+			tags: ["React", "Next.js"],
+		}),
+	{
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application-json",
+		},
+		body: JSON.stringify({
+			title: "Next.js Multi Zones Docs",
+			url: "https://nextjs.org/docs/advanced-features/multi-zones",
+			tags: {
+				create: ["Next.js"],
+				connect: ["React"],
+			},
+		}),
+	},
+);
+```
+
+Refer to _Bookmark_ model [here](/docs/models#bookmark).

@@ -1,15 +1,15 @@
-import ms from "ms";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { createVerifier, createSigner } from "fast-jwt";
-import { hash, genSalt, compare } from "bcrypt";
-import { isProd } from "~/config";
-import nextConnect, { ErrorHandler, Middleware } from "next-connect";
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { compare, genSalt, hash } from "bcrypt";
 import { CookieSerializeOptions, serialize } from "cookie";
-import ApiResponse from "~/types/ApiResponse";
+import { createSigner, createVerifier } from "fast-jwt";
+import ms from "ms";
+import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import nextConnect, { Middleware } from "next-connect";
 import { createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { isProd } from "~/config";
 import ApiRequest from "~/types/ApiRequest";
+import ApiResponse from "~/types/ApiResponse";
 import DecodedPat from "~/types/DecodedPat";
 
 /* -------------------------------------------------------------------------- */
@@ -124,13 +124,6 @@ export const jwtVerifyPat = createVerifier({
 	key: async () => process.env.JWT_SECRET_PAT,
 });
 
-export const ncOnError: ErrorHandler<NextApiRequest, ApiResponse> = async (
-	err,
-	req,
-	res,
-	next,
-) => {};
-
 export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
 	req,
 	res,
@@ -142,7 +135,8 @@ export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
 	const isMatching = /^Bearer\s+(.+)/.exec(auth);
 	if (isMatching) {
 		try {
-			const decoded = (await jwtVerifyPat(auth.split(" ")[1])) as DecodedPat;
+			const token = auth.split(" ")[1].trim();
+			const decoded: DecodedPat = await jwtVerifyPat(token);
 			try {
 				const { userId } = await prisma.accessToken.findUnique({
 					where: {
@@ -161,6 +155,7 @@ export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
 				res.status(500).send({ message: "Unable to get userId for token." });
 			}
 		} catch (err) {
+			console.log(err);
 			res.status(400).send({ message: "Invalid token." });
 		}
 		return;

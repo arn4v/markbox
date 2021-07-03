@@ -16,7 +16,7 @@ export default function RegisterPage() {
 		email: "",
 		password: "",
 	});
-	const [error, setError] = React.useState<string>("");
+	const [error, setError] = React.useState<string>(undefined);
 	const router = useRouter();
 	const { mutate: handleRegister } = useMutation(
 		"register",
@@ -102,7 +102,7 @@ export default function RegisterPage() {
 							autoComplete="new-password"
 							required
 						/>
-						{error.length > 0 && (
+						{error && (
 							<InfoBox
 								bgColor="red-200"
 								textColor="red-600"

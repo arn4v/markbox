@@ -1,5 +1,6 @@
+import { Prisma } from "@prisma/client";
 import { pickKeys } from "~/lib/misc";
-import { jwtSignPat } from "~/lib/utils.server";
+import { createPat } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { MutationResolvers } from "../types.generated";
@@ -183,15 +184,12 @@ const Mutation: MutationResolvers<GQLContext> = {
 				lastUsed: true,
 			},
 		});
-		const token = await jwtSignPat({
-			sub: id,
-			scopes,
-		});
+		const token = await createPat(id, scopes);
 		return {
 			id,
 			name,
 			token,
-			scopes: [],
+			scopes: _scopes as Prisma.JsonArray as string[],
 			lastUsed: lastUsed.toISOString(),
 		};
 	},

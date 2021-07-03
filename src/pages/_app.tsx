@@ -6,8 +6,7 @@ import Head from "next/head";
 import "prism-themes/themes/prism-gruvbox-dark.css";
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { defaultSeoProps, isProd } from "~/config";
+import { defaultSeoProps } from "~/config";
 import "~/styles/index.css";
 
 const queryClient = new QueryClient();
@@ -154,8 +153,8 @@ export default function App({ Component, pageProps }: AppProps) {
 			</Head>
 			<DefaultSeo {...defaultSeoProps} />
 			<QueryClientProvider client={queryClient}>
-				{!isProd && <ReactQueryDevtools />}
-				<ThemeProvider attribute="class" enableSystem={false}>
+				{/* {!isProd && <ReactQueryDevtools />} */}
+				<ThemeProvider attribute="class">
 					<Component {...pageProps} />
 				</ThemeProvider>
 			</QueryClientProvider>
