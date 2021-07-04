@@ -1,11 +1,12 @@
 import Link from "next/link";
 
-const MDXLink = ({ href, ...props }: JSX.IntrinsicElements["a"]) => {
+const MDXLink = (props: JSX.IntrinsicElements["a"]) => {
+	const href = props.href;
 	const isInternalLink = href && (href.startsWith("/") || href.startsWith("#"));
 
 	if (isInternalLink) {
 		return (
-			<Link href={href} passHref>
+			<Link href={href}>
 				<a {...props}>{props.children}</a>
 			</Link>
 		);
