@@ -1,13 +1,15 @@
-import clsx from "clsx";
+import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
+import {
+	HiOutlineMenu,
+	HiOutlineMoon,
+	HiOutlineSun,
+	HiOutlineX
+} from "react-icons/hi";
 import { Logo } from "~/components/Logo";
-
-type Category = {
-	title: string;
-	children: { title: string; href: string }[];
-};
+import useDisclosure from "~/hooks/use-disclosure";
+import SidebarSection from "./SidebarSection";
 
 const sidebarData: Category[] = [
 	{
@@ -16,6 +18,10 @@ const sidebarData: Category[] = [
 			{
 				title: "Introduction",
 				href: "/docs/introduction",
+			},
+			{
+				title: "Roadmap",
+				href: "/docs/roadmap",
 			},
 			{
 				title: "Contributing",
@@ -32,55 +38,58 @@ const sidebarData: Category[] = [
 		children: [
 			{
 				title: "bookmarks",
-				href: "/docs/endpoints/v1/bookmarks",
+				href: "/docs/v1/bookmarks",
 			},
 			{
 				title: "tags",
-				href: "/docs/endpoints/v1/tags",
+				href: "/docs/v1/tags",
 			},
 		],
 	},
 ];
 
 const Sidebar = () => {
-	const router = useRouter();
-	const slug = "/docs/" + (router.query.slug as string[]).join("/");
-
+	const { theme, setTheme } = useTheme();
+	const { isOpen, onToggle } = useDisclosure();
 	return (
-		<div className="top-0 flex flex-col items-start justify-start w-full h-full gap-8 px-4 pt-8 lg:min-h-screen lg:px-0">
-			<Logo className="text-black dark:text-white" />
-			<div className="flex flex-col w-full gap-8">
-				{sidebarData.map((item) => {
-					return (
-						<nav
-							key={item.title}
-							className="flex flex-col items-start justify-start gap-2"
-						>
-							<h2 className="block font-semibold">{item.title}</h2>
-							<ul className="flex flex-col w-full gap-2 lg:pl-4">
-								{item.children.map((child) => {
-									return (
-										<li key={`${item.title}-${child.title}`}>
-											<Link href={child.href}>
-												<a
-													className={clsx([
-														"block py-1 px-2 rounded-l-md",
-														slug === child.href
-															? "bg-blue-100 dark:bg-blue-200 dark:mix-blend-multiply border-r-4 border-blue-600 dark:border-blue-700 font-medium text-black"
-															: "hover:bg-blue-100 dark:hover:bg-blue-200 dark:hover:text-black dark:text-white",
-													])}
-												>
-													{child.title}
-												</a>
-											</Link>
-										</li>
-									);
-								})}
-							</ul>
-						</nav>
-					);
+		<div className="top-0 flex flex-col items-center justify-between w-full h-full gap-8 px-4 pt-8 lg:items-start lg:justify-start lg:min-h-screen lg:px-0">
+			<div className="flex items-center justify-between w-full">
+				<Link href="/docs">
+					<a>
+						<Logo className="text-black dark:text-white" />
+					</a>
+				</Link>
+				<div className="flex items-center gap-4 mr-2">
+					<button
+						onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+					>
+						{theme === "light" ? (
+							<HiOutlineSun className="w-6 h-6" />
+						) : (
+							<HiOutlineMoon className="w-6 h-6" />
+						)}
+					</button>
+					<button onClick={onToggle} className="lg:hidden">
+						{isOpen ? (
+							<HiOutlineX className="w-6 h-6" />
+						) : (
+							<HiOutlineMenu className="w-6 h-6" />
+						)}
+					</button>
+				</div>
+			</div>
+			<div className="flex-col hidden w-full gap-8 lg:flex">
+				{sidebarData.map((data) => {
+					return <SidebarSection key={data.title} data={data} />;
 				})}
 			</div>
+			{isOpen && (
+				<div className="flex flex-col w-full gap-8 lg:hidden">
+					{sidebarData.map((data) => {
+						return <SidebarSection key={data.title} data={data} />;
+					})}
+				</div>
+			)}
 		</div>
 	);
 };

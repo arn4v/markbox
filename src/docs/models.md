@@ -1,6 +1,6 @@
 ---
 title: Data Models
-seo_title: API Data Models
+seo_title: Data Models
 ---
 
 

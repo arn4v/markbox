@@ -1,0 +1,47 @@
+---
+title: /api/v1/tags
+seo_title: /api/v1/tags Endpoint
+---
+
+## Actions
+
+### Endpoint URL
+
+```js
+const endpoint_url = `https://bookmarky.io/api/v1/tags`;
+```
+
+### Required headers
+
+```ts
+type Headers = {
+	"x-api-key": string;
+};
+```
+
+### Response object
+
+```ts
+type Response = {
+	data: Tag;
+};
+```
+
+Refer to [/models](/models#tag) for complete Tag model.
+
+### Rename tag
+
+```js
+const res = await fetch(endpoint_url, {
+	method: "PATCH",
+	headers: {
+		"x-api-key": "<token>",
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		name: "Next js",
+		new_name: "Next.js",
+	}),
+});
+const json = await res.json();
+```
