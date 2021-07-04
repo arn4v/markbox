@@ -66,8 +66,8 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		{ id },
 		{
 			onSuccess(data) {
-				const { title, url, tags } = data.bookmark;
 				if (JSON.stringify(state) === JSON.stringify(initialState)) {
+					const { title, url, tags } = data.bookmark;
 					setState({
 						title,
 						url,
@@ -88,6 +88,8 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 
 	const internalOnClose = () => {
 		onClose();
+		setState(initialState);
+		refetchBookmark();
 	};
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -111,7 +113,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 			<DrawerContent
 				placement={drawerPlacement}
 				className={clsx([
-					"p-8 bg-white dark:bg-gray-900",
+					"p-8 bg-white dark:bg-gray-900 dark:text-white",
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
 				])}
 			>
@@ -120,7 +122,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 						<h1 className="text-lg font-bold">Edit bookmark</h1>
 						<button
 							onClick={internalOnClose}
-							className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  dark:hover:bg-gray-500"
+							className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 dark:hover:bg-gray-500"
 						>
 							<HiX />
 							<span className="sr-only">Close drawer</span>
@@ -178,8 +180,9 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 													type="button"
 													onClick={() => {
 														setState((prev) => {
-															delete prev.tags[item?.name];
-															return prev;
+															const tags = prev.tags;
+															delete tags[item?.name];
+															return Object.assign({}, prev, { tags });
 														});
 													}}
 												>

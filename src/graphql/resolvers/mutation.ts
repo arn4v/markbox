@@ -135,7 +135,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 					id,
 				},
 			});
-			return true;
+			return Boolean(deleted);
 		} catch (err) {
 			return false;
 		}
