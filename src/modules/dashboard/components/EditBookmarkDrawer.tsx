@@ -23,6 +23,7 @@ interface LocalState {
 	title: string;
 	url: string;
 	tags: Record<string, CreateOrUpdateBookmarkTagInput>;
+	tagsDisconnect: Record<string, CreateOrUpdateBookmarkTagInput>;
 }
 
 /**
@@ -52,13 +53,11 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		title: "",
 		url: "",
 		tags: {},
+		tagsDisconnect: {},
 	};
 	const [state, setState] = React.useState<LocalState>(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 	const { isLg } = useBreakpoints();
-	const drawerPlacement = React.useMemo(() => {
-		return isLg ? "right" : "bottom";
-	}, [isLg]);
 
 	// React query
 	const queryClient = useQueryClient();
@@ -68,11 +67,12 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 			onSuccess(data) {
 				if (JSON.stringify(state) === JSON.stringify(initialState)) {
 					const { title, url, tags } = data.bookmark;
-					setState({
+					setState((prev) => ({
+						...prev,
 						title,
 						url,
 						tags: transformTags(tags),
-					});
+					}));
 				}
 			},
 		},
@@ -87,15 +87,16 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 	});
 
 	const internalOnClose = () => {
-		onClose();
 		setState(initialState);
 		refetchBookmark();
+		onClose();
 	};
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { title, url } = state;
+		const { title, url, tagsDisconnect } = state;
 		const tags = Object.values(state.tags).reduce((acc, cur) => {
+			if (tagsDisconnect[cur?.name]) delete tagsDisconnect[cur?.name];
 			const existingTag = data.tags.find((item) => item.name === cur.name);
 			if (existingTag) {
 				acc.push({ id: existingTag.id });
@@ -104,14 +105,32 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 			}
 			return acc;
 		}, []);
-		mutate({ input: { id, title, url, tags } });
+		const _tagsDisconnect = Object.values(tagsDisconnect).reduce((acc, cur) => {
+			const existingTag = data.tags.find((item) => item.name === cur.name);
+			if (existingTag) {
+				acc.push({ id: existingTag.id });
+			}
+
+			return acc;
+		}, []);
+
+		mutate({
+			input: {
+				id,
+				title,
+				url,
+				tags,
+				tagsDisconnect: _tagsDisconnect,
+			},
+		});
+
 		internalOnClose();
 	};
 
 	return (
 		<Drawer isOpen={isOpen} onClose={internalOnClose}>
 			<DrawerContent
-				placement={drawerPlacement}
+				placement={isLg ? "right" : "bottom"}
 				className={clsx([
 					"p-8 bg-white dark:bg-gray-900 dark:text-white",
 					isLg ? "h-screen w-1/3 rounded-l-lg" : "w-screen h-auto rounded-t-lg",
@@ -182,7 +201,14 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 														setState((prev) => {
 															const tags = prev.tags;
 															delete tags[item?.name];
-															return Object.assign({}, prev, { tags });
+															return {
+																...prev,
+																tags,
+																tagsDisconnect: {
+																	...prev.tagsDisconnect,
+																	[item.name]: { name: item.name },
+																},
+															};
 														});
 													}}
 												>
@@ -205,7 +231,6 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 												trimmedValue = trimmedValue.slice(0, -1);
 												setState((prev) => ({
 													...prev,
-													newTag: "",
 													tags: {
 														...prev.tags,
 														[trimmedValue]: {

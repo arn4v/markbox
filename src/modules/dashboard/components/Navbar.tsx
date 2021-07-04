@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Logo } from "~/components/Logo";
-import useBreakpoints from "~/hooks/use-breakpoints";
 import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
 import CreateBookmarkButton from "./CreateBookmark/CreateBookmarkButton";
 import MenuDrawer from "./MenuDrawer";
 import TagsDrawer from "./TagsDrawer";
 
 export default function Navbar() {
-	const { isLg } = useBreakpoints();
 	const router = useRouter();
 
 	return (
@@ -20,28 +18,23 @@ export default function Navbar() {
 					</a>
 				</Link>
 				<nav>
-					<div className="flex items-center gap-5">
-						{isLg ? (
+					<div className="items-center hidden gap-5 lg:flex">
+						{router.pathname === "/dashboard" && (
+							<CreateBookmarkButton
+								className="text-white border-none"
+								showText
+							/>
+						)}
+						<ProfileDropdown />
+					</div>
+					<div className="flex items-center gap-5 lg:hidden">
+						{router.pathname === "/dashboard" && (
 							<>
-								{router.pathname === "/dashboard" && (
-									<CreateBookmarkButton
-										className="text-white border-none"
-										showText
-									/>
-								)}
-								<ProfileDropdown />
-							</>
-						) : (
-							<>
-								{router.pathname === "/dashboard" && (
-									<>
-										<CreateBookmarkButton className="text-black bg-transparent dark:text-white hover:bg-transparent" />
-										<TagsDrawer />
-									</>
-								)}
-								<MenuDrawer />
+								<CreateBookmarkButton className="text-black bg-transparent dark:text-white hover:bg-transparent" />
+								<TagsDrawer />
 							</>
 						)}
+						<MenuDrawer />
 					</div>
 				</nav>
 			</div>

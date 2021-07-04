@@ -68,6 +68,7 @@ export default gql`
 		title: String
 		url: String
 		tags: [CreateOrUpdateBookmarkTagInput!]
+		tagsDisconnect: [CreateOrUpdateBookmarkTagInput!]
 	}
 
 	input RenameTagInput {

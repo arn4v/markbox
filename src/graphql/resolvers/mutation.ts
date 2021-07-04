@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { deleteOrphanTagsForUserId } from "~/lib/db";
 import { pickKeys } from "~/lib/misc";
 import { createPat } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
@@ -44,7 +45,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 	},
 	async updateBookmark(_, { input }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		const { id, title, url } = input;
+		const { id, title, url, tagsDisconnect, tags } = input;
 
 		const _updated = await prisma.bookmark.update({
 			where: {
@@ -54,10 +55,13 @@ const Mutation: MutationResolvers<GQLContext> = {
 				title,
 				url,
 				tags: {
-					create: input.tags
+					create: tags
 						.filter((item) => typeof item.name !== "undefined")
 						.map((item) => ({ name: item.name, userId })),
-					connect: input.tags
+					connect: tags
+						.filter((item) => typeof item.id !== "undefined")
+						.map((item) => ({ id: item.id })),
+					disconnect: tagsDisconnect
 						.filter((item) => typeof item.id !== "undefined")
 						.map((item) => ({ id: item.id })),
 				},
@@ -66,6 +70,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 				tags: true,
 			},
 		});
+		await deleteOrphanTagsForUserId(prisma, userId);
 
 		return {
 			id: _updated.id,
@@ -77,41 +82,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 		};
 	},
 	async deleteBookmark(_, { id }, { prisma, req, res }) {
-		await protectResolver(req, res);
-
-		/**
-		 * Deleting a bookmark should also delete tags that were only
-		 * associated with that one bookmark
-		 *
-		 * Currently prisma does not have support for referential actions
-		 * Hence, we need to fetch tags associated with that bookmark
-		 * Then filter tags to find orphan tags and delete them
-		 */
-		const tags = await prisma.tag.findMany({
-			where: {
-				bookmarks: {
-					every: {
-						id,
-					},
-				},
-			},
-			select: {
-				id: true,
-				bookmarks: {
-					select: {
-						id: true,
-					},
-				},
-			},
-		});
-
-		const toDelete = tags.filter((item) => {
-			if (item.bookmarks.length === 1 && item.bookmarks[0].id === id) {
-				return true;
-			} else {
-				return false;
-			}
-		});
+		const userId = await protectResolver(req, res);
 
 		const _bookmark = await prisma.bookmark.delete({
 			where: {
@@ -119,11 +90,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 			},
 		});
 
-		const _tags = await prisma.tag.deleteMany({
-			where: {
-				OR: toDelete.map(({ id }) => ({ id: { equals: id } })),
-			},
-		});
+		const _tags = await deleteOrphanTagsForUserId(prisma, userId);
 
 		return !!_bookmark && !!_tags;
 	},
