@@ -50,3 +50,7 @@ pre {
 .prose *:hover > .anchor {
 	@apply visible no-underline;
 }
+
+html {
+	overflow-x: hidden;
+}
