@@ -59,7 +59,7 @@ const ProfileDropdown = () => {
 				aria-labelledby="dropdownMenuButton"
 				className="w-56 mt-2 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
 			>
-				<li className="px-4 py-2 text-center bg-gray-200 border-b border-gray-300 dark:bg-transparent dark:border-blueGray-400 whitespace-nowrap dark:text-white">
+				<li className="px-4 py-2 text-center bg-gray-200 border-b border-gray-300 dark:bg-transparent dark:border-blueGray-400 whitespace-nowrap dark:text-white overflow-ellipsis">
 					Signed in as <br /> {user?.email}
 				</li>
 				<Item href="/docs">
