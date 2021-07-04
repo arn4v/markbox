@@ -2,7 +2,6 @@ import clsx from "clsx";
 import Link from "next/link";
 import * as React from "react";
 import { Tag as TagType } from "~/graphql/types.generated";
-import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
 import DeleteTagPopup from "./DeleteTag";
 import EditTagPopup from "./EditTag";
@@ -30,7 +29,6 @@ export default function Tag({
 		onClose: onEditClose,
 		onOpen: onEditOpen,
 	} = useDisclosure();
-	const { isLg } = useBreakpoints();
 
 	return (
 		<li className={clsx(["flex w-full gap-4 items-center"])}>

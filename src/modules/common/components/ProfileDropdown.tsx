@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -44,7 +45,10 @@ const ProfileDropdown = () => {
 					data-toggle="dropdown"
 					aria-expanded={isOpen}
 					aria-haspopup={true}
-					className="flex items-center justify-center w-full gap-2 px-2 py-2 font-medium text-black transition duration-150 ease-in-out bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 dark:bg-gray-800 focus:outline-none dark:text-white dark:border-none"
+					className={clsx([
+						"flex items-center justify-center w-full gap-2 p-2 font-medium transition bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200  focus:outline-none",
+						"dark:hover:bg-gray-700 dark:bg-gray-800 dark:text-white dark:border-none",
+					])}
 				>
 					Account
 					<HiOutlineChevronDown />

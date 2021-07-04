@@ -70,9 +70,9 @@ const BookmarkCard = ({ data }: Props) => {
 								onClick={onDropdownToggle}
 								aria-expanded={isDropdownOpen}
 								aria-haspopup={true}
-								className="p-1 transition rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none"
+								className="p-1 text-black transition rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none dark:text-white"
 							>
-								<HiOutlineMenu className="w-5 h-5" />
+								<HiOutlineMenu className="w-5 h-5 fill-current" />
 							</button>
 						}
 					>
