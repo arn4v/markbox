@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
 import { pickKeys } from "~/lib/misc";
-import { createPat } from "~/lib/utils.server";
+import { comparePassword, createPat, hashPassword } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { MutationResolvers } from "../types.generated";
@@ -194,6 +194,49 @@ const Mutation: MutationResolvers<GQLContext> = {
 			scopes: updated.scopes as string[],
 			lastUsed: updated.lastUsed.toISOString(),
 		};
+	},
+	async updatePassword(
+		_,
+		{ input: { id, newPassword, currentPassword } },
+		{ prisma, req, res },
+	) {
+		const userId = await protectResolver(req, res);
+		const { password: hashedPassword } = await prisma.user.findUnique({
+			where: {
+				id: userId,
+			},
+			select: {
+				password: true,
+			},
+		});
+		if (await comparePassword(currentPassword, hashedPassword)) {
+			await prisma.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					password: await hashPassword(newPassword),
+				},
+			});
+			return {
+				code: "success",
+			};
+		} else {
+			return {
+				code: "current_password_invalid",
+			};
+		}
+	},
+	async updateProfile(_, { input: { id, name } }, { prisma, req, res }) {
+		const userId = await protectResolver(req, res);
+		return !!(await prisma.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				name,
+			},
+		}));
 	},
 };
 

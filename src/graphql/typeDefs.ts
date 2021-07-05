@@ -28,6 +28,7 @@ export default gql`
 
 	type User {
 		id: ID!
+		name: String!
 		email: String!
 		emailVerified: Boolean!
 		createdAt: String!
@@ -46,6 +47,21 @@ export default gql`
 		token: String!
 		lastUsed: String!
 		scopes: [String!]!
+	}
+
+	type ChangePasswordMessage {
+		code: String!
+	}
+
+	input UpdateProfileInput {
+		id: ID!
+		name: String!
+	}
+
+	input UpdatePasswordInput {
+		id: ID!
+		currentPassword: String!
+		newPassword: String!
 	}
 
 	input FilterBookmarksTagInput {
@@ -96,5 +112,7 @@ export default gql`
 		generateToken(name: String!, scopes: [String!]!): GeneratedAccessToken!
 		updateToken(id: ID!, scopes: [String!]!): AccessToken!
 		deleteToken(id: ID!): Boolean!
+		updateProfile(input: UpdateProfileInput!): Boolean!
+		updatePassword(input: UpdatePasswordInput!): ChangePasswordMessage!
 	}
 `;
