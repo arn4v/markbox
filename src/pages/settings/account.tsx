@@ -48,8 +48,12 @@ export default function AccountSettingsPage() {
 				<div className="flex items-center justify-between w-full pb-4 border-b border-gray-500">
 					<span className="text-xl font-bold">Profile settings</span>
 				</div>
-				<div className="grid grid-rows-2 rounded-lg dark:bg-gray-900">
-					<form onSubmit={onSubmit} className="flex flex-col w-1/2 gap-4">
+				<div className="flex flex-col items-start justify-start rounded-lg">
+					<h3 className="mb-6 text-lg font-semibold">Update name</h3>
+					<form
+						onSubmit={onSubmit}
+						className="flex flex-col w-full gap-4 p-4 bg-white border border-gray-200 rounded-lg shadow-lg dark:border-none dark:bg-gray-900"
+					>
 						<div className="w-full">
 							<label htmlFor="name" className="block">
 								Name
