@@ -17,6 +17,11 @@ module.exports = {
 			// Based on @leerob's tailwind config. https://github.com/leerob/leerob.io
 			typography(theme) {
 				return {
+					default: {
+						h1: {
+							"margin-bottom": "0px",
+						},
+					},
 					dark: {
 						css: {
 							color: theme("colors.gray.300"),

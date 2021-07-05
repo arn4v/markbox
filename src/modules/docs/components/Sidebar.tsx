@@ -9,6 +9,7 @@ import {
 } from "react-icons/hi";
 import { Logo } from "~/components/Logo";
 import useDisclosure from "~/hooks/use-disclosure";
+import AuthButton from "./AuthButton";
 import SidebarSection from "./SidebarSection";
 
 const sidebarData: Category[] = [
@@ -88,6 +89,7 @@ const Sidebar = () => {
 					{sidebarData.map((data) => {
 						return <SidebarSection key={data.title} data={data} />;
 					})}
+					<AuthButton className="flex justify-center lg:hidden" />
 				</div>
 			)}
 		</div>

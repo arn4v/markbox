@@ -3,7 +3,7 @@ import { getMDXComponent } from "mdx-bundler/client";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
 import * as React from "react";
-import MDXLink from "~/components/MDXComponents";
+import MDXComponents from "~/components/MDXComponents";
 import { getDocsSlugs, getSourceFromSlugArray } from "~/lib/docs-mdx";
 import AuthButton from "~/modules/docs/components/AuthButton";
 import Sidebar from "~/modules/docs/components/Sidebar";
@@ -23,6 +23,13 @@ export default function DocsPage({ code, metadata }: Props) {
 
 	return (
 		<>
+			<style jsx scoped>
+				{`
+					h1.heading {
+						margin-bottom: 0;
+					}
+				`}
+			</style>
 			<NextSeo title={`${metadata.seo_title} | Docs`} />
 			<div className="w-screen min-h-screen text-black bg-white dark:text-white dark:bg-black">
 				<div className="flex flex-col h-auto mx-auto max-w-7xl lg:flex-row">
@@ -30,11 +37,11 @@ export default function DocsPage({ code, metadata }: Props) {
 						<Sidebar />
 					</div>
 					<div className="box-border flex flex-col flex-auto h-full px-4 pt-4 pb-8 lg:h-auto lg:py-8 lg:px-8">
-						<AuthButton className="hidden lg:flex" />
+						<AuthButton className="hidden lg:flex lg:ml-auto" />
 						<article className="mt-8 prose dark:prose-dark flex-grow-1">
-							<h1 className="mb-8">{metadata.title}</h1>
+							<h1 className="lg:mb-8 heading">{metadata.title}</h1>
 							<div className="overflow-x-hidden">
-								<MDXComponent components={{ a: MDXLink }} />
+								<MDXComponent components={MDXComponents} />
 							</div>
 						</article>
 					</div>

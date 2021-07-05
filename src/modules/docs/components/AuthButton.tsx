@@ -10,7 +10,7 @@ function AuthButton({ className }: { className: string }) {
 		<Link href={isAuthenticated ? "/dashboard" : "/login"}>
 			<a
 				className={clsx([
-					"flex items-center gap-2 px-2 py-2 ml-auto font-medium text-white transition bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-2 ring-offset-2 ring-offset-current",
+					"flex items-center gap-2 px-2 py-2 font-medium text-white transition bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-2 ring-offset-2 ring-offset-current",
 					className,
 				])}
 			>

@@ -15,4 +15,8 @@ const MDXLink = (props: JSX.IntrinsicElements["a"]) => {
 	return <a target="_blank" rel="noopener noreferrer" {...props} />;
 };
 
-export default MDXLink;
+const MDXComponents = {
+	a: MDXLink,
+};
+
+export default MDXComponents;

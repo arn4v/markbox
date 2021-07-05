@@ -7,26 +7,36 @@ import {
 } from "~/lib/utils.server";
 import ApiRequest from "~/types/ApiRequest";
 
-interface GetQuery {
+interface GetBody {
 	id?: string;
 	title?: string;
-	tags?: Array<{ id?: string; name?: string }>;
+	tags?: {
+		AND?: string[];
+		OR?: string[];
+	};
 }
 
-const GetQuerySchema = yup
+const GetBodySchema = yup
 	.object()
 	.shape({
 		id: yup.string(),
 		title: yup.string(),
 		tags: yup
-			.array()
-			.of(
-				yup
-					.mixed()
-					.oneOf([
-						yup.object().shape({ id: yup.string() }),
-						yup.object().shape({ name: yup.string() }),
-					]),
+			.object()
+			.shape({
+				AND: yup.array().of(yup.string()),
+				OR: yup.array().of(yup.string()),
+			})
+			.test(
+				"either AND or OR",
+				"You can use only AND or OR, not both.",
+				(obj) => {
+					if (obj?.AND && obj?.OR) {
+						return false;
+					} else {
+						return true;
+					}
+				},
 			),
 	})
 	.optional();
@@ -43,33 +53,56 @@ const PostBodySchema = yup.object().shape({
 	tags: yup.array(yup.string()),
 });
 
+interface DeleteQuery {
+	id: string;
+}
+
+const DeleteQuerySchema = yup.object().shape({
+	id: yup.string().required(),
+});
+
 const handler = routeHandler<ApiRequest>()
 	.use(patAuthMiddleware)
 	.get(async (req, res) => {
 		try {
-			const query = (
-				req.query ? await GetQuerySchema.validate(req.query) : req.query
-			) as GetQuery;
+			const body = (
+				req.body ? await GetBodySchema.validate(req.body) : req.body
+			) as GetBody;
 			const items = await prisma.bookmark.findMany({
 				where: {
 					userId: req.ctx.userId,
-					...(typeof query.title === "string"
+					...(typeof body.id === "string"
 						? {
-								title: {
-									equals: query.title,
+								id: {
+									equals: body.id,
 								},
 						  }
 						: {}),
-					...(Array.isArray(query?.tags) && query?.tags.length > 0
+					...(typeof body.title === "string"
+						? {
+								title: {
+									equals: body.title,
+								},
+						  }
+						: {}),
+					...(Array.isArray(body?.tags?.AND) || Array.isArray(body?.tags?.OR)
 						? {
 								tags: {
 									some: {
-										OR: query?.tags.map((item) => {
-											if (item?.id) {
-												return { id: item.id };
-											}
-											return { name: item.name, userId: req.ctx.userId };
-										}),
+										...(body?.tags?.OR
+											? {
+													OR: body?.tags.OR.map((item) => {
+														return { name: item, userId: req.ctx.userId };
+													}),
+											  }
+											: {}),
+										...(body?.tags?.AND
+											? {
+													AND: body?.tags.AND.map((item) => {
+														return { name: item, userId: req.ctx.userId };
+													}),
+											  }
+											: {}),
 									},
 								},
 						  }
@@ -111,7 +144,7 @@ const handler = routeHandler<ApiRequest>()
 					const existingTags = await prisma.tag.findMany({
 						where: {
 							userId: req.ctx.userId,
-							AND: body.tags.map((item) => {
+							OR: body.tags.map((item) => {
 								return {
 									name: item,
 								};
@@ -125,6 +158,10 @@ const handler = routeHandler<ApiRequest>()
 					const existingTagsNames = existingTags.map((item) => item.name);
 					tags.create = body.tags
 						.filter((item) => {
+							console.log(
+								existingTagsNames,
+								existingTagsNames.indexOf(item) === -1,
+							);
 							return existingTagsNames.indexOf(item) === -1;
 						})
 						.map((item) => {
@@ -222,7 +259,21 @@ const handler = routeHandler<ApiRequest>()
 		res.status(204).end();
 	})
 	.delete(async (req, res) => {
-		res.status(204).end();
+		try {
+			const query = (
+				req?.query ? await DeleteQuerySchema.validate(req?.query) : req?.query
+			) as DeleteQuery;
+			const deleted = await prisma.bookmark.delete({
+				where: {
+					id: query.id,
+					userId: req.ctx.userId,
+				},
+				select: {},
+			});
+			res.status(204).end();
+		} catch (err) {
+			res.status(400).send(err);
+		}
 	});
 
 export default withCookies(handler);
