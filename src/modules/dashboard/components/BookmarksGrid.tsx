@@ -1,15 +1,13 @@
-import { useRouter } from "next/router";
 import Spinner from "~/components/Spinner";
-import {
-	useGetAllBookmarksQuery
-} from "~/graphql/types.generated";
+import { useGetAllBookmarksQuery } from "~/graphql/types.generated";
+import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
 import { CreateBookmarkButton } from "./CreateBookmark";
 
 export default function BookmarksGrid() {
-	const router = useRouter();
+	const { tag } = useDashboardStore();
 	const { data, isLoading } = useGetAllBookmarksQuery(
-		router.query?.tag ? { tag: { name: router.query?.tag as string } } : {},
+		tag ? { tag: { name: tag } } : {},
 		{
 			initialData: { bookmarks: [] },
 		},
@@ -23,7 +21,10 @@ export default function BookmarksGrid() {
 		);
 
 	return (
-		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:pt-8 lg:px-8 2xl:pr-0">
+		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:pt-8 gap-6 lg:px-8 2xl:pr-0">
+			{tag !== "All" && (
+				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
+			)}
 			{data?.bookmarks.length > 0 ? (
 				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-x-6">
 					{data?.bookmarks.map((item) => {
@@ -32,7 +33,7 @@ export default function BookmarksGrid() {
 				</div>
 			) : (
 				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
-					<span className="text-xl font-medium">
+					<span className="text-xl font-medium text-center">
 						You don't have any bookmarks yet.
 					</span>
 					<div>

@@ -1,15 +1,13 @@
 import clsx from "clsx";
-import { useRouter } from "next/router";
-import QueryString from "qs";
 import * as React from "react";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
+import useDashboardStore from "../store";
 import Tag from "./Tag";
 
 export default function TagList() {
 	const {
 		isOpen: isEditModeEnabled,
-		onOpen: onEditModeEnabled,
 		onClose: onEditModeDisabled,
 		onToggle: onEditModeToggle,
 	} = useDisclosure();
@@ -18,13 +16,13 @@ export default function TagList() {
 		{
 			initialData: { tags: [] },
 			onSuccess(data) {
-				if (data?.tags?.length!) {
+				if (data?.tags?.length === 0) {
 					onEditModeDisabled();
 				}
 			},
 		},
 	);
-	const router = useRouter();
+	const { tag } = useDashboardStore();
 
 	return (
 		<div className="flex flex-col items-center w-full dark:text-white">
@@ -48,8 +46,7 @@ export default function TagList() {
 			<div className="flex flex-col items-center justify-start w-full gap-2 my-2">
 				<Tag
 					isEditModeEnabled={false}
-					active={typeof router.query.tag === "undefined"}
-					href="/dashboard"
+					active={typeof tag === "undefined"}
 					data={{ id: undefined, name: "All" }}
 				/>
 				{data?.tags?.map((item) => {
@@ -58,13 +55,7 @@ export default function TagList() {
 							key={item.id}
 							isEditModeEnabled={isEditModeEnabled}
 							data={item}
-							href={
-								"/dashboard?" +
-								QueryString.stringify({
-									tag: encodeURIComponent(item.name.toLowerCase()),
-								})
-							}
-							active={router.query?.tag === item.name.toLowerCase()}
+							active={tag === item.id}
 						/>
 					);
 				})}

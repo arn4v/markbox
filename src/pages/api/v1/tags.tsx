@@ -1,9 +1,9 @@
 import * as yup from "yup";
 import {
-  patAuthMiddleware,
-  prisma,
-  routeHandler,
-  withCookies
+	patAuthMiddleware,
+	prisma,
+	routeHandler,
+	withCookies
 } from "~/lib/utils.server";
 import ApiRequest from "~/types/ApiRequest";
 
@@ -21,9 +21,9 @@ const handler = routeHandler<ApiRequest>()
 	.use(patAuthMiddleware)
 	.patch(async (req, res) => {
 		try {
-			const body = (
-				req.body ? await PatchBodySchema.validate(req.body) : req.body
-			) as PatchBody;
+			const body = (req.body
+				? await PatchBodySchema.validate(req.body)
+				: req.body) as unknown as PatchBody;
 			const { id } = await prisma.tag.findFirst({
 				where: {
 					name: body.name,

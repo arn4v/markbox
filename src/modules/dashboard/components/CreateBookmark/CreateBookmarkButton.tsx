@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import QueryString from "qs";
 import * as React from "react";
 import { HiPlus } from "react-icons/hi";
-import useBreakpoints from "~/hooks/use-breakpoints";
 import useStore from "./store";
 
 interface Props {
@@ -19,13 +18,14 @@ export default function CreateBookmarkButton({
 }: Props): JSX.Element {
 	const { isOpen, onOpen: _onOpen } = useStore();
 	const router = useRouter();
-	const { isLg } = useBreakpoints();
 
 	const onOpen = () => {
 		_onOpen(() => {
 			if (onClick) onClick();
 			router.push(
-				router.pathname + "?" + QueryString.stringify({ create: true }),
+				router.pathname +
+					"?" +
+					QueryString.stringify({ ...router.query, create: true }),
 				null,
 				{
 					shallow: true,

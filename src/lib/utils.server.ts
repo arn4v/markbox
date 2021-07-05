@@ -155,7 +155,6 @@ export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
 				res.status(500).send({ message: "Unable to get userId for token." });
 			}
 		} catch (err) {
-			console.log(err);
 			res.status(400).send({ message: "Invalid token." });
 		}
 		return;

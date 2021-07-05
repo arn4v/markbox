@@ -158,10 +158,6 @@ const handler = routeHandler<ApiRequest>()
 					const existingTagsNames = existingTags.map((item) => item.name);
 					tags.create = body.tags
 						.filter((item) => {
-							console.log(
-								existingTagsNames,
-								existingTagsNames.indexOf(item) === -1,
-							);
 							return existingTagsNames.indexOf(item) === -1;
 						})
 						.map((item) => {
@@ -260,17 +256,26 @@ const handler = routeHandler<ApiRequest>()
 	})
 	.delete(async (req, res) => {
 		try {
-			const query = (
-				req?.query ? await DeleteQuerySchema.validate(req?.query) : req?.query
-			) as DeleteQuery;
-			const deleted = await prisma.bookmark.delete({
+			const body = (req?.query
+				? await DeleteQuerySchema.validate(req?.query)
+				: req?.query) as unknown as DeleteQuery;
+			const doesBookmarkExistForUser = await prisma.bookmark.findFirst({
 				where: {
-					id: query.id,
+					id: body.id,
 					userId: req.ctx.userId,
 				},
-				select: {},
 			});
-			res.status(204).end();
+			if (doesBookmarkExistForUser) {
+				const deleted = await prisma.bookmark.delete({
+					where: {
+						id: body.id,
+					},
+					select: {},
+				});
+				res.status(200).send({ message: "Successfully deleted bookmark." });
+			} else {
+				res.status(200).send({ message: "Invalid bookmark id." });
+			}
 		} catch (err) {
 			res.status(400).send(err);
 		}

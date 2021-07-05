@@ -1,25 +1,18 @@
 import { CardStackIcon } from "@radix-ui/react-icons";
 import clsx from "clsx";
-import { useRouter } from "next/router";
-import QueryString from "qs";
 import React from "react";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
-import { useAuth } from "~/hooks/use-auth";
 import useDisclosure from "~/hooks/use-disclosure";
-import { omitKeys } from "~/lib/misc";
+import useDashboardStore from "../store";
 import useStore from "./CreateBookmark";
 import Tag from "./Tag";
 
 export default function TagsDrawer(): JSX.Element {
-	const { user } = useAuth();
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const { isOpen: isCreateOpen, onClose: onCreateClose } = useStore();
-	const router = useRouter();
 	const { data } = useGetAllTagsQuery();
-	const {
-		query: { tag },
-	} = useRouter();
+	const { tag } = useDashboardStore();
 
 	return (
 		<>
@@ -42,10 +35,7 @@ export default function TagsDrawer(): JSX.Element {
 						<div className="flex flex-col items-center justify-start w-full gap-4 my-2">
 							<Tag
 								isEditModeEnabled={false}
-								data={{ id: "", name: "All" }}
-								href={`/dashboard?${QueryString.stringify(
-									omitKeys(router.query, "tag"),
-								)}`}
+								data={{ id: undefined, name: "All" }}
 								active={typeof tag === "undefined"}
 							/>
 							{data?.tags?.map((item) => {
@@ -53,12 +43,8 @@ export default function TagsDrawer(): JSX.Element {
 									<Tag
 										key={item.id}
 										data={item}
-										active={tag === item.name.toLowerCase()}
+										active={tag === item.id}
 										isEditModeEnabled={false}
-										href={`/dashboard?${QueryString.stringify({
-											...router.query,
-											tag: item.name,
-										})}`}
 									/>
 								);
 							})}
