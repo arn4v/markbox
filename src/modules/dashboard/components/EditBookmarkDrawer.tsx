@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import isEqual from "lodash.isequal";
 import React from "react";
 import { HiOutlineXCircle, HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
@@ -9,7 +10,7 @@ import {
 	CreateOrUpdateBookmarkTagInput,
 	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useUpdateBookmarkMutation
+	useUpdateBookmarkMutation,
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 
@@ -65,7 +66,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		{ id },
 		{
 			onSuccess(data) {
-				if (JSON.stringify(state) === JSON.stringify(initialState)) {
+				if (isEqual(state, initialState)) {
 					const { title, url, tags } = data.bookmark;
 					setState((prev) => ({
 						...prev,
@@ -82,7 +83,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 		onSuccess: (res) => {
 			queryClient.invalidateQueries("GetAllBookmarks");
 			queryClient.invalidateQueries("GetAllTags");
-			refetchBookmark();
+			internalOnClose();
 		},
 	});
 
@@ -123,8 +124,6 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 				tagsDisconnect: _tagsDisconnect,
 			},
 		});
-
-		internalOnClose();
 	};
 
 	return (
