@@ -5,6 +5,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import "prism-themes/themes/prism-gruvbox-dark.css";
 import * as React from "react";
+import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { defaultSeoProps } from "~/config";
 import "~/styles/index.css";
@@ -14,6 +15,7 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
+			<Toaster />
 			<Head>
 				<link rel="shortcut icon" href="/favicon.ico" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
