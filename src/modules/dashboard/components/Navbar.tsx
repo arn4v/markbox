@@ -10,7 +10,7 @@ export default function Navbar() {
 	const router = useRouter();
 
 	return (
-		<header className="w-full h-20 border-b dark:border-gray-700">
+		<header className="w-full h-20 border-b dark:border-gray-700 fixed dark:bg-black bg-white z-50">
 			<div className="flex items-center justify-between w-full h-full px-6 mx-auto 2xl:px-0 2xl:w-3/5">
 				<Link href="/dashboard">
 					<a>

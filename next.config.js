@@ -1,31 +1,35 @@
 const withPWA = require("next-pwa");
-const runtimeCaching = require("next-pwa/cache");
 
-let config = withPWA({
-	webpack: (config) => {
-		return config;
-	},
-	async rewrites() {
+/**
+ * @type {import("next/dist/next-server/server/config-shared").NextConfig}
+ */
+let config = {
+	async redirects() {
 		return [
-			{
-				source: "/register",
-				destination: "/signup",
-			},
 			{
 				source: "/settings",
 				destination: "/settings/account",
+				permanent: false,
 			},
 			{
 				source: "/docs",
 				destination: "/docs/introduction",
+				permanent: false,
 			},
 		];
 	},
-	pwa: {
-		dest: "public",
-		disable: process.env.NODE_ENV !== "production",
-		runtimeCaching,
-	},
-});
+};
+
+if (process.env.NODE_ENV === "production") {
+	config = withPWA(
+		Object.assign({}, config, {
+			pwa: {
+				dest: "public",
+				register: process.env.NODE_ENV === "production",
+				disable: process.env.NODE_ENV !== "production",
+			},
+		}),
+	);
+}
 
 module.exports = config;

@@ -1,6 +1,11 @@
 import format from "date-fns/format";
 import * as React from "react";
-import { HiOutlineMenu, HiPencil, HiTrash } from "react-icons/hi";
+import {
+	HiOutlineExternalLink,
+	HiOutlineMenu,
+	HiPencil,
+	HiTrash
+} from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Popup from "~/components/Popup";
@@ -107,22 +112,9 @@ const BookmarkCard = ({ data }: Props) => {
 							target="_blank"
 							rel="noreferrer"
 							href={data?.url}
-							className="focus:outline-none"
+							className="focus:outline-none dark:text-white text-black"
 						>
-							<svg
-								width="14"
-								height="14"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M13 1L5.5 8.5m0-6h-3A1.5 1.5 0 001 4v7.5A1.5 1.5 0 002.5 13H10a1.5 1.5 0 001.5-1.5v-3l-6-6zm3-1.5H13 8.5zM13 1v4.5V1z"
-									stroke="#EDF2F7"
-									strokeWidth="1.5"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								/>
-							</svg>
+							<HiOutlineExternalLink />
 						</a>
 						<button
 							type="button"

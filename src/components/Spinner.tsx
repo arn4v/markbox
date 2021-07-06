@@ -1,7 +1,15 @@
-export default function Spinner() {
+import clsx from "clsx";
+
+interface Props {
+	className?: string;
+}
+function Spinner(props: Props) {
 	return (
 		<svg
-			className="animate-spin -ml-1 mr-3 h-8 w-8 text-black dark:text-white"
+			className={clsx([
+				"animate-spin -ml-1 mr-3 h-8 w-8 text-black dark:text-white",
+				props.className,
+			])}
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
@@ -22,3 +30,5 @@ export default function Spinner() {
 		</svg>
 	);
 }
+
+export default Spinner;
