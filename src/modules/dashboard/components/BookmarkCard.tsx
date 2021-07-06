@@ -1,4 +1,5 @@
 import format from "date-fns/format";
+import { useRouter } from "next/router";
 import * as React from "react";
 import {
 	HiOutlineExternalLink,
@@ -33,6 +34,7 @@ const BookmarkCard = ({ data }: Props) => {
 		},
 	});
 	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	return (
 		<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
@@ -118,7 +120,7 @@ const BookmarkCard = ({ data }: Props) => {
 						</a>
 						<button
 							type="button"
-							onClick={onOpen}
+							onClick={() => router.push("/edit/" + data.id)}
 							className="focus:outline-none"
 						>
 							<HiPencil />

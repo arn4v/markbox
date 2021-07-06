@@ -1,10 +1,18 @@
 import clsx from "clsx";
 import Link from "next/link";
 import * as React from "react";
-import { HiArrowRight } from "react-icons/hi";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useAuth } from "~/hooks/use-auth";
 
-function AuthButton({ className }: { className: string }) {
+function AuthButton({
+	className = "",
+	icon,
+	iconPosition = "right",
+}: {
+	className?: string;
+	icon?: React.ReactNode;
+	iconPosition?: "left" | "right";
+}) {
 	const { isAuthenticated } = useAuth();
 	return (
 		<Link href={isAuthenticated ? "/dashboard" : "/login"}>
@@ -14,7 +22,9 @@ function AuthButton({ className }: { className: string }) {
 					className,
 				])}
 			>
-				{isAuthenticated ? "Dashboard" : "Login"} <HiArrowRight />
+				{iconPosition === "left" && <>{icon ?? <HiArrowLeft />}</>}
+				{isAuthenticated ? "Dashboard" : "Login"}
+				{iconPosition === "right" && <>{icon ?? <HiArrowRight />}</>}
 			</a>
 		</Link>
 	);
