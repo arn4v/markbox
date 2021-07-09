@@ -2,8 +2,8 @@ import * as React from "react";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import {
-  useCreateBookmarkMutation,
-  useGetAllTagsQuery
+	useCreateBookmarkMutation,
+	useGetAllTagsQuery
 } from "~/graphql/types.generated";
 
 interface Props {
@@ -44,10 +44,11 @@ const CreateForm = ({ onSuccess }: Props) => {
 			return acc;
 		}, []);
 		mutate({ input: { title, url, tags } });
+		onSuccess();
 	};
 
 	return (
-		<form className="flex flex-col gap-4" onSubmit={onSuccess}>
+		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
 			<div className="w-full">
 				<label htmlFor="title" className="block">
 					Name
@@ -120,6 +121,7 @@ const CreateForm = ({ onSuccess }: Props) => {
 								newTagInputRef.current.value = "";
 							}
 						}}
+						placeholder="Separate tags by typing comma (,)"
 						className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 caret-black"
 						list="tags"
 					/>

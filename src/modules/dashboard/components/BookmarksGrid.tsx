@@ -25,9 +25,15 @@ export default function BookmarksGrid() {
 			)}
 			{data?.bookmarks.length > 0 ? (
 				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-x-6">
-					{data?.bookmarks.map((item) => {
-						return <BookmarkCard key={item.id} data={item} />;
-					})}
+					{data?.bookmarks
+						.sort(
+							(a, b) =>
+								new Date(b.createdAt).valueOf() -
+								new Date(a.createdAt).valueOf(),
+						)
+						.map((item) => {
+							return <BookmarkCard key={item.id} data={item} />;
+						})}
 				</div>
 			) : (
 				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">

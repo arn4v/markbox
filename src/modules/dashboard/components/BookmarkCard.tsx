@@ -1,4 +1,5 @@
 import format from "date-fns/format";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import {
@@ -40,7 +41,14 @@ const BookmarkCard = ({ data }: Props) => {
 		<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
 			<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 				<span className="text-xs">
-					{format(new Date(data?.createdAt), "do MMMM, yyyy")}
+					{/* Need to test the advantages/disadvantages of using IIFEs in JSX */}
+					{(() => {
+						const date = new Date(data?.createdAt);
+						return `Created on ${format(date, "do MMMM, yyyy")} at ${format(
+							date,
+							"h:mmaa",
+						)}`;
+					})()}
 				</span>
 				<div className="w-5/6 text-sm font-medium break-words">
 					{data?.title}
@@ -85,15 +93,16 @@ const BookmarkCard = ({ data }: Props) => {
 					>
 						<ul className="flex flex-col w-48 mt-1 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg dark:border-none dark:bg-gray-600">
 							<li className="w-full border-b border-gray-300 dark:border-blueGray-400">
-								<button
-									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
-									onClick={() => {
-										onOpen();
-										onDropdownClose();
-									}}
-								>
-									Edit <HiPencil />
-								</button>
+								<Link href={"/edit/" + data?.id}>
+									<a
+										className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
+										onClick={() => {
+											onDropdownClose();
+										}}
+									>
+										Edit <HiPencil />
+									</a>
+								</Link>
 							</li>
 							<li className="w-full">
 								<button

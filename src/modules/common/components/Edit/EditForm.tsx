@@ -204,7 +204,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 								newTagInputRef.current.value = "";
 							}
 						}}
-						placeholder="Separate tags by typing comma (,)."
+						placeholder="Separate tags by typing comma (,)"
 						className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-blue-600 ring-offset-2 caret-black"
 						list="tags"
 					/>
