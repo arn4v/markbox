@@ -49,6 +49,7 @@
 		"faker": "^5.5.3",
 		"fast-jwt": "^1.2.0",
 		"framer-motion": "^4.1.17",
+		"fuse.js": "^6.4.6",
 		"graphql": "^15.5.1",
 		"graphql-tools": "^7.0.5",
 		"gray-matter": "^4.0.3",

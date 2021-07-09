@@ -1,15 +1,34 @@
+import clsx from "clsx";
 import * as React from "react";
+import { HiX } from "react-icons/hi";
 import Spinner from "~/components/Spinner";
-import { useGetAllBookmarksQuery } from "~/graphql/types.generated";
+import { Bookmark, useGetAllBookmarksQuery } from "~/graphql/types.generated";
+import useFuse from "~/hooks/use-fuse";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
 
 export default function BookmarksGrid() {
 	const { tag } = useDashboardStore();
+	const queryRef = React.useRef<HTMLInputElement>(null);
 	const { data, isLoading } = useGetAllBookmarksQuery(
 		tag !== "All" ? { tag: { name: tag } } : {},
+		{
+			initialData: {
+				bookmarks: [],
+			},
+		},
 	);
+	const [query, setQuery] = React.useState<string>("");
+	const { result } = useFuse<Bookmark>({
+		data: data?.bookmarks,
+		query,
+		options: {
+			keys: ["title", "tags.name"],
+			shouldSort: true,
+			location: 15,
+		},
+	});
 
 	if (isLoading)
 		return (
@@ -20,17 +39,46 @@ export default function BookmarksGrid() {
 
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
+			<div className="relative w-full">
+				<input
+					type="text"
+					value={query}
+					onChange={(e) => {
+						setQuery(e.target.value);
+					}}
+					ref={queryRef}
+					className={clsx([
+						"border border-gray-300 rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full",
+					])}
+					autoComplete="off"
+				/>
+				{query.length > 0 ? (
+					<button
+						className={clsx([
+							"bg-transparent text-gray-500 px-2 absolute right-0 top-0 h-full",
+						])}
+						onClick={() => setQuery("")}
+					>
+						<HiX />
+					</button>
+				) : null}
+			</div>
 			{tag && tag !== "All" && (
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
-			{data?.bookmarks.length > 0 ? (
+			{result?.length > 0 ? (
 				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-x-6">
-					{data?.bookmarks
-						.sort(
-							(a, b) =>
+					{result
+						.sort((a, b) => {
+							if (result.length !== data.bookmarks.length) {
+								return 0;
+							}
+
+							return (
 								new Date(b.createdAt).valueOf() -
-								new Date(a.createdAt).valueOf(),
-						)
+								new Date(a.createdAt).valueOf()
+							);
+						})
 						.map((item) => {
 							return <BookmarkCard key={item.id} data={item} />;
 						})}
