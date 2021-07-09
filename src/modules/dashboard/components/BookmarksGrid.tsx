@@ -39,30 +39,33 @@ export default function BookmarksGrid() {
 
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
-			<div className="relative w-full">
-				<input
-					type="text"
-					value={query}
-					onChange={(e) => {
-						setQuery(e.target.value);
-					}}
-					ref={queryRef}
-					className={clsx([
-						"border border-gray-300 rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full",
-					])}
-					autoComplete="off"
-				/>
-				{query.length > 0 ? (
-					<button
+			<div className="sticky top-0">
+				<div className="relative w-full">
+					<input
+						type="text"
+						value={query}
+						onChange={(e) => {
+							setQuery(e.target.value);
+						}}
+						ref={queryRef}
 						className={clsx([
-							"bg-transparent text-gray-500 px-2 absolute right-0 top-0 h-full",
+							"border border-gray-300 rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full",
 						])}
-						onClick={() => setQuery("")}
-					>
-						<HiX />
-					</button>
-				) : null}
+						autoComplete="off"
+					/>
+					{query.length > 0 ? (
+						<button
+							className={clsx([
+								"bg-transparent text-gray-500 px-2 absolute right-0 top-0 h-full",
+							])}
+							onClick={() => setQuery("")}
+						>
+							<HiX />
+						</button>
+					) : null}
+				</div>
 			</div>
+
 			{tag && tag !== "All" && (
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
@@ -84,17 +87,30 @@ export default function BookmarksGrid() {
 						})}
 				</div>
 			) : (
-				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
-					<span className="text-xl font-medium text-center">
-						You don&apos;t have any bookmarks yet.
-					</span>
-					<div>
-						<CreateBookmarkButton
-							className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-gray-500 dark:hover:bg-gray-600"
-							showText
-						/>
-					</div>
-				</div>
+				(() => {
+					if (data.bookmarks.length > 0 && result.length === 0) {
+						return (
+							<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
+								<span className="text-lg font-medium text-center">
+									Couldn&apos;t find any bookmarks with that query.
+								</span>
+							</div>
+						);
+					}
+					return (
+						<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
+							<span className="text-xl font-medium text-center">
+								You don&apos;t have any bookmarks yet.
+							</span>
+							<div>
+								<CreateBookmarkButton
+									className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-gray-500 dark:hover:bg-gray-600"
+									showText
+								/>
+							</div>
+						</div>
+					);
+				})()
 			)}
 		</div>
 	);

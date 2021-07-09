@@ -37,18 +37,23 @@ const Drawer: DrawerComponent = ({
 			if (event.key === "Escape") onClose();
 		};
 
-		const onScroll = (e: Event) => {
-			e.preventDefault();
-			window.scrollTo(0, 0);
-		};
+		/**
+		 * onScroll and onTouchMove are used to stop viewport
+		 * scrolling when modal or drawer are open
+		 */
+
+		// const onScroll = (e: Event) => {
+		// 	e.preventDefault();
+		// 	window.scrollTo(0, 0);
+		// };
 
 		if (isOpen) {
-			document.addEventListener("scroll", onScroll);
-			document.addEventListener("touchmove", onScroll);
-			document.addEventListener("onsc", onEscape, false);
+			// document.addEventListener("scroll", onScroll);
+			// document.addEventListener("touchmove", onScroll);
+			document.addEventListener("keydown", onEscape, false);
 		} else {
-			document.removeEventListener("scroll", onScroll);
-			document.removeEventListener("touchmove", onScroll);
+			// document.removeEventListener("scroll", onScroll);
+			// document.removeEventListener("touchmove", onScroll);
 			document.removeEventListener("keydown", onEscape, false);
 		}
 	}, [isOpen, onClose]);

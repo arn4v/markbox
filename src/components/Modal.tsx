@@ -35,18 +35,18 @@ const Modal: Modal = ({
 			if (event.key === "Escape") onClose();
 		};
 
-		const onScroll = (e) => {
-			e.preventDefault();
-			window.scrollTo(0, 0);
-		};
+		// const onScroll = (e) => {
+		// 	e.preventDefault();
+		// 	window.scrollTo(0, 0);
+		// };
 
 		if (isOpen) {
-			document.addEventListener("scroll", onScroll);
-			document.addEventListener("touchmove", onScroll);
+			// document.addEventListener("scroll", onScroll, false);
+			// document.addEventListener("touchmove", onScroll, false);
 			document.addEventListener("onsc", onEscape, false);
 		} else {
-			document.removeEventListener("scroll", onScroll);
-			document.removeEventListener("touchmove", onScroll);
+			// document.removeEventListener("scroll", onScroll, false);
+			// document.removeEventListener("touchmove", onScroll, false);
 			document.removeEventListener("keydown", onEscape, false);
 		}
 	}, [isOpen, onClose]);
