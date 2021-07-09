@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { useAuth } from "~/hooks/use-auth";
+import useIsPwa from "~/hooks/use-pwa";
 import { CreateForm } from "~/modules/common/components/Create";
 import Navbar from "~/modules/dashboard/components/Navbar";
 
@@ -12,6 +13,7 @@ interface Props {
 
 const CreatePage = ({}: Props) => {
 	const router = useRouter();
+	const isPwa = useIsPwa();
 	const {
 		title = "",
 		url = "",
@@ -37,7 +39,7 @@ const CreatePage = ({}: Props) => {
 			<div className="flex flex-col gap-6 p-3 w-11/12 lg:p-6 dark:bg-gray-900 bg-white rounded-md border border-gray-300 lg:w-1/2 shadow-lg mt-8">
 				<CreateForm
 					onSuccess={() => {
-						if (popup) {
+						if (popup && !isPwa) {
 							window.close();
 						} else {
 							router.push("/dashboard");
