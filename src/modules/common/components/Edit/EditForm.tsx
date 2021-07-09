@@ -114,7 +114,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
 			<div className="w-full">
 				<label htmlFor="title" className="block">
-					Name
+					Title
 				</label>
 				<input
 					id="title"

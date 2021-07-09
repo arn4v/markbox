@@ -21,6 +21,10 @@ const sidebarData: Category[] = [
 				href: "/docs/introduction",
 			},
 			{
+				title: "Saving browser tab using bookmarklet",
+				href: "/docs/bookmarklet",
+			},
+			{
 				title: "Roadmap",
 				href: "/docs/roadmap",
 			},

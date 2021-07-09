@@ -7,10 +7,12 @@ import {
 } from "~/graphql/types.generated";
 
 interface Props {
+	title?: string;
+	url?: string;
 	onSuccess: (...args: unknown[]) => void;
 }
 
-const CreateForm = ({ onSuccess }: Props) => {
+const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	const initialState = {
 		title: "",
 		url: "",
@@ -27,8 +29,11 @@ const CreateForm = ({ onSuccess }: Props) => {
 			onSuccess();
 		},
 	});
-
-	const [state, setState] = React.useState<typeof initialState>(initialState);
+	const [state, setState] = React.useState<typeof initialState>({
+		...initialState,
+		title,
+		url,
+	});
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -44,14 +49,13 @@ const CreateForm = ({ onSuccess }: Props) => {
 			return acc;
 		}, []);
 		mutate({ input: { title, url, tags } });
-		onSuccess();
 	};
 
 	return (
 		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
 			<div className="w-full">
 				<label htmlFor="title" className="block">
-					Name
+					Title
 				</label>
 				<input
 					id="title"
