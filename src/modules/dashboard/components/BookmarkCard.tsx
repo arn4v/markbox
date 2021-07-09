@@ -13,7 +13,7 @@ import Popup from "~/components/Popup";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
-import EditBookmarkDrawer from "./EditBookmarkDrawer";
+import EditBookmarkDrawer from "../../common/components/Edit/EditBookmarkDrawer";
 
 interface Props {
 	data: Bookmark;

@@ -4,8 +4,8 @@ import React from "react";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
+import useStore from "../../common/components/Create";
 import useDashboardStore from "../store";
-import useStore from "./CreateBookmark";
 import Tag from "./Tag";
 
 export default function TagsDrawer(): JSX.Element {

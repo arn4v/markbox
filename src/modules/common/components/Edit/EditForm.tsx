@@ -3,11 +3,11 @@ import React from "react";
 import { HiOutlineXCircle } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import {
-  Bookmark,
-  CreateOrUpdateBookmarkTagInput,
-  useGetAllTagsQuery,
-  useGetBookmarkQuery,
-  useUpdateBookmarkMutation
+	Bookmark,
+	CreateOrUpdateBookmarkTagInput,
+	useGetAllTagsQuery,
+	useGetBookmarkQuery,
+	useUpdateBookmarkMutation
 } from "~/graphql/types.generated";
 
 interface LocalState {
@@ -39,7 +39,12 @@ const transformTags = (
 	}, {});
 };
 
-const EditBookmarkForm = ({ id, onSuccess }) => {
+interface Props {
+	id: string;
+	onSuccess: () => void;
+}
+
+const EditForm = ({ id, onSuccess }: Props) => {
 	const initialState: LocalState = {
 		title: "",
 		url: "",
@@ -199,6 +204,7 @@ const EditBookmarkForm = ({ id, onSuccess }) => {
 								newTagInputRef.current.value = "";
 							}
 						}}
+						placeholder="Separate tags by typing comma (,)."
 						className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-blue-600 ring-offset-2 caret-black"
 						list="tags"
 					/>
@@ -219,4 +225,4 @@ const EditBookmarkForm = ({ id, onSuccess }) => {
 	);
 };
 
-export default EditBookmarkForm;
+export default EditForm;

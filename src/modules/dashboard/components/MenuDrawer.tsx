@@ -15,7 +15,7 @@ import {
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useAuth } from "~/hooks/use-auth";
 import useDisclosure from "~/hooks/use-disclosure";
-import useStore from "./CreateBookmark";
+import useStore from "../../common/components/Create";
 
 const MenuItem = ({ href, children }) => {
 	return (

@@ -4,7 +4,7 @@ import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import useBreakpoints from "~/hooks/use-breakpoints";
-import EditBookmarkForm from "~/modules/common/components/EditBookmarkForm";
+import EditForm from "~/modules/common/components/Edit/EditForm";
 
 interface Props {
 	isOpen: boolean;
@@ -43,7 +43,7 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 						</button>
 					</div>
 					<div className="lg:mt-8">
-						<EditBookmarkForm id={id} onSuccess={onSuccess} />
+						<EditForm id={id} onSuccess={onSuccess} />
 					</div>
 				</div>
 			</DrawerContent>

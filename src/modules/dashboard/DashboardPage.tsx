@@ -2,8 +2,8 @@ import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
+import { CreateBookmarkDrawer } from "../common/components/Create";
 import BookmarksGrid from "./components/BookmarksGrid";
-import { CreateBookmarkDrawer } from "./components/CreateBookmark";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 

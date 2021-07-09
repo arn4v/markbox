@@ -1,9 +1,9 @@
 import * as React from "react";
 import Spinner from "~/components/Spinner";
 import { useGetAllBookmarksQuery } from "~/graphql/types.generated";
+import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
-import { CreateBookmarkButton } from "./CreateBookmark";
 
 export default function BookmarksGrid() {
 	const { tag } = useDashboardStore();

@@ -11,7 +11,7 @@ interface Props {
 	showText?: boolean;
 }
 
-export default function CreateBookmarkButton({
+export default function CreateButton({
 	className,
 	onClick,
 	showText = false,
