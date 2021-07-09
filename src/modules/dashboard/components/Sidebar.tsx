@@ -33,7 +33,7 @@ const Sidebar = () => {
 					}
 				`}
 			</style>
-			<div className="hidden lg:block gap-6 px-6 bg-white border-r border-gray-200 dark:bg-transparent dark:border-gray-700 2xl:pl-0 2xl:pr-6 lg:w-72 dark:text-white overflow-y-scroll scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:border-none dark:scrollbar-track-gray-800 scrollbar scrollbar-thin py-8 sidebar fixed">
+			<div className="hidden lg:block gap-6 px-6 bg-white border-r border-gray-200 dark:bg-transparent dark:border-gray-700 2xl:pl-0 2xl:pr-6 lg:w-72 dark:text-white overflow-y-scroll scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 scrollbar scrollbar-thin py-8 sidebar fixed">
 				<div className="h-auto flex flex-col items-start justify-start gap-4 w-full">
 					<div className="flex items-center justify-between w-full">
 						<h2

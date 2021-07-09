@@ -1,9 +1,7 @@
-import ms from "ms";
 import { useRouter } from "next/router";
+import QueryString from "qs";
 import create from "zustand";
 import { User, useUserQuery } from "~/graphql/types.generated";
-import QueryString from "qs";
-import { omitKeys, pickKeys } from "~/lib/misc";
 
 interface UseAuthReturn {
 	isAuthenticated: boolean;

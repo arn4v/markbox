@@ -1,11 +1,11 @@
-import * as React from "react";
-import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
-import clsx from "clsx";
-import { getTargetChildren } from "~/lib/react";
 import { Portal, PortalProps } from "@reach/portal";
+import clsx from "clsx";
+import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
+import * as React from "react";
+import { getTargetChildren } from "~/lib/react";
 
 type ModalProps = {
-	portalProps?: PortalProps;
+	portalProps?: Omit<PortalProps, "children">;
 	containerProps?: {
 		className?: string;
 	};
@@ -30,25 +30,31 @@ const Modal: Modal = ({
 		[children],
 	);
 
-	const onEscape = React.useCallback(
-		(event: KeyboardEvent) => {
-			if (event.key === "Escape") onClose();
-		},
-		[onClose],
-	);
-
 	React.useEffect(() => {
+		const onEscape = (event: KeyboardEvent) => {
+			if (event.key === "Escape") onClose();
+		};
+
+		const onScroll = (e) => {
+			e.preventDefault();
+			window.scrollTo(0, 0);
+		};
+
 		if (isOpen) {
-			document.addEventListener("keydown", onEscape, false);
+			document.addEventListener("scroll", onScroll);
+			document.addEventListener("touchmove", onScroll);
+			document.addEventListener("onsc", onEscape, false);
 		} else {
+			document.removeEventListener("scroll", onScroll);
+			document.removeEventListener("touchmove", onScroll);
 			document.removeEventListener("keydown", onEscape, false);
 		}
-	}, [onEscape, isOpen]);
+	}, [isOpen, onClose]);
 
 	return (
-		<Portal {...portalProps}>
-			<AnimatePresence>
-				{isOpen && (
+		<AnimatePresence>
+			{isOpen && (
+				<Portal {...portalProps}>
 					<div
 						className={clsx([
 							"h-screen w-screen fixed inset-0 overflow-none",
@@ -72,9 +78,9 @@ const Modal: Modal = ({
 						/>
 						{withTarget}
 					</div>
-				)}
-			</AnimatePresence>
-		</Portal>
+				</Portal>
+			)}
+		</AnimatePresence>
 	);
 };
 

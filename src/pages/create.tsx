@@ -25,8 +25,6 @@ const CreatePage = ({}: Props) => {
 	};
 	useAuth(true);
 
-	console.log(popup);
-
 	return (
 		<div className="flex flex-col w-screen min-h-screen scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 scrollbar scrollbar-thin bg-white dark:bg-black items-center">
 			<Navbar />
