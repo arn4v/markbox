@@ -1,11 +1,11 @@
-import * as React from "react";
-import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
-import clsx from "clsx";
-import { getTargetChildren } from "~/lib/react";
 import { Portal, PortalProps } from "@reach/portal";
+import clsx from "clsx";
+import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
+import * as React from "react";
+import { getTargetChildren } from "~/lib/react";
 
 type DrawerProps = {
-	portalProps?: PortalProps;
+	portalProps?: Omit<PortalProps, "children">;
 	containerProps?: {
 		className?: string;
 	};
@@ -32,10 +32,31 @@ const Drawer: DrawerComponent = ({
 		[children],
 	);
 
+	React.useEffect(() => {
+		const onEscape = (event: KeyboardEvent) => {
+			if (event.key === "Escape") onClose();
+		};
+
+		const onScroll = (e) => {
+			e.preventDefault();
+			window.scrollTo(0, 0);
+		};
+
+		if (isOpen) {
+			document.addEventListener("scroll", onScroll);
+			document.addEventListener("touchmove", onScroll);
+			document.addEventListener("onsc", onEscape, false);
+		} else {
+			document.removeEventListener("scroll", onScroll);
+			document.removeEventListener("touchmove", onScroll);
+			document.removeEventListener("keydown", onEscape, false);
+		}
+	}, [isOpen, onClose]);
+
 	return (
-		<Portal>
-			<AnimatePresence>
-				{isOpen && (
+		<AnimatePresence>
+			{isOpen && (
+				<Portal {...portalProps}>
 					<div
 						className={clsx([
 							"h-screen w-screen fixed inset-0 overflow-none",
@@ -64,9 +85,9 @@ const Drawer: DrawerComponent = ({
 						/>
 						{withTarget}
 					</div>
-				)}
-			</AnimatePresence>
-		</Portal>
+				</Portal>
+			)}
+		</AnimatePresence>
 	);
 };
 

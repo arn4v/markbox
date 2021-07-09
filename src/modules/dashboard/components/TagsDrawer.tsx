@@ -28,7 +28,7 @@ export default function TagsDrawer(): JSX.Element {
 			<Drawer isOpen={isOpen} onClose={onClose}>
 				<DrawerContent
 					placement="bottom"
-					className="w-full h-auto py-8 bg-white rounded-t-lg dark:bg-gray-900"
+					className="w-full h-auto py-8 bg-white rounded-t-lg dark:bg-gray-900 overflow-y-scroll max-h-[75%]"
 				>
 					<ul className={clsx(["flex flex-col w-full gap-4 px-6 text-base"])}>
 						<h1 className="text-lg font-bold dark:text-white">Tags</h1>
