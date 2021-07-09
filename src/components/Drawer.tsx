@@ -37,7 +37,7 @@ const Drawer: DrawerComponent = ({
 			if (event.key === "Escape") onClose();
 		};
 
-		const onScroll = (e) => {
+		const onScroll = (e: Event) => {
 			e.preventDefault();
 			window.scrollTo(0, 0);
 		};
