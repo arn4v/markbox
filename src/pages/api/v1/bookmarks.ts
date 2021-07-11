@@ -116,6 +116,7 @@ const handler = routeHandler<ApiRequest>()
 							name: true,
 						},
 					},
+					url: true,
 					title: true,
 					createdAt: true,
 					updatedAt: true,
