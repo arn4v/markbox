@@ -38,16 +38,18 @@ export default function TagsDrawer(): JSX.Element {
 								data={{ id: undefined, name: "All" }}
 								active={typeof tag === "undefined"}
 							/>
-							{data?.tags?.map((item) => {
-								return (
-									<Tag
-										key={item.id}
-										data={item}
-										active={tag === item.id}
-										isEditModeEnabled={false}
-									/>
-								);
-							})}
+							{data?.tags
+								?.sort((a, b) => a.name.localeCompare(b.name))
+								.map((item) => {
+									return (
+										<Tag
+											key={item.id}
+											data={item}
+											active={tag === item.id}
+											isEditModeEnabled={false}
+										/>
+									);
+								})}
 						</div>
 					</ul>
 				</DrawerContent>
