@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import QueryString from "qs";
+import React from "react";
 import create from "zustand";
 import { User, useUserQuery } from "~/graphql/types.generated";
 
@@ -28,27 +29,25 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 		{},
 		{
 			onSuccess: (data) => {
-				if (
-					typeof data.user !== "undefined" &&
-					data.user !== null &&
-					typeof user === "undefined"
-				) {
-					setState({
-						isAuthenticated: true,
-						user: data.user,
-					});
-				}
-
-				if (!data.user && !user && isProtected) {
-					router.push(
-						"/login?" +
-							QueryString.stringify({
-								message: "Could not verify user, please login again.",
-							}),
-					);
+				if (data && data?.user) {
+					if (typeof user !== "undefined") {
+						setState({
+							isAuthenticated: true,
+							user: data.user,
+						});
+					}
+				} else {
+					if (isProtected) {
+						router.push(
+							"/login?" +
+								QueryString.stringify({
+									message: "Could not verify user, please login again.",
+								}),
+						);
+					}
 				}
 			},
-			onError(error) {
+			onError() {
 				if (isProtected) {
 					router.push(
 						"/login?" +

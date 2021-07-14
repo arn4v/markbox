@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
+import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
 import useIsPwa from "~/hooks/use-pwa";
 import { CreateForm } from "~/modules/common/components/Create";
@@ -23,7 +24,9 @@ const CreatePage = ({}: Props) => {
 		url?: string;
 		popup?: boolean;
 	};
-	useAuth(true);
+	const { isLoading } = useAuth(true);
+
+	if (isLoading) return <LoadingPage />;
 
 	return (
 		<div className="flex flex-col w-screen min-h-screen scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 scrollbar scrollbar-thin bg-white dark:bg-black items-center">
