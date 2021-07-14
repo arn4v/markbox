@@ -30,12 +30,10 @@ export function useAuth(isProtected: boolean = false): UseAuthReturn {
 		{
 			onSuccess: (data) => {
 				if (data && data?.user) {
-					if (typeof user !== "undefined") {
-						setState({
-							isAuthenticated: true,
-							user: data.user,
-						});
-					}
+					setState({
+						isAuthenticated: true,
+						user: data.user,
+					});
 				} else {
 					if (isProtected) {
 						router.push(
