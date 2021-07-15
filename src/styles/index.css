@@ -2,25 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* html.dark:not(html.light) input:-webkit-autofill {
-	-webkit-box-shadow: 0 0 0 1000px #475569 inset !important;
+html.dark:not(html.light) input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px #52525b inset !important;
 	-webkit-text-fill-color: white !important;
 }
 
 html.dark:not(html.light) input:-webkit-autofill:focus {
-	-webkit-box-shadow: 0 0 0 1000px #64748b inset !important;
+	-webkit-box-shadow: 0 0 0 1000px #52525b inset !important;
 	-webkit-text-fill-color: white !important;
 }
 
 html.light:not(html.dark) input:-webkit-autofill {
-	-webkit-box-shadow: 0 0 0 1000px #e5e7eb inset !important;
+	-webkit-box-shadow: 0 0 0 1000px #dbeafe inset !important;
 	-webkit-text-fill-color: #1b1b1b !important;
 }
 
 html.light:not(html.dark) input:-webkit-autofill:focus {
-	-webkit-box-shadow: 0 0 0 1000px #e5e7eb inset !important;
+	-webkit-box-shadow: 0 0 0 1000px #dbeafe inset !important;
 	-webkit-text-fill-color: #1b1b1b !important;
-} */
+}
 
 pre {
 	-ms-overflow-style: none; /* IE and Edge */
