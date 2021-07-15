@@ -21,5 +21,14 @@
 	"orientation": "portrait",
 	"scope": "/",
 	"start_url": "/dashboard",
-	"splash_pages": null
+	"splash_pages": null,
+	"share_target": {
+		"action": "/create/",
+		"method": "GET",
+		"params": {
+			"title": "title",
+			"text": "description",
+			"url": "url"
+		}
+	}
 }
