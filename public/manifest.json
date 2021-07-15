@@ -1,6 +1,23 @@
 {
 	"name": "Bookmarky",
 	"short_name": "Bookmarky",
+	"start_url": "/dashboard",
+	"scope": "/",
+	"orientation": "portrait",
+	"display": "standalone",
+	"background_color": "#FFFFFF",
+	"theme_color": "#FFFFFF",
+	"splash_pages": null,
+	"share_target": {
+		"action": "/create",
+		"method": "GET",
+		"enctype": "application/x-www-form-urlencoded",
+		"params": {
+			"title": "title",
+			"url": "url",
+			"text": "description"
+		}
+	},
 	"icons": [
 		{
 			"src": "icons/manifest-icon-192.png",
@@ -14,20 +31,5 @@
 			"type": "image/png",
 			"purpose": "maskable any"
 		}
-	],
-	"theme_color": "#FFFFFF",
-	"background_color": "#FFFFFF",
-	"display": "standalone",
-	"orientation": "portrait",
-	"scope": "/",
-	"start_url": "/dashboard",
-	"splash_pages": null,
-	"share_target": {
-		"action": "/create",
-		"params": {
-			"title": "title",
-			"text": "description",
-			"url": "url"
-		}
-	}
+	]
 }

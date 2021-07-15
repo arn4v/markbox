@@ -27,6 +27,7 @@
 		"lint": "next lint",
 		"lint-fix": "next lint --fix",
 		"start-docker": "docker-compose up -d",
+		"stop-docker": "docker-compose down",
 		"add-user": "ts-node ./scripts/add-user.ts",
 		"update-password": "ts-node ./scripts/update-password.ts",
 		"seed-bookmarks": "ts-node ./scripts/seed-bookmarks.ts"
