@@ -8,7 +8,7 @@
 		"start": "next start -p ${PORT-3000}",
 		"build": "next build",
 		"build-start": "yarn build && yarn start",
-		"dev": "concurrently -n \"next,gql-codegen,prisma-gen\" \"next dev\" \"npm run gql-gen-watch\" \"npm run db-gen\"",
+		"dev": "concurrently -n \"next,gql-codegen,prisma-gen\" \"next dev\" \"npm run gql-gen-watch\" \"npm run db-gen-watch\"",
 		"format": "prettier --write ./src/**/*.{js,jsx,ts,tsx}",
 		"gen": "npm run gql-gen && npm run db-gen",
 		"gen-watch": "concurrently 'npm run gql-gen' 'npm run db-gen'",
@@ -33,6 +33,7 @@
 		"seed-bookmarks": "ts-node ./scripts/seed-bookmarks.ts"
 	},
 	"dependencies": {
+		"@auth0/nextjs-auth0": "^1.5.0",
 		"@prisma/client": "^2.26.0",
 		"@radix-ui/react-icons": "^1.0.3",
 		"@reach/portal": "^0.15.2",

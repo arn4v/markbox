@@ -1,3 +1,4 @@
+import { UserProvider } from "@auth0/nextjs-auth0";
 import "inter-ui/inter.css";
 import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
@@ -17,13 +18,15 @@ export default function App({ Component, pageProps }: AppProps) {
 		<>
 			<Toaster />
 			<DefaultSeo {...defaultSeoProps} />
-			<QueryClientProvider client={queryClient}>
-				{/* {!isProd && <ReactQueryDevtools />} */}
-				<ThemeProvider attribute="class">
-					<CustomHead />
-					<Component {...pageProps} />
-				</ThemeProvider>
-			</QueryClientProvider>
+			<UserProvider>
+				<QueryClientProvider client={queryClient}>
+					{/* {!isProd && <ReactQueryDevtools />} */}
+					<ThemeProvider attribute="class">
+						<CustomHead />
+						<Component {...pageProps} />
+					</ThemeProvider>
+				</QueryClientProvider>
+			</UserProvider>
 		</>
 	);
 }

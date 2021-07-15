@@ -9,17 +9,14 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(uuid())
-  type          String        @default("email")
-  name          String        @default("")
-  email         String        @unique
-  emailVerified Boolean       @default(false) @map("email_verified")
-  password      String
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  bookmarks     Bookmark[]
-  tags          Tag[]
-  keys          AccessToken[]
+  id        String        @id @default(uuid())
+  name      String        @default("")
+  email     String        @unique
+  bookmarks Bookmark[]
+  tags      Tag[]
+  keys      AccessToken[]
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
 
   @@map("users")
 }
