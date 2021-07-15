@@ -23,7 +23,7 @@
 	"start_url": "/dashboard",
 	"splash_pages": null,
 	"share_target": {
-		"action": "/create/",
+		"action": "/create",
 		"method": "GET",
 		"params": {
 			"title": "title",
