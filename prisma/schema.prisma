@@ -10,6 +10,7 @@ datasource db {
 
 model User {
   id        String        @id @default(uuid())
+  auth0Id   String?       @unique @map("auth0_id")
   name      String        @default("")
   email     String        @unique
   bookmarks Bookmark[]
