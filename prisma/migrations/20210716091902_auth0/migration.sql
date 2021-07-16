@@ -5,7 +5,8 @@
 
 */
 -- AlterTable
-ALTER TABLE `users` ADD COLUMN `auth0_id` VARCHAR(191);
+ALTER TABLE `users` ADD COLUMN `auth0_id` VARCHAR(191),
+    MODIFY `password` VARCHAR(191);
 
 -- CreateIndex
 CREATE UNIQUE INDEX `users.auth0_id_unique` ON `users`(`auth0_id`);
