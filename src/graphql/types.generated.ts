@@ -102,7 +102,6 @@ export type Mutation = {
 	updateToken: AccessToken;
 	deleteToken: Scalars["Boolean"];
 	updateProfile: Scalars["Boolean"];
-	updatePassword: ChangePasswordMessage;
 };
 
 export type MutationCreateBookmarkArgs = {
@@ -141,10 +140,6 @@ export type MutationDeleteTokenArgs = {
 
 export type MutationUpdateProfileArgs = {
 	input: UpdateProfileInput;
-};
-
-export type MutationUpdatePasswordArgs = {
-	input: UpdatePasswordInput;
 };
 
 export type Query = {
@@ -196,12 +191,6 @@ export type UpdateBookmarkInput = {
 	url?: Maybe<Scalars["String"]>;
 	tags?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
 	tagsDisconnect?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
-};
-
-export type UpdatePasswordInput = {
-	id: Scalars["ID"];
-	currentPassword: Scalars["String"];
-	newPassword: Scalars["String"];
 };
 
 export type UpdateProfileInput = {
@@ -300,15 +289,6 @@ export type UpdateBookmarkMutation = {
 		updatedAt: string;
 		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	};
-};
-
-export type UpdatePasswordMutationVariables = Exact<{
-	input: UpdatePasswordInput;
-}>;
-
-export type UpdatePasswordMutation = {
-	__typename?: "Mutation";
-	updatePassword: { __typename?: "ChangePasswordMessage"; code: string };
 };
 
 export type UpdateProfileMutationVariables = Exact<{
@@ -571,7 +551,6 @@ export type ResolversTypes = {
 	RenameTagInput: RenameTagInput;
 	Tag: ResolverTypeWrapper<Tag>;
 	UpdateBookmarkInput: UpdateBookmarkInput;
-	UpdatePasswordInput: UpdatePasswordInput;
 	UpdateProfileInput: UpdateProfileInput;
 	User: ResolverTypeWrapper<User>;
 };
@@ -596,7 +575,6 @@ export type ResolversParentTypes = {
 	RenameTagInput: RenameTagInput;
 	Tag: Tag;
 	UpdateBookmarkInput: UpdateBookmarkInput;
-	UpdatePasswordInput: UpdatePasswordInput;
 	UpdateProfileInput: UpdateProfileInput;
 	User: User;
 };
@@ -725,12 +703,6 @@ export type MutationResolvers<
 		ParentType,
 		ContextType,
 		RequireFields<MutationUpdateProfileArgs, "input">
-	>;
-	updatePassword?: Resolver<
-		ResolversTypes["ChangePasswordMessage"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationUpdatePasswordArgs, "input">
 	>;
 };
 
@@ -1013,34 +985,6 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		(variables?: UpdateBookmarkMutationVariables) =>
 			fetcher<UpdateBookmarkMutation, UpdateBookmarkMutationVariables>(
 				UpdateBookmarkDocument,
-				variables,
-			)(),
-		options,
-	);
-export const UpdatePasswordDocument = `
-    mutation UpdatePassword($input: UpdatePasswordInput!) {
-  updatePassword(input: $input) {
-    code
-  }
-}
-    `;
-export const useUpdatePasswordMutation = <TError = unknown, TContext = unknown>(
-	options?: UseMutationOptions<
-		UpdatePasswordMutation,
-		TError,
-		UpdatePasswordMutationVariables,
-		TContext
-	>,
-) =>
-	useMutation<
-		UpdatePasswordMutation,
-		TError,
-		UpdatePasswordMutationVariables,
-		TContext
-	>(
-		(variables?: UpdatePasswordMutationVariables) =>
-			fetcher<UpdatePasswordMutation, UpdatePasswordMutationVariables>(
-				UpdatePasswordDocument,
 				variables,
 			)(),
 		options,

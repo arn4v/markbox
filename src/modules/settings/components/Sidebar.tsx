@@ -37,8 +37,6 @@ const Sidebar: Component = () => {
 				<span className="w-full h-px dark:bg-gray-500" />
 				<div className="flex flex-col w-full">
 					<SidebarItem href="/settings/account">Profile</SidebarItem>
-					<span className="h-px dark:bg-gray-500" />
-					<SidebarItem href="/settings/security">Security</SidebarItem>
 				</div>
 			</div>
 			<div

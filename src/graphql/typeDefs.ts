@@ -58,12 +58,6 @@ export default gql`
 		name: String!
 	}
 
-	input UpdatePasswordInput {
-		id: ID!
-		currentPassword: String!
-		newPassword: String!
-	}
-
 	input FilterBookmarksTagInput {
 		name: String!
 	}
@@ -113,6 +107,5 @@ export default gql`
 		updateToken(id: ID!, scopes: [String!]!): AccessToken!
 		deleteToken(id: ID!): Boolean!
 		updateProfile(input: UpdateProfileInput!): Boolean!
-		updatePassword(input: UpdatePasswordInput!): ChangePasswordMessage!
 	}
 `;

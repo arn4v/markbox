@@ -195,38 +195,6 @@ const Mutation: MutationResolvers<GQLContext> = {
 			lastUsed: updated.lastUsed.toISOString(),
 		};
 	},
-	async updatePassword(
-		_,
-		{ input: { id, newPassword, currentPassword } },
-		{ prisma, req, res },
-	) {
-		const userId = await protectResolver(req, res);
-		const { password: hashedPassword } = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-			select: {
-				password: true,
-			},
-		});
-		if (await comparePassword(currentPassword, hashedPassword)) {
-			await prisma.user.update({
-				where: {
-					id: userId,
-				},
-				data: {
-					password: await hashPassword(newPassword),
-				},
-			});
-			return {
-				code: "success",
-			};
-		} else {
-			return {
-				code: "current_password_invalid",
-			};
-		}
-	},
 	async updateProfile(_, { input: { id, name } }, { prisma, req, res }) {
 		const userId = await protectResolver(req, res);
 		return !!(await prisma.user.update({
