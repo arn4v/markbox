@@ -4,7 +4,6 @@ import {
 	handleLogin,
 	UserProfile,
 } from "@auth0/nextjs-auth0";
-import { isProd } from "~/config";
 import { prisma } from "~/lib/utils.server";
 
 export default handleAuth({
