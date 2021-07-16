@@ -15,7 +15,7 @@ function AuthButton({
 }) {
 	const { isAuthenticated } = useAuth();
 	return (
-		<Link href={isAuthenticated ? "/dashboard" : "/login"}>
+		<Link href={isAuthenticated ? "/dashboard" : "/api/auth/login"}>
 			<a
 				className={clsx([
 					"flex items-center gap-2 px-2 py-2 font-medium text-white transition bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-2 ring-offset-2 ring-offset-current",

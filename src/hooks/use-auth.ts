@@ -24,7 +24,7 @@ export function useAuth(
 		} else {
 			if (isProtected)
 				router.push(
-					"/dashboard?" +
+					"/?" +
 						QueryString.stringify({
 							message: "Unable to verify user, please login again.",
 						}),

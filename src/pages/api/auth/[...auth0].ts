@@ -1,13 +1,20 @@
-import { handleAuth, handleCallback, UserProfile } from "@auth0/nextjs-auth0";
+import {
+	handleAuth,
+	handleCallback,
+	handleLogin,
+	UserProfile,
+} from "@auth0/nextjs-auth0";
 import { isProd } from "~/config";
 import { prisma } from "~/lib/utils.server";
 
 export default handleAuth({
+	async login(req, res) {
+		await handleLogin(req, res, {
+			returnTo: "/dashboard",
+		});
+	},
 	async callback(req, res) {
 		await handleCallback(req, res, {
-			redirectUri: isProd
-				? "https://bookmarky.io"
-				: "http://localhost:3000" + "/dashboard",
 			async afterCallback(req, res, session, options) {
 				const user = session.user as UserProfile;
 				await prisma.user.upsert({
