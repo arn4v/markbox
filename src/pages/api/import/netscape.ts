@@ -5,6 +5,12 @@ import multer from "multer";
 import { NextApiRequest } from "next";
 import fs from "fs";
 import { User } from "@prisma/client";
+import parse, { BookmarkOrFolder } from "bookmarks-parser";
+import { promisify } from "util";
+import { format } from "date-fns";
+import { sanitizeUrl } from "@braintree/sanitize-url";
+
+const parsePromise = promisify(parse);
 
 interface ApiRequest extends NextApiRequest {
 	ctx: {
@@ -24,6 +30,20 @@ export const config = {
 	api: {
 		bodyParser: false,
 	},
+};
+
+const getBookmarksFromFolder = (data: BookmarkOrFolder): BookmarkOrFolder[] => {
+	const bookmarks = [];
+	for (const item of data.children) {
+		if (item.type === "folder") {
+			bookmarks.concat(getBookmarksFromFolder(item));
+		} else {
+			const copy = JSON.parse(JSON.stringify(item));
+			bookmarks.push(copy);
+		}
+	}
+
+	return bookmarks;
 };
 
 export default routeHandler<ApiRequest>()
@@ -53,7 +73,7 @@ export default routeHandler<ApiRequest>()
 	})
 	.use(upload.single("file"))
 	.post(async (req, res) => {
-		const bookmarks = fs.readFileSync(
+		const rawBookmarks = fs.readFileSync(
 			path.join(
 				path.resolve(
 					process.cwd(),
@@ -62,7 +82,64 @@ export default routeHandler<ApiRequest>()
 			),
 			{ encoding: "utf-8" },
 		);
-		console.log(bookmarks);
+		try {
+			const parsed = await parsePromise(rawBookmarks);
+			const bookmarks: BookmarkOrFolder[] = parsed.bookmarks.reduce(
+				(acc, cur) => acc.concat(getBookmarksFromFolder(cur), []),
+				[],
+			);
 
-		res.status(204).end();
+			const tagName = `Imported from browser ${format(
+				new Date(),
+				"d/MM/yyyy",
+			)}`;
+			let tag = await prisma.tag.findFirst({
+				where: {
+					name: tagName,
+					userId: req.ctx.user.id,
+				},
+			});
+
+			if (!tag) {
+				tag = await prisma.tag.create({
+					data: {
+						name: tagName,
+						userId: req.ctx.user.id,
+					},
+				});
+			}
+
+			const transactions = bookmarks
+				.filter(
+					(item) =>
+						!item.url.toLowerCase().startsWith("javascript:") &&
+						!item.url.toLowerCase().includes("about:blank"),
+				)
+				.map(({ title, url }) => {
+					const sanitized = sanitizeUrl(url);
+					return prisma.bookmark.create({
+						data: {
+							title,
+							url: sanitized,
+							User: {
+								connect: {
+									id: req.ctx.user.id,
+								},
+							},
+							tags: {
+								connect: {
+									id: tag.id,
+								},
+							},
+						},
+					});
+				});
+
+			await prisma.$transaction(transactions);
+
+			res.status(204).end();
+		} catch (err) {
+			console.log(err);
+			res.status(500).send("Unable to process bookmarks file.");
+		}
 	});

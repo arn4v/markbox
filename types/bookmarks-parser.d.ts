@@ -1,13 +1,15 @@
 declare module "bookmarks-parser" {
-	type BookmarkOrFolder = {
+	export type BookmarkOrFolder = {
 		type: "folder" | "bookmark";
 		title: string;
 		url?: string;
 		ns_root: "menu" | "toolbar" | "unsorted" | "unsorted" | null;
+		add_date: string;
+		ll_modified: string;
 		children: BookmarkOrFolder[];
 	};
 
-	type Callback = (
+	export type Callback = (
 		error: ErrorConstructor,
 		result: {
 			parser: "netscape" | "pocket";

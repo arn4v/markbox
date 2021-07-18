@@ -53,8 +53,8 @@ model Tag {
 
 model Bookmark {
   id          String   @id @default(uuid())
-  title       String   @db.VarChar(500)
-  url         String
+  title       String   @db.VarChar(1000)
+  url         String   @db.VarChar(1000)
   description String   @default("") @db.VarChar(1000)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")

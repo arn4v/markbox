@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `bookmarks` MODIFY `title` VARCHAR(1000) NOT NULL,
+    MODIFY `url` VARCHAR(1000) NOT NULL;

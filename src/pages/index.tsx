@@ -58,13 +58,13 @@ export default function IndexPage() {
 									title="Login"
 									className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2"
 								>
-									Starting bookmarking for free <HiArrowRight />
+									Start bookmarking for free <HiArrowRight />
 								</a>
 							</>
 						) : (
 							<Link href="/dashboard">
 								<a className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2">
-									Starting bookmarking for free <HiArrowRight />
+									Start bookmarking for free <HiArrowRight />
 								</a>
 							</Link>
 						)}
