@@ -5,7 +5,7 @@ import {
 	routeHandler,
 	withCookies
 } from "~/lib/utils.server";
-import ApiRequest from "~/types/ApiRequest";
+import ApiRequestGQL from "~/types/ApiRequest";
 
 interface PatchBody {
 	name: string;
@@ -17,7 +17,7 @@ const PatchBodySchema = yup.object().shape({
 	new_name: yup.string().required(),
 });
 
-const handler = routeHandler<ApiRequest>()
+const handler = routeHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
 	.patch(async (req, res) => {
 		try {

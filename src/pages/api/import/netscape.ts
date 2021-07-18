@@ -1,6 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import path from "path";
-import { prisma, routeHandler } from "~/lib/utils.server";
+import { authMiddleware, prisma, routeHandler } from "~/lib/utils.server";
 import multer from "multer";
 import { NextApiRequest } from "next";
 import fs from "fs";
@@ -9,14 +9,9 @@ import parse, { BookmarkOrFolder } from "bookmarks-parser";
 import { promisify } from "util";
 import { format } from "date-fns";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { ApiRequest } from "~/types/ApiRequest";
 
 const parsePromise = promisify(parse);
-
-interface ApiRequest extends NextApiRequest {
-	ctx: {
-		user: User;
-	};
-}
 
 const upload = multer({
 	storage: multer.diskStorage({
@@ -47,30 +42,7 @@ const getBookmarksFromFolder = (data: BookmarkOrFolder): BookmarkOrFolder[] => {
 };
 
 export default routeHandler<ApiRequest>()
-	.use(async (req, res, next) => {
-		const session = getSession(req, res);
-
-		if (!session.user) {
-			res.status(400).send("Unable to verify session.");
-			return;
-		}
-
-		const auth0Id = session.user.sub;
-
-		const user = await prisma.user.findUnique({
-			where: {
-				auth0Id,
-			},
-		});
-
-		if (!user) {
-			res.status(400).send("Unable to find user.");
-			return;
-		}
-
-		req.ctx = { user };
-		next();
-	})
+	.use(authMiddleware)
 	.use(upload.single("file"))
 	.post(async (req, res) => {
 		const rawBookmarks = fs.readFileSync(

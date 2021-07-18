@@ -5,7 +5,7 @@ import {
 	routeHandler,
 	withCookies
 } from "~/lib/utils.server";
-import ApiRequest from "~/types/ApiRequest";
+import ApiRequestGQL from "~/types/ApiRequest";
 
 interface GetBody {
 	id?: string;
@@ -61,7 +61,7 @@ const DeleteQuerySchema = yup.object().shape({
 	id: yup.string().required(),
 });
 
-const handler = routeHandler<ApiRequest>()
+const handler = routeHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
 	.get(async (req, res) => {
 		try {

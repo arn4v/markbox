@@ -1,3 +1,4 @@
+import { getSession } from "@auth0/nextjs-auth0";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { compare, genSalt, hash } from "bcrypt";
 import { CookieSerializeOptions, serialize } from "cookie";
@@ -8,7 +9,7 @@ import nextConnect, { Middleware } from "next-connect";
 import { createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { isProd } from "~/config";
-import ApiRequest from "~/types/ApiRequest";
+import ApiRequestGQL from "~/types/ApiRequest";
 import ApiResponse from "~/types/ApiResponse";
 import DecodedPat from "~/types/DecodedPat";
 
@@ -124,7 +125,7 @@ export const jwtVerifyPat = createVerifier({
 	key: async () => process.env.JWT_SECRET_PAT,
 });
 
-export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
+export const patAuthMiddleware: Middleware<ApiRequestGQL, ApiResponse> = async (
 	req,
 	res,
 	next,
@@ -163,4 +164,29 @@ export const patAuthMiddleware: Middleware<ApiRequest, ApiResponse> = async (
 			message: 'Invalid Authorization header format. Valid: "Bearer <token>"',
 		});
 	}
+};
+
+export const authMiddleware = async (req, res, next) => {
+	const session = getSession(req, res);
+
+	if (!session.user) {
+		res.status(400).send("Unable to verify session.");
+		return;
+	}
+
+	const auth0Id = session.user.sub;
+
+	const user = await prisma.user.findUnique({
+		where: {
+			auth0Id,
+		},
+	});
+
+	if (!user) {
+		res.status(400).send("Unable to find user.");
+		return;
+	}
+
+	req.ctx = { user };
+	next();
 };
