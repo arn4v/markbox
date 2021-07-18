@@ -57,13 +57,13 @@ const Modal: Modal = ({
 				<Portal {...portalProps}>
 					<div
 						className={clsx([
-							"h-screen w-screen fixed inset-0 overflow-none",
-							containerProps?.className ?? "z-[100]",
+							"h-screen w-screen fixed inset-0 overflow-none z[60]",
+							containerProps?.className,
 						])}
 					>
 						<motion.div
 							className={clsx([
-								"z-10 fixed inset-0 bg-black",
+								"z-[60] fixed inset-0 bg-black",
 								overlayProps?.className,
 							])}
 							variants={{

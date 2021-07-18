@@ -36,3 +36,4 @@ yarn-error.log*
 **/public/worker-*.js
 
 sentry.properties
+uploads/

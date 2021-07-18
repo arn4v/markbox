@@ -13,6 +13,8 @@ module.exports = {
 			colors: { ...colors },
 			fontFamily: {
 				sans: ["Inter", ...defaultTheme.fontFamily.sans],
+				inter: ["Inter"],
+				poppins: ["Poppins"],
 			},
 			// Based on @leerob's tailwind config. https://github.com/leerob/leerob.io
 			typography(theme) {

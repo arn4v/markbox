@@ -13,6 +13,7 @@ export default async function protectResolver(
 	if (!session) {
 		throw new AuthenticationError("Unable to authenticate.");
 	}
+
 	const auth0Id = session.user.sub;
 
 	const user = await prisma.user.findUnique({

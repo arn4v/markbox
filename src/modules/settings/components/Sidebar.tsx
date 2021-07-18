@@ -34,9 +34,23 @@ const Sidebar: Component = () => {
 						Account settings
 					</span>
 				</div>
-				<span className="w-full h-px dark:bg-gray-500" />
+				<span className="w-full h-px dark:bg-gray-500 bg-gray-300" />
 				<div className="flex flex-col w-full">
 					<SidebarItem href="/settings/account">Profile</SidebarItem>
+				</div>
+			</div>
+			<div
+				id="wrapper"
+				className="flex flex-col w-full mb-4 overflow-hidden text-sm bg-gray-100 rounded-lg dark:bg-gray-900"
+			>
+				<div className="w-full px-4 py-2">
+					<span className="font-medium dark:text-gray-200">Data settings</span>
+				</div>
+				<span className="w-full h-px dark:bg-gray-500 bg-gray-300" />
+				<div className="flex flex-col w-full">
+					<SidebarItem href="/settings/data/import">Import</SidebarItem>
+					<span className="h-px dark:bg-gray-500" />
+					<SidebarItem href="/settings/data/export">Export</SidebarItem>
 				</div>
 			</div>
 			<div
