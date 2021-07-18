@@ -31,5 +31,13 @@ export default routeHandler<ApiRequest>()
 			description,
 		}));
 
-		res.status(200).send({ results: { tags, bookmarks } });
+		res.status(200).send({
+			results: {
+				exported_at: new Date().toISOString(),
+				data: {
+					tags,
+					bookmarks,
+				},
+			},
+		});
 	});
