@@ -17,7 +17,6 @@ import Popup from "~/components/Popup";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
-import useIsVisible from "~/hooks/use-is-visible";
 
 interface Props {
 	data: Bookmark;

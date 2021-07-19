@@ -55,6 +55,9 @@ const Query: QueryResolvers<GQLContext> = {
 			include: {
 				tags: true,
 			},
+			orderBy: {
+				createdAt: "desc",
+			},
 		});
 		return bookmarks.map(({ id, url, title, createdAt, updatedAt, tags }) => ({
 			id,
