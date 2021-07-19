@@ -9,13 +9,11 @@ import {
 	HiPencil,
 	HiTrash,
 } from "react-icons/hi";
-import { useInView } from "react-intersection-observer";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Modal, { ModalContent } from "~/components/Modal";
 import Popup from "~/components/Popup";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
-import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
 
 interface Props {
@@ -40,7 +38,7 @@ const BookmarkCard = ({ data }: Props) => {
 
 	return (
 		<>
-			<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
+			<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white h-auto">
 				<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 					<span className="text-xs">
 						{/* Need to test the advantages/disadvantages of using IIFEs in JSX */}

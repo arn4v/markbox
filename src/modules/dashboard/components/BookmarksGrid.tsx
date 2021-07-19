@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
+import { useVirtual } from "react-virtual";
 import Spinner from "~/components/Spinner";
 import { Bookmark, useGetAllBookmarksQuery } from "~/graphql/types.generated";
-import useFuse, { UseFuse } from "~/hooks/use-fuse";
+import useFuse from "~/hooks/use-fuse";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
@@ -20,21 +21,6 @@ const BookmarksGrid = (): JSX.Element => {
 		},
 	);
 	const [query, setQuery] = React.useState<string>("");
-	const [limit, setLimit] = React.useState(50);
-	const onFilter: UseFuse<Bookmark>["onFilter"] = React.useCallback(
-		(result) => {
-			result = result.sort(
-				(a, b) =>
-					new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf(),
-			);
-			if (result.length === data.bookmarks.length) {
-				result = result.splice(0, limit);
-			}
-
-			return result;
-		},
-		[data.bookmarks.length, limit],
-	);
 	const { result } = useFuse<Bookmark>({
 		data: data?.bookmarks,
 		query,
@@ -43,34 +29,14 @@ const BookmarksGrid = (): JSX.Element => {
 			shouldSort: true,
 			location: 15,
 		},
-		onFilter,
 	});
-	const observerRef = React.useRef<IntersectionObserver>(null);
-	const loaderRef = React.useRef<HTMLDivElement>(null);
-
-	// Use the IntersectionObserver API to watch for changes in the viewport.
-	React.useEffect(() => {
-		const handler: IntersectionObserverCallback = (entries) => {
-			const target = entries[0];
-			if (target.isIntersecting) {
-				setLimit((prev) =>
-					data.bookmarks.length - prev <= 50
-						? prev + 50
-						: data.bookmarks.length,
-				);
-			}
-		};
-
-		if (!isLoading && !observerRef.current) {
-			observerRef.current = new IntersectionObserver(handler, {
-				root: null,
-				rootMargin: "20px",
-			});
-			observerRef.current.observe(loaderRef.current);
-		} else {
-			return () => observerRef.current.disconnect();
-		}
-	}, [data.bookmarks.length, isLoading]);
+	const parentRef = React.useRef<HTMLDivElement>(null);
+	const virtualized = useVirtual({
+		parentRef,
+		size: result?.length,
+		estimateSize: React.useCallback(() => 35, []),
+		overscan: 10,
+	});
 
 	if (isLoading)
 		return (
@@ -80,7 +46,10 @@ const BookmarksGrid = (): JSX.Element => {
 		);
 
 	return (
-		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
+		<div
+			className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72"
+			ref={parentRef}
+		>
 			<div className="sticky top-0">
 				<div className="relative w-full">
 					<input
@@ -111,9 +80,14 @@ const BookmarksGrid = (): JSX.Element => {
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
 			{result?.length > 0 ? (
-				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
-					{result.map((item) => (
-						<BookmarkCard key={item.id} data={item} />
+				<div
+					className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
+					style={{
+						height: `${virtualized.totalSize}px`,
+					}}
+				>
+					{virtualized.virtualItems.map(({ index }) => (
+						<BookmarkCard key={result[index].id} data={result[index]} />
 					))}
 				</div>
 			) : (
@@ -142,7 +116,6 @@ const BookmarksGrid = (): JSX.Element => {
 					);
 				})()
 			)}
-			<div ref={loaderRef} />
 		</div>
 	);
 };
