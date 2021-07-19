@@ -7,6 +7,13 @@ import useFuse from "~/hooks/use-fuse";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
+import AutoSizer from "react-virtualized-auto-sizer";
+import {
+	VariableSizeGrid,
+	VariableSizeList,
+	FixedSizeList,
+	FixedSizeGrid,
+} from "react-window";
 
 export default function BookmarksGrid() {
 	const { tag } = useDashboardStore();
@@ -29,6 +36,28 @@ export default function BookmarksGrid() {
 			location: 15,
 		},
 	});
+	const [limit, setLimit] = React.useState(50);
+	const observerRef = React.useRef<IntersectionObserver>(null);
+	const loaderRef = React.useRef<HTMLDivElement>(null);
+
+	// Use the IntersectionObserver API to watch for changes in the viewport.
+	React.useEffect(() => {
+		const handler: IntersectionObserverCallback = (entries) => {
+			const target = entries[0];
+			if (target.isIntersecting) {
+				setLimit((prev) => prev + 50);
+			}
+		};
+
+		if (!isLoading && !observerRef.current) {
+			observerRef.current = new IntersectionObserver(handler, {
+				root: document,
+			});
+			observerRef.current.observe(loaderRef.current);
+		} else {
+			return () => observerRef.current.disconnect();
+		}
+	}, [isLoading]);
 
 	if (isLoading)
 		return (
@@ -70,21 +99,10 @@ export default function BookmarksGrid() {
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
 			{result?.length > 0 ? (
-				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-x-6">
-					{result
-						.sort((a, b) => {
-							if (result.length !== data.bookmarks.length) {
-								return 0;
-							}
-
-							return (
-								new Date(b.createdAt).valueOf() -
-								new Date(a.createdAt).valueOf()
-							);
-						})
-						.map((item) => {
-							return <BookmarkCard key={item.id} data={item} />;
-						})}
+				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+					{result.splice(0, limit).map((item) => (
+						<BookmarkCard key={item.id} data={item} />
+					))}
 				</div>
 			) : (
 				(() => {
@@ -112,6 +130,7 @@ export default function BookmarksGrid() {
 					);
 				})()
 			)}
+			<div ref={loaderRef} />
 		</div>
 	);
 }

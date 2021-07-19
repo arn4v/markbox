@@ -7,8 +7,9 @@ import {
 	HiOutlineMenu,
 	HiOutlineTrash,
 	HiPencil,
-	HiTrash
+	HiTrash,
 } from "react-icons/hi";
+import { useInView } from "react-intersection-observer";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Modal, { ModalContent } from "~/components/Modal";
@@ -16,6 +17,7 @@ import Popup from "~/components/Popup";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
+import useIsVisible from "~/hooks/use-is-visible";
 
 interface Props {
 	data: Bookmark;
@@ -77,73 +79,70 @@ const BookmarkCard = ({ data }: Props) => {
 					</div>
 				</div>
 				<div className="flex flex-col items-end w-1/6 gap-3">
-					{isLg ? (
-						<Popup
-							isOpen={isDropdownOpen}
-							onDismiss={onDropdownClose}
-							placement="bottom"
-							trigger={
-								<button
-									onClick={onDropdownToggle}
-									aria-expanded={isDropdownOpen}
-									aria-haspopup={true}
-									className="p-1 text-black transition rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none dark:text-white"
-								>
-									<HiOutlineMenu className="w-5 h-5 fill-current" />
-								</button>
-							}
-						>
-							<ul className="flex flex-col w-48 mt-1 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg dark:border-none dark:bg-gray-600">
-								<li className="w-full border-b border-gray-300 dark:border-blueGray-400">
-									<Link href={"/edit/" + data?.id}>
-										<a
-											className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
-											onClick={() => {
-												onDropdownClose();
-											}}
-										>
-											Edit <HiPencil />
-										</a>
-									</Link>
-								</li>
-								<li className="w-full">
-									<button
+					<Popup
+						isOpen={isDropdownOpen}
+						onDismiss={onDropdownClose}
+						placement="bottom"
+						trigger={
+							<button
+								onClick={onDropdownToggle}
+								aria-expanded={isDropdownOpen}
+								aria-haspopup={true}
+								className="p-1 text-black transition rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none dark:text-white hidden lg:block"
+							>
+								<HiOutlineMenu className="w-5 h-5 fill-current" />
+							</button>
+						}
+					>
+						<ul className="flex flex-col w-48 mt-1 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg dark:border-none dark:bg-gray-600">
+							<li className="w-full border-b border-gray-300 dark:border-blueGray-400">
+								<Link href={"/edit/" + data?.id}>
+									<a
 										className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
 										onClick={() => {
-											onOpen();
+											onDropdownClose();
 										}}
 									>
-										Delete <HiTrash />
-									</button>
-								</li>
-							</ul>
-						</Popup>
-					) : (
-						<>
-							<a
-								target="_blank"
-								rel="noreferrer"
-								href={data?.url}
-								className="focus:outline-none dark:text-white text-black"
-							>
-								<HiOutlineExternalLink />
-							</a>
-							<button
-								type="button"
-								onClick={() => router.push("/edit/" + data.id)}
-								className="focus:outline-none"
-							>
-								<HiPencil />
-							</button>
-							<button
-								type="button"
-								onClick={onOpen}
-								className="focus:outline-none"
-							>
-								<HiOutlineTrash />
-							</button>
-						</>
-					)}
+										Edit <HiPencil />
+									</a>
+								</Link>
+							</li>
+							<li className="w-full">
+								<button
+									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
+									onClick={() => {
+										onOpen();
+									}}
+								>
+									Delete <HiTrash />
+								</button>
+							</li>
+						</ul>
+					</Popup>
+					<div className="flex flex-col items-center gap-2 lg:hidden">
+						<a
+							target="_blank"
+							rel="noreferrer"
+							href={data?.url}
+							className="focus:outline-none dark:text-white text-black"
+						>
+							<HiOutlineExternalLink />
+						</a>
+						<button
+							type="button"
+							onClick={() => router.push("/edit/" + data.id)}
+							className="focus:outline-none"
+						>
+							<HiPencil />
+						</button>
+						<button
+							type="button"
+							onClick={onOpen}
+							className="focus:outline-none"
+						>
+							<HiOutlineTrash />
+						</button>
+					</div>
 				</div>
 			</div>
 			<Modal

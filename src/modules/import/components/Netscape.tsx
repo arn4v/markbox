@@ -1,10 +1,12 @@
 import React from "react";
-import { HiUpload } from "react-icons/hi";
+import { useMutation } from "react-query";
+import axios from "redaxios";
 import useDisclosure from "~/hooks/use-disclosure";
-import UploadNetscapeModal from "./UploadNetscapeModal";
+import UploadNetscapeModal from "./NetscapeModal";
 
 const Netscape = () => {
 	const { isOpen, onClose, onOpen } = useDisclosure();
+
 	return (
 		<>
 			<button

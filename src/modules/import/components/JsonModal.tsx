@@ -1,18 +1,32 @@
 import clsx from "clsx";
-import React from "react";
-import axios from "redaxios";
-import { useMutation } from "react-query";
+import * as React from "react";
+import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
+import { useMutation } from "react-query";
+import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
 
-const UploadNetscapeModal = ({ isOpen, onClose }) => {
+const UploadJsonModal = ({ isOpen, onClose }) => {
 	const [file, setFile] = React.useState<File>(null);
-	const { mutate, isLoading } = useMutation((file: File) => {
-		const formData = new FormData();
-		formData.append("file", file);
-		return axios.post("/api/import/netscape", formData);
-	});
+	const { mutate, isLoading } = useMutation(
+		(file: File) => {
+			const formData = new FormData();
+			formData.append("file", file);
+			return axios.post("/api/import/netscape", formData);
+		},
+		{
+			onSuccess(res) {
+				if (res.status === 204) {
+					toast.success(
+						`Queued for import, try again if bookmarks don't show up in 2-3 minutes.`,
+					);
+				}
+
+				_onClose();
+			},
+		},
+	);
 	const inputRef = React.useRef<HTMLInputElement>(null);
 
 	const _onClose = React.useCallback(() => {
@@ -23,14 +37,14 @@ const UploadNetscapeModal = ({ isOpen, onClose }) => {
 	return (
 		<Modal
 			isOpen={isOpen}
-			onClose={_onClose}
+			onClose={onClose}
 			containerProps={{
 				className: "flex items-center justify-center z-[60]",
 			}}
 			overlayProps={{ className: "bg-black/[0.75] z-[60]" }}
 		>
 			<ModalContent
-				className="lg:h-[20%] z-[200] lg:w-[22%] flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
+				className="z-[200] lg:w-[22%] flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				exit={{ opacity: 0, y: -20 }}
@@ -96,4 +110,4 @@ const UploadNetscapeModal = ({ isOpen, onClose }) => {
 	);
 };
 
-export default UploadNetscapeModal;
+export default UploadJsonModal;

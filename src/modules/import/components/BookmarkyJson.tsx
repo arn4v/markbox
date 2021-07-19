@@ -1,7 +1,7 @@
 import React from "react";
 import { HiUpload } from "react-icons/hi";
 import useDisclosure from "~/hooks/use-disclosure";
-import UploadJsonModal from "./UploadJsonModal";
+import UploadJsonModal from "./JsonModal";
 
 const BookmarkyJson = () => {
 	const { isOpen, onClose, onOpen } = useDisclosure();

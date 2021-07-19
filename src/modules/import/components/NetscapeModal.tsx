@@ -1,18 +1,31 @@
 import clsx from "clsx";
-import * as React from "react";
-import { HiX } from "react-icons/hi";
-import { useMutation } from "react-query";
+import React from "react";
 import axios from "redaxios";
+import { useMutation } from "react-query";
+import { HiX } from "react-icons/hi";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
+import toast from "react-hot-toast";
 
-const UploadJsonModal = ({ isOpen, onClose }) => {
+const UploadNetscapeModal = ({ isOpen, onClose }) => {
 	const [file, setFile] = React.useState<File>(null);
-	const { mutate, isLoading } = useMutation((file: File) => {
-		const formData = new FormData();
-		formData.append("file", file);
-		return axios.post("/api/import/netscape", formData);
-	});
+	const { mutate, isLoading } = useMutation(
+		(file: File) => {
+			const formData = new FormData();
+			formData.append("file", file);
+			return axios.post("/api/import/netscape", formData);
+		},
+		{
+			onSuccess(res) {
+				if (res.status === 204) {
+					toast.success(
+						`Queued for import, try again if bookmarks don't show up in 2-3 minutes.`,
+					);
+				}
+				_onClose();
+			},
+		},
+	);
 	const inputRef = React.useRef<HTMLInputElement>(null);
 
 	const _onClose = React.useCallback(() => {
@@ -23,14 +36,14 @@ const UploadJsonModal = ({ isOpen, onClose }) => {
 	return (
 		<Modal
 			isOpen={isOpen}
-			onClose={onClose}
+			onClose={_onClose}
 			containerProps={{
 				className: "flex items-center justify-center z-[60]",
 			}}
 			overlayProps={{ className: "bg-black/[0.75] z-[60]" }}
 		>
 			<ModalContent
-				className="lg:h-[20%] z-[200] lg:w-[22%] flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
+				className="z-[200] lg:min-w-[22%] flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				exit={{ opacity: 0, y: -20 }}
@@ -57,7 +70,11 @@ const UploadJsonModal = ({ isOpen, onClose }) => {
 						!file ? "justify-center" : "justify-between",
 					)}
 				>
-					{file ? <>File selected: {file?.name}</> : null}
+					{file ? (
+						<>
+							<span className="font-medium">File selected:</span> {file?.name}
+						</>
+					) : null}
 					<button
 						className="flex items-center justify-center bg-white dark:bg-gray-800 dark:hover:bg-gray-700 transition border border-gray-200 shadow px-2 py-1.5 rounded-md"
 						onClick={() => {
@@ -78,7 +95,7 @@ const UploadJsonModal = ({ isOpen, onClose }) => {
 					</button>
 					<button
 						className={clsx(
-							"px-2 py-1.5 border border-gray-200 rounded-md shadow font-medium transition dark:bg-gray-600",
+							"w-20 py-1.5 border border-gray-200 rounded-md shadow font-medium transition dark:bg-gray-600 flex items-center justify-center",
 							file === null
 								? "bg-gray-100 cursor-not-allowed text-gray-400"
 								: "bg-white dark:bg-gray-800 dark:hover:bg-gray-700",
@@ -88,7 +105,7 @@ const UploadJsonModal = ({ isOpen, onClose }) => {
 						}}
 						disabled={!file}
 					>
-						{isLoading ? <Spinner /> : "Upload"}
+						{isLoading ? <Spinner className="h-5 w-5 mr-0" /> : "Upload"}
 					</button>
 				</div>
 			</ModalContent>
@@ -96,4 +113,4 @@ const UploadJsonModal = ({ isOpen, onClose }) => {
 	);
 };
 
-export default UploadJsonModal;
+export default UploadNetscapeModal;

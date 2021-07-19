@@ -45,6 +45,7 @@ export default routeHandler<ApiRequest>()
 	.use(authMiddleware)
 	.use(upload.single("file"))
 	.post(async (req, res) => {
+		res.status(204).end();
 		const rawBookmarks = fs.readFileSync(
 			path.join(
 				path.resolve(
@@ -108,10 +109,7 @@ export default routeHandler<ApiRequest>()
 				});
 
 			await prisma.$transaction(transactions);
-
-			res.status(204).end();
 		} catch (err) {
 			console.log(err);
-			res.status(500).send("Unable to process bookmarks file.");
 		}
 	});
