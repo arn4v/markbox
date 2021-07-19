@@ -9161,6 +9161,11 @@ react-refresh@0.8.3:
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
+react-simple-typewriter@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/react-simple-typewriter/-/react-simple-typewriter-3.0.0.tgz#80ac4e52bc4421cc23c6744847e447810c613db1"
+  integrity sha512-asT0tTweJ2ntMU1VRKHz5LvzkF/bCnuh2XpKaTnz5aFp3DS044LW2IbeyDxuRaYgrxe7Op4E4yub3W0sKLCEcg==
+
 react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.npmjs.org/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
