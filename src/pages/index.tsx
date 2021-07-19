@@ -1,132 +1,136 @@
 import Link from "next/link";
 import React from "react";
-import { HiArrowRight } from "react-icons/hi";
+import { HiArrowRight, HiMenu, HiX } from "react-icons/hi";
+import { Typewriter } from "react-simple-typewriter";
 import { Logo } from "~/components/Logo";
-import NextImage from "next/image";
 import { useAuth } from "~/hooks/use-auth";
-import useBreakpoints from "~/hooks/use-breakpoints";
+import useDisclosure from "~/hooks/use-disclosure";
 
 export default function IndexPage() {
 	const { isAuthenticated } = useAuth();
-	const { isLg } = useBreakpoints();
+	const { isOpen, onToggle } = useDisclosure();
 
 	return (
-		<div className="w-screen h-screen overflow-hidden from-blue-100 to-white bg-gradient-to-b dark:from-gray-800 dark:to-black">
-			<header className="flex items-center justify-between gap-3 p-5 mx-auto text-gray-600 dark:bg-transparent w-5/6">
-				<Link href="/">
-					<a className="flex items-center font-medium text-gray-900 title-font">
-						<Logo className="text-black dark:text-white" />
-					</a>
-				</Link>
-				<div className="flex items-center gap-5">
-					{/* <NavLinks /> */}
-					{isAuthenticated ? (
-						<Link href="/dashboard">
-							<a className="flex items-center px-2 py-2 mt-auto text-sm font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg lg:text-base lg:px-6 hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2">
-								Dashboard
-								<HiArrowRight className="w-4 h-4 ml-2" />
+		<div className="min-h-screen w-screen dark:bg-black relative">
+			<header className="sticky top-0 w-full border-b dark:border-gray-700 bg-transparent z-50 backdrop-filter backdrop-blur-lg">
+				<div className="flex items-center justify-between lg:px-8 h-20 w-full px-4 lg:w-5/6 mx-auto">
+					<Logo className="text-black dark:text-white" />
+					<nav className="flex items-center gap-6">
+						<button onClick={onToggle} className="block lg:hidden">
+							{isOpen ? (
+								<HiX className="h-6 w-6" />
+							) : (
+								<HiMenu className="h-6 w-6" />
+							)}
+						</button>
+						<Link href="/docs">
+							<a className="border-b border-transparent dark:hover:border-white pb-px hidden lg:block">
+								Docs
 							</a>
 						</Link>
-					) : (
-						<>
-							<a
-								className="flex items-center px-2 py-2 mt-auto text-sm font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg lg:text-base lg:px-6 hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
-								href="/api/auth/login"
-							>
-								Log in
-								<HiArrowRight className="w-4 h-4 ml-2" />
-							</a>
-						</>
-					)}
-				</div>
-			</header>
-			<section id="hero" className="text-blueGray-700 dark:text-blueGray-200">
-				<div className="flex flex-col px-5 pt-16 lg:items-center">
-					<div className="flex flex-col w-full text-left lg:mb-8 lg:text-center">
-						<h1 className="mb-6 text-2xl font-semibold tracking-tighter text-center text-black dark:text-white sm:text-5xl title-font font-poppins">
-							{" "}
-							API-first bookmarking tool <br className="md:hidden" /> for
-							developers.{" "}
-						</h1>
-					</div>
-					<div className="flex justify-center mb-12">
-						{!isAuthenticated ? (
+						{isAuthenticated ? (
 							<>
-								<a
-									href="/api/auth/login"
-									aria-label="login"
-									title="Login"
-									className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2"
-								>
-									Start bookmarking for free <HiArrowRight />
-								</a>
+								<Link href="/dashboard">
+									<a>
+										Dashbard <HiArrowRight />
+									</a>
+								</Link>
 							</>
 						) : (
-							<Link href="/dashboard">
-								<a className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2">
-									Start bookmarking for free <HiArrowRight />
+							<>
+								<a
+									className="items-center px-2 hidden lg:flex lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2"
+									href="/api/auth/login"
+								>
+									Get started
+									<HiArrowRight />
 								</a>
-							</Link>
+							</>
 						)}
-					</div>
-					<div className="flex items-center justify-center w-full">
-						<div className="overflow-hidden rounded-lg ring-2 ring-gray-400">
-							{isLg ? (
-								<NextImage
-									src="/static/dashboard-desktop.png"
-									alt="Bookmarky dashboard "
-									height={687}
-									width={1200}
-								/>
-							) : (
-								<NextImage
-									src="/static/dashboard-mobile.png"
-									alt="Bookmarky dashboard "
-									height={823}
-									width={411}
-								/>
-							)}
-						</div>
-					</div>
+					</nav>
 				</div>
-			</section>
-			<footer className="fixed bottom-0 flex items-center justify-between w-full p-3 text-gray-400 bg-black dark:bg-gray-900 body-font">
-				<div className="flex flex-col items-start justify-start md:items-center md:flex-row">
-					<a className="flex items-center justify-center font-medium text-white title-font md:justify-start">
-						<Logo className="text-white" />
-					</a>
-					<p className="text-sm text-gray-400 sm:border-l-2 sm:border-gray-800 sm:py-2 sm:mt-0">
-						© 2021 Arnav Gosain —
-						<a
-							href="https://twitter.com/knyttneve"
-							className="ml-1 text-gray-500"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							arn4v
-						</a>
+				{isOpen ? (
+					<div className="w-full backdrop-filter backdrop-blur-lg mb-8">
+						<ul className="flex flex-col">
+							<li className="px-6">
+								<Link href="/docs">
+									<a
+										className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2 justify-center w-full"
+										href="/api/auth/login"
+									>
+										Docs
+									</a>
+								</Link>
+							</li>
+							<li className="px-6 mt-4">
+								<a
+									className="flex items-center justify-center px-2 lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2"
+									href="/api/auth/login"
+								>
+									Get started
+									<HiArrowRight />
+								</a>
+							</li>
+						</ul>
+					</div>
+				) : null}
+			</header>
+			<div className="w-96 h-64 blur-[350px] absolute bg-sky-400 rounded-full top-1/3 left-1/2 -translate-x-1/2 transform"></div>
+			<section className="dark:text-blueGray-200 text-blueGray-700 container flex flex-col px-5 py-8 lg:py-24 mx-auto items-center">
+				<div className="flex flex-col w-full mb-12 text-left lg:text-center">
+					<h2 className="mb-4 text-xs font-semibold tracking-widest text-black dark:text-white uppercase text-center">
+						API-first bookmarking for Developers
+					</h2>
+					<h1 className="mb-6 text-4xl font-semibold tracking-tighter dark:text-white text-black sm:text-5xl font-poppins text-center">
+						Bookmark from your
+						<br className="md:hidden" />{" "}
+						<span className="text-blue-500">
+							<Typewriter
+								words={["browser", "terminal", "chrome extension"]}
+								cursorStyle="_"
+								typeSpeed={70}
+								loop
+							/>
+						</span>
+						.
+					</h1>
+					<p className="mx-auto text-base font-medium leading-relaxed dark:text-blueGray-200 text-blueGray-700 lg:w-1/3 text-center">
+						Bookmarky is a bookmarking tool built as an alternative to
+						in-browser bookmark manager with focus on extending it for your own
+						needs.
+						<br />
+						<br />
+						Do you want to bookmark with your friends on Discord? Build your own
+						bot and use the Bookmarky API to store data.
 					</p>
 				</div>
-				<span className="inline-flex justify-center">
+				<div className="flex justify-left lg:justify-center">
 					<a
-						className="ml-3 text-gray-400 transition hover:text-gray-200"
-						target="_blank"
-						rel="noopener noreferrer"
-						href="https://twitter.com/arn4v"
+						className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
+						href="/api/auth/login"
 					>
-						<svg
-							fill="currentColor"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth="2"
-							className="w-5 h-5"
-							viewBox="0 0 24 24"
-						>
-							<path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
-						</svg>
+						Login
 					</a>
-				</span>
-			</footer>
+					<a
+						className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
+						href="/api/auth/signup"
+					>
+						Sign up
+					</a>
+				</div>
+				<div className="flex items-center w-full lg:px-0 lg:w-3/4 mt-8 justify-between blur-none">
+					<img
+						src="/static/hero-desktop.jpg"
+						alt="Mockup"
+						className="object-contain hidden lg:block"
+					/>
+					<img
+						src="/static/hero-mobile.jpg"
+						alt="Mockup"
+						className="object-contain lg:hidden"
+					/>
+				</div>
+			</section>
 		</div>
 	);
 }
