@@ -95,13 +95,12 @@ export default function IndexPage() {
 						.
 					</h1>
 					<p className="mx-auto text-base font-medium leading-relaxed dark:text-blueGray-200 text-blueGray-700 lg:w-1/3 text-center">
-						Bookmarky is a bookmarking tool built as an alternative to
-						in-browser bookmark manager with focus on extending it for your own
-						needs.
+						Bookmarky is an alternative to in-browser bookmark manager with
+						focus on extending it for your own needs.
 						<br />
 						<br />
-						Do you want to bookmark with your friends on Discord? Build your own
-						bot and use the Bookmarky API to store data.
+						Want to bookmark with your friends on Discord? Build your own bot
+						and use the Bookmarky API to store data.
 					</p>
 				</div>
 				<div className="flex justify-left lg:justify-center">
