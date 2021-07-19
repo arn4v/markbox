@@ -29,7 +29,6 @@ const BookmarkCard = ({ data }: Props) => {
 		onClose: onDropdownClose,
 		onToggle: onDropdownToggle,
 	} = useDisclosure();
-	const { isLg } = useBreakpoints();
 	const { mutate } = useDeleteBookmarkMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries("GetAllBookmarks");

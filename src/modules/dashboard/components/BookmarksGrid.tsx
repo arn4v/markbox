@@ -3,19 +3,12 @@ import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Spinner from "~/components/Spinner";
 import { Bookmark, useGetAllBookmarksQuery } from "~/graphql/types.generated";
-import useFuse from "~/hooks/use-fuse";
+import useFuse, { UseFuse } from "~/hooks/use-fuse";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
-import AutoSizer from "react-virtualized-auto-sizer";
-import {
-	VariableSizeGrid,
-	VariableSizeList,
-	FixedSizeList,
-	FixedSizeGrid,
-} from "react-window";
 
-export default function BookmarksGrid() {
+const BookmarksGrid = (): JSX.Element => {
 	const { tag } = useDashboardStore();
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const { data, isLoading } = useGetAllBookmarksQuery(
@@ -27,6 +20,21 @@ export default function BookmarksGrid() {
 		},
 	);
 	const [query, setQuery] = React.useState<string>("");
+	const [limit, setLimit] = React.useState(50);
+	const onFilter: UseFuse<Bookmark>["onFilter"] = React.useCallback(
+		(result) => {
+			result = result.sort(
+				(a, b) =>
+					new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf(),
+			);
+			if (result.length === data.bookmarks.length) {
+				result = result.splice(0, limit);
+			}
+
+			return result;
+		},
+		[data.bookmarks.length, limit],
+	);
 	const { result } = useFuse<Bookmark>({
 		data: data?.bookmarks,
 		query,
@@ -35,8 +43,8 @@ export default function BookmarksGrid() {
 			shouldSort: true,
 			location: 15,
 		},
+		onFilter,
 	});
-	const [limit, setLimit] = React.useState(50);
 	const observerRef = React.useRef<IntersectionObserver>(null);
 	const loaderRef = React.useRef<HTMLDivElement>(null);
 
@@ -45,19 +53,24 @@ export default function BookmarksGrid() {
 		const handler: IntersectionObserverCallback = (entries) => {
 			const target = entries[0];
 			if (target.isIntersecting) {
-				setLimit((prev) => prev + 50);
+				setLimit((prev) =>
+					data.bookmarks.length - prev <= 50
+						? prev + 50
+						: data.bookmarks.length,
+				);
 			}
 		};
 
 		if (!isLoading && !observerRef.current) {
 			observerRef.current = new IntersectionObserver(handler, {
-				root: document,
+				root: null,
+				rootMargin: "20px",
 			});
 			observerRef.current.observe(loaderRef.current);
 		} else {
 			return () => observerRef.current.disconnect();
 		}
-	}, [isLoading]);
+	}, [data.bookmarks.length, isLoading]);
 
 	if (isLoading)
 		return (
@@ -94,13 +107,12 @@ export default function BookmarksGrid() {
 					) : null}
 				</div>
 			</div>
-
 			{tag && tag !== "All" && (
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
 			{result?.length > 0 ? (
 				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
-					{result.splice(0, limit).map((item) => (
+					{result.map((item) => (
 						<BookmarkCard key={item.id} data={item} />
 					))}
 				</div>
@@ -133,4 +145,6 @@ export default function BookmarksGrid() {
 			<div ref={loaderRef} />
 		</div>
 	);
-}
+};
+
+export default BookmarksGrid;
