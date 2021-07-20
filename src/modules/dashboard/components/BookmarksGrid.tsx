@@ -8,8 +8,10 @@ import useFuse from "~/hooks/use-fuse";
 import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
 import useIntersectionObserver from "~/hooks/use-intersection-observer";
 import { Bookmark } from "~/graphql/types.generated";
-import { CreateBookmarkButton } from "../../common/components/Create";
 import { HiX } from "react-icons/hi";
+import NoDataWarning from "./NoDataWarning";
+import LoadMoreButton from "./LoadMoreButton";
+import NoResultsWarning from "../NoResultsWarning";
 
 const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
@@ -89,42 +91,20 @@ const BookmarksGrid = (): JSX.Element => {
 					{result.map((data) => (
 						<BookmarkCard key={data.id} data={data} />
 					))}
-					{count !== data.length ? (
-						<div
-							ref={loaderRef}
-							className="flex items-center justify-center col-span-2"
-						>
-							<button
-								onClick={loadMore}
-								className="px-4 py-2 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 transition bg-gray-100 hover:bg-gray-200 border border-gray-300 dark:border-transparent flex items-center justify-center w-32 h-10"
-							>
-								{isNextPageLoading ? (
-									<Spinner className="text-black dark:text-white h-5 w-5 mr-0" />
-								) : (
-									"Load more"
-								)}
-							</button>
-						</div>
-					) : null}
-				</div>
-			) : data.length > 0 && result.length === 0 ? (
-				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
-					<span className="text-lg font-medium text-center">
-						Couldn&apos;t find any bookmarks with that query.
-					</span>
+					<LoadMoreButton
+						ref={loaderRef}
+						onClick={loadMore}
+						isLoading={isNextPageLoading}
+						isVisible={query.length === 0 || count !== data.length}
+					/>
 				</div>
 			) : (
-				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
-					<span className="text-xl font-medium text-center">
-						You don&apos;t have any bookmarks yet.
-					</span>
-					<div>
-						<CreateBookmarkButton
-							className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-gray-500 dark:hover:bg-gray-600"
-							showText
-						/>
-					</div>
-				</div>
+				<>
+					<NoResultsWarning
+						isVisible={!(data.length > 0 && result.length === 0)}
+					/>
+					<NoDataWarning isVisible={data.length > 0 && result.length === 0} />
+				</>
 			)}
 		</div>
 	);
