@@ -7,7 +7,7 @@ import {
 	CreateOrUpdateBookmarkTagInput,
 	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useUpdateBookmarkMutation
+	useUpdateBookmarkMutation,
 } from "~/graphql/types.generated";
 
 interface LocalState {
@@ -80,6 +80,8 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { title, url, tagsDisconnect } = state;
+
+		// Transform tags to be consumed by API
 		const tags = Object.values(state.tags).reduce((acc, cur) => {
 			if (tagsDisconnect[cur?.name]) delete tagsDisconnect[cur?.name];
 			const existingTag = data.tags.find((item) => item.name === cur.name);
@@ -90,6 +92,8 @@ const EditForm = ({ id, onSuccess }: Props) => {
 			}
 			return acc;
 		}, []);
+
+		// Transform tagsDisconnect to be consumed by API
 		const _tagsDisconnect = Object.values(tagsDisconnect).reduce((acc, cur) => {
 			const existingTag = data.tags.find((item) => item.name === cur.name);
 			if (existingTag) {
@@ -121,6 +125,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					autoComplete="off"
 					type="text"
 					className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black"
+					placeholder="Title"
 					onChange={(e) =>
 						setState((prev) => ({ ...prev, title: e.target.value }))
 					}
@@ -136,6 +141,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					id="url"
 					type="url"
 					className="block w-full mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-blue-600 ring-offset-2 caret-black"
+					placeholder="URL"
 					value={state.url}
 					autoComplete="off"
 					onChange={(e) =>

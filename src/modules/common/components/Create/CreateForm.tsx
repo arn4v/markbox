@@ -1,9 +1,10 @@
 import * as React from "react";
+import { HiOutlineXCircle } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import {
 	useCreateBookmarkMutation,
-	useGetAllTagsQuery
+	useGetAllTagsQuery,
 } from "~/graphql/types.generated";
 
 interface Props {
@@ -23,6 +24,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	const { data } = useGetAllTagsQuery();
 	const { mutate } = useCreateBookmarkMutation({
 		onSuccess: () => {
+			// Invalidate GetAllBookmarks and GetAllTags on successful mutation
 			queryClient.invalidateQueries("GetAllBookmarks");
 			queryClient.invalidateQueries("GetAllTags");
 			setState(initialState);
@@ -39,6 +41,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 		const { title, url } = state;
+		// Transform tags to Array<{ id: string }>
 		const tags = Object.values(state.tags).reduce((acc, cur) => {
 			const existingTag = data?.tags.find((item) => item.name === cur.name);
 			if (existingTag) {
@@ -61,6 +64,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					id="title"
 					type="text"
 					className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-gray-300 dark:ring-black caret-black"
+					placeholder="Name"
 					onChange={(e) =>
 						setState((prev) => ({ ...prev, title: e.target.value }))
 					}
@@ -77,6 +81,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					id="url"
 					type="url"
 					className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-gray-300 dark:ring-black caret-black"
+					placeholder="URL"
 					value={state.url}
 					autoComplete="off"
 					onChange={(e) =>
@@ -97,7 +102,23 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 								title={item?.name}
 								variant="outline"
 								color="white"
-							/>
+							>
+								<button
+									type="button"
+									onClick={() => {
+										setState((prev) => {
+											const tags = prev.tags;
+											delete tags[item?.name];
+											return {
+												...prev,
+												tags,
+											};
+										});
+									}}
+								>
+									<HiOutlineXCircle />
+								</button>
+							</Badge>
 						);
 					})}
 				</div>
