@@ -19,21 +19,20 @@ export default function Navbar() {
 				</Link>
 				<nav>
 					<div className="items-center hidden gap-5 lg:flex">
-						{router.pathname === "/dashboard" && (
-							<CreateButton
-								className="text-white border-none"
-								showText
-							/>
-						)}
+						{/* Only show create button on Dashboard */}
+						{router.pathname === "/dashboard" ? (
+							<CreateButton className="text-white border-none" showText />
+						) : null}
 						<ProfileDropdown />
 					</div>
 					<div className="flex items-center gap-5 lg:hidden">
-						{router.pathname === "/dashboard" && (
+						{/* Only show create button and tags drawer on Dashboard */}
+						{router.pathname === "/dashboard" ? (
 							<>
 								<CreateButton className="text-black bg-transparent dark:text-white hover:bg-transparent" />
 								<TagsDrawer />
 							</>
-						)}
+						) : null}
 						<MenuDrawer />
 					</div>
 				</nav>

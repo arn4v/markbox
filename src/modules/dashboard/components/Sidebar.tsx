@@ -15,6 +15,7 @@ const Sidebar = () => {
 		{},
 		{
 			initialData: { tags: [] },
+			// Disable edit mode if there are no tags
 			onSuccess(data) {
 				if (data?.tags?.length === 0) {
 					onEditModeDisabled();
@@ -43,14 +44,15 @@ const Sidebar = () => {
 						>
 							Tags
 						</h2>
-						{data?.tags.length > 0 && (
+						{/* Only show Edit mode button when user has created > 0 tags */}
+						{data?.tags.length > 0 ? (
 							<button
 								className="px-2 py-0.5 dark:bg-gray-900 bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition rounded-md text-sm focus:outline-none"
 								onClick={onEditModeToggle}
 							>
 								{isEditModeEnabled ? "Dismiss" : "Edit"}
 							</button>
-						)}
+						) : null}
 					</div>
 					<div className="flex flex-col items-center justify-start w-full gap-2">
 						<Tag

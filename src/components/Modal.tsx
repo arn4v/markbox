@@ -30,34 +30,25 @@ const Modal: Modal = ({
 		[children],
 	);
 
-	React.useEffect(() => {
-		const onEscape = (event: KeyboardEvent) => {
+	const onEscape = React.useCallback(
+		(event: KeyboardEvent) => {
 			if (event.key === "Escape") onClose();
-		};
+		},
+		[onClose],
+	);
 
-		// const onScroll = (e) => {
-		// 	e.preventDefault();
-		// 	window.scrollTo(0, 0);
-		// };
-
-		if (isOpen) {
-			// document.addEventListener("scroll", onScroll, false);
-			// document.addEventListener("touchmove", onScroll, false);
-			document.addEventListener("onsc", onEscape, false);
-		} else {
-			// document.removeEventListener("scroll", onScroll, false);
-			// document.removeEventListener("touchmove", onScroll, false);
-			document.removeEventListener("keydown", onEscape, false);
-		}
-	}, [isOpen, onClose]);
+	React.useEffect(() => {
+		document.addEventListener("keydown", onEscape, false);
+		return () => document.removeEventListener("keydown", onEscape, false);
+	}, [isOpen, onEscape]);
 
 	return (
-		<AnimatePresence>
+		<AnimatePresence exitBeforeEnter>
 			{isOpen && (
 				<Portal {...portalProps}>
 					<div
 						className={clsx([
-							"h-screen w-screen fixed inset-0 overflow-none z[60]",
+							"h-screen w-screen fixed inset-0 overflow-none z-[60]",
 							containerProps?.className,
 						])}
 					>
@@ -97,7 +88,7 @@ export const ModalContent = React.forwardRef<
 	return (
 		<motion.div
 			ref={ref}
-			className={clsx(["absolute z-30", className])}
+			className={clsx(["absolute z-[200]", className])}
 			transition={{ type: "spring", stiffness: 350, damping: 40 }}
 			{...props}
 		>

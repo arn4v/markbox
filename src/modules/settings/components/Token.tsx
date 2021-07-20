@@ -1,5 +1,6 @@
 import { useQueryClient } from "react-query";
 import Modal, { ModalContent } from "~/components/Modal";
+import { genericModalMotionProps } from "~/config";
 import { AccessToken, useDeleteTokenMutation } from "~/graphql/types.generated";
 import useDisclosure from "~/hooks/use-disclosure";
 
@@ -35,10 +36,7 @@ export default function Token({ data }: Props) {
 			>
 				<ModalContent
 					className="w-4/5 lg:h-[15%] lg:w-1/5 flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
-					initial={{ opacity: 0, y: -20 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: -20 }}
-					transition={{ duration: 0.2 }}
+					{...genericModalMotionProps}
 				>
 					<p className="mx-auto font-medium text-center lg:text-lg dark:text-white">
 						Do you really want to delete this token?

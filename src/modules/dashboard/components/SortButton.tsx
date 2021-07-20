@@ -8,9 +8,6 @@ import useDisclosure from "~/hooks/use-disclosure";
 import useDashboardStore from "../store";
 import { SortBy } from "../types";
 
-interface Props {
-	type: SortBy;
-}
 const SortButton = () => {
 	const { sort } = useDashboardStore();
 	const { isOpen, onToggle, onClose } = useDisclosure();

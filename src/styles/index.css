@@ -54,3 +54,7 @@ pre {
 html {
 	overflow-x: hidden;
 }
+
+body.modal-open {
+	overflow: hidden;
+}

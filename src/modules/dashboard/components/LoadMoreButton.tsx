@@ -3,8 +3,19 @@ import Spinner from "~/components/Spinner";
 import { Bookmark } from "~/graphql/types.generated";
 
 interface Props {
+	/**
+	 * @description Next page loading state
+	 */
 	isLoading: boolean;
+
+	/**
+	 * @description LoadMoreButton visibility
+	 */
 	isVisible: boolean;
+
+	/**
+	 * @description onClick handler
+	 */
 	onClick(): void;
 }
 

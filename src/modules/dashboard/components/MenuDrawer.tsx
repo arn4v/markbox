@@ -10,7 +10,7 @@ import {
 	HiOutlineLogout,
 	HiOutlineMoon,
 	HiOutlineSun,
-	HiOutlineTemplate
+	HiOutlineTemplate,
 } from "react-icons/hi";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useAuth } from "~/hooks/use-auth";
