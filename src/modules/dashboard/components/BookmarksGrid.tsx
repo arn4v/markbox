@@ -1,75 +1,21 @@
-import clsx from "clsx";
 import * as React from "react";
-import { HiX } from "react-icons/hi";
-import { useInfiniteQuery } from "react-query";
-import Spinner from "~/components/Spinner";
-import { fetcher } from "~/graphql/fetcher";
-import {
-	Bookmark,
-	GetAllBookmarksQuery,
-	GetAllBookmarksDocument,
-	GetAllBookmarksQueryVariables,
-	useGetBookmarksCountQuery,
-} from "~/graphql/types.generated";
-import useFuse from "~/hooks/use-fuse";
-import useIntersectionObserver from "~/hooks/use-intersection-observer";
-import { CreateBookmarkButton } from "../../common/components/Create";
-import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
 import SortButton from "./SortButton";
-
-const useInfiniteFetchBookmarks = () => {
-	const { tag, sort } = useDashboardStore();
-
-	const [isLoading, setLoading] = React.useState(true);
-
-	const infiniteFetcher = React.useCallback(
-		({ pageParam = null }) => {
-			return fetcher<GetAllBookmarksQuery, GetAllBookmarksQueryVariables>(
-				GetAllBookmarksDocument,
-				{
-					sort,
-					...(typeof pageParam === "string" ? { cursor: pageParam } : {}),
-					...(tag !== "All" ? { tag: { name: tag } } : {}),
-				},
-			)();
-		},
-		[sort, tag],
-	);
-
-	const {
-		data,
-		isLoading: _,
-		...infiniteQueryReturn
-	} = useInfiniteQuery(["GetAllBookmarks", tag, sort], infiniteFetcher, {
-		getNextPageParam: (lastPage) => lastPage.bookmarks.next_cursor,
-	});
-
-	useGetBookmarksCountQuery(
-		{},
-		{
-			onSuccess() {
-				setLoading(false);
-			},
-		},
-	);
-
-	const bookmarks = React.useMemo(() => {
-		return (
-			data?.pages?.reduce((acc, cur) => {
-				return acc.concat(cur.bookmarks.data);
-			}, []) ?? []
-		);
-	}, [data]);
-
-	return { data: bookmarks, isLoading, ...infiniteQueryReturn };
-};
+import Spinner from "~/components/Spinner";
+import clsx from "clsx";
+import useDashboardStore from "../store";
+import useFuse from "~/hooks/use-fuse";
+import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
+import useIntersectionObserver from "~/hooks/use-intersection-observer";
+import { Bookmark } from "~/graphql/types.generated";
+import { CreateBookmarkButton } from "../../common/components/Create";
+import { HiX } from "react-icons/hi";
 
 const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
-	const { data, isLoading, fetchNextPage } = useInfiniteFetchBookmarks();
+	const { data, isLoading, fetchNextPage } = useInfiniteBookmarksQuery();
 	const { result } = useFuse<Bookmark>({
 		data: data ?? [],
 		query,
