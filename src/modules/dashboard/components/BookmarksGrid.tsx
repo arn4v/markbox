@@ -65,6 +65,7 @@ const BookmarksGrid = (): JSX.Element => {
 							setQuery(e.target.value);
 						}}
 						ref={queryRef}
+						placeholder="Search bookmarks..."
 						className={clsx([
 							"border border-gray-300 rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full",
 						])}
