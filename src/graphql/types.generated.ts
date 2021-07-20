@@ -160,6 +160,7 @@ export type QueryBookmarkArgs = {
 
 export type QueryBookmarksArgs = {
 	tag?: Maybe<FilterBookmarksTagInput>;
+	sort: Scalars["String"];
 };
 
 export type QueryTagArgs = {
@@ -318,6 +319,7 @@ export type UpdateTokenMutation = {
 
 export type GetAllBookmarksQueryVariables = Exact<{
 	tag?: Maybe<FilterBookmarksTagInput>;
+	sort: Scalars["String"];
 }>;
 
 export type GetAllBookmarksQuery = {
@@ -720,7 +722,7 @@ export type QueryResolvers<
 		Array<ResolversTypes["Bookmark"]>,
 		ParentType,
 		ContextType,
-		RequireFields<QueryBookmarksArgs, never>
+		RequireFields<QueryBookmarksArgs, "sort">
 	>;
 	tag?: Resolver<
 		ResolversTypes["Tag"],
@@ -1047,8 +1049,8 @@ export const useUpdateTokenMutation = <TError = unknown, TContext = unknown>(
 		options,
 	);
 export const GetAllBookmarksDocument = `
-    query GetAllBookmarks($tag: FilterBookmarksTagInput) {
-  bookmarks(tag: $tag) {
+    query GetAllBookmarks($tag: FilterBookmarksTagInput, $sort: String!) {
+  bookmarks(tag: $tag, sort: $sort) {
     id
     title
     url
@@ -1065,7 +1067,7 @@ export const useGetAllBookmarksQuery = <
 	TData = GetAllBookmarksQuery,
 	TError = unknown,
 >(
-	variables?: GetAllBookmarksQueryVariables,
+	variables: GetAllBookmarksQueryVariables,
 	options?: UseQueryOptions<GetAllBookmarksQuery, TError, TData>,
 ) =>
 	useQuery<GetAllBookmarksQuery, TError, TData>(

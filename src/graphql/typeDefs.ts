@@ -88,7 +88,7 @@ export default gql`
 
 	type Query {
 		bookmark(id: ID!): Bookmark!
-		bookmarks(tag: FilterBookmarksTagInput): [Bookmark!]!
+		bookmarks(tag: FilterBookmarksTagInput, sort: String!): [Bookmark!]!
 		tag(id: ID!): Tag!
 		tagBookmarksCount(id: ID!): Int!
 		tags: [Tag!]

@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { pickKeys } from "~/lib/misc";
+import { SortBy } from "~/modules/dashboard/types";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { QueryResolvers, Tag } from "../types.generated";
@@ -36,8 +37,28 @@ const Query: QueryResolvers<GQLContext> = {
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-	async bookmarks(_, { tag }, { req, res, prisma }) {
+	async bookmarks(_, { tag, sort }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
+		let orderBy: Record<string, string> = {};
+		switch (sort as SortBy) {
+			case "created_at_asc": {
+				orderBy.createdAt = "asc";
+				break;
+			}
+			case "created_at_desc": {
+				orderBy.createdAt = "desc";
+				break;
+			}
+			case "updated_at_asc": {
+				orderBy.updatedAt = "asc";
+				break;
+			}
+			case "updated_at_desc": {
+				orderBy.updatedAt = "desc";
+				break;
+			}
+		}
+
 		const bookmarks = await prisma.bookmark.findMany({
 			where: {
 				userId,
@@ -55,9 +76,7 @@ const Query: QueryResolvers<GQLContext> = {
 			include: {
 				tags: true,
 			},
-			orderBy: {
-				createdAt: "desc",
-			},
+			orderBy,
 		});
 		return bookmarks.map(({ id, url, title, createdAt, updatedAt, tags }) => ({
 			id,

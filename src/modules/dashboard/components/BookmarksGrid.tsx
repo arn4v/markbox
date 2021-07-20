@@ -2,25 +2,23 @@ import clsx from "clsx";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
 import { useVirtual } from "react-virtual";
+import Popup from "~/components/Popup";
 import Spinner from "~/components/Spinner";
 import { Bookmark, useGetAllBookmarksQuery } from "~/graphql/types.generated";
 import useFuse from "~/hooks/use-fuse";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
+import { SortBy } from "../types";
 import BookmarkCard from "./BookmarkCard";
-import VirtualizedBookmarks from "./VirtualizedBookmarks";
+import SortButton from "./SortButton";
 
 const BookmarksGrid = (): JSX.Element => {
-	const { tag } = useDashboardStore();
+	const [tag, sort] = useDashboardStore((state) => [state.tag, state.sort]);
 	const queryRef = React.useRef<HTMLInputElement>(null);
-	const { data, isLoading } = useGetAllBookmarksQuery(
-		tag !== "All" ? { tag: { name: tag } } : {},
-		{
-			initialData: {
-				bookmarks: [],
-			},
-		},
-	);
+	const { data, isLoading } = useGetAllBookmarksQuery({
+		sort,
+		...(tag !== "All" ? { tag: { name: tag } } : {}),
+	});
 	const [query, setQuery] = React.useState<string>("");
 	const { result } = useFuse<Bookmark>({
 		data: data?.bookmarks,
@@ -41,7 +39,7 @@ const BookmarksGrid = (): JSX.Element => {
 
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
-			<div className="sticky top-0">
+			<div className="flex space-x-4 lg:space-x-6 items-center">
 				<div className="relative w-full">
 					<input
 						type="text"
@@ -66,44 +64,36 @@ const BookmarksGrid = (): JSX.Element => {
 						</button>
 					) : null}
 				</div>
+				<SortButton />
 			</div>
 			{tag && tag !== "All" && (
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
 			{result?.length > 0 ? (
-				<div
-					className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
-					style={{}}
-				>
+				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
 					{result.map((data) => (
 						<BookmarkCard key={data.id} data={data} />
 					))}
 				</div>
+			) : null}{" "}
+			{data.bookmarks?.length > 0 && result?.length === 0 ? (
+				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
+					<span className="text-lg font-medium text-center">
+						Couldn&apos;t find any bookmarks with that query.
+					</span>
+				</div>
 			) : (
-				(() => {
-					if (data.bookmarks.length > 0 && result.length === 0) {
-						return (
-							<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
-								<span className="text-lg font-medium text-center">
-									Couldn&apos;t find any bookmarks with that query.
-								</span>
-							</div>
-						);
-					}
-					return (
-						<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
-							<span className="text-xl font-medium text-center">
-								You don&apos;t have any bookmarks yet.
-							</span>
-							<div>
-								<CreateBookmarkButton
-									className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-gray-500 dark:hover:bg-gray-600"
-									showText
-								/>
-							</div>
-						</div>
-					);
-				})()
+				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
+					<span className="text-xl font-medium text-center">
+						You don&apos;t have any bookmarks yet.
+					</span>
+					<div>
+						<CreateBookmarkButton
+							className="block gap-2 px-2 py-2 mx-auto text-white border-transparent rounded-lg dark:bg-gray-500 dark:hover:bg-gray-600"
+							showText
+						/>
+					</div>
+				</div>
 			)}
 		</div>
 	);
