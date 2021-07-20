@@ -4,6 +4,8 @@ import { SortBy } from "./types";
 interface DashboardStoreState {
 	tag: string;
 	sort: SortBy;
+	cursor: string;
+	setCursor(cursor: string): void;
 	setTag(tag: string): void;
 	setSort(type: SortBy): void;
 }
@@ -11,6 +13,10 @@ interface DashboardStoreState {
 const useDashboardStore = create<DashboardStoreState>((set) => ({
 	tag: "All",
 	sort: "created_at_desc",
+	cursor: "",
+	setCursor(cursor) {
+		set({ cursor });
+	},
 	setSort(type) {
 		set({ sort: type });
 	},
