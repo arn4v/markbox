@@ -32,6 +32,7 @@ const Modal: Modal = ({
 
 	const onEscape = React.useCallback(
 		(event: KeyboardEvent) => {
+			event.stopPropagation();
 			if (event.key === "Escape") onClose();
 		},
 		[onClose],

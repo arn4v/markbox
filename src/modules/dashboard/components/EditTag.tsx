@@ -16,18 +16,18 @@ interface EditTagProps {
 
 const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 	const queryClient = useQueryClient();
-	const [name, setName] = React.useState<string>(data.name);
+	const [name, setName] = React.useState<string>(undefined);
 	const { mutate } = useRenameTagMutation({
 		// Invalidate GetTags query on successful rename
-		onSuccess() {
-			queryClient.invalidateQueries("GetTags");
+		onSuccess(data) {
+			queryClient.invalidateQueries("GetAllTags");
+			onClose();
 		},
 	});
 
-	const internalOnClose = () => {
-		setName(data.name);
-		onClose();
-	};
+	React.useEffect(() => {
+		if (!name) setName(data.name);
+	}, [data, name]);
 
 	return (
 		<>
@@ -55,7 +55,6 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 							onSubmit={(e) => {
 								e.preventDefault();
 								mutate({ input: { id: data.id, name } });
-								internalOnClose();
 							}}
 						>
 							<div className="text-center font-bold text-lg">Rename tag</div>
@@ -63,7 +62,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 								<label htmlFor="name">Name</label>
 								<input
 									id="name"
-									className="block w-full text-black rounded outline-none focus:outline-none border border-gray-300 focus:border-gray-400 px-2 py-2 caret-black"
+									className="block w-full text-black dark:text-white rounded outline-none border border-gray-300 focus:border-gray-400 px-2 py-2 caret-black dark:bg-gray-900 dark:focus:border-gray-700 dark:border-gray-600 dark:focus:bg-gray-800 dark:caret-white"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
 									required
