@@ -1,33 +1,83 @@
 import clsx from "clsx";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
-import { useVirtual } from "react-virtual";
-import Popup from "~/components/Popup";
+import { useInfiniteQuery } from "react-query";
 import Spinner from "~/components/Spinner";
-import { Bookmark, useGetAllBookmarksQuery } from "~/graphql/types.generated";
+import { fetcher } from "~/graphql/fetcher";
+import {
+	Bookmark,
+	GetAllBookmarksQuery,
+	GetAllBookmarksDocument,
+	GetAllBookmarksQueryVariables,
+} from "~/graphql/types.generated";
 import useFuse from "~/hooks/use-fuse";
+import useIntersectionObserver from "~/hooks/use-intersection-observer";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
-import { SortBy } from "../types";
 import BookmarkCard from "./BookmarkCard";
 import SortButton from "./SortButton";
 
+const useInfiniteFetchBookmarks = () => {
+	const { tag, sort } = useDashboardStore();
+
+	const infiniteFetcher = React.useCallback(
+		({ pageParam = null }) => {
+			console.log(pageParam);
+			return fetcher<GetAllBookmarksQuery, GetAllBookmarksQueryVariables>(
+				GetAllBookmarksDocument,
+				{
+					sort,
+					...(typeof pageParam === "string" ? { cursor: pageParam } : {}),
+					...(tag !== "All" ? { tag: { name: tag } } : {}),
+				},
+			)();
+		},
+		[sort, tag],
+	);
+
+	const { data, ...infiniteQueryReturn } = useInfiniteQuery(
+		["GetAllBookmarks", tag, sort],
+		infiniteFetcher,
+		{
+			getPreviousPageParam: (previousPage) => previousPage.bookmarks.cursor,
+			getNextPageParam: (lastPage) => lastPage.bookmarks.next_cursor,
+		},
+	);
+
+	const bookmarks = React.useMemo(() => {
+		return (
+			data?.pages?.reduce((acc, cur) => {
+				return acc.concat(cur.bookmarks.data);
+			}, []) ?? []
+		);
+	}, [data]);
+
+	return { data: bookmarks, ...infiniteQueryReturn };
+};
+
 const BookmarksGrid = (): JSX.Element => {
-	const [tag, sort] = useDashboardStore((state) => [state.tag, state.sort]);
+	const tag = useDashboardStore((state) => state.tag);
 	const queryRef = React.useRef<HTMLInputElement>(null);
-	const { data, isLoading } = useGetAllBookmarksQuery({
-		sort,
-		...(tag !== "All" ? { tag: { name: tag } } : {}),
-	});
 	const [query, setQuery] = React.useState<string>("");
+	const { data, isLoading, fetchNextPage } = useInfiniteFetchBookmarks();
 	const { result } = useFuse<Bookmark>({
-		data: data?.bookmarks,
+		data: data,
 		query,
 		options: {
 			keys: ["title", "tags.name"],
 			shouldSort: true,
 			location: 15,
 		},
+	});
+	const loaderRef = React.useRef<HTMLDivElement>(null);
+
+	useIntersectionObserver({
+		root: null,
+		target: loaderRef,
+		rootMargin: "24px",
+		onIntersect: React.useCallback(() => {
+			fetchNextPage();
+		}, [fetchNextPage]),
 	});
 
 	if (isLoading)
@@ -74,9 +124,14 @@ const BookmarksGrid = (): JSX.Element => {
 					{result.map((data) => (
 						<BookmarkCard key={data.id} data={data} />
 					))}
+					<div
+						ref={loaderRef}
+						className="flex items-center justify-center col-span-2"
+					>
+						<Spinner className="text-black dark:text-white h-5 w-5" />
+					</div>
 				</div>
-			) : null}{" "}
-			{data.bookmarks?.length > 0 && result?.length === 0 ? (
+			) : data.length > 0 && result.length === 0 ? (
 				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
 					<span className="text-lg font-medium text-center">
 						Couldn&apos;t find any bookmarks with that query.

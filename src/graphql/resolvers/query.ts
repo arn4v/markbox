@@ -7,7 +7,7 @@ import { QueryResolvers, Tag } from "../types.generated";
 
 const Query: QueryResolvers<GQLContext> = {
 	async bookmark(_, { id }, { prisma, req, res }) {
-		const userId = await protectResolver(req, res);
+		await protectResolver(req, res);
 		const {
 			id: _id,
 			title,
@@ -37,7 +37,7 @@ const Query: QueryResolvers<GQLContext> = {
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-	async bookmarks(_, { tag, sort }, { req, res, prisma }) {
+	async bookmarks(_, { tag, sort, cursor }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
 		let orderBy: Record<string, string> = {};
 		switch (sort as SortBy) {
@@ -57,28 +57,41 @@ const Query: QueryResolvers<GQLContext> = {
 				orderBy.updatedAt = "desc";
 				break;
 			}
+			default: {
+				break;
+			}
 		}
 
-		const bookmarks = await prisma.bookmark.findMany({
-			where: {
-				userId,
-				...(typeof tag?.name === "string"
-					? {
-							tags: {
-								some: {
-									name: tag.name,
-									userId,
+		const bookmarks = (
+			await prisma.bookmark.findMany({
+				where: {
+					userId,
+					...(typeof tag?.name === "string"
+						? {
+								tags: {
+									some: {
+										name: tag.name,
+										userId,
+									},
 								},
+						  }
+						: {}),
+				},
+				include: {
+					tags: true,
+				},
+				orderBy: orderBy,
+				take: 50,
+				...(typeof cursor === "string"
+					? {
+							cursor: {
+								id: cursor,
 							},
+							skip: 1,
 					  }
 					: {}),
-			},
-			include: {
-				tags: true,
-			},
-			orderBy,
-		});
-		return bookmarks.map(({ id, url, title, createdAt, updatedAt, tags }) => ({
+			})
+		).map(({ id, url, title, createdAt, updatedAt, tags }) => ({
 			id,
 			url,
 			title,
@@ -86,6 +99,12 @@ const Query: QueryResolvers<GQLContext> = {
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
 		}));
+
+		return {
+			data: bookmarks,
+			...(typeof cursor === "string" ? { cursor } : {}),
+			next_cursor: bookmarks[bookmarks.length - 1].id,
+		};
 	},
 	async user(_, __, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);

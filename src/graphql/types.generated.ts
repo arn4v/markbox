@@ -84,6 +84,13 @@ export type GeneratedAccessToken = {
 	scopes: Array<Scalars["String"]>;
 };
 
+export type GetBookmarksData = {
+	__typename?: "GetBookmarksData";
+	cursor?: Maybe<Scalars["String"]>;
+	next_cursor: Scalars["String"];
+	data: Array<Bookmark>;
+};
+
 export type LoginMessage = {
 	__typename?: "LoginMessage";
 	code: Scalars["String"];
@@ -145,7 +152,7 @@ export type MutationUpdateProfileArgs = {
 export type Query = {
 	__typename?: "Query";
 	bookmark: Bookmark;
-	bookmarks: Array<Bookmark>;
+	bookmarks?: Maybe<GetBookmarksData>;
 	tag: Tag;
 	tagBookmarksCount: Scalars["Int"];
 	tags?: Maybe<Array<Tag>>;
@@ -161,6 +168,7 @@ export type QueryBookmarkArgs = {
 export type QueryBookmarksArgs = {
 	tag?: Maybe<FilterBookmarksTagInput>;
 	sort: Scalars["String"];
+	cursor?: Maybe<Scalars["String"]>;
 };
 
 export type QueryTagArgs = {
@@ -320,18 +328,24 @@ export type UpdateTokenMutation = {
 export type GetAllBookmarksQueryVariables = Exact<{
 	tag?: Maybe<FilterBookmarksTagInput>;
 	sort: Scalars["String"];
+	cursor?: Maybe<Scalars["String"]>;
 }>;
 
 export type GetAllBookmarksQuery = {
 	__typename?: "Query";
-	bookmarks: Array<{
-		__typename?: "Bookmark";
-		id: string;
-		title: string;
-		url: string;
-		createdAt: string;
-		updatedAt: string;
-		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
+	bookmarks?: Maybe<{
+		__typename?: "GetBookmarksData";
+		cursor?: Maybe<string>;
+		next_cursor: string;
+		data: Array<{
+			__typename?: "Bookmark";
+			id: string;
+			title: string;
+			url: string;
+			createdAt: string;
+			updatedAt: string;
+			tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
+		}>;
 	}>;
 };
 
@@ -545,6 +559,7 @@ export type ResolversTypes = {
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
 	GeneratedAccessToken: ResolverTypeWrapper<GeneratedAccessToken>;
+	GetBookmarksData: ResolverTypeWrapper<GetBookmarksData>;
 	LoginMessage: ResolverTypeWrapper<LoginMessage>;
 	Mutation: ResolverTypeWrapper<{}>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
@@ -569,6 +584,7 @@ export type ResolversParentTypes = {
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
 	GeneratedAccessToken: GeneratedAccessToken;
+	GetBookmarksData: GetBookmarksData;
 	LoginMessage: LoginMessage;
 	Mutation: {};
 	Boolean: Scalars["Boolean"];
@@ -631,6 +647,16 @@ export type GeneratedAccessTokenResolvers<
 	token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	scopes?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
+	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GetBookmarksDataResolvers<
+	ContextType = any,
+	ParentType extends ResolversParentTypes["GetBookmarksData"] = ResolversParentTypes["GetBookmarksData"],
+> = {
+	cursor?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+	next_cursor?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	data?: Resolver<Array<ResolversTypes["Bookmark"]>, ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -719,7 +745,7 @@ export type QueryResolvers<
 		RequireFields<QueryBookmarkArgs, "id">
 	>;
 	bookmarks?: Resolver<
-		Array<ResolversTypes["Bookmark"]>,
+		Maybe<ResolversTypes["GetBookmarksData"]>,
 		ParentType,
 		ContextType,
 		RequireFields<QueryBookmarksArgs, "sort">
@@ -778,6 +804,7 @@ export type Resolvers<ContextType = any> = {
 	Bookmark?: BookmarkResolvers<ContextType>;
 	ChangePasswordMessage?: ChangePasswordMessageResolvers<ContextType>;
 	GeneratedAccessToken?: GeneratedAccessTokenResolvers<ContextType>;
+	GetBookmarksData?: GetBookmarksDataResolvers<ContextType>;
 	LoginMessage?: LoginMessageResolvers<ContextType>;
 	Mutation?: MutationResolvers<ContextType>;
 	Query?: QueryResolvers<ContextType>;
@@ -1049,17 +1076,21 @@ export const useUpdateTokenMutation = <TError = unknown, TContext = unknown>(
 		options,
 	);
 export const GetAllBookmarksDocument = `
-    query GetAllBookmarks($tag: FilterBookmarksTagInput, $sort: String!) {
-  bookmarks(tag: $tag, sort: $sort) {
-    id
-    title
-    url
-    tags {
+    query GetAllBookmarks($tag: FilterBookmarksTagInput, $sort: String!, $cursor: String) {
+  bookmarks(tag: $tag, sort: $sort, cursor: $cursor) {
+    cursor
+    next_cursor
+    data {
       id
-      name
+      title
+      url
+      tags {
+        id
+        name
+      }
+      createdAt
+      updatedAt
     }
-    createdAt
-    updatedAt
   }
 }
     `;

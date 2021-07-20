@@ -1,17 +1,21 @@
 import { gql } from "@apollo/client";
 
 export default gql`
-	query GetAllBookmarks($tag: FilterBookmarksTagInput, $sort: String!) {
-		bookmarks(tag: $tag, sort: $sort) {
-			id
-			title
-			url
-			tags {
+	query GetAllBookmarks($tag: FilterBookmarksTagInput, $sort: String!, $cursor: String) {
+		bookmarks(tag: $tag, sort: $sort, cursor: $cursor) {
+			cursor
+			next_cursor
+			data {
 				id
-				name
+				title
+				url
+				tags {
+					id
+					name
+				}
+				createdAt
+				updatedAt
 			}
-			createdAt
-			updatedAt
 		}
 	}
 `;

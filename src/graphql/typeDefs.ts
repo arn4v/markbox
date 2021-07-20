@@ -86,9 +86,18 @@ export default gql`
 		name: String!
 	}
 
+	type GetBookmarksData {
+		cursor: String
+		next_cursor: String!
+		data: [Bookmark!]!
+	}
 	type Query {
 		bookmark(id: ID!): Bookmark!
-		bookmarks(tag: FilterBookmarksTagInput, sort: String!): [Bookmark!]!
+		bookmarks(
+			tag: FilterBookmarksTagInput
+			sort: String!
+			cursor: String
+		): GetBookmarksData
 		tag(id: ID!): Tag!
 		tagBookmarksCount(id: ID!): Int!
 		tags: [Tag!]
