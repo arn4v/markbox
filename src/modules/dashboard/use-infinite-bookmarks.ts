@@ -9,10 +9,25 @@ import {
 } from "~/graphql/types.generated";
 import useDashboardStore from "./store";
 
-const useInfiniteBookmarksQuery = () => {
-	const { tag, sort } = useDashboardStore();
+type OnSuccess = () => void;
 
-	const [isLoading, setLoading] = React.useState(true);
+const useInfiniteBookmarksQuery = ({
+	onSuccess,
+}: {
+	onSuccess?: OnSuccess;
+}) => {
+	const { tag, sort } = useDashboardStore();
+	// Total bookmarks count set by useGetBookmarksCountQuery
+	const [count, setCount] = React.useState(0);
+
+	const { isLoading } = useGetBookmarksCountQuery(
+		{},
+		{
+			onSuccess(data) {
+				setCount(data?.bookmarksCount);
+			},
+		},
+	);
 
 	const infiniteFetcher = React.useCallback(
 		({ pageParam = null }) => {
@@ -34,16 +49,10 @@ const useInfiniteBookmarksQuery = () => {
 		...infiniteQueryReturn
 	} = useInfiniteQuery(["GetAllBookmarks", tag, sort], infiniteFetcher, {
 		getNextPageParam: (lastPage) => lastPage.bookmarks.next_cursor,
-	});
-
-	useGetBookmarksCountQuery(
-		{},
-		{
-			onSuccess() {
-				setLoading(false);
-			},
+		onSuccess(data) {
+			if (!onSuccess) onSuccess();
 		},
-	);
+	});
 
 	const bookmarks = React.useMemo(() => {
 		return (
@@ -53,7 +62,7 @@ const useInfiniteBookmarksQuery = () => {
 		);
 	}, [data]);
 
-	return { data: bookmarks, isLoading, ...infiniteQueryReturn };
+	return { data: bookmarks, count, isLoading, ...infiniteQueryReturn };
 };
 
 export default useInfiniteBookmarksQuery;

@@ -65,7 +65,9 @@ const Query: QueryResolvers<GQLContext> = {
 		const bookmarks = (
 			await prisma.bookmark.findMany({
 				where: {
-					userId,
+					User: {
+						id: userId,
+					},
 					...(typeof tag?.name === "string"
 						? {
 								tags: {
@@ -154,6 +156,7 @@ const Query: QueryResolvers<GQLContext> = {
 		const userId = await protectResolver(req, res);
 		const count = await prisma.bookmark.count({
 			where: {
+				userId,
 				tags: {
 					every: {
 						id,
@@ -211,13 +214,15 @@ const Query: QueryResolvers<GQLContext> = {
 	},
 	async bookmarksCount(_, __, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		return await prisma.bookmark.count({
+		const count = await prisma.bookmark.count({
 			where: {
 				User: {
 					id: userId,
 				},
 			},
 		});
+
+		return count;
 	},
 };
 

@@ -15,7 +15,11 @@ const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
-	const { data, isLoading, fetchNextPage } = useInfiniteBookmarksQuery();
+	const { data, count, isLoading, fetchNextPage } = useInfiniteBookmarksQuery({
+		onSuccess() {
+			setNextPageLoading(false);
+		},
+	});
 	const { result } = useFuse<Bookmark>({
 		data: data ?? [],
 		query,
@@ -29,17 +33,16 @@ const BookmarksGrid = (): JSX.Element => {
 	const [isNextPageLoading, setNextPageLoading] =
 		React.useState<boolean>(false);
 
-	React.useEffect(() => {
-		if (isNextPageLoading) setNextPageLoading(false);
-	}, [data, isNextPageLoading]);
+	const loadMore = React.useCallback(() => {
+		setNextPageLoading(true);
+		fetchNextPage();
+	}, [fetchNextPage]);
 
 	useIntersectionObserver({
 		root: null,
 		target: loaderRef,
 		rootMargin: "24px",
-		onIntersect: React.useCallback(() => {
-			fetchNextPage();
-		}, [fetchNextPage]),
+		onIntersect: loadMore,
 	});
 
 	if (isLoading)
@@ -86,24 +89,23 @@ const BookmarksGrid = (): JSX.Element => {
 					{result.map((data) => (
 						<BookmarkCard key={data.id} data={data} />
 					))}
-					<div
-						ref={loaderRef}
-						className="flex items-center justify-center col-span-2"
-					>
-						<button
-							onClick={() => {
-								setNextPageLoading(true);
-								fetchNextPage();
-							}}
-							className="px-4 py-2 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 transition bg-gray-100 hover:bg-gray-200 border border-gray-300 dark:border-transparent"
+					{count !== data.length ? (
+						<div
+							ref={loaderRef}
+							className="flex items-center justify-center col-span-2"
 						>
-							{isNextPageLoading ? (
-								<Spinner className="text-black dark:text-white h-5 w-5" />
-							) : (
-								"Load more"
-							)}
-						</button>
-					</div>
+							<button
+								onClick={loadMore}
+								className="px-4 py-2 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 transition bg-gray-100 hover:bg-gray-200 border border-gray-300 dark:border-transparent flex items-center justify-center w-32 h-10"
+							>
+								{isNextPageLoading ? (
+									<Spinner className="text-black dark:text-white h-5 w-5 mr-0" />
+								) : (
+									"Load more"
+								)}
+							</button>
+						</div>
+					) : null}
 				</div>
 			) : data.length > 0 && result.length === 0 ? (
 				<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
