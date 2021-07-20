@@ -25,7 +25,12 @@ const CreatePage = () => {
 		const url = searchParams.get("url");
 		const description = searchParams.get("description");
 		const popup = !!searchParams.get("popup") ?? false;
-		setState({ title, url, description, popup });
+		setState({
+			title,
+			url: url ? decodeURIComponent(url) : "",
+			description,
+			popup,
+		});
 		setMounted(true);
 	}, []);
 
@@ -43,7 +48,7 @@ const CreatePage = () => {
 			<div className="flex flex-col gap-6 p-3 w-11/12 lg:p-6 dark:bg-gray-900 bg-white rounded-md border border-gray-300 lg:w-1/2 shadow-lg mt-8">
 				<CreateForm
 					onSuccess={() => {
-						if (popup || isPwa) {
+						if (popup && !isPwa) {
 							window.close();
 						} else {
 							router.push("/dashboard");
