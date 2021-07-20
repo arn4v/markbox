@@ -8,6 +8,7 @@ import useFuse from "~/hooks/use-fuse";
 import { CreateBookmarkButton } from "../../common/components/Create";
 import useDashboardStore from "../store";
 import BookmarkCard from "./BookmarkCard";
+import VirtualizedBookmarks from "./VirtualizedBookmarks";
 
 const BookmarksGrid = (): JSX.Element => {
 	const { tag } = useDashboardStore();
@@ -30,13 +31,6 @@ const BookmarksGrid = (): JSX.Element => {
 			location: 15,
 		},
 	});
-	const parentRef = React.useRef<HTMLDivElement>(null);
-	const virtualized = useVirtual({
-		parentRef,
-		size: result?.length,
-		estimateSize: React.useCallback(() => 35, []),
-		overscan: 10,
-	});
 
 	if (isLoading)
 		return (
@@ -46,10 +40,7 @@ const BookmarksGrid = (): JSX.Element => {
 		);
 
 	return (
-		<div
-			className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72"
-			ref={parentRef}
-		>
+		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
 			<div className="sticky top-0">
 				<div className="relative w-full">
 					<input
@@ -82,12 +73,10 @@ const BookmarksGrid = (): JSX.Element => {
 			{result?.length > 0 ? (
 				<div
 					className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
-					style={{
-						height: `${virtualized.totalSize}px`,
-					}}
+					style={{}}
 				>
-					{virtualized.virtualItems.map(({ index }) => (
-						<BookmarkCard key={result[index].id} data={result[index]} />
+					{result.map((data) => (
+						<BookmarkCard key={data.id} data={data} />
 					))}
 				</div>
 			) : (

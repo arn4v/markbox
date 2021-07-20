@@ -1,0 +1,35 @@
+import * as React from "react";
+import { useVirtual } from "react-virtual";
+import { Bookmark } from "~/graphql/types.generated";
+import BookmarkCard from "./BookmarkCard";
+
+interface Props {
+	data: Bookmark[];
+}
+
+const VirtualizedBookmarks: Component<Props> = ({ data }) => {
+	const parentRef = React.useRef<HTMLDivElement>(null);
+	const virtualized = useVirtual({
+		parentRef,
+		size: data?.length,
+		estimateSize: React.useCallback(() => 35, []),
+		overscan: 10,
+	});
+
+	return (
+		<div ref={parentRef}>
+			<div
+				className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
+				style={{
+					height: `${virtualized.totalSize}px`,
+				}}
+			>
+				{virtualized.virtualItems.map(({ index }) => (
+					<BookmarkCard key={data[index].id} data={data[index]} />
+				))}
+			</div>
+		</div>
+	);
+};
+
+export default VirtualizedBookmarks;

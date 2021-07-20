@@ -24,14 +24,14 @@ export default function IndexPage() {
 							)}
 						</button>
 						<Link href="/docs">
-							<a className="border-b border-transparent dark:hover:border-white pb-px hidden lg:block">
+							<a className="hidden rounded-lg lg:block dark:text-white font-bold text-gray-700 hover:text-black">
 								Docs
 							</a>
 						</Link>
 						{isAuthenticated ? (
 							<>
 								<Link href="/dashboard">
-									<a>
+									<a className="flex items-center justify-center px-2 lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2">
 										Dashbard <HiArrowRight />
 									</a>
 								</Link>
@@ -103,28 +103,30 @@ export default function IndexPage() {
 						and use the Bookmarky API to store data.
 					</p>
 				</div>
-				<div className="flex justify-left lg:justify-center">
-					<a
-						className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
-						href="/api/auth/login"
-					>
-						Login
-					</a>
-					<a
-						className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
-						href="/api/auth/signup"
-					>
-						Sign up
-					</a>
-				</div>
-				<div className="flex items-center w-full lg:px-0 lg:w-3/4 mt-8 justify-between blur-none">
+				{!isAuthenticated ? (
+					<div className="flex justify-left lg:justify-center">
+						<a
+							className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
+							href="/api/auth/login"
+						>
+							Login
+						</a>
+						<a
+							className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
+							href="/api/auth/signup"
+						>
+							Sign up
+						</a>
+					</div>
+				) : null}
+				<div className="flex items-center w-full lg:px-0 lg:w-3/4 justify-between blur-none object-contain">
 					<img
-						src="/static/hero-desktop.jpg"
+						src="/static/hero-desktop.png"
 						alt="Mockup"
 						className="object-contain hidden lg:block"
 					/>
 					<img
-						src="/static/hero-mobile.jpg"
+						src="/static/hero-mobile.png"
 						alt="Mockup"
 						className="object-contain lg:hidden"
 					/>
