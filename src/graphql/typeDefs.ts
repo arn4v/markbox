@@ -91,6 +91,7 @@ export default gql`
 		next_cursor: String!
 		data: [Bookmark!]!
 	}
+
 	type Query {
 		bookmark(id: ID!): Bookmark!
 		bookmarks(
@@ -98,6 +99,7 @@ export default gql`
 			sort: String!
 			cursor: String
 		): GetBookmarksData
+		bookmarksCount: Int!
 		tag(id: ID!): Tag!
 		tagBookmarksCount(id: ID!): Int!
 		tags: [Tag!]

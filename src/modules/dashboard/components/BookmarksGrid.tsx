@@ -9,6 +9,7 @@ import {
 	GetAllBookmarksQuery,
 	GetAllBookmarksDocument,
 	GetAllBookmarksQueryVariables,
+	useGetBookmarksCountQuery,
 } from "~/graphql/types.generated";
 import useFuse from "~/hooks/use-fuse";
 import useIntersectionObserver from "~/hooks/use-intersection-observer";
@@ -20,9 +21,10 @@ import SortButton from "./SortButton";
 const useInfiniteFetchBookmarks = () => {
 	const { tag, sort } = useDashboardStore();
 
+	const [isLoading, setLoading] = React.useState(true);
+
 	const infiniteFetcher = React.useCallback(
 		({ pageParam = null }) => {
-			console.log(pageParam);
 			return fetcher<GetAllBookmarksQuery, GetAllBookmarksQueryVariables>(
 				GetAllBookmarksDocument,
 				{
@@ -35,12 +37,20 @@ const useInfiniteFetchBookmarks = () => {
 		[sort, tag],
 	);
 
-	const { data, ...infiniteQueryReturn } = useInfiniteQuery(
-		["GetAllBookmarks", tag, sort],
-		infiniteFetcher,
+	const {
+		data,
+		isLoading: _,
+		...infiniteQueryReturn
+	} = useInfiniteQuery(["GetAllBookmarks", tag, sort], infiniteFetcher, {
+		getNextPageParam: (lastPage) => lastPage.bookmarks.next_cursor,
+	});
+
+	useGetBookmarksCountQuery(
+		{},
 		{
-			getPreviousPageParam: (previousPage) => previousPage.bookmarks.cursor,
-			getNextPageParam: (lastPage) => lastPage.bookmarks.next_cursor,
+			onSuccess() {
+				setLoading(false);
+			},
 		},
 	);
 
@@ -52,7 +62,7 @@ const useInfiniteFetchBookmarks = () => {
 		);
 	}, [data]);
 
-	return { data: bookmarks, ...infiniteQueryReturn };
+	return { data: bookmarks, isLoading, ...infiniteQueryReturn };
 };
 
 const BookmarksGrid = (): JSX.Element => {
@@ -61,7 +71,7 @@ const BookmarksGrid = (): JSX.Element => {
 	const [query, setQuery] = React.useState<string>("");
 	const { data, isLoading, fetchNextPage } = useInfiniteFetchBookmarks();
 	const { result } = useFuse<Bookmark>({
-		data: data,
+		data: data ?? [],
 		query,
 		options: {
 			keys: ["title", "tags.name"],
@@ -70,6 +80,12 @@ const BookmarksGrid = (): JSX.Element => {
 		},
 	});
 	const loaderRef = React.useRef<HTMLDivElement>(null);
+	const [isNextPageLoading, setNextPageLoading] =
+		React.useState<boolean>(false);
+
+	React.useEffect(() => {
+		if (isNextPageLoading) setNextPageLoading(false);
+	}, [data, isNextPageLoading]);
 
 	useIntersectionObserver({
 		root: null,
@@ -82,7 +98,7 @@ const BookmarksGrid = (): JSX.Element => {
 
 	if (isLoading)
 		return (
-			<div className="flex flex-col items-center justify-center flex-grow h-full p-4 lg:p-0 lg:pt-8 lg:pl-8 lg:ml-72">
+			<div className="flex flex-col items-center justify-center flex-grow h-full p-4 lg:p-0 lg:pt-24 lg:pl-8 lg:ml-72">
 				<Spinner />
 			</div>
 		);
@@ -128,7 +144,19 @@ const BookmarksGrid = (): JSX.Element => {
 						ref={loaderRef}
 						className="flex items-center justify-center col-span-2"
 					>
-						<Spinner className="text-black dark:text-white h-5 w-5" />
+						<button
+							onClick={() => {
+								setNextPageLoading(true);
+								fetchNextPage();
+							}}
+							className="px-4 py-2 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 transition bg-gray-100 hover:bg-gray-200 border border-gray-300 dark:border-transparent"
+						>
+							{isNextPageLoading ? (
+								<Spinner className="text-black dark:text-white h-5 w-5" />
+							) : (
+								"Load more"
+							)}
+						</button>
 					</div>
 				</div>
 			) : data.length > 0 && result.length === 0 ? (
