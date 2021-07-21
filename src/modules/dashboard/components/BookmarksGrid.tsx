@@ -17,11 +17,7 @@ const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
-	const { data, count, isLoading, fetchNextPage } = useInfiniteBookmarksQuery({
-		onSuccess() {
-			setNextPageLoading(false);
-		},
-	});
+	const { data, count, isLoading, fetchNextPage } = useInfiniteBookmarksQuery();
 	const { result } = useFuse<Bookmark>({
 		data: data ?? [],
 		query,
@@ -93,7 +89,7 @@ const BookmarksGrid = (): JSX.Element => {
 						ref={ref}
 						onClick={loadMore}
 						isLoading={isNextPageLoading}
-						isVisible={query.length === 0 || count !== data.length}
+						isHidden={data.length === result.length}
 					/>
 				</div>
 			) : (

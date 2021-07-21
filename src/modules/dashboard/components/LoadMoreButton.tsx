@@ -11,7 +11,7 @@ interface Props {
 	/**
 	 * @description LoadMoreButton visibility
 	 */
-	isVisible: boolean;
+	isHidden: boolean;
 
 	/**
 	 * @description onClick handler
@@ -20,8 +20,8 @@ interface Props {
 }
 
 const LoadMoreButton = React.forwardRef<HTMLDivElement, Props>(
-	({ onClick, isVisible, isLoading }, ref) => {
-		if (!isVisible) return null;
+	({ onClick, isHidden, isLoading }, ref) => {
+		if (isHidden) return null;
 
 		return (
 			<div ref={ref} className="flex items-center justify-center lg:col-span-2">
