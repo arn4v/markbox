@@ -2,7 +2,7 @@ import * as yup from "yup";
 import {
 	patAuthMiddleware,
 	prisma,
-	routeHandler,
+	createHandler,
 	withCookies
 } from "~/lib/utils.server";
 import ApiRequestGQL from "~/types/ApiRequest";
@@ -61,7 +61,7 @@ const DeleteQuerySchema = yup.object().shape({
 	id: yup.string().required(),
 });
 
-const handler = routeHandler<ApiRequestGQL>()
+const handler = createHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
 	.get(async (req, res) => {
 		try {

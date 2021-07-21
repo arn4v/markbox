@@ -72,6 +72,7 @@
 		"next-themes": "^0.0.15",
 		"nodemailer": "^6.6.2",
 		"nookies": "^2.5.2",
+		"playwright": "^1.12.3",
 		"prism-themes": "^1.7.0",
 		"project-name-generator": "^2.1.9",
 		"qs": "^6.10.1",

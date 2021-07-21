@@ -1,7 +1,7 @@
-import { authMiddleware, prisma, routeHandler } from "~/lib/utils.server";
+import { authMiddleware, prisma, createHandler } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
-export default routeHandler<ApiRequest>()
+export default createHandler<ApiRequest>()
 	.use(authMiddleware)
 	.get(async (req, res) => {
 		const tags = (

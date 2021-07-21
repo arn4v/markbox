@@ -1,4 +1,4 @@
-import { authMiddleware, prisma, routeHandler } from "~/lib/utils.server";
+import { authMiddleware, prisma, createHandler } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 import * as yup from "yup";
 
@@ -71,7 +71,7 @@ type PostBody = {
 	};
 };
 
-export default routeHandler<ApiRequest>()
+export default createHandler<ApiRequest>()
 	.use(authMiddleware)
 	.post(async (req, res) => {
 		try {

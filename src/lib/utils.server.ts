@@ -51,7 +51,7 @@ export const prisma = global.prisma as PrismaClient;
 /*                                Next Connect                                */
 /* -------------------------------------------------------------------------- */
 
-export const routeHandler = <Req = NextApiRequest, Res = NextApiResponse>() =>
+export const createHandler = <Req = NextApiRequest, Res = NextApiResponse>() =>
 	nextConnect<Req, Res>();
 
 /* -------------------------------------------------------------------------- */

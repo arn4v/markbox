@@ -2,7 +2,7 @@ import * as yup from "yup";
 import {
 	patAuthMiddleware,
 	prisma,
-	routeHandler,
+	createHandler,
 	withCookies
 } from "~/lib/utils.server";
 import ApiRequestGQL from "~/types/ApiRequest";
@@ -17,7 +17,7 @@ const PatchBodySchema = yup.object().shape({
 	new_name: yup.string().required(),
 });
 
-const handler = routeHandler<ApiRequestGQL>()
+const handler = createHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
 	.patch(async (req, res) => {
 		try {

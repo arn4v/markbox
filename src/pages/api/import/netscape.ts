@@ -1,6 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import path from "path";
-import { authMiddleware, prisma, routeHandler } from "~/lib/utils.server";
+import { authMiddleware, prisma, createHandler } from "~/lib/utils.server";
 import multer from "multer";
 import { NextApiRequest } from "next";
 import fs from "fs";
@@ -41,7 +41,7 @@ const getBookmarksFromFolder = (data: BookmarkOrFolder): BookmarkOrFolder[] => {
 	return bookmarks;
 };
 
-export default routeHandler<ApiRequest>()
+export default createHandler<ApiRequest>()
 	.use(authMiddleware)
 	.use(upload.single("file"))
 	.post(async (req, res) => {
