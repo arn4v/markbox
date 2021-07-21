@@ -58,18 +58,17 @@ const BookmarkCard = ({ data }: Props) => {
 						href={data?.url}
 						target="_blank"
 						rel="noreferrer"
-						className="w-3/4 text-xs text-gray-400 truncate whitespace-nowrap"
+						className="w-3/4 text-xs text-gray-500 dark:text-gray-400 truncate whitespace-nowrap hover:text-gray-700 transition dark:hover:text-gray-300"
 					>
 						{data?.url}
 					</a>
-					<div className="flex gap-2 mt-1.5">
+					<div className="flex gap-2 mt-1.5 flex-wrap">
 						{Object.values(data?.tags).map((item) => {
 							return (
 								<Badge
 									key={item.id}
 									title={item.name}
-									variant="outline"
-									color="white"
+									className="dark:bg-gray-800 border dark:border-gray-600 border-gray-300 bg-white"
 								/>
 							);
 						})}

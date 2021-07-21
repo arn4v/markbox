@@ -4,10 +4,11 @@ import { useRouter } from "next/router";
 import generate from "project-name-generator";
 import * as React from "react";
 import {
-    HiArrowLeft,
-    HiClipboardCheck,
-    HiOutlineClipboard
+	HiArrowLeft,
+	HiClipboardCheck,
+	HiOutlineClipboard,
 } from "react-icons/hi";
+import Input from "~/components/Input";
 import { useGenerateTokenMutation } from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
@@ -45,10 +46,10 @@ export default function NewTokenPage() {
 							<label htmlFor="title" className="block">
 								Name
 							</label>
-							<input
+							<Input
 								id="title"
 								type="text"
-								className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2  caret-black"
+								className="block w-full h-10 mt-2"
 								value={state.name}
 								onChange={(e) =>
 									setState((prev) => ({ ...prev, name: e.target.value }))

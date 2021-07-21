@@ -12,7 +12,7 @@ interface Props {
 	id: string;
 }
 
-const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
+const EditDrawer = ({ isOpen, onClose, id }: Props) => {
 	const { isLg } = useBreakpoints();
 	const queryClient = useQueryClient();
 	const onSuccess = () => {
@@ -51,4 +51,4 @@ const EditBookmarkDrawer = ({ isOpen, onClose, id }: Props) => {
 	);
 };
 
-export default EditBookmarkDrawer;
+export default EditDrawer;

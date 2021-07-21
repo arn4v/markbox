@@ -1,7 +1,8 @@
 import * as React from "react";
-import { HiOutlineXCircle } from "react-icons/hi";
+import { HiOutlineXCircle, HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
+import Input from "~/components/Input";
 import {
 	useCreateBookmarkMutation,
 	useGetAllTagsQuery,
@@ -60,10 +61,10 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 				<label htmlFor="title" className="block">
 					Title
 				</label>
-				<input
+				<Input
 					id="title"
 					type="text"
-					className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-gray-300 dark:ring-black caret-black"
+					className="block w-full h-10 mt-2"
 					placeholder="Name"
 					onChange={(e) =>
 						setState((prev) => ({ ...prev, title: e.target.value }))
@@ -77,10 +78,10 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 				<label htmlFor="url" className="block">
 					URL
 				</label>
-				<input
+				<Input
 					id="url"
 					type="url"
-					className="block w-full h-10 mt-2 text-black rounded-lg focus:outline-none focus:ring ring-gray-300 dark:ring-black caret-black"
+					className="block w-full h-10 mt-2"
 					placeholder="URL"
 					value={state.url}
 					autoComplete="off"
@@ -100,8 +101,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 							<Badge
 								key={item.name}
 								title={item?.name}
-								variant="outline"
-								color="white"
+								className="z-50 dark:bg-gray-900 dark:border-gray-600 border border-gray-300"
 							>
 								<button
 									type="button"
@@ -116,14 +116,14 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 										});
 									}}
 								>
-									<HiOutlineXCircle />
+									<HiX />
 								</button>
 							</Badge>
 						);
 					})}
 				</div>
 				<div className="flex w-full gap-6 mt-2">
-					<input
+					<Input
 						id="tag"
 						ref={newTagInputRef}
 						type="text"
@@ -147,7 +147,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 							}
 						}}
 						placeholder="Separate tags by typing comma (,)"
-						className="block w-full h-10 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 caret-black"
+						className="block w-full h-10"
 						list="tags"
 					/>
 					<datalist id="tags">

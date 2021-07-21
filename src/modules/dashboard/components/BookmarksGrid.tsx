@@ -12,6 +12,7 @@ import NoDataWarning from "./NoDataWarning";
 import LoadMoreButton from "./LoadMoreButton";
 import NoResultsWarning from "../NoResultsWarning";
 import { useInView } from "react-intersection-observer";
+import Input from "~/components/Input";
 
 const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
@@ -51,7 +52,7 @@ const BookmarksGrid = (): JSX.Element => {
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
 			<div className="flex space-x-4 lg:space-x-6 items-center">
 				<div className="relative w-full">
-					<input
+					<Input
 						type="text"
 						value={query}
 						onChange={(e) => {
@@ -60,7 +61,7 @@ const BookmarksGrid = (): JSX.Element => {
 						ref={queryRef}
 						placeholder="Search bookmarks..."
 						className={clsx([
-							"border border-gray-300 rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full",
+							"rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full focus:border-transparent",
 						])}
 						autoComplete="off"
 					/>

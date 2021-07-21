@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { HiPencil } from "react-icons/hi";
 import { useQueryClient } from "react-query";
+import Input from "~/components/Input";
 import Modal, { ModalContent } from "~/components/Modal";
 import Popup from "~/components/Popup";
 import { genericModalMotionProps } from "~/config";
@@ -60,13 +61,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 							<div className="text-center font-bold text-lg">Rename tag</div>
 							<div className="flex gap-6 items-center">
 								<label htmlFor="name">Name</label>
-								<input
-									id="name"
-									className="block w-full text-black dark:text-white rounded outline-none border border-gray-300 focus:border-gray-400 px-2 py-2 caret-black dark:bg-gray-900 dark:focus:border-gray-700 dark:border-gray-600 dark:focus:bg-gray-800 dark:caret-white"
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									required
-								/>
+								<Input className="block w-full px-2 py-2" />
 							</div>
 							<div className="flex items-center justify-between w-full">
 								<button

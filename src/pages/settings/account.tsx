@@ -1,9 +1,10 @@
 import { NextSeo } from "next-seo";
 import * as React from "react";
 import toast from "react-hot-toast";
+import Input from "~/components/Input";
 import {
 	useUpdateProfileMutation,
-	useUserQuery
+	useUserQuery,
 } from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
@@ -58,10 +59,10 @@ export default function AccountSettingsPage() {
 							<label htmlFor="name" className="block">
 								Name
 							</label>
-							<input
+							<Input
 								id="name"
 								type="text"
-								className="block w-full h-10 mt-4 text-black rounded-lg focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 caret-black"
+								className="block w-full h-10 mt-4"
 								value={state.name}
 								onChange={(e) =>
 									setState((prev) => ({ ...prev, name: e.target.value }))
