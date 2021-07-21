@@ -33,6 +33,10 @@ const BookmarkCard = ({ data }: Props) => {
 			queryClient.invalidateQueries("GetAllTags");
 		},
 	});
+	const date = React.useMemo(
+		() => new Date(data?.createdAt),
+		[data?.createdAt],
+	);
 	const queryClient = useQueryClient();
 	const router = useRouter();
 
@@ -42,13 +46,10 @@ const BookmarkCard = ({ data }: Props) => {
 				<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 					<span className="text-xs">
 						{/* Need to test the advantages/disadvantages of using IIFEs in JSX */}
-						{(() => {
-							const date = new Date(data?.createdAt);
-							return `Created on ${format(date, "do MMMM, yyyy")} at ${format(
-								date,
-								"h:mmaa",
-							)}`;
-						})()}
+						{`Created on ${format(date, "do MMMM, yyyy")} at ${format(
+							date,
+							"h:mmaa",
+						)}`}
 					</span>
 					<div className="w-5/6 text-sm font-medium break-words">
 						{data?.title}
