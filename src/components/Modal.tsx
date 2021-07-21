@@ -2,7 +2,7 @@ import { Portal, PortalProps } from "@reach/portal";
 import clsx from "clsx";
 import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
 import * as React from "react";
-import { getTargetChildren } from "~/lib/react";
+import useChildren from "use-children";
 
 type ModalProps = {
 	portalProps?: Omit<PortalProps, "children">;
@@ -25,10 +25,7 @@ const Modal: Modal = ({
 	overlayProps,
 	portalProps,
 }) => {
-	const [withTarget] = React.useMemo(
-		() => getTargetChildren(children, ModalContent),
-		[children],
-	);
+	const [withModalContent] = useChildren(children, ModalContent);
 
 	const onEscape = React.useCallback(
 		(event: KeyboardEvent) => {
@@ -68,7 +65,7 @@ const Modal: Modal = ({
 							transition={{ type: "tween" }}
 							onClick={onClose}
 						/>
-						{withTarget}
+						{withModalContent}
 					</div>
 				</Portal>
 			)}

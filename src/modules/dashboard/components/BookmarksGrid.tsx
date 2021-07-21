@@ -89,7 +89,7 @@ const BookmarksGrid = (): JSX.Element => {
 						ref={ref}
 						onClick={loadMore}
 						isLoading={isNextPageLoading}
-						isHidden={data.length === result.length}
+						isHidden={count === result.length}
 					/>
 				</div>
 			) : (

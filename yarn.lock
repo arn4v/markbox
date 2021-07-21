@@ -11341,6 +11341,11 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+use-children@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/use-children/-/use-children-0.1.0.tgz#af823072f953b92d147046dcc90e8058fc3cd2a1"
+  integrity sha512-1Xy5p8pMV42Wihdfl5Ixnq/TbF9awZIZBPzRgoDgQ/S0M8iKyUSFrHZy2YogNRgAq5xFg2NYFy32ckZaSbNq6Q==
+
 use-subscription@1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/use-subscription/-/use-subscription-1.5.1.tgz#73501107f02fad84c6dd57965beb0b75c68c42d1"

@@ -2,7 +2,7 @@ import { Portal, PortalProps } from "@reach/portal";
 import clsx from "clsx";
 import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
 import * as React from "react";
-import { getTargetChildren } from "~/lib/react";
+import useChildren from "use-children";
 
 type DrawerProps = {
 	portalProps?: Omit<PortalProps, "children">;
@@ -27,10 +27,7 @@ const Drawer: DrawerComponent = ({
 	overlayProps,
 	portalProps,
 }) => {
-	const [withTarget] = React.useMemo(
-		() => getTargetChildren(children, DrawerContent),
-		[children],
-	);
+	const [withDrawerContent] = useChildren(children, DrawerContent);
 
 	React.useEffect(() => {
 		const onEscape = (event: KeyboardEvent) => {
@@ -88,7 +85,7 @@ const Drawer: DrawerComponent = ({
 							transition={{ type: "tween" }}
 							onClick={onClose}
 						/>
-						{withTarget}
+						{withDrawerContent}
 					</div>
 				</Portal>
 			)}
