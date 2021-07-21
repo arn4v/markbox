@@ -56,7 +56,7 @@ const data: Data = {
 				title: "Export",
 			},
 		],
-		visible: false,
+		visible: true,
 	},
 	"Developer settings": {
 		id: "0738885e-ba67-4cf6-a4a4-6936f4479d43",
