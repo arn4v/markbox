@@ -1,14 +1,11 @@
-import { getSession } from "@auth0/nextjs-auth0";
-import path from "path";
-import { authMiddleware, prisma, createHandler } from "~/lib/utils.server";
-import multer from "multer";
-import { NextApiRequest } from "next";
-import fs from "fs";
-import { User } from "@prisma/client";
-import parse, { BookmarkOrFolder } from "bookmarks-parser";
-import { promisify } from "util";
-import { format } from "date-fns";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import parse, { BookmarkOrFolder } from "bookmarks-parser";
+import { format } from "date-fns";
+import fs from "fs";
+import multer from "multer";
+import path from "path";
+import { promisify } from "util";
+import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
 const parsePromise = promisify(parse);
