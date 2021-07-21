@@ -14,11 +14,17 @@ export default async function protectResolver(
 		throw new AuthenticationError("Unable to authenticate.");
 	}
 
-	const auth0Id = session.user.sub;
+	const auth0user = session.user as UserProfile;
 
-	const user = await prisma.user.findUnique({
-		where: {
-			auth0Id,
+	const user = await prisma.user.upsert({
+		where: { email: auth0user?.email },
+		create: {
+			auth0Id: auth0user?.sub,
+			name: auth0user?.name,
+			email: auth0user?.email,
+		},
+		update: {
+			auth0Id: session?.user?.sub,
 		},
 	});
 
