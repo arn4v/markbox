@@ -38,6 +38,7 @@ const useInfiniteBookmarksQuery = () => {
 	const {
 		data,
 		isLoading: _,
+		refetch,
 		...infiniteQueryReturn
 	} = useInfiniteQuery(["GetAllBookmarks", tag, sort], infiniteFetcher, {
 		getPreviousPageParam: (lastPage) => lastPage.bookmarks.cursor,
@@ -53,8 +54,8 @@ const useInfiniteBookmarksQuery = () => {
 	}, [data]);
 
 	React.useEffect(() => {
-		console.log(countQueryVariables, countData);
-	}, [countData, countQueryVariables]);
+		refetch();
+	}, [refetch]);
 
 	return {
 		data: bookmarks,

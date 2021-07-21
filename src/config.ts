@@ -17,6 +17,13 @@ export const defaultSeoProps: DefaultSeoProps = {
 		type: "website",
 		locale: "en_IE",
 		site_name: "Bookmarky",
+		images: [
+			{
+				url: "/static/og.jpg",
+				height: 627,
+				width: 1200,
+			},
+		],
 	},
 	twitter: {
 		handle: "@arn4v",
