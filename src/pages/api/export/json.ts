@@ -1,4 +1,4 @@
-import { authMiddleware, prisma, createHandler } from "~/lib/utils.server";
+import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
 export default createHandler<ApiRequest>()
@@ -31,6 +31,7 @@ export default createHandler<ApiRequest>()
 			description,
 		}));
 
+		console.log(tags, bookmarks);
 		res.status(200).send({
 			results: {
 				exported_at: new Date().toISOString(),

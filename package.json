@@ -46,6 +46,7 @@
 		"arg": "^5.0.0",
 		"bcrypt": "^5.0.1",
 		"bookmarks-parser": "^1.5.0",
+		"cheerio": "^1.0.0-rc.10",
 		"clsx": "^1.1.1",
 		"cookie": "^0.4.1",
 		"cors": "^2.8.5",

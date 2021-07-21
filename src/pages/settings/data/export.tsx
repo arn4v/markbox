@@ -1,5 +1,6 @@
 import { NextSeo } from "next-seo";
 import React from "react";
+import ExportJson from "~/modules/export/components/ExportJson";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
 const ExportPage = () => {
@@ -10,7 +11,9 @@ const ExportPage = () => {
 				<div className="flex items-center justify-between w-full pb-4 border-b border-blueGray-500">
 					<span className="text-xl font-bold">Export bookmarks</span>
 				</div>
-				<div className="flex flex-col bg-gray-100 divide-y rounded-lg dark:divide-blueGray-400 dark:bg-gray-900"></div>
+				<div className="flex flex-col bg-gray-100 divide-y rounded-lg dark:divide-blueGray-400 dark:bg-gray-900">
+					<ExportJson />
+				</div>
 			</div>
 		</SettingsPageWrapper>
 	);
