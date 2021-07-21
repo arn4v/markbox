@@ -8,7 +8,7 @@ import { genericModalMotionProps } from "~/config";
 import {
 	Tag,
 	useDeleteTagMutation,
-	useGetTagBookmarksCountQuery,
+	useGetBookmarksCountQuery,
 } from "~/graphql/types.generated";
 
 interface DeleteTagProps {
@@ -36,7 +36,7 @@ interface DeleteTagProps {
 const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 	const queryClient = useQueryClient();
 	// Get tag bookmarks count
-	const { data: countData } = useGetTagBookmarksCountQuery({ id: data.id });
+	const { data: countData } = useGetBookmarksCountQuery({ tagName: data.name });
 	const { mutate } = useDeleteTagMutation({
 		// Invalidate queries onSuccess
 		onSuccess() {
@@ -68,7 +68,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 				<ModalContent className="z-[200]" {...genericModalMotionProps}>
 					<div className="flex flex-col gap-8 p-8 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
 						<div className="text-center whitespace-no-wrap">
-							This tag is related to {countData?.tagBookmarksCount} bookmarks.
+							This tag is related to {countData?.bookmarksCount} bookmarks.
 							<br />
 							Do you really want to delete it?
 						</div>

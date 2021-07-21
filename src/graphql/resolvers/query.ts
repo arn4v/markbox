@@ -152,20 +152,6 @@ const Query: QueryResolvers<GQLContext> = {
 			},
 		});
 	},
-	async tagBookmarksCount(_, { id }, { prisma, req, res }) {
-		const userId = await protectResolver(req, res);
-		const count = await prisma.bookmark.count({
-			where: {
-				userId,
-				tags: {
-					every: {
-						id,
-					},
-				},
-			},
-		});
-		return count;
-	},
 	async token(_, { id }, { req, res, prisma }) {
 		await protectResolver(req, res);
 		const {
@@ -212,17 +198,41 @@ const Query: QueryResolvers<GQLContext> = {
 			};
 		});
 	},
-	async bookmarksCount(_, __, { req, res, prisma }) {
+	async bookmarksCount(_, { tagName }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		const count = await prisma.bookmark.count({
-			where: {
-				User: {
-					id: userId,
-				},
-			},
+		let tagId: string;
+
+		if (typeof tagName === "string")
+			tagId = (
+				await prisma.tag.findFirst({
+					where: {
+						name: tagName,
+						userId,
+					},
+					select: {
+						id: true,
+					},
+				})
+			).id;
+
+		const count = await prisma.bookmark.findMany({
+			where:
+				typeof tagId === "string"
+					? {
+							tags: {
+								every: {
+									id: tagId,
+								},
+							},
+							userId,
+					  }
+					: {
+							userId,
+					  },
+			select: { id: true },
 		});
 
-		return count;
+		return count.length;
 	},
 };
 

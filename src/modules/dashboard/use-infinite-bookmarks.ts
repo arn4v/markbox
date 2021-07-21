@@ -13,7 +13,13 @@ import useDashboardStore from "./store";
 const useInfiniteBookmarksQuery = () => {
 	const { tag, sort } = useDashboardStore();
 
-	const { isLoading, data: countData } = useGetBookmarksCountQuery({});
+	const countQueryVariables = React.useMemo(
+		() => (tag === "All" ? {} : { tagName: tag }),
+		[tag],
+	);
+
+	const { isLoading, data: countData } =
+		useGetBookmarksCountQuery(countQueryVariables);
 
 	const infiniteFetcher = React.useCallback(
 		({ pageParam = null }) => {
@@ -45,6 +51,10 @@ const useInfiniteBookmarksQuery = () => {
 			}, []) ?? []
 		);
 	}, [data]);
+
+	React.useEffect(() => {
+		console.log(countQueryVariables, countData);
+	}, [countData, countQueryVariables]);
 
 	return {
 		data: bookmarks,

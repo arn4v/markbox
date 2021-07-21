@@ -99,9 +99,8 @@ export default gql`
 			sort: String!
 			cursor: String
 		): GetBookmarksData
-		bookmarksCount: Int!
 		tag(id: ID!): Tag!
-		tagBookmarksCount(id: ID!): Int!
+		bookmarksCount(tagName: String): Int!
 		tags: [Tag!]
 		user: User
 		tokens: [AccessToken!]!

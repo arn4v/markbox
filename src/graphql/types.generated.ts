@@ -153,9 +153,8 @@ export type Query = {
 	__typename?: "Query";
 	bookmark: Bookmark;
 	bookmarks?: Maybe<GetBookmarksData>;
-	bookmarksCount: Scalars["Int"];
 	tag: Tag;
-	tagBookmarksCount: Scalars["Int"];
+	bookmarksCount: Scalars["Int"];
 	tags?: Maybe<Array<Tag>>;
 	user?: Maybe<User>;
 	tokens: Array<AccessToken>;
@@ -176,8 +175,8 @@ export type QueryTagArgs = {
 	id: Scalars["ID"];
 };
 
-export type QueryTagBookmarksCountArgs = {
-	id: Scalars["ID"];
+export type QueryBookmarksCountArgs = {
+	tagName?: Maybe<Scalars["String"]>;
 };
 
 export type QueryTokenArgs = {
@@ -387,7 +386,9 @@ export type GetBookmarkQuery = {
 	};
 };
 
-export type GetBookmarksCountQueryVariables = Exact<{ [key: string]: never }>;
+export type GetBookmarksCountQueryVariables = Exact<{
+	tagName?: Maybe<Scalars["String"]>;
+}>;
 
 export type GetBookmarksCountQuery = {
 	__typename?: "Query";
@@ -401,15 +402,6 @@ export type GetTagQueryVariables = Exact<{
 export type GetTagQuery = {
 	__typename?: "Query";
 	tag: { __typename?: "Tag"; id: string; name: string };
-};
-
-export type GetTagBookmarksCountQueryVariables = Exact<{
-	id: Scalars["ID"];
-}>;
-
-export type GetTagBookmarksCountQuery = {
-	__typename?: "Query";
-	tagBookmarksCount: number;
 };
 
 export type GetTokenQueryVariables = Exact<{
@@ -758,18 +750,17 @@ export type QueryResolvers<
 		ContextType,
 		RequireFields<QueryBookmarksArgs, "sort">
 	>;
-	bookmarksCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 	tag?: Resolver<
 		ResolversTypes["Tag"],
 		ParentType,
 		ContextType,
 		RequireFields<QueryTagArgs, "id">
 	>;
-	tagBookmarksCount?: Resolver<
+	bookmarksCount?: Resolver<
 		ResolversTypes["Int"],
 		ParentType,
 		ContextType,
-		RequireFields<QueryTagBookmarksCountArgs, "id">
+		RequireFields<QueryBookmarksCountArgs, never>
 	>;
 	tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>;
 	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
@@ -1191,8 +1182,8 @@ export const useGetBookmarkQuery = <TData = GetBookmarkQuery, TError = unknown>(
 		options,
 	);
 export const GetBookmarksCountDocument = `
-    query GetBookmarksCount {
-  bookmarksCount
+    query GetBookmarksCount($tagName: String) {
+  bookmarksCount(tagName: $tagName)
 }
     `;
 export const useGetBookmarksCountQuery = <
@@ -1225,26 +1216,6 @@ export const useGetTagQuery = <TData = GetTagQuery, TError = unknown>(
 	useQuery<GetTagQuery, TError, TData>(
 		["GetTag", variables],
 		fetcher<GetTagQuery, GetTagQueryVariables>(GetTagDocument, variables),
-		options,
-	);
-export const GetTagBookmarksCountDocument = `
-    query GetTagBookmarksCount($id: ID!) {
-  tagBookmarksCount(id: $id)
-}
-    `;
-export const useGetTagBookmarksCountQuery = <
-	TData = GetTagBookmarksCountQuery,
-	TError = unknown,
->(
-	variables: GetTagBookmarksCountQueryVariables,
-	options?: UseQueryOptions<GetTagBookmarksCountQuery, TError, TData>,
-) =>
-	useQuery<GetTagBookmarksCountQuery, TError, TData>(
-		["GetTagBookmarksCount", variables],
-		fetcher<GetTagBookmarksCountQuery, GetTagBookmarksCountQueryVariables>(
-			GetTagBookmarksCountDocument,
-			variables,
-		),
 		options,
 	);
 export const GetTokenDocument = `

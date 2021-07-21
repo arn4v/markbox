@@ -1,7 +1,7 @@
 import gql from "../gql-tag";
 
 export default gql`
-	query GetBookmarksCount {
-		bookmarksCount
+	query GetBookmarksCount($tagName: String) {
+		bookmarksCount(tagName: $tagName)
 	}
 `;

@@ -41,6 +41,10 @@ const BookmarksGrid = (): JSX.Element => {
 		loadMore();
 	}, [inView, loadMore]);
 
+	React.useEffect(() => {
+		console.log(count, result.length);
+	}, [count, result.length]);
+
 	if (isLoading)
 		return (
 			<div className="flex flex-col items-center justify-center flex-grow h-full p-4 lg:p-0 lg:pt-24 lg:pl-8 lg:ml-72">
