@@ -6,12 +6,12 @@ import clsx from "clsx";
 import useDashboardStore from "../store";
 import useFuse from "~/hooks/use-fuse";
 import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
-import useIntersectionObserver from "~/hooks/use-intersection-observer";
 import { Bookmark } from "~/graphql/types.generated";
 import { HiX } from "react-icons/hi";
 import NoDataWarning from "./NoDataWarning";
 import LoadMoreButton from "./LoadMoreButton";
 import NoResultsWarning from "../NoResultsWarning";
+import { useInView } from "react-intersection-observer";
 
 const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
@@ -31,7 +31,7 @@ const BookmarksGrid = (): JSX.Element => {
 			location: 15,
 		},
 	});
-	const loaderRef = React.useRef<HTMLDivElement>(null);
+	const { ref, inView } = useInView({});
 	const [isNextPageLoading, setNextPageLoading] =
 		React.useState<boolean>(false);
 
@@ -40,12 +40,9 @@ const BookmarksGrid = (): JSX.Element => {
 		fetchNextPage();
 	}, [fetchNextPage]);
 
-	useIntersectionObserver({
-		root: null,
-		target: loaderRef,
-		rootMargin: "24px",
-		onIntersect: loadMore,
-	});
+	React.useEffect(() => {
+		loadMore();
+	}, [inView, loadMore]);
 
 	if (isLoading)
 		return (
@@ -93,7 +90,7 @@ const BookmarksGrid = (): JSX.Element => {
 						<BookmarkCard key={data.id} data={data} />
 					))}
 					<LoadMoreButton
-						ref={loaderRef}
+						ref={ref}
 						onClick={loadMore}
 						isLoading={isNextPageLoading}
 						isVisible={query.length === 0 || count !== data.length}
@@ -102,9 +99,11 @@ const BookmarksGrid = (): JSX.Element => {
 			) : (
 				<>
 					<NoResultsWarning
+						isVisible={data.length > 0 && result.length === 0}
+					/>
+					<NoDataWarning
 						isVisible={!(data.length > 0 && result.length === 0)}
 					/>
-					<NoDataWarning isVisible={data.length > 0 && result.length === 0} />
 				</>
 			)}
 		</div>
