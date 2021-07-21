@@ -4,12 +4,14 @@ import { compare, genSalt, hash } from "bcrypt";
 import { CookieSerializeOptions, serialize } from "cookie";
 import { createSigner, createVerifier } from "fast-jwt";
 import ms from "ms";
+import multer from "multer";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import nextConnect, { Middleware } from "next-connect";
 import { createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import path from "path";
 import { isProd } from "~/config";
-import ApiRequestGQL from "~/types/ApiRequest";
+import ApiRequestGQL, { ApiRequest } from "~/types/ApiRequest";
 import ApiResponse from "~/types/ApiResponse";
 import DecodedPat from "~/types/DecodedPat";
 
@@ -229,3 +231,15 @@ export const chromiumArgs = [
 	"--use-gl=swiftshader",
 	"--use-mock-keychain",
 ];
+
+export const createUploadMiddleware = (filenameSuffix: string) =>
+	multer({
+		storage: multer.diskStorage({
+			destination: path.resolve(process.cwd(), "uploads"),
+			filename: (req, file, cb) =>
+				cb(
+					null,
+					`${(req as unknown as ApiRequest).ctx.user.id}-${filenameSuffix}`,
+				),
+		}),
+	});

@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import Input from "~/components/Input";
 import {
 	useUpdateProfileMutation,
-	useUserQuery,
+	useUserQuery
 } from "~/graphql/types.generated";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 

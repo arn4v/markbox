@@ -3,21 +3,19 @@ import parse, { BookmarkOrFolder } from "bookmarks-parser";
 import cheerio from "cheerio";
 import { format } from "date-fns";
 import fs from "fs";
-import multer from "multer";
 import path from "path";
 import { promisify } from "util";
-import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
+import {
+	authMiddleware,
+	createHandler,
+	createUploadMiddleware,
+	prisma
+} from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
 const parsePromise = promisify(parse);
 
-const upload = multer({
-	storage: multer.diskStorage({
-		destination: path.resolve(process.cwd(), "uploads"),
-		filename: (req, file, cb) =>
-			cb(null, `${(req as unknown as ApiRequest).ctx.user.id}-bookmarks.html`),
-	}),
-});
+const upload = createUploadMiddleware("bookmarks.html");
 
 export const config = {
 	api: {

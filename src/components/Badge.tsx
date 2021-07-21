@@ -1,7 +1,5 @@
-import * as React from "react";
 import clsx from "clsx";
-import colors from "~/lib/colors";
-import { Colors } from "~/types/Colors";
+import * as React from "react";
 
 interface Props {
 	className?: string;
@@ -10,9 +8,10 @@ interface Props {
 }
 
 const Badge = React.forwardRef<HTMLDivElement, Props>(
-	({ className = "", title, children }) => {
+	({ className = "", title, children }, ref) => {
 		return (
 			<div
+				ref={ref}
 				className={clsx([
 					"flex gap-1.5 px-2 py-1 text-xs font-medium dark:text-white items-center justify-center uppercase rounded-full",
 					className,

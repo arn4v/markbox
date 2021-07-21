@@ -1,11 +1,8 @@
-import { authMiddleware, prisma, createHandler } from "~/lib/utils.server";
-import { ApiRequest } from "~/types/ApiRequest";
 import * as yup from "yup";
+import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
+import { ApiRequest } from "~/types/ApiRequest";
 
-const tagsArraySchema = yup
-	.array()
-	.of(yup.object().shape({ name: yup.string().required() }))
-	.required();
+const tagsArraySchema = yup.array().of(yup.string().required()).required();
 
 const getAllTagsForUser = async ({ userId }: { userId: string }) =>
 	await prisma.tag.findMany({
@@ -42,7 +39,17 @@ const exportSchema = yup.object().shape({
 				yup.object().shape({
 					title: yup.string().required(),
 					url: yup.string().required(),
-					tags: tagsArraySchema,
+					tags: yup
+						.array()
+						.of(
+							yup
+								.object()
+								.shape({
+									name: yup.string().required(),
+								})
+								.required(),
+						)
+						.required(),
 				}),
 			)
 			.required(),
@@ -65,8 +72,8 @@ type PostBody = {
 	data: {
 		exported_at: string;
 		data: {
+			tags: string[];
 			bookmarks: Bookmark[];
-			tags: Tag[];
 		};
 	};
 };
@@ -81,69 +88,86 @@ export default createHandler<ApiRequest>()
 				},
 			} = (await postBodySchema.validate(req.body)) as PostBody;
 			{
+				// Get all existing tags to only add new ones
 				const existingTags = await getAllTagsForUser({
 					userId: req.ctx.user.id,
 				});
-				await prisma.$transaction(
-					tags
-						.filter((item) => {
-							return Boolean(
-								existingTags.find(
-									(existingTag) => existingTag.name === item.name,
-								),
+
+				const transactions = tags
+					.filter((name) => {
+						return (
+							typeof existingTags.find(
+								(existingTag) => existingTag.name === name,
+							) === "undefined"
+						);
+					})
+					.map((name) => {
+						return prisma.tag.create({
+							data: {
+								name: name,
+								userId: req.ctx.user.id,
+							},
+						});
+					});
+				await prisma.$transaction(transactions);
+			}
+
+			// Get all existing after adding non-existing tags
+			const tagsData = await getAllTagsForUser({
+				userId: req.ctx.user.id,
+			});
+
+			// Get all existing bookmarks to use in filtering
+			const bookmarksData = await getAllBookmarksForUser({
+				userId: req.ctx.user.id,
+			});
+
+			const transactions = bookmarks.map(
+				({ description, tags, title, url }) => {
+					const tagsToConnect = tags
+						.map((item) => {
+							return tagsData.find(
+								(existingTag) => existingTag.name === item.name,
 							);
 						})
-						.map(({ name }) =>
-							prisma.tag.create({
-								data: {
-									name: name,
-									User: { connect: { id: req.ctx.user.id } },
-								},
-							}),
-						),
-				);
-			}
-			const existingTags = await getAllTagsForUser({
-				userId: req.ctx.user.id,
-			});
-			const existingBookmarks = await getAllBookmarksForUser({
-				userId: req.ctx.user.id,
-			});
-			await prisma.$transaction(
-				bookmarks.map(({ description, tags, title, url }) => {
-					const tagsConnect = tags.map((item) => {
-						const { id } = existingTags.find(
-							(existingTag) => existingTag.name === item.name,
-						);
-						return { id };
-					});
-					const { id } = existingBookmarks.find((item) => item.url === url);
-					return prisma.bookmark.upsert({
-						where: {
-							...(id ? { id } : {}),
-						},
-						create: {
-							title,
-							url,
-							description,
+						.filter((item) => !!item)
+						.map(({ id }) => ({ id }));
 
-							tags: {
-								connect: tagsConnect,
-							},
-						},
-						update: {
-							title,
-							url,
-							description,
-							tags: {
-								connect: tagsConnect,
-							},
-						},
-					});
-				}),
+					const existing = bookmarksData.find((item) => item.url === url);
+
+					const data = {
+						title,
+						url,
+						description,
+						...(tagsToConnect.length > 0
+							? {
+									tags: {
+										connect: tagsToConnect,
+									},
+							  }
+							: {}),
+					};
+
+					return !!existing
+						? prisma.bookmark.update({
+								where: { id: existing.id },
+								data,
+						  })
+						: prisma.bookmark.create({
+								// Code works but throws typescript error
+								// @ts-ignore
+								data: {
+									...data,
+									userId: req.ctx.user.id,
+								},
+						  });
+				},
 			);
+
+			await prisma.$transaction(transactions);
 			res.status(204).end();
 		} catch (err) {
+			console.log(err);
 			res.status(400).send(err);
 		}
 	});
