@@ -41,21 +41,13 @@ export default createHandler<ApiRequest>()
 	.use(authMiddleware)
 	.use(upload.single("file"))
 	.post(async (req, res) => {
-		const raw = fs.readFileSync(
-			path.join(
-				path.resolve(
-					process.cwd(),
-					`uploads/${req.ctx.user.id}-bookmarks.html`,
-				),
-			),
-			{ encoding: "utf-8" },
+		const filePath = path.join(
+			path.resolve(process.cwd()),
+			`uploads/${req.ctx.user.id}-bookmarks.html`,
 		);
+		const raw = fs.readFileSync(filePath, { encoding: "utf-8" });
+
 		try {
-			// const parsed = await parsePromise(raw);
-			// const bookmarks: BookmarkOrFolder[] = parsed.bookmarks.reduce(
-			// 	(acc, cur) => acc.concat(getBookmarksFromFolder(cur)),
-			// 	[],
-			// );
 			const bookmarks = (() => {
 				const bookmarks = [];
 				const $ = cheerio.load(raw);
@@ -116,6 +108,7 @@ export default createHandler<ApiRequest>()
 				});
 
 			await prisma.$transaction(transactions);
+			await fs.promises.unlink(filePath);
 
 			res.status(204).end();
 		} catch (err) {
