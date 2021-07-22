@@ -1,18 +1,18 @@
-import * as React from "react";
-import BookmarkCard from "./BookmarkCard";
-import SortButton from "./SortButton";
-import Spinner from "~/components/Spinner";
 import clsx from "clsx";
-import useDashboardStore from "../store";
-import useFuse from "~/hooks/use-fuse";
-import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
-import { Bookmark } from "~/graphql/types.generated";
+import * as React from "react";
 import { HiX } from "react-icons/hi";
-import NoDataWarning from "./NoDataWarning";
-import LoadMoreButton from "./LoadMoreButton";
-import NoResultsWarning from "../NoResultsWarning";
 import { useInView } from "react-intersection-observer";
 import Input from "~/components/Input";
+import Spinner from "~/components/Spinner";
+import { Bookmark } from "~/graphql/types.generated";
+import useFuse from "~/hooks/use-fuse";
+import NoResultsWarning from "../NoResultsWarning";
+import useDashboardStore from "../store";
+import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
+import BookmarkCard from "./BookmarkCard";
+import LoadMoreButton from "./LoadMoreButton";
+import NoDataWarning from "./NoDataWarning";
+import SortButton from "./SortButton";
 
 const BookmarksGrid = (): JSX.Element => {
 	const tag = useDashboardStore((state) => state.tag);
