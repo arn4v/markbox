@@ -27,13 +27,13 @@ export default createHandler<ApiRequest>()
 		).map(({ title, url, tags, description }) => ({
 			title,
 			url,
-			tags,
+			tags: tags.map(({ name }) => name),
 			description,
 		}));
 
-		console.log(tags, bookmarks);
 		res.status(200).send({
 			results: {
+				schema_version: 1,
 				exported_at: new Date().toISOString(),
 				data: {
 					tags,

@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
-const tagsArraySchema = yup.array().of(yup.string().required()).required();
+const tagsArraySchema = yup.array().of(yup.string()).required();
 
 const getAllTagsForUser = async ({ userId }: { userId: string }) =>
 	await prisma.tag.findMany({
@@ -30,6 +30,7 @@ const getAllBookmarksForUser = async ({ userId }: { userId: string }) =>
 	});
 
 const exportSchema = yup.object().shape({
+	schema_version: yup.number().required(),
 	exported_at: yup.string().required(),
 	data: yup.object().shape({
 		tags: tagsArraySchema,
@@ -39,17 +40,7 @@ const exportSchema = yup.object().shape({
 				yup.object().shape({
 					title: yup.string().required(),
 					url: yup.string().required(),
-					tags: yup
-						.array()
-						.of(
-							yup
-								.object()
-								.shape({
-									name: yup.string().required(),
-								})
-								.required(),
-						)
-						.required(),
+					tags: tagsArraySchema,
 				}),
 			)
 			.required(),
@@ -60,16 +51,16 @@ const postBodySchema = yup.object().shape({
 	data: exportSchema.required(),
 });
 
-type Tag = { name: string };
 type Bookmark = {
 	title: string;
 	url: string;
 	description: string;
-	tags: Tag[];
+	tags: string[];
 };
 
 type PostBody = {
 	data: {
+		schema_version: number;
 		exported_at: string;
 		data: {
 			tags: string[];
@@ -126,9 +117,7 @@ export default createHandler<ApiRequest>()
 				({ description, tags, title, url }) => {
 					const tagsToConnect = tags
 						.map((item) => {
-							return tagsData.find(
-								(existingTag) => existingTag.name === item.name,
-							);
+							return tagsData.find((existingTag) => existingTag.name === item);
 						})
 						.filter((item) => !!item)
 						.map(({ id }) => ({ id }));
