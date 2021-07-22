@@ -1,11 +1,11 @@
 import clsx from "clsx";
 import React from "react";
-import axios from "redaxios";
-import { useMutation } from "react-query";
+import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
+import { useMutation } from "react-query";
+import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
-import toast from "react-hot-toast";
 
 const UploadNetscapeModal = ({ isOpen, onClose }) => {
 	const [file, setFile] = React.useState<File>(null);
@@ -23,6 +23,11 @@ const UploadNetscapeModal = ({ isOpen, onClose }) => {
 					);
 				}
 				_onClose();
+			},
+			onError() {
+				toast.error("Unable to import file, try again in a few minutes.");
+				setFile(null);
+				onClose();
 			},
 		},
 	);

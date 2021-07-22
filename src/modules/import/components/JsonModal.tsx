@@ -26,6 +26,11 @@ const UploadJsonModal = ({ isOpen, onClose }) => {
 				setFile(null);
 				onClose();
 			},
+			onError() {
+				toast.error("Unable to import file, try again in a few minutes.");
+				setFile(null);
+				onClose();
+			},
 		},
 	);
 	const inputRef = React.useRef<HTMLInputElement>(null);
