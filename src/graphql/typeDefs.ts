@@ -4,6 +4,7 @@ export default gql`
 	type Bookmark {
 		id: ID!
 		title: String!
+		description: String!
 		url: String!
 		tags: [Tag!]!
 		createdAt: String!
@@ -70,6 +71,7 @@ export default gql`
 	input CreateBookmarkInput {
 		title: String!
 		url: String!
+		description: String!
 		tags: [CreateOrUpdateBookmarkTagInput!]!
 	}
 
@@ -77,6 +79,7 @@ export default gql`
 		id: ID!
 		title: String
 		url: String
+		description: String
 		tags: [CreateOrUpdateBookmarkTagInput!]
 		tagsDisconnect: [CreateOrUpdateBookmarkTagInput!]
 	}

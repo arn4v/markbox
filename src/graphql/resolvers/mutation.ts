@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
 import { pickKeys } from "~/lib/misc";
-import { comparePassword, createPat, hashPassword } from "~/lib/utils.server";
+import { createPat } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
 import { MutationResolvers } from "../types.generated";
@@ -9,12 +9,13 @@ import { MutationResolvers } from "../types.generated";
 const Mutation: MutationResolvers<GQLContext> = {
 	async createBookmark(_, { input }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		const { title, url } = input;
+		const { title, url, description } = input;
 
 		const newBookmark = await prisma.bookmark.create({
 			data: {
 				title: title,
 				url: url,
+				description,
 				tags: {
 					create: input.tags
 						.filter((item) => typeof item.name !== "undefined")
@@ -37,6 +38,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 		return {
 			id: newBookmark.id,
 			title: newBookmark.title,
+			description: newBookmark.description,
 			url: newBookmark.url,
 			tags: newBookmark.tags.map((item) => pickKeys(item, "id", "name")),
 			createdAt: newBookmark.createdAt.toISOString(),
@@ -45,7 +47,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 	},
 	async updateBookmark(_, { input }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		const { id, title, url, tagsDisconnect, tags } = input;
+		const { id, title, url, description, tagsDisconnect, tags } = input;
 
 		const _updated = await prisma.bookmark.update({
 			where: {
@@ -54,6 +56,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 			data: {
 				title,
 				url,
+				description: description,
 				tags: {
 					create: tags
 						.filter((item) => typeof item.name !== "undefined")
@@ -75,6 +78,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 		return {
 			id: _updated.id,
 			title: _updated.title,
+			description: _updated.description,
 			url: _updated.url,
 			tags: _updated.tags.map((item) => pickKeys(item, "id", "name")),
 			createdAt: _updated.createdAt.toISOString(),

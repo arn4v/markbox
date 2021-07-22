@@ -49,6 +49,7 @@ export type Bookmark = {
 	__typename?: "Bookmark";
 	id: Scalars["ID"];
 	title: Scalars["String"];
+	description: Scalars["String"];
 	url: Scalars["String"];
 	tags: Array<Tag>;
 	createdAt: Scalars["String"];
@@ -63,6 +64,7 @@ export type ChangePasswordMessage = {
 export type CreateBookmarkInput = {
 	title: Scalars["String"];
 	url: Scalars["String"];
+	description: Scalars["String"];
 	tags: Array<CreateOrUpdateBookmarkTagInput>;
 };
 
@@ -198,6 +200,7 @@ export type UpdateBookmarkInput = {
 	id: Scalars["ID"];
 	title?: Maybe<Scalars["String"]>;
 	url?: Maybe<Scalars["String"]>;
+	description?: Maybe<Scalars["String"]>;
 	tags?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
 	tagsDisconnect?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
 };
@@ -294,6 +297,7 @@ export type UpdateBookmarkMutation = {
 		id: string;
 		title: string;
 		url: string;
+		description: string;
 		createdAt: string;
 		updatedAt: string;
 		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
@@ -341,6 +345,7 @@ export type GetAllBookmarksQuery = {
 			__typename?: "Bookmark";
 			id: string;
 			title: string;
+			description: string;
 			url: string;
 			createdAt: string;
 			updatedAt: string;
@@ -623,6 +628,7 @@ export type BookmarkResolvers<
 > = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -988,6 +994,7 @@ export const UpdateBookmarkDocument = `
     id
     title
     url
+    description
     tags {
       id
       name
@@ -1083,6 +1090,7 @@ export const GetAllBookmarksDocument = `
     data {
       id
       title
+      description
       url
       tags {
         id

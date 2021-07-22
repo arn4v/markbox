@@ -8,6 +8,7 @@ export default gql`
 			data {
 				id
 				title
+				description
 				url
 				tags {
 					id

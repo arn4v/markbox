@@ -11,6 +11,7 @@ const Query: QueryResolvers<GQLContext> = {
 		const {
 			id: _id,
 			title,
+			description,
 			createdAt,
 			updatedAt,
 			url,
@@ -31,6 +32,7 @@ const Query: QueryResolvers<GQLContext> = {
 		return {
 			id: _id,
 			title,
+			description,
 			url,
 			tags,
 			createdAt: createdAt.toISOString(),
@@ -93,10 +95,11 @@ const Query: QueryResolvers<GQLContext> = {
 					  }
 					: {}),
 			})
-		).map(({ id, url, title, createdAt, updatedAt, tags }) => ({
+		).map(({ id, url, title, description, createdAt, updatedAt, tags }) => ({
 			id,
 			url,
 			title,
+			description,
 			tags: tags.map((item) => ({ id: item.id, name: item.name })),
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
