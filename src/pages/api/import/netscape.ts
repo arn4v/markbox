@@ -1,10 +1,9 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import parse, { BookmarkOrFolder } from "bookmarks-parser";
+import { BookmarkOrFolder } from "bookmarks-parser";
 import cheerio from "cheerio";
 import { format } from "date-fns";
 import fs from "fs";
 import path from "path";
-import { promisify } from "util";
 import {
 	authMiddleware,
 	createHandler,
@@ -12,8 +11,6 @@ import {
 	prisma
 } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
-
-const parsePromise = promisify(parse);
 
 const upload = createUploadMiddleware("bookmarks.html");
 
@@ -91,8 +88,9 @@ export default createHandler<ApiRequest>()
 					const sanitized = sanitizeUrl(url);
 					return prisma.bookmark.create({
 						data: {
-							title,
-							url: sanitized,
+							title: title.length > 1000 ? title.substr(0, 1000) : title,
+							url:
+								sanitized.length > 1000 ? sanitized.substr(0, 1000) : sanitized,
 							User: {
 								connect: {
 									id: req.ctx.user.id,
