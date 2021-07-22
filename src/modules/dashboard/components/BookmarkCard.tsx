@@ -1,5 +1,4 @@
 import format from "date-fns/format";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import {
@@ -7,14 +6,16 @@ import {
 	HiOutlineMenu,
 	HiOutlineTrash,
 	HiPencil,
-	HiTrash,
+	HiTrash
 } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Modal, { ModalContent } from "~/components/Modal";
 import Popup from "~/components/Popup";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
+import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
+import { EditDrawer } from "~/modules/common/components/Edit";
 
 interface Props {
 	data: Bookmark;
@@ -27,6 +28,11 @@ const BookmarkCard = ({ data }: Props) => {
 		onClose: onDropdownClose,
 		onToggle: onDropdownToggle,
 	} = useDisclosure();
+	const {
+		isOpen: isDrawerOpen,
+		onOpen: onDrawerOpen,
+		onClose: onDrawerClose,
+	} = useDisclosure();
 	const { mutate } = useDeleteBookmarkMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries("GetAllBookmarks");
@@ -37,8 +43,13 @@ const BookmarkCard = ({ data }: Props) => {
 		() => new Date(data?.createdAt),
 		[data?.createdAt],
 	);
+	const { isLg } = useBreakpoints();
 	const queryClient = useQueryClient();
 	const router = useRouter();
+
+	React.useEffect(() => {
+		if (isOpen) onClose();
+	}, [isLg, isOpen, onClose]);
 
 	return (
 		<>
@@ -92,16 +103,20 @@ const BookmarkCard = ({ data }: Props) => {
 					>
 						<ul className="flex flex-col w-48 mt-1 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg dark:border-none dark:bg-gray-600">
 							<li className="w-full border-b border-gray-300 dark:border-blueGray-400">
-								<Link href={"/edit/" + data?.id}>
-									<a
-										className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
-										onClick={() => {
-											onDropdownClose();
-										}}
-									>
-										Edit <HiPencil />
-									</a>
-								</Link>
+								<button
+									onClick={() => {
+										if (isLg) {
+											onDrawerOpen();
+										} else {
+											router.push("/edit/" + data?.id);
+										}
+
+										onDropdownClose();
+									}}
+									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
+								>
+									Edit <HiPencil />
+								</button>
 							</li>
 							<li className="w-full">
 								<button
@@ -178,6 +193,7 @@ const BookmarkCard = ({ data }: Props) => {
 					</div>
 				</ModalContent>
 			</Modal>
+			<EditDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} id={data?.id} />
 		</>
 	);
 };

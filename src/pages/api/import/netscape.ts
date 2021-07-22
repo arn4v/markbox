@@ -1,5 +1,4 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { BookmarkOrFolder } from "bookmarks-parser";
 import cheerio from "cheerio";
 import { format } from "date-fns";
 import fs from "fs";
@@ -20,17 +19,24 @@ export const config = {
 	},
 };
 
-const getBookmarksFromFolder = (data: BookmarkOrFolder): BookmarkOrFolder[] => {
+const URL_FILTER_REGEX =
+	/(chrome(-extension)?|about:blank|javascript:|edge(.*))(:\/\/)?/;
+
+const getBookmarksFromHtml = (raw: string) => {
 	const bookmarks = [];
+	const $ = cheerio.load(raw);
+	$("dt > a").each((idx, el) => {
+		const _el = $(el);
+		const title = _el.text();
+		const url = sanitizeUrl(_el.attr("href"));
 
-	for (const item of data.children) {
-		if (item.type === "folder") {
-			bookmarks.concat(getBookmarksFromFolder(item));
-		} else {
-			bookmarks.push(item);
+		if (!URL_FILTER_REGEX.test(url)) {
+			bookmarks.push({
+				title: title,
+				url: url,
+			});
 		}
-	}
-
+	});
 	return bookmarks;
 };
 
@@ -45,18 +51,7 @@ export default createHandler<ApiRequest>()
 		const raw = fs.readFileSync(filePath, { encoding: "utf-8" });
 
 		try {
-			const bookmarks = (() => {
-				const bookmarks = [];
-				const $ = cheerio.load(raw);
-				$("dt > a").each((idx, el) => {
-					const _el = $(el);
-					bookmarks.push({
-						title: _el.text(),
-						url: _el.attr("href"),
-					});
-				});
-				return bookmarks;
-			})();
+			const bookmarks = getBookmarksFromHtml(raw);
 
 			const tagName = `Imported from browser ${format(
 				new Date(),
@@ -78,32 +73,24 @@ export default createHandler<ApiRequest>()
 				});
 			}
 
-			const transactions = bookmarks
-				.filter(
-					(item) =>
-						!item.url.toLowerCase().startsWith("javascript:") &&
-						!item.url.toLowerCase().includes("about:blank"),
-				)
-				.map(({ title, url }) => {
-					const sanitized = sanitizeUrl(url);
-					return prisma.bookmark.create({
-						data: {
-							title: title.length > 1000 ? title.substr(0, 1000) : title,
-							url:
-								sanitized.length > 1000 ? sanitized.substr(0, 1000) : sanitized,
-							User: {
-								connect: {
-									id: req.ctx.user.id,
-								},
-							},
-							tags: {
-								connect: {
-									id: tag.id,
-								},
+			const transactions = bookmarks.map(({ title, url }) => {
+				return prisma.bookmark.create({
+					data: {
+						title: title.length > 1000 ? title.substr(0, 1000) : title,
+						url: url.length > 1000 ? url.substr(0, 1000) : url,
+						User: {
+							connect: {
+								id: req.ctx.user.id,
 							},
 						},
-					});
+						tags: {
+							connect: {
+								id: tag.id,
+							},
+						},
+					},
 				});
+			});
 
 			await prisma.$transaction(transactions);
 			await fs.promises.unlink(filePath);
