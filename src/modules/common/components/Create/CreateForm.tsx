@@ -1,11 +1,11 @@
 import * as React from "react";
-import { HiOutlineXCircle, HiX } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import {
 	useCreateBookmarkMutation,
-	useGetAllTagsQuery,
+	useGetAllTagsQuery
 } from "~/graphql/types.generated";
 
 interface Props {
@@ -18,6 +18,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	const initialState = {
 		title: "",
 		url: "",
+		description: "",
 		tags: {} as Record<string, { name: string }>,
 	};
 	// Data fetching/mutation
@@ -41,7 +42,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		const { title, url } = state;
+		const { title, url, description } = state;
 		// Transform tags to Array<{ id: string }>
 		const tags = Object.values(state.tags).reduce((acc, cur) => {
 			const existingTag = data?.tags.find((item) => item.name === cur.name);
@@ -52,8 +53,15 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 			}
 			return acc;
 		}, []);
-		mutate({ input: { title, url, tags } });
+		mutate({ input: { title, url, description, tags } });
 	};
+
+	const onChange = React.useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setState((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+		},
+		[],
+	);
 
 	return (
 		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
@@ -66,10 +74,8 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					type="text"
 					className="block w-full h-10 mt-2"
 					placeholder="Name"
-					onChange={(e) =>
-						setState((prev) => ({ ...prev, title: e.target.value }))
-					}
 					value={state.title}
+					onChange={onChange}
 					autoComplete="off"
 					required
 				/>
@@ -84,10 +90,23 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					className="block w-full h-10 mt-2"
 					placeholder="URL"
 					value={state.url}
+					onChange={onChange}
 					autoComplete="off"
-					onChange={(e) =>
-						setState((prev) => ({ ...prev, url: e.target.value }))
-					}
+					required
+				/>
+			</div>
+			<div className="w-full">
+				<label htmlFor="description" className="block">
+					Description
+				</label>
+				<Input
+					id="description"
+					type="text"
+					className="block w-full h-10 mt-2"
+					placeholder="Description"
+					value={state.description}
+					onChange={onChange}
+					autoComplete="off"
 					required
 				/>
 			</div>

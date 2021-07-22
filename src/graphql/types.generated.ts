@@ -385,6 +385,7 @@ export type GetBookmarkQuery = {
 		id: string;
 		title: string;
 		url: string;
+		description: string;
 		createdAt: string;
 		updatedAt: string;
 		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
@@ -1168,6 +1169,7 @@ export const GetBookmarkDocument = `
     id
     title
     url
+    description
     tags {
       id
       name

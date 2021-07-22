@@ -6,6 +6,7 @@ export default gql`
 			id
 			title
 			url
+			description
 			tags {
 				id
 				name

@@ -1,19 +1,21 @@
 import isEqual from "lodash.isequal";
 import React from "react";
-import { HiOutlineXCircle, HiX } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import {
 	Bookmark,
 	CreateOrUpdateBookmarkTagInput,
+	Tag,
 	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useUpdateBookmarkMutation,
+	useUpdateBookmarkMutation
 } from "~/graphql/types.generated";
 
 interface LocalState {
 	title: string;
 	url: string;
+	description: string;
 	tags: Record<string, CreateOrUpdateBookmarkTagInput>;
 	tagsDisconnect: Record<string, CreateOrUpdateBookmarkTagInput>;
 }
@@ -31,13 +33,44 @@ interface LocalState {
  * ```
  * Hence the requirement for transforming it
  */
-const transformTags = (
+const transformTagsToClientRequirement = (
 	data: Bookmark["tags"],
 ): Record<string, CreateOrUpdateBookmarkTagInput> => {
 	return data.reduce((acc, { name }) => {
 		acc[name] = { name };
 		return acc;
 	}, {});
+};
+
+const transformTagsToServerRequirement = (
+	data: Tag[],
+	tags: LocalState["tags"],
+	tagsDisconnect: LocalState["tagsDisconnect"],
+) => {
+	const transformedTags = Object.values(tags).reduce((acc, cur) => {
+		if (tagsDisconnect[cur?.name]) delete tagsDisconnect[cur?.name];
+		const existingTag = data.find((item) => item.name === cur.name);
+		if (existingTag) {
+			acc.push({ id: existingTag.id });
+		} else {
+			acc.push(cur);
+		}
+		return acc;
+	}, []);
+
+	const transformedTagsDisconnect = Object.values(tagsDisconnect).reduce(
+		(acc, cur) => {
+			const existingTag = data.find((item) => item.name === cur.name);
+			if (existingTag) {
+				acc.push({ id: existingTag.id });
+			}
+
+			return acc;
+		},
+		[],
+	);
+
+	return { tags: transformedTags, tagsDisconnect: transformedTagsDisconnect };
 };
 
 interface Props {
@@ -49,22 +82,24 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const initialState: LocalState = {
 		title: "",
 		url: "",
+		description: "",
 		tags: {},
 		tagsDisconnect: {},
 	};
 	const [state, setState] = React.useState<LocalState>(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
-	const {} = useGetBookmarkQuery(
+	useGetBookmarkQuery(
 		{ id },
 		{
 			onSuccess(data) {
+				console.log(data);
 				if (isEqual(state, initialState)) {
-					const { title, url, tags } = data.bookmark;
 					setState((prev) => ({
 						...prev,
-						title,
-						url,
-						tags: transformTags(tags),
+						title: data.bookmark.title,
+						url: data.bookmark.url,
+						description: data.bookmark.description,
+						tags: transformTagsToClientRequirement(data.bookmark.tags),
 					}));
 				}
 			},
@@ -78,42 +113,37 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		},
 	});
 
-	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const { title, url, tagsDisconnect } = state;
+	const onSubmit = React.useCallback(
+		(e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+			const { title, url, description } = state;
 
-		// Transform tags to be consumed by API
-		const tags = Object.values(state.tags).reduce((acc, cur) => {
-			if (tagsDisconnect[cur?.name]) delete tagsDisconnect[cur?.name];
-			const existingTag = data.tags.find((item) => item.name === cur.name);
-			if (existingTag) {
-				acc.push({ id: existingTag.id });
-			} else {
-				acc.push(cur);
-			}
-			return acc;
-		}, []);
+			const { tags, tagsDisconnect } = transformTagsToServerRequirement(
+				data.tags,
+				state.tags,
+				state.tagsDisconnect,
+			);
 
-		// Transform tagsDisconnect to be consumed by API
-		const _tagsDisconnect = Object.values(tagsDisconnect).reduce((acc, cur) => {
-			const existingTag = data.tags.find((item) => item.name === cur.name);
-			if (existingTag) {
-				acc.push({ id: existingTag.id });
-			}
+			mutate({
+				input: {
+					id,
+					title,
+					description,
+					url,
+					tags,
+					tagsDisconnect,
+				},
+			});
+		},
+		[data?.tags, id, mutate, state],
+	);
 
-			return acc;
-		}, []);
-
-		mutate({
-			input: {
-				id,
-				title,
-				url,
-				tags,
-				tagsDisconnect: _tagsDisconnect,
-			},
-		});
-	};
+	const onChange = React.useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setState((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+		},
+		[],
+	);
 
 	return (
 		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
@@ -127,9 +157,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					type="text"
 					className="block w-full mt-2"
 					placeholder="Title"
-					onChange={(e) =>
-						setState((prev) => ({ ...prev, title: e.target.value }))
-					}
+					onChange={onChange}
 					value={state.title}
 					required
 				/>
@@ -144,10 +172,23 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					className="block w-full mt-2"
 					placeholder="URL"
 					value={state.url}
+					onChange={onChange}
 					autoComplete="off"
-					onChange={(e) =>
-						setState((prev) => ({ ...prev, url: e.target.value }))
-					}
+					required
+				/>
+			</div>
+			<div className="w-full">
+				<label htmlFor="description" className="block">
+					Description
+				</label>
+				<Input
+					id="description"
+					type="text"
+					className="block w-full h-10 mt-2"
+					placeholder="Description"
+					value={state.description}
+					onChange={onChange}
+					autoComplete="off"
 					required
 				/>
 			</div>
