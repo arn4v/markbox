@@ -17,7 +17,10 @@ ENV NODE_ENV production
 
 RUN yarn build
 
-RUN chown -R node:node /app
+RUN mkdir /app/uploads
+
+RUN chown -R node:node /app/.next
+RUN chown -R node:node /app/uploads
 
 USER node
 
