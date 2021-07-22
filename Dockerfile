@@ -17,7 +17,8 @@ ENV NODE_ENV production
 
 RUN yarn build
 
-RUN chown -R node:node /app/.next
+RUN chown -R node:node /app
+
 USER node
 
 CMD ["yarn", "start"]
