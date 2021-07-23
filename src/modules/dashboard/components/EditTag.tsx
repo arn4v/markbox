@@ -4,7 +4,6 @@ import { HiPencil } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Input from "~/components/Input";
 import Modal, { ModalContent } from "~/components/Modal";
-import Popup from "~/components/Popup";
 import { genericModalMotionProps } from "~/config";
 import { Tag, useRenameTagMutation } from "~/graphql/types.generated";
 
@@ -17,18 +16,15 @@ interface EditTagProps {
 
 const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 	const queryClient = useQueryClient();
-	const [name, setName] = React.useState<string>(undefined);
+	const [name, setName] = React.useState<string>(data?.name);
 	const { mutate } = useRenameTagMutation({
 		// Invalidate GetTags query on successful rename
-		onSuccess(data) {
+		onSuccess() {
 			queryClient.invalidateQueries("GetAllTags");
+			queryClient.invalidateQueries("GetAllBookmarks");
 			onClose();
 		},
 	});
-
-	React.useEffect(() => {
-		if (!name) setName(data.name);
-	}, [data, name]);
 
 	return (
 		<>
@@ -50,7 +46,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 				overlayProps={{ className: "bg-black/[0.75] z-[60]" }}
 			>
 				<ModalContent className="z-[200]" {...genericModalMotionProps}>
-					<div className="p-8 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
+					<div className="p-6 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
 						<form
 							className="flex flex-col w-full gap-8"
 							onSubmit={(e) => {
@@ -61,7 +57,12 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 							<div className="text-center font-bold text-lg">Rename tag</div>
 							<div className="flex gap-6 items-center">
 								<label htmlFor="name">Name</label>
-								<Input className="block w-full px-2 py-2" />
+								<Input
+									className="block w-full px-2 py-2"
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+									placeholder="Name"
+								/>
 							</div>
 							<div className="flex items-center justify-between w-full">
 								<button

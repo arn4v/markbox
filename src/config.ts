@@ -1,3 +1,4 @@
+import { MotionProps } from "framer-motion";
 import { DefaultSeoProps } from "next-seo";
 
 export const isSsr = typeof window === "undefined";
@@ -35,7 +36,7 @@ export const defaultSeoProps: DefaultSeoProps = {
 	canonical: "https://bookmarky.io",
 };
 
-export const genericModalMotionProps = {
+export const genericModalMotionProps: MotionProps = {
 	initial: { opacity: 0, y: -20 },
 	animate: { opacity: 1, y: 0 },
 	exit: { opacity: 0, y: -20 },
