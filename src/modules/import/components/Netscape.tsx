@@ -1,7 +1,5 @@
 import React from "react";
-import { useMutation } from "react-query";
-import axios from "redaxios";
-import useDisclosure from "~/hooks/use-disclosure";
+import { useDisclosure } from "react-sensible";
 import UploadNetscapeModal from "./NetscapeModal";
 
 const Netscape = () => {

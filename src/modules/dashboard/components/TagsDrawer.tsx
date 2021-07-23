@@ -1,9 +1,9 @@
 import { CardStackIcon } from "@radix-ui/react-icons";
 import clsx from "clsx";
 import React from "react";
+import { useDisclosure } from "react-sensible";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
-import useDisclosure from "~/hooks/use-disclosure";
 import useStore from "../../common/components/Create";
 import useDashboardStore from "../store";
 import Tag from "./Tag";

@@ -6,15 +6,15 @@ import {
 	HiOutlineMenu,
 	HiOutlineTrash,
 	HiPencil,
-	HiTrash
+	HiTrash,
 } from "react-icons/hi";
 import { useQueryClient } from "react-query";
+import { useDisclosure } from "react-sensible";
 import Badge from "~/components/Badge";
 import DeleteModal from "~/components/DeleteModal";
 import Popup from "~/components/Popup";
 import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
-import useDisclosure from "~/hooks/use-disclosure";
 import { EditDrawer } from "~/modules/common/components/Edit";
 
 interface Props {

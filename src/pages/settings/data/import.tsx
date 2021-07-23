@@ -1,15 +1,8 @@
-import clsx from "clsx";
 import { NextSeo } from "next-seo";
 import React from "react";
-import axios from "redaxios";
-import { HiUpload, HiX } from "react-icons/hi";
-import { useMutation } from "react-query";
-import Modal, { ModalContent } from "~/components/Modal";
-import Spinner from "~/components/Spinner";
-import useDisclosure from "~/hooks/use-disclosure";
-import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
-import Netscape from "~/modules/import/components/Netscape";
 import BookmarkyJson from "~/modules/import/components/BookmarkyJson";
+import Netscape from "~/modules/import/components/Netscape";
+import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
 const ImportPage = () => {
 	return (

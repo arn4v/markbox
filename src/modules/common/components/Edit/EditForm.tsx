@@ -9,7 +9,7 @@ import {
 	Tag,
 	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useUpdateBookmarkMutation
+	useUpdateBookmarkMutation,
 } from "~/graphql/types.generated";
 
 interface LocalState {

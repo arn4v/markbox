@@ -1,7 +1,7 @@
-import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
-import useOnClickOutside from "~/hooks/use-onclickoutside";
+import { AnimatePresence, motion } from "framer-motion";
+import * as React from "react";
+import { useOnClickOutside } from "react-sensible";
 import { mergeRefs } from "~/lib/react";
 import styles from "./Popup.module.css";
 

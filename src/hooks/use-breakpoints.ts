@@ -1,4 +1,4 @@
-import useMediaQuery from "./use-mediaquery";
+import { useMediaQuery } from "react-sensible";
 
 export default function useBreakpoints() {
 	const isSm = useMediaQuery("(min-width: 640px)");

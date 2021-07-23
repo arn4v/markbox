@@ -5,10 +5,10 @@ import {
 	HiOutlineMenu,
 	HiOutlineMoon,
 	HiOutlineSun,
-	HiOutlineX
+	HiOutlineX,
 } from "react-icons/hi";
+import { useDisclosure } from "react-sensible";
 import { Logo } from "~/components/Logo";
-import useDisclosure from "~/hooks/use-disclosure";
 import AuthButton from "./AuthButton";
 import SidebarSection from "./SidebarSection";
 

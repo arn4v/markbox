@@ -6,7 +6,7 @@ import {
 	GetAllBookmarksDocument,
 	GetAllBookmarksQuery,
 	GetAllBookmarksQueryVariables,
-	useGetBookmarksCountQuery
+	useGetBookmarksCountQuery,
 } from "~/graphql/types.generated";
 import useDashboardStore from "./store";
 

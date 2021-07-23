@@ -10,11 +10,11 @@ import {
 	HiOutlineLogout,
 	HiOutlineMoon,
 	HiOutlineSun,
-	HiOutlineTemplate
+	HiOutlineTemplate,
 } from "react-icons/hi";
+import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
 import { useAuth } from "~/hooks/use-auth";
-import useDisclosure from "~/hooks/use-disclosure";
 
 const Item = ({ href, children }) => {
 	return (

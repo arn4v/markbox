@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import * as React from "react";
+import { useDisclosure } from "react-sensible";
 import { Tag as TagType } from "~/graphql/types.generated";
-import useDisclosure from "~/hooks/use-disclosure";
 import useDashboardStore from "../store";
 import DeleteTagPopup from "./DeleteTag";
 import EditTagPopup from "./EditTag";

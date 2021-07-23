@@ -1,4 +1,4 @@
-import useDisclosure from "~/hooks/use-disclosure";
+import { useDisclosure } from "react-sensible";
 import ExportJsonModal from "./ExportJsonModal";
 
 const ExportJson = () => {

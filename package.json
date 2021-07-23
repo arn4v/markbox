@@ -84,6 +84,7 @@
 		"react-icons": "^4.2.0",
 		"react-intersection-observer": "^8.32.0",
 		"react-query": "^3.18.1",
+		"react-sensible": "^0.0.2",
 		"react-simple-typewriter": "^3.0.0",
 		"react-use": "^17.2.4",
 		"react-virtual": "^2.8.0",

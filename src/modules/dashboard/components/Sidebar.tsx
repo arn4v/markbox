@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
+import { useDisclosure } from "react-sensible";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
-import useDisclosure from "~/hooks/use-disclosure";
 import useDashboardStore from "../store";
 import Tag from "./Tag";
 

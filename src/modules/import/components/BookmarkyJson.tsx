@@ -1,6 +1,5 @@
 import React from "react";
-import { HiUpload } from "react-icons/hi";
-import useDisclosure from "~/hooks/use-disclosure";
+import { useDisclosure } from "react-sensible";
 import UploadJsonModal from "./JsonModal";
 
 const BookmarkyJson = () => {

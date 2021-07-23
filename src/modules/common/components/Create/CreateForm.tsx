@@ -5,7 +5,7 @@ import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import {
 	useCreateBookmarkMutation,
-	useGetAllTagsQuery
+	useGetAllTagsQuery,
 } from "~/graphql/types.generated";
 
 interface Props {

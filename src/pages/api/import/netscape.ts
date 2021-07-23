@@ -7,7 +7,7 @@ import {
 	authMiddleware,
 	createHandler,
 	createUploadMiddleware,
-	prisma
+	prisma,
 } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 

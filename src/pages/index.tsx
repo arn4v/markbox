@@ -7,11 +7,11 @@ import {
 	HiOutlineDocumentText,
 	HiX,
 } from "react-icons/hi";
+import { useDisclosure } from "react-sensible";
 import { Typewriter } from "react-simple-typewriter";
 import { Logo } from "~/components/Logo";
 import { useAuth } from "~/hooks/use-auth";
 import useBreakpoints from "~/hooks/use-breakpoints";
-import useDisclosure from "~/hooks/use-disclosure";
 
 const GetStartedButton = ({ className = "" }) => {
 	const { isAuthenticated } = useAuth();

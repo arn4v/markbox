@@ -3,8 +3,8 @@ import {
 	HiOutlineSortAscending,
 	HiOutlineSortDescending,
 } from "react-icons/hi";
+import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
-import useDisclosure from "~/hooks/use-disclosure";
 import useDashboardStore from "../store";
 import { SortBy } from "../types";
 

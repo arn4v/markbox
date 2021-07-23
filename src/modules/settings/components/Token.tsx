@@ -1,7 +1,7 @@
 import { useQueryClient } from "react-query";
+import { useDisclosure } from "react-sensible";
 import DeleteModal from "~/components/DeleteModal";
 import { AccessToken, useDeleteTokenMutation } from "~/graphql/types.generated";
-import useDisclosure from "~/hooks/use-disclosure";
 
 interface Props {
 	data: AccessToken;

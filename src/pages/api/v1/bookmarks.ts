@@ -3,7 +3,7 @@ import {
 	patAuthMiddleware,
 	prisma,
 	createHandler,
-	withCookies
+	withCookies,
 } from "~/lib/utils.server";
 import ApiRequestGQL from "~/types/ApiRequest";
 
