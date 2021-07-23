@@ -4,7 +4,7 @@ import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
 import * as React from "react";
 import useChildren from "use-children";
 
-type ModalProps = {
+export type ModalProps = {
 	portalProps?: Omit<PortalProps, "children">;
 	containerProps?: {
 		className?: string;

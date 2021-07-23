@@ -20,20 +20,7 @@ interface LocalState {
 	tagsDisconnect: Record<string, CreateOrUpdateBookmarkTagInput>;
 }
 
-/**
- * The backend needs to be provided an array of objects
- * with following structure for it to be able to make the
- * database connections or create new tags if it doesn't
- * exist
- *
- * ```
- * {
- *  name: string
- * }
- * ```
- * Hence the requirement for transforming it
- */
-const transformTagsToClientRequirement = (
+const processServerTagsToClientNeeds = (
 	data: Bookmark["tags"],
 ): Record<string, CreateOrUpdateBookmarkTagInput> => {
 	return data.reduce((acc, { name }) => {
@@ -42,7 +29,7 @@ const transformTagsToClientRequirement = (
 	}, {});
 };
 
-const transformTagsToServerRequirement = (
+const processClientTagsToServerNeeds = (
 	data: Tag[],
 	tags: LocalState["tags"],
 	tagsDisconnect: LocalState["tagsDisconnect"],
@@ -99,7 +86,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 						title: data.bookmark.title,
 						url: data.bookmark.url,
 						description: data.bookmark.description,
-						tags: transformTagsToClientRequirement(data.bookmark.tags),
+						tags: processServerTagsToClientNeeds(data.bookmark.tags),
 					}));
 				}
 			},
@@ -118,7 +105,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 			e.preventDefault();
 			const { title, url, description } = state;
 
-			const { tags, tagsDisconnect } = transformTagsToServerRequirement(
+			const { tags, tagsDisconnect } = processClientTagsToServerNeeds(
 				data.tags,
 				state.tags,
 				state.tagsDisconnect,

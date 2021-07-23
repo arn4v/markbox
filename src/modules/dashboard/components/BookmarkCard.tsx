@@ -8,20 +8,32 @@ import {
 	HiPencil,
 	HiTrash
 } from "react-icons/hi";
+import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
+import DeleteModal from "~/components/DeleteModal";
 import Popup from "~/components/Popup";
-import { Bookmark } from "~/graphql/types.generated";
+import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useDisclosure from "~/hooks/use-disclosure";
 import { EditDrawer } from "~/modules/common/components/Edit";
-import DeleteBookmarkModal from "./DeleteBookmarkModal";
 
 interface Props {
 	data: Bookmark;
 }
 
 const BookmarkCard = ({ data }: Props) => {
-	const { isOpen, onClose, onOpen } = useDisclosure();
+	const {
+		isOpen: isDeleteOpen,
+		onClose: onDeleteClose,
+		onOpen: onDeleteOpen,
+	} = useDisclosure();
+	const queryClient = useQueryClient();
+	const { mutate } = useDeleteBookmarkMutation({
+		onSuccess: () => {
+			queryClient.invalidateQueries("GetAllBookmarks");
+			queryClient.invalidateQueries("GetAllTags");
+		},
+	});
 	const {
 		isOpen: isDropdownOpen,
 		onClose: onDropdownClose,
@@ -32,6 +44,7 @@ const BookmarkCard = ({ data }: Props) => {
 		onOpen: onDrawerOpen,
 		onClose: onDrawerClose,
 	} = useDisclosure();
+
 	const date = React.useMemo(
 		() => new Date(data?.createdAt),
 		[data?.createdAt],
@@ -114,7 +127,7 @@ const BookmarkCard = ({ data }: Props) => {
 								<button
 									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
 									onClick={() => {
-										onOpen();
+										onDeleteOpen();
 									}}
 								>
 									Delete <HiTrash />
@@ -140,7 +153,7 @@ const BookmarkCard = ({ data }: Props) => {
 						</button>
 						<button
 							type="button"
-							onClick={onOpen}
+							onClick={onDeleteOpen}
 							className="focus:outline-none"
 						>
 							<HiOutlineTrash />
@@ -148,7 +161,11 @@ const BookmarkCard = ({ data }: Props) => {
 					</div>
 				</div>
 			</div>
-			<DeleteBookmarkModal onClose={onClose} isOpen={isOpen} id={data?.id} />
+			<DeleteModal
+				onClose={onDeleteClose}
+				isOpen={isDeleteOpen}
+				onDelete={() => mutate({ id: data?.id })}
+			/>
 			<EditDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} id={data?.id} />
 		</>
 	);
