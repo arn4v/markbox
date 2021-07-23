@@ -107,7 +107,6 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					value={state.description}
 					onChange={onChange}
 					autoComplete="off"
-					required
 				/>
 			</div>
 			<div className="w-full">

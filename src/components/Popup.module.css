@@ -1,8 +1,8 @@
 .popup {
-	animation: slideDown 200ms ease-in-out forwards;
+	animation: slide-down 200ms ease-in-out forwards;
 }
 
-@keyframes slideDown {
+@keyframes slide-down {
 	0% {
 		opacity: 0;
 		margin-top: -20px;
