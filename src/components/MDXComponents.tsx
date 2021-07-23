@@ -1,8 +1,11 @@
 import Link from "next/link";
+import * as React from "react";
 
-const MDXLink = (props: JSX.IntrinsicElements["a"]) => {
-	const href = props.href;
-	const isInternalLink = href && (href.startsWith("/") || href.startsWith("#"));
+const MDXLink = ({ href, ...props }: JSX.IntrinsicElements["a"]) => {
+	const isInternalLink = React.useMemo(
+		() => href && (href.startsWith("/") || href.startsWith("#")),
+		[href],
+	);
 
 	if (isInternalLink) {
 		return (
@@ -12,7 +15,7 @@ const MDXLink = (props: JSX.IntrinsicElements["a"]) => {
 		);
 	}
 
-	return <a target="_blank" rel="noopener noreferrer" {...props} />;
+	return <a target="_blank" rel="noopener noreferrer" href={href} {...props} />;
 };
 
 const MDXComponents = {
