@@ -2,24 +2,20 @@ import React from "react";
 import { useInfiniteQuery } from "react-query";
 import { fetcher } from "~/graphql/fetcher";
 import {
+	Bookmark,
+	GetAllBookmarksDocument,
 	GetAllBookmarksQuery,
 	GetAllBookmarksQueryVariables,
-	GetAllBookmarksDocument,
-	useGetBookmarksCountQuery,
-	Bookmark,
+	useGetBookmarksCountQuery
 } from "~/graphql/types.generated";
 import useDashboardStore from "./store";
 
 const useInfiniteBookmarksQuery = () => {
 	const { tag, sort } = useDashboardStore();
 
-	const countQueryVariables = React.useMemo(
-		() => (tag === "All" ? {} : { tagName: tag }),
-		[tag],
+	const { isLoading, data: countData } = useGetBookmarksCountQuery(
+		tag === "All" ? {} : { tagName: tag },
 	);
-
-	const { isLoading, data: countData } =
-		useGetBookmarksCountQuery(countQueryVariables);
 
 	const infiniteFetcher = React.useCallback(
 		({ pageParam = null }) => {

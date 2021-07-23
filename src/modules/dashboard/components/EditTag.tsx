@@ -43,7 +43,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 				containerProps={{
 					className: "flex items-center justify-center z-[60]",
 				}}
-				overlayProps={{ className: "bg-black/[0.75] z-[60]" }}
+				overlayProps={{ className: "bg-black bg-opacity-75 z-[60]" }}
 			>
 				<ModalContent className="z-[200]" {...genericModalMotionProps}>
 					<div className="p-6 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">

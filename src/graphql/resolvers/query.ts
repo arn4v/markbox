@@ -218,7 +218,7 @@ const Query: QueryResolvers<GQLContext> = {
 				})
 			).id;
 
-		const count = await prisma.bookmark.findMany({
+		const count = await prisma.bookmark.count({
 			where:
 				typeof tagId === "string"
 					? {
@@ -232,10 +232,9 @@ const Query: QueryResolvers<GQLContext> = {
 					: {
 							userId,
 					  },
-			select: { id: true },
 		});
 
-		return count.length;
+		return count;
 	},
 };
 
