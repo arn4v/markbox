@@ -1,4 +1,4 @@
-import useMediaQuery from "./use-mediaquery";
+import { useMediaQuery } from "react-sensible";
 
 export default function useIsPwa() {
 	const isPwa = useMediaQuery("(display-mode: standalone)");

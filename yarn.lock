@@ -9611,10 +9611,10 @@ react-refresh@0.8.3:
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
-react-sensible@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/react-sensible/-/react-sensible-0.0.2.tgz#195d2d8f7b4ffcdd0787e1ae90f1bc986e0c83dd"
-  integrity sha512-PL3oRVvJ2unRlDQkAQ324pEtvlpNeM9mZf7dJ4WAAemiivXWDdyiuW6Csq2rL2Jfa/gmUJDEmZcQKbmqLP65Rg==
+react-sensible@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/react-sensible/-/react-sensible-0.0.4.tgz#39fcc89464134653986e889ab5bb716454b3d7db"
+  integrity sha512-3VaFQV0nwwAL8BxfQrBXpEic1P5LIh8FBiSYlt/nuwnpI2Wa9a0N9pDCqhsu2ydthdTjFaVdzUdnW1Jleo/P/A==
 
 react-simple-typewriter@^3.0.0:
   version "3.0.0"
