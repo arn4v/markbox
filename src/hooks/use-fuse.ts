@@ -5,14 +5,12 @@ export interface UseFuse<T extends unknown> {
 	data: T[];
 	query: string;
 	options: Fuse.IFuseOptions<T>;
-	onFilter?: (result: T[]) => T[];
 }
 
 export default function useFuse<T extends unknown>({
 	data,
 	query = "",
 	options = {},
-	onFilter,
 }: UseFuse<T>) {
 	const fuse = React.useMemo(() => {
 		return new Fuse(data, options);
@@ -25,8 +23,8 @@ export default function useFuse<T extends unknown>({
 			  })
 			: data;
 
-		return onFilter ? onFilter(value) : value;
-	}, [data, onFilter, fuse, query]);
+		return value;
+	}, [data, fuse, query]);
 
 	return { fuse, result };
 }

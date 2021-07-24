@@ -23,9 +23,7 @@ const BookmarksGrid = (): JSX.Element => {
 		data: data ?? [],
 		query,
 		options: {
-			keys: ["title", "tags.name"],
-			shouldSort: true,
-			location: 15,
+			keys: ["title", "url", "tags.name"],
 		},
 	});
 	const { ref, inView } = useInView({});

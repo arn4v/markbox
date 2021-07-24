@@ -24,13 +24,10 @@ export default function TagsList() {
 	);
 	const [search, setSearch] = React.useState("");
 	const { result } = useFuse<TagType>({
-		data: React.useMemo(() => data?.tags ?? [], [data?.tags]),
+		data: data?.tags?.sort((a, b) => a.name.localeCompare(b.name)),
 		query: search,
 		options: {
 			keys: ["name"],
-		},
-		onFilter(result) {
-			return result.sort((a, b) => a.name.localeCompare(b.name));
 		},
 	});
 	const { isLg } = useBreakpoints();
