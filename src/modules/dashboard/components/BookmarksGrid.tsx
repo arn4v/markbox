@@ -37,6 +37,7 @@ const BookmarksGrid = (): JSX.Element => {
 
 	React.useEffect(() => {
 		loadMore();
+		return () => setNextPageLoading(false);
 	}, [inView, loadMore]);
 
 	if (isLoading)
