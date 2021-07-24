@@ -45,21 +45,29 @@ export default function TagsList() {
 				placeholder="Search tags..."
 			/>
 			<ul className="flex flex-col items-center justify-start w-full gap-4">
-				<Tag
-					isEditModeEnabled={false}
-					data={{ id: undefined, name: "All" }}
-					active={typeof tag === "undefined"}
-				/>
-				{result?.map((item) => {
-					return (
-						<Tag
-							key={item.id}
-							data={item}
-							active={tag === item.id}
-							isEditModeEnabled={isEnabled}
-						/>
-					);
-				})}
+				{result?.length === data?.tags?.length ? (
+					<Tag
+						isEditModeEnabled={false}
+						data={{ id: undefined, name: "All" }}
+						active={typeof tag === "undefined"}
+					/>
+				) : null}
+				{result?.length > 0 ? (
+					result?.map((item) => {
+						return (
+							<Tag
+								key={item.id}
+								data={item}
+								active={tag === item.id}
+								isEditModeEnabled={isEnabled}
+							/>
+						);
+					})
+				) : (
+					<div className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded border border-gray-300">
+						Couldn't find any results for query {`"${search}"`}, try again.
+					</div>
+				)}
 			</ul>
 		</>
 	);
