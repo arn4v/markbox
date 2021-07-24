@@ -11,7 +11,7 @@ export default function TagsList() {
 		...state.edit_mode,
 		tag: state.tag,
 	}));
-	const { data } = useGetAllTagsQuery(
+	const { data, isLoading } = useGetAllTagsQuery(
 		{},
 		{
 			onSuccess(data) {
@@ -19,7 +19,6 @@ export default function TagsList() {
 					onDisable();
 				}
 			},
-			initialData: { tags: [] },
 		},
 	);
 	const [search, setSearch] = React.useState("");
@@ -49,7 +48,7 @@ export default function TagsList() {
 					<Tag
 						isEditModeEnabled={false}
 						data={{ id: undefined, name: "All" }}
-						active={typeof tag === "undefined"}
+						isActive={tag === "All"}
 					/>
 				) : null}
 				{result?.length > 0 ? (
@@ -58,16 +57,16 @@ export default function TagsList() {
 							<Tag
 								key={item.id}
 								data={item}
-								active={tag === item.id}
+								isActive={item.name === tag}
 								isEditModeEnabled={isEnabled}
 							/>
 						);
 					})
-				) : (
-					<div className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded border border-gray-300">
+				) : !isLoading ? (
+					<div className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded">
 						Couldn't find any results for query {`"${search}"`}, try again.
 					</div>
-				)}
+				) : null}
 			</ul>
 		</>
 	);
