@@ -1,29 +1,12 @@
 import clsx from "clsx";
 import React from "react";
-import { useDisclosure } from "react-sensible";
 import { useGetAllTagsQuery } from "~/graphql/types.generated";
 import useDashboardStore from "../store";
-import Tag from "./Tag";
+import TagsList from "./TagsList";
 
 const Sidebar = () => {
-	const {
-		isOpen: isEditModeEnabled,
-		onClose: onEditModeDisabled,
-		onToggle: onEditModeToggle,
-	} = useDisclosure();
-	const { data } = useGetAllTagsQuery(
-		{},
-		{
-			initialData: { tags: [] },
-			// Disable edit mode if there are no tags
-			onSuccess(data) {
-				if (data?.tags?.length === 0) {
-					onEditModeDisabled();
-				}
-			},
-		},
-	);
-	const { tag } = useDashboardStore();
+	const { onToggle, isEnabled } = useDashboardStore((state) => state.edit_mode);
+	const { data } = useGetAllTagsQuery({});
 
 	return (
 		<>
@@ -48,29 +31,13 @@ const Sidebar = () => {
 						{data?.tags.length > 0 ? (
 							<button
 								className="px-2 py-0.5 dark:bg-gray-900 bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition rounded-md text-sm focus:outline-none"
-								onClick={onEditModeToggle}
+								onClick={onToggle}
 							>
-								{isEditModeEnabled ? "Dismiss" : "Edit"}
+								{isEnabled ? "Dismiss" : "Edit"}
 							</button>
 						) : null}
 					</div>
-					<div className="flex flex-col items-center justify-start w-full gap-2">
-						<Tag
-							isEditModeEnabled={false}
-							active={typeof tag === "undefined" || tag === "All"}
-							data={{ id: undefined, name: "All" }}
-						/>
-						{data?.tags?.map((item) => {
-							return (
-								<Tag
-									key={item.id}
-									isEditModeEnabled={isEditModeEnabled}
-									data={item}
-									active={tag === item.name}
-								/>
-							);
-						})}
-					</div>
+					<TagsList />
 				</div>
 			</div>
 		</>
