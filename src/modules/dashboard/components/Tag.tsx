@@ -36,11 +36,11 @@ export default function Tag({
 					setTag(data.name);
 				}}
 				className={clsx([
-					"px-4 py-2 flex-grow transition rounded-md dark:text-white",
+					"px-4 py-2 flex-grow transition rounded-md dark:text-white border",
 					isDeleteOpen && "z-30",
 					isActive
-						? "dark:bg-gray-500 lg:dark:bg-gray-600 bg-gray-200 font-medium"
-						: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200",
+						? "dark:bg-gray-500 lg:dark:bg-gray-600 bg-gray-200 border-gray-300 font-medium"
+						: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200 border-transparent",
 				])}
 			>
 				{data.name}

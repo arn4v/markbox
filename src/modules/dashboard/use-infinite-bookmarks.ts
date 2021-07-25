@@ -6,7 +6,7 @@ import {
 	GetAllBookmarksDocument,
 	GetAllBookmarksQuery,
 	GetAllBookmarksQueryVariables,
-	useGetBookmarksCountQuery,
+	useGetBookmarksCountQuery
 } from "~/graphql/types.generated";
 import useDashboardStore from "./store";
 
@@ -42,11 +42,16 @@ const useInfiniteBookmarksQuery = () => {
 	});
 
 	const bookmarks: Bookmark[] = React.useMemo(() => {
-		return (
-			data?.pages?.reduce((acc, cur) => {
-				return acc.concat(cur.bookmarks.data);
-			}, []) ?? []
-		);
+		const dataMap = {};
+
+		if (data?.pages.length)
+			for (const page of data?.pages) {
+				page.bookmarks.data.forEach((data) => {
+					dataMap[data.id] = data;
+				});
+			}
+
+		return Object.values(dataMap);
 	}, [data]);
 
 	React.useEffect(() => {
