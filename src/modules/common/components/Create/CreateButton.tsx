@@ -20,6 +20,7 @@ export default function CreateButton({
 	return (
 		<Link href="/create">
 			<a
+				data-test="create-bookmark-button"
 				className={clsx([
 					"w-full font-medium items-center justify-center flex transition focus:outline-none lg:p-2 lg:rounded-lg lg:gap-2 border p-[1px] rounded-full border-gray-400 dark:border-gray-300 lg:w-auto lg:h-auto",
 					showText

@@ -60,12 +60,14 @@ const Drawer: DrawerComponent = ({
 			{isOpen && (
 				<Portal {...portalProps}>
 					<div
+						data-test="drawer"
 						className={clsx([
 							"h-screen w-screen fixed inset-0 overflow-none",
 							containerProps?.className ?? "z-[100]",
 						])}
 					>
 						<motion.div
+							data-test="drawer-overlay"
 							className={clsx([
 								"z-10 fixed inset-0 bg-black",
 								overlayProps?.className,
@@ -154,6 +156,7 @@ export const DrawerContent = React.forwardRef<
 
 	return (
 		<motion.div
+			data-test="drawer-content"
 			ref={ref}
 			className={clsx([
 				"absolute z-30",
