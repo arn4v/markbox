@@ -4,8 +4,8 @@
 	"license": "AGPL-3.0-or-later",
 	"author": "Arnav Gosain <arnav@arnavgosain.com>",
 	"scripts": {
-		"prestart": "yarn db-migrate-deploy",
 		"start": "next start -p ${PORT-3000}",
+		"start-ci": "yarn db-migrate-deploy && yarn start",
 		"build": "next build",
 		"build-start": "yarn build && yarn start",
 		"dev": "concurrently -n \"next,gql-codegen,prisma-gen\" \"next dev\" \"npm run gql-gen-watch\" \"npm run db-gen-watch\"",
@@ -35,7 +35,8 @@
 		"cy-open": "cypress open",
 		"cy-run": "cypress run --browser chrome",
 		"precy-test": "yarn build",
-		"cy-test": "start-server-and-test 3000 cy-run"
+		"cy-test": "start-server-and-test 3000 cy-run",
+		"cy-test-ui": "start-server-and-test 3000 cy-open"
 	},
 	"dependencies": {
 		"@auth0/nextjs-auth0": "^1.5.0",

@@ -24,4 +24,4 @@ RUN chown -R node:node /app/uploads
 
 USER node
 
-CMD ["yarn", "start"]
+CMD ["yarn", "run", "start-ci"]

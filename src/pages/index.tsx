@@ -19,20 +19,21 @@ const GetStartedButton = ({ className = "" }) => {
 
 	return isAuthenticated ? (
 		<>
-			<CustomLink href="/dashboard">
-				<a
-					className={clsx(
-						"flex items-center justify-center px-2 lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2",
-						className,
-					)}
-				>
-					Dashboard <HiArrowRight />
-				</a>
+			<CustomLink
+				data-test="homepage-dashboard-link"
+				href="/dashboard"
+				className={clsx(
+					"flex items-center justify-center px-2 lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2",
+					className,
+				)}
+			>
+				Dashboard <HiArrowRight />
 			</CustomLink>
 		</>
 	) : (
 		<>
 			<a
+				data-test="homepage-get-started-link"
 				className={clsx(
 					"items-center px-2 w-full flex items-center justify-center lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2",
 					className,
@@ -92,6 +93,7 @@ export default function IndexPage() {
 						<ul className="flex flex-col gap-4">
 							<li className="px-6">
 								<CustomLink
+									data-test="homepage-github-link"
 									href="https://github.com/arn4v/bookmarky"
 									className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2 justify-center w-full"
 								>
@@ -101,6 +103,7 @@ export default function IndexPage() {
 							</li>
 							<li className="px-6">
 								<CustomLink
+									data-test="homepage-documentation-link"
 									href="/docs"
 									className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2 justify-center w-full"
 								>
@@ -146,12 +149,14 @@ export default function IndexPage() {
 				{!isAuthenticated ? (
 					<div className="flex justify-left lg:justify-center">
 						<a
+							data-test="homepage-login-link"
 							className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
 							href="/api/auth/login"
 						>
 							Login
 						</a>
 						<a
+							data-test="homepage-signup-link"
 							className="flex items-center px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2"
 							href="/api/auth/signup"
 						>
