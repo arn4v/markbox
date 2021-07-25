@@ -10,7 +10,7 @@ import {
 	HiOutlineLogout,
 	HiOutlineMoon,
 	HiOutlineSun,
-	HiOutlineTemplate,
+	HiOutlineTemplate
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
@@ -41,6 +41,7 @@ const ProfileDropdown = () => {
 			placement="bottom-start"
 			trigger={
 				<button
+					data-test="profile-dropdown"
 					onClick={isOpen ? onClose : onOpen}
 					data-toggle="dropdown"
 					aria-expanded={isOpen}
@@ -88,11 +89,13 @@ const ProfileDropdown = () => {
 					</button>
 				</li>
 				<li className="w-full">
-					<Link href="/api/auth/logout">
-						<a className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-200 dark:text-white">
-							Logout <HiOutlineLogout />
-						</a>
-					</Link>
+					<a
+						data-test="dropdown-logout-link"
+						href="/api/auth/logout"
+						className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-200 dark:text-white"
+					>
+						Logout <HiOutlineLogout />
+					</a>
 				</li>
 			</ul>
 		</Popup>

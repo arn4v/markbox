@@ -37,7 +37,7 @@ describe("When trying to authenticate", () => {
 		cy.wait(1500);
 	});
 
-	it("should show dashboard button if logged in", () => {
+	it.skip("should show dashboard button if logged in", () => {
 		cy.get("[data-test=homepage-get-started-link]")
 			.click()
 			.url()
@@ -45,7 +45,7 @@ describe("When trying to authenticate", () => {
 	});
 });
 
-describe("When logging in", () => {
+describe.skip("When logging in", () => {
 	before(() => {
 		cy.clearCookies().clearLocalStorage();
 	});
@@ -65,5 +65,14 @@ describe("When logging in", () => {
 		cy.wait(3000);
 
 		cy.location("pathname").should("eq", "/dashboard");
+
+		cy.get("[data-test=profile-dropdown]")
+			.click()
+			.get("[data-test=dropdown-logout-link]")
+			.click();
+
+		cy.wait(3000);
+
+		cy.location("pathname").should("eq", "/");
 	});
 });
