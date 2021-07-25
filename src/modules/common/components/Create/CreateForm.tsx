@@ -5,7 +5,7 @@ import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import {
 	useCreateBookmarkMutation,
-	useGetAllTagsQuery,
+	useGetAllTagsQuery
 } from "~/graphql/types.generated";
 
 interface Props {
@@ -64,7 +64,11 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	);
 
 	return (
-		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
+		<form
+			data-test="create-form"
+			className="flex flex-col gap-4"
+			onSubmit={onSubmit}
+		>
 			<div className="w-full">
 				<label htmlFor="title" className="block">
 					Title
@@ -176,6 +180,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 				</div>
 			</div>
 			<button
+				data-test="create-form-submit"
 				type="submit"
 				className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-gray-500 focus:ring-2 ring-offset-current ring-offset-2 focus:outline-none"
 			>

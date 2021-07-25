@@ -58,7 +58,10 @@ const BookmarkCard = ({ data }: Props) => {
 
 	return (
 		<>
-			<div className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white h-auto">
+			<li
+				data-test="bookmark-card"
+				className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white h-auto"
+			>
 				<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 					<span className="text-xs">
 						{/* Need to test the advantages/disadvantages of using IIFEs in JSX */}
@@ -99,6 +102,7 @@ const BookmarkCard = ({ data }: Props) => {
 							<button
 								onClick={onDropdownToggle}
 								aria-expanded={isDropdownOpen}
+								data-test="bookmark-menu-trigger"
 								aria-haspopup={true}
 								className="p-1 text-black transition rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none dark:text-white hidden lg:block"
 							>
@@ -109,6 +113,7 @@ const BookmarkCard = ({ data }: Props) => {
 						<ul className="flex flex-col w-48 mt-1 overflow-hidden bg-gray-100 border border-gray-300 rounded-lg dark:border-none dark:bg-gray-600">
 							<li className="w-full border-b border-gray-300 dark:border-blueGray-400">
 								<button
+									data-test="bookmark-menu-edit"
 									onClick={() => {
 										if (isLg) {
 											onDrawerOpen();
@@ -125,6 +130,7 @@ const BookmarkCard = ({ data }: Props) => {
 							</li>
 							<li className="w-full">
 								<button
+									data-test="bookmark-menu-delete"
 									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
 									onClick={() => {
 										onDeleteOpen();
@@ -161,7 +167,7 @@ const BookmarkCard = ({ data }: Props) => {
 						</button>
 					</div>
 				</div>
-			</div>
+			</li>
 			<DeleteModal
 				onClose={onDeleteClose}
 				isOpen={isDeleteOpen}

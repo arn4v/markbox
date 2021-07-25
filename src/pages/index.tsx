@@ -17,32 +17,27 @@ import useBreakpoints from "~/hooks/use-breakpoints";
 const GetStartedButton = ({ className = "" }) => {
 	const { isAuthenticated } = useAuth();
 
-	return isAuthenticated ? (
+	return (
 		<>
 			<CustomLink
 				data-test="homepage-get-started-link"
-				href="/dashboard"
+				href={isAuthenticated ? "/dashboard" : "/api/auth/login"}
 				className={clsx(
 					"flex items-center justify-center px-2 lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2",
 					className,
 				)}
 			>
-				Dashboard <HiArrowRight />
-			</CustomLink>
-		</>
-	) : (
-		<>
-			<a
-				data-test="homepage-get-started-link"
-				className={clsx(
-					"items-center px-2 w-full flex items-center justify-center lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2",
-					className,
+				{isAuthenticated ? (
+					<>
+						Dashboard <HiArrowRight />
+					</>
+				) : (
+					<>
+						Get started
+						<HiArrowRight />
+					</>
 				)}
-				href="/api/auth/login"
-			>
-				Get started
-				<HiArrowRight />
-			</a>
+			</CustomLink>
 		</>
 	);
 };

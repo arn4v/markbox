@@ -45,12 +45,14 @@ const Modal: Modal = ({
 			{isOpen && (
 				<Portal {...portalProps}>
 					<div
+						data-test="modal-root"
 						className={clsx([
 							"h-screen w-screen fixed inset-0 overflow-none z-[60]",
 							containerProps?.className,
 						])}
 					>
 						<motion.div
+							data-test="modal-overlay"
 							className={clsx([
 								"z-[60] fixed inset-0 bg-black",
 								overlayProps?.className,
@@ -85,6 +87,7 @@ export const ModalContent = React.forwardRef<
 >(({ children, className, ...props }, ref) => {
 	return (
 		<motion.div
+			data-test="modal-content"
 			ref={ref}
 			className={clsx(["absolute z-[200]", className])}
 			transition={{ type: "spring", stiffness: 350, damping: 40 }}

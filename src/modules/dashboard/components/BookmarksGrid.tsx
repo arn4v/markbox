@@ -81,7 +81,10 @@ const BookmarksGrid = (): JSX.Element => {
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
 			{result?.length > 0 ? (
-				<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+				<ul
+					data-test="bookmarks-list"
+					className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
+				>
 					{result.map((data) => (
 						<BookmarkCard key={data.id} data={data} />
 					))}
@@ -91,7 +94,7 @@ const BookmarksGrid = (): JSX.Element => {
 						isLoading={isNextPageLoading}
 						isHidden={count === result.length}
 					/>
-				</div>
+				</ul>
 			) : (
 				<>
 					<NoResultsWarning

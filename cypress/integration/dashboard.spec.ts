@@ -1,7 +1,7 @@
 describe("When no data exists", () => {
-	before(() => {
-		cy.visit("/");
+	beforeEach(() => {
 		cy.login();
+		cy.location("pathname").should("eq", "/dashboard");
 	});
 
 	it("Should show no data warning", () => {
@@ -42,6 +42,33 @@ describe("When some data is added", () => {
 		// Adds tag "Company"
 		cy.get("input[id=tag]").type("Company,");
 
-		cy.get("[data-test=create-root] > form").submit();
+		cy.get("form[data-test=create-form]").submit();
+
+		cy.location("pathname").should("eq", "/dashboard");
+
+		cy.get("[data-test=bookmark-card]").should("have.length", 1);
+	});
+
+	it("Should render delete bookmark", () => {
+		cy.get("[data-test=bookmark-menu-trigger]").should("exist").click();
+		cy.get("[data-test=bookmark-menu-delete]").should("exist").click();
+		cy.get("[data-test=modal-root]").should("exist");
+	});
+
+	it("Should render close delete bookmark modal on overlay click", () => {
+		cy.get("[data-test=bookmark-menu-trigger]").should("exist").click();
+		cy.get("[data-test=bookmark-menu-delete]").should("exist").click();
+		cy.get("[data-test=modal-root]").should("exist");
+		cy.get("[data-test=modal-overlay]").click();
+		cy.get("[data-test=modal-root]").should("not.exist");
+	});
+
+	it("Should delete bookmark", () => {
+		cy.get("[data-test=bookmark-menu-trigger]").should("exist").click();
+		cy.get("[data-test=bookmark-menu-delete]").should("exist").click();
+		cy.get("[data-test=modal-root]").should("exist");
+		cy.get("[data-test=delete-modal-submit]").click();
+		cy.get("[data-test=modal-root]").should("not.exist");
+		cy.get("[data-test=bookmark-card]").should("have.length", 0);
 	});
 });
