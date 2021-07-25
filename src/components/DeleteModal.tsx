@@ -20,7 +20,7 @@ export default function DeleteModal({
 			containerProps={{
 				className: "flex items-center justify-center z-[999]",
 			}}
-			overlayProps={{ className: "bg-black/[0.75] z-[999]" }}
+			overlayProps={{ className: "bg-black bg-opacity-75 z-[999]" }}
 		>
 			<ModalContent
 				className="z-[1000] flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"
