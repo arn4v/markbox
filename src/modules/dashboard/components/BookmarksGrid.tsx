@@ -6,12 +6,12 @@ import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
 import { Bookmark } from "~/graphql/types.generated";
 import useFuse from "~/hooks/use-fuse";
-import NoResultsWarning from "../NoResultsWarning";
 import useDashboardStore from "../store";
 import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
 import BookmarkCard from "./BookmarkCard";
 import LoadMoreButton from "./LoadMoreButton";
 import NoDataWarning from "./NoDataWarning";
+import NoResultsWarning from "./NoResultsWarning";
 import SortButton from "./SortButton";
 
 const BookmarksGrid = (): JSX.Element => {
