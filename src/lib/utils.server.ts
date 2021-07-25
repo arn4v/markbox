@@ -2,6 +2,7 @@ import { getSession } from "@auth0/nextjs-auth0";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { compare, genSalt, hash } from "bcrypt";
 import { CookieSerializeOptions, serialize } from "cookie";
+import rateLimit from "express-rate-limit";
 import { createSigner, createVerifier } from "fast-jwt";
 import ms from "ms";
 import multer from "multer";
@@ -243,3 +244,8 @@ export const createUploadMiddleware = (filenameSuffix: string) =>
 				),
 		}),
 	});
+
+export const rateLimitMiddleware = rateLimit({
+	windowMs: 60 * 10 * 1000,
+	max: 100,
+});

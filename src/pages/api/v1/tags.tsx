@@ -1,9 +1,10 @@
 import * as yup from "yup";
 import {
+	createHandler,
 	patAuthMiddleware,
 	prisma,
-	createHandler,
-	withCookies,
+	rateLimitMiddleware,
+	withCookies
 } from "~/lib/utils.server";
 import ApiRequestGQL from "~/types/ApiRequest";
 
@@ -19,6 +20,7 @@ const PatchBodySchema = yup.object().shape({
 
 const handler = createHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
+	.use(rateLimitMiddleware)
 	.patch(async (req, res) => {
 		try {
 			const body = (req.body
