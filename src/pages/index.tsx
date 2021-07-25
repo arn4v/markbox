@@ -1,14 +1,15 @@
 import clsx from "clsx";
-import Link from "next/link";
 import React from "react";
 import {
 	HiArrowRight,
 	HiMenu,
 	HiOutlineDocumentText,
-	HiX,
+	HiX
 } from "react-icons/hi";
+import { VscGithub } from "react-icons/vsc";
 import { useDisclosure } from "react-sensible";
 import { Typewriter } from "react-simple-typewriter";
+import CustomLink from "~/components/CustomLink";
 import { Logo } from "~/components/Logo";
 import { useAuth } from "~/hooks/use-auth";
 import useBreakpoints from "~/hooks/use-breakpoints";
@@ -18,7 +19,7 @@ const GetStartedButton = ({ className = "" }) => {
 
 	return isAuthenticated ? (
 		<>
-			<Link href="/dashboard">
+			<CustomLink href="/dashboard">
 				<a
 					className={clsx(
 						"flex items-center justify-center px-2 lg:px-6 py-2 mt-auto font-semibold text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2",
@@ -27,7 +28,7 @@ const GetStartedButton = ({ className = "" }) => {
 				>
 					Dashboard <HiArrowRight />
 				</a>
-			</Link>
+			</CustomLink>
 		</>
 	) : (
 		<>
@@ -61,7 +62,7 @@ export default function IndexPage() {
 			<header className="sticky top-0 w-full border-b dark:border-gray-700 bg-transparent z-50 backdrop-filter backdrop-blur-lg">
 				<div className="flex items-center justify-between lg:px-8 h-20 w-full px-4 lg:w-5/6 mx-auto">
 					<Logo className="text-black dark:text-white" />
-					<nav className="flex items-center gap-6">
+					<nav className="flex items-center gap-8">
 						<button onClick={onToggle} className="block lg:hidden">
 							{isOpen ? (
 								<HiX className="h-6 w-6" />
@@ -69,29 +70,45 @@ export default function IndexPage() {
 								<HiMenu className="h-6 w-6" />
 							)}
 						</button>
-						<Link href="/docs">
-							<a className="hidden rounded-lg lg:block dark:text-white font-bold text-gray-700 hover:text-black">
-								Docs
-							</a>
-						</Link>
+						<CustomLink
+							href="https://github.com/arn4v/bookmarky"
+							className="hidden rounded-lg dark:text-white font-bold text-gray-700 hover:text-black lg:flex items-center gap-2"
+						>
+							GitHub
+							<VscGithub />
+						</CustomLink>
+						<CustomLink
+							href="/docs"
+							className="hidden rounded-lg dark:text-white font-bold text-gray-700 hover:text-black lg:flex items-center gap-2"
+						>
+							Documentation
+							<HiOutlineDocumentText />
+						</CustomLink>
 						<GetStartedButton className="hidden lg:flex" />
 					</nav>
 				</div>
 				{isOpen ? (
 					<div className="w-full backdrop-filter backdrop-blur-lg mb-8">
-						<ul className="flex flex-col">
+						<ul className="flex flex-col gap-4">
 							<li className="px-6">
-								<Link href="/docs">
-									<a
-										className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2 justify-center w-full"
-										href="/api/auth/login"
-									>
-										Docs
-										<HiOutlineDocumentText />
-									</a>
-								</Link>
+								<CustomLink
+									href="https://github.com/arn4v/bookmarky"
+									className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2 justify-center w-full"
+								>
+									GitHub
+									<VscGithub />
+								</CustomLink>
 							</li>
-							<li className="px-6 mt-4">
+							<li className="px-6">
+								<CustomLink
+									href="/docs"
+									className="flex items-center px-6 py-2 mt-auto mr-3 font-semibold text-blue-800 transition duration-500 ease-in-out transform bg-blue-100 rounded-lg hover:bg-blue-200 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 gap-2 justify-center w-full"
+								>
+									Documentation
+									<HiOutlineDocumentText />
+								</CustomLink>
+							</li>
+							<li className="px-6">
 								<GetStartedButton />
 							</li>
 						</ul>
