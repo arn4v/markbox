@@ -165,7 +165,10 @@ const BookmarkCard = ({ data }: Props) => {
 			<DeleteModal
 				onClose={onDeleteClose}
 				isOpen={isDeleteOpen}
-				onDelete={() => mutate({ id: data?.id })}
+				onDelete={() => {
+					mutate({ id: data?.id });
+					onDeleteClose();
+				}}
 			/>
 			<EditDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} id={data?.id} />
 		</>
