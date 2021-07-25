@@ -8,7 +8,10 @@ const NoDataWarning = ({ isVisible }) => {
 	if (!isVisible) return null;
 
 	return (
-		<div className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white">
+		<div
+			data-test="dashboard-no-data-warning"
+			className="flex flex-col items-center justify-center gap-8 py-8 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white"
+		>
 			<span className="text-xl font-medium text-center">
 				You don&apos;t have any bookmarks yet.
 			</span>

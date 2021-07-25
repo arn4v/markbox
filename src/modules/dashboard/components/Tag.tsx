@@ -30,7 +30,10 @@ export default function Tag({
 	const { tag, setTag } = useDashboardStore();
 
 	return (
-		<li className={clsx(["flex w-full gap-4 items-center"])}>
+		<li
+			data-test="dashboard-tag"
+			className={clsx(["flex w-full gap-4 items-center"])}
+		>
 			<button
 				onClick={() => {
 					setTag(data.name);
