@@ -6,7 +6,7 @@ import {
 	HiOutlineMenu,
 	HiOutlineTrash,
 	HiPencil,
-	HiTrash,
+	HiTrash
 } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import { useDisclosure } from "react-sensible";
@@ -128,6 +128,7 @@ const BookmarkCard = ({ data }: Props) => {
 									className="flex items-center justify-center w-full gap-2 py-2 transition dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-300"
 									onClick={() => {
 										onDeleteOpen();
+										onDropdownClose();
 									}}
 								>
 									Delete <HiTrash />
