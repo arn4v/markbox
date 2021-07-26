@@ -7,7 +7,11 @@ import useDashboardStore from "../store";
 import Tag from "./Tag";
 
 export default function TagsList() {
-	const { isEnabled, onDisable, tag } = useDashboardStore((state) => ({
+	const {
+		isEnabled,
+		onDisable,
+		tag: activeTag,
+	} = useDashboardStore((state) => ({
 		...state.edit_mode,
 		tag: state.tag,
 	}));
@@ -30,7 +34,11 @@ export default function TagsList() {
 		},
 	});
 	const { isLg } = useBreakpoints();
+	const activeTagData = React.useMemo(() => {
+		return data?.tags.find((item) => item.name === activeTag);
+	}, [data?.tags, activeTag]);
 
+	// Disable edit mode on mobile if it is enabled
 	React.useEffect(() => {
 		if (!isLg && isEnabled) onDisable();
 	}, [isEnabled, isLg, onDisable]);
@@ -52,30 +60,34 @@ export default function TagsList() {
 					<Tag
 						isEditModeEnabled={false}
 						data={{ id: undefined, name: "All" }}
-						isActive={tag === "All"}
+						isActive={activeTag === "All"}
+					/>
+				) : null}
+				{activeTag !== "All" ? (
+					<Tag
+						isEditModeEnabled={isEnabled}
+						data={activeTagData}
+						isActive={true}
 					/>
 				) : null}
 				{result?.length > 0 ? (
-					result
-						?.sort((a, b) => {
-							return (Number(b.name === tag) - Number(a.name === tag)) * 2 - 1;
-						})
-						.map((item) => {
-							return (
-								<Tag
-									key={item.id}
-									data={item}
-									isActive={item.name === tag}
-									isEditModeEnabled={isEnabled}
-								/>
-							);
-						})
+					result.map((item) => {
+						if (item.name === activeTag) return null;
+						return (
+							<Tag
+								key={item.id}
+								data={item}
+								isActive={item.name === activeTag}
+								isEditModeEnabled={isEnabled}
+							/>
+						);
+					})
 				) : !isLoading && search.length > 0 ? (
 					<div
 						data-test="no-tags-search-warning"
 						className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded"
 					>
-						Couldn't find any results for query {`"${search}"`}, try again.
+						Couldn&apos;t find any results for query {`"${search}"`}, try again.
 					</div>
 				) : null}
 			</ul>
