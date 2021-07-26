@@ -56,16 +56,20 @@ export default function TagsList() {
 					/>
 				) : null}
 				{result?.length > 0 ? (
-					result?.map((item) => {
-						return (
-							<Tag
-								key={item.id}
-								data={item}
-								isActive={item.name === tag}
-								isEditModeEnabled={isEnabled}
-							/>
-						);
-					})
+					result
+						?.sort((a, b) => {
+							return (Number(b.name === tag) - Number(a.name === tag)) * 2 - 1;
+						})
+						.map((item) => {
+							return (
+								<Tag
+									key={item.id}
+									data={item}
+									isActive={item.name === tag}
+									isEditModeEnabled={isEnabled}
+								/>
+							);
+						})
 				) : !isLoading && search.length > 0 ? (
 					<div
 						data-test="no-tags-search-warning"
