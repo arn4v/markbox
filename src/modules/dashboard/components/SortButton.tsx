@@ -1,7 +1,8 @@
+import clsx from "clsx";
 import * as React from "react";
 import {
 	HiOutlineSortAscending,
-	HiOutlineSortDescending,
+	HiOutlineSortDescending
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
@@ -30,7 +31,7 @@ const SortButton = () => {
 				</button>
 			}
 		>
-			<ul className="flex flex-col space-y-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 mt-2">
+			<ul className="flex flex-col divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mt-2">
 				<SortItem type="created_at_desc">Created at: Descending</SortItem>
 				<SortItem type="created_at_asc">Created at: Ascending</SortItem>
 				<SortItem type="updated_at_desc">Updated at: Descending</SortItem>
@@ -49,7 +50,11 @@ const SortItem = ({ type, children }: SortItemProps) => {
 	const { setSort, sort } = useDashboardStore();
 
 	return (
-		<li className="flex items-center justify-between space-x-4 whitespace-nowrap">
+		<li
+			className={clsx(
+				"flex items-center justify-between space-x-4 whitespace-nowrap dark:text-white py-2 px-4",
+			)}
+		>
 			<span>{children}</span>
 			<input
 				type="radio"
