@@ -49,26 +49,48 @@ describe("When some data is added", () => {
 		cy.get("[data-test=bookmark-card]").should("have.length", 1);
 	});
 
-	it("Should render delete bookmark", () => {
+	it("Should render delete bookmark modal", () => {
 		cy.get("[data-test=bookmark-menu-trigger]").should("exist").click();
 		cy.get("[data-test=bookmark-menu-delete]").should("exist").click();
 		cy.get("[data-test=modal-root]").should("exist");
 	});
 
 	it("Should render close delete bookmark modal on overlay click", () => {
+		// Menu button should exist
 		cy.get("[data-test=bookmark-menu-trigger]").should("exist").click();
+
+		// Delete button should exist
 		cy.get("[data-test=bookmark-menu-delete]").should("exist").click();
+
+		// Modal should exist
 		cy.get("[data-test=modal-root]").should("exist");
-		cy.get("[data-test=modal-overlay]").click();
+
+		// Modal overlay click should close modal
+		cy.get("[data-test=modal-overlay]").trigger("click", { force: true });
+
+		// Modal should be closed
 		cy.get("[data-test=modal-root]").should("not.exist");
 	});
 
 	it("Should delete bookmark", () => {
+		// Click menu
 		cy.get("[data-test=bookmark-menu-trigger]").should("exist").click();
+
+		// Click delete button in menu
 		cy.get("[data-test=bookmark-menu-delete]").should("exist").click();
+
+		// Check if modal has opened
 		cy.get("[data-test=modal-root]").should("exist");
+
+		// Click delete button in modal
 		cy.get("[data-test=delete-modal-submit]").click();
+
+		// Check if modal has closed
 		cy.get("[data-test=modal-root]").should("not.exist");
+
+		cy.reload();
+
+		// Bookmarks should now be 0
 		cy.get("[data-test=bookmark-card]").should("have.length", 0);
 	});
 });

@@ -12,8 +12,6 @@ describe("When not authenticated", () => {
 	it("should show login, signup and get started button if not logged in", () => {
 		cy.visit("/");
 
-		cy.viewport(1920, 1080);
-
 		cy.get("[data-test=homepage-login-link]")
 			.should("have.attr", "href")
 			.should("equal", "/api/auth/login");
