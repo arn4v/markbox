@@ -31,8 +31,12 @@ const BookmarksGrid = (): JSX.Element => {
 		React.useState<boolean>(false);
 
 	const loadMore = React.useCallback(() => {
-		setNextPageLoading(true);
+		const timer = setTimeout(() => setNextPageLoading(true), 500);
 		fetchNextPage();
+		return () => {
+			clearTimeout(timer);
+			setNextPageLoading(false);
+		};
 	}, [fetchNextPage]);
 
 	React.useEffect(() => {
