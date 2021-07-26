@@ -42,6 +42,7 @@ export default function TagsList() {
 				onChange={(e) => setSearch(e.target.value)}
 				className="mb-2 w-full px-2 py-2"
 				placeholder="Search tags..."
+				data-test="tag-search-input"
 			/>
 			<ul
 				data-test="dashboard-tags-list"
@@ -65,8 +66,11 @@ export default function TagsList() {
 							/>
 						);
 					})
-				) : !isLoading ? (
-					<div className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded">
+				) : !isLoading && search.length > 0 ? (
+					<div
+						data-test="no-tags-search-warning"
+						className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded"
+					>
 						Couldn't find any results for query {`"${search}"`}, try again.
 					</div>
 				) : null}

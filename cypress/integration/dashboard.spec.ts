@@ -1,3 +1,5 @@
+import sel from "../selectors";
+
 describe("When no data exists", () => {
 	beforeEach(() => {
 		cy.login();
@@ -5,16 +7,22 @@ describe("When no data exists", () => {
 	});
 
 	it("Should show no data warning", () => {
-		cy.get("[data-test=dashboard-no-data-warning]");
+		cy.get(sel.NO_BOOKMARKS_DATA_WARNING).should("exist");
 	});
 
 	it('Should only have "All" tag', () => {
-		cy.get("[data-test=dashboard-tag]").should("have.length", 1);
-		cy.get("[data-test=dashboard-tag]").eq(0).contains("All");
+		cy.get(sel.TAG).should("have.length", 1);
+		cy.get(sel.TAG).eq(0).contains("All");
+	});
+
+	it("Should not show no results warning in Tags List", () => {
+		cy.get(sel.NO_TAGS_SEARCH_WARNING).should("not.exist");
 	});
 });
 
-describe("When some data is added", () => {
+describe("When a bookmark is added", () => {
+	const getSidebarTags = () => cy.get("[data-test=dashboard-tag]");
+
 	beforeEach(() => {
 		cy.login();
 		cy.location("pathname").should("eq", "/dashboard");
@@ -22,16 +30,16 @@ describe("When some data is added", () => {
 	});
 
 	it("Should render create bookmark button", () => {
-		cy.get("[data-test=create-bookmark-button]").should("exist");
+		cy.get(sel.CREATE_BOOKMARK_BUTTON).should("exist");
 	});
 
 	it("Should render create bookmark drawer on button click", () => {
-		cy.get("[data-test=create-bookmark-button]").eq(0).click();
+		cy.get(sel.CREATE_BOOKMARK_BUTTON).eq(0).click();
 		cy.location("pathname").should("eq", "/create");
 	});
 
 	it("Should create a bookmark", () => {
-		cy.get("[data-test=create-bookmark-button]").eq(0).click();
+		cy.get(sel.CREATE_BOOKMARK_BUTTON).eq(0).click();
 		cy.location("pathname").should("eq", "/create");
 
 		cy.get("input[id=title]").type("Vercel");
@@ -43,11 +51,21 @@ describe("When some data is added", () => {
 		// Adds tag "Company"
 		cy.get("input[id=tag]").type("Company,");
 
-		cy.get("form[data-test=create-form]").submit();
+		cy.get(sel.CREATE_FORM).submit();
 
 		cy.location("pathname").should("eq", "/dashboard");
 
-		cy.get("[data-test=bookmark-card]").should("have.length", 1);
+		cy.get(sel.BOOKMARK_CARD).should("have.length", 1);
+	});
+
+	it('Should render "All", "Company" and "Dev Tools" tags in Tags List', () => {
+		cy.get(sel.TAG).should("have.length", 3);
+
+		cy.get(sel.TAG).eq(0).invoke("text").should("eq", "All");
+
+		cy.get(sel.TAG).eq(1).invoke("text").should("eq", "Company");
+
+		cy.get(sel.TAG).eq(2).invoke("text").should("eq", "Dev Tools");
 	});
 
 	it("Should render delete bookmark modal", () => {
@@ -131,7 +149,7 @@ describe("When some data is added", () => {
 	});
 
 	it("Should remove Company tag from bookmark", () => {
-		cy.get("[data-test=tag-badge]").should("have.length", 2);
+		cy.get().should("have.length", 2);
 
 		cy.get("[data-test=bookmark-menu-trigger]").eq(0).should("exist").click();
 
