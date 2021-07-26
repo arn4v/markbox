@@ -3,20 +3,16 @@ import * as React from "react";
 import { HiX } from "react-icons/hi";
 import { mergeRefs } from "~/lib/react";
 
-type ShowClearProps =
-	| {
-			showClear?: false;
-			onClear: never;
-	  }
-	| {
-			showClear: true;
-			onClear: () => void | Promise<void>;
-	  };
+type Props = JSX.IntrinsicElements["input"] & {
+	showClear?: boolean;
+	onClear?: () => void | Promise<void>;
+};
 
-type Props = JSX.IntrinsicElements["input"] & ShowClearProps;
-
-const Input = React.forwardRef<HTMLInputElement, Props>(
-	({ className, ...props }, theirRef) => {
+const Input = React.forwardRef(
+	(
+		{ className, ...props }: Props,
+		theirRef: React.MutableRefObject<HTMLInputElement>,
+	) => {
 		const ref = React.useRef<HTMLInputElement>(null);
 
 		const inputElement = React.useMemo(() => {
@@ -45,7 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
 							])}
 							onClick={() => {
 								ref.current.value = "";
-								props.onClear();
+								if (props.onClear) props.onClear();
 							}}
 						>
 							<HiX />
