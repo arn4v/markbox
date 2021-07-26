@@ -9,7 +9,7 @@ import {
 	Tag,
 	useGetAllTagsQuery,
 	useGetBookmarkQuery,
-	useUpdateBookmarkMutation,
+	useUpdateBookmarkMutation
 } from "~/graphql/types.generated";
 
 interface LocalState {
@@ -133,12 +133,17 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	);
 
 	return (
-		<form className="flex flex-col gap-4" onSubmit={onSubmit}>
+		<form
+			data-test="edit-form"
+			className="flex flex-col gap-4"
+			onSubmit={onSubmit}
+		>
 			<div className="w-full">
 				<label htmlFor="title" className="block">
 					Title
 				</label>
 				<Input
+					data-test="edit-title"
 					id="title"
 					autoComplete="off"
 					type="text"
@@ -154,6 +159,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					URL
 				</label>
 				<Input
+					data-test="edit-url"
 					id="url"
 					type="url"
 					className="block w-full mt-2"
@@ -169,6 +175,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					Description
 				</label>
 				<Input
+					data-test="edit-description"
 					id="description"
 					type="text"
 					className="block w-full h-10 mt-2"
@@ -186,11 +193,13 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					{Object.values(state.tags).map((item) => {
 						return (
 							<Badge
+								data-test="edit-tag-badge"
 								key={item.name}
 								title={item?.name}
 								className="z-50 dark:bg-gray-900 dark:border-gray-600 border border-gray-300"
 							>
 								<button
+									data-test="edit-tag-delete"
 									type="button"
 									onClick={() => {
 										setState((prev) => {
@@ -215,6 +224,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 				</div>
 				<div className="flex w-full gap-6 mt-2">
 					<Input
+						data-test="edit-tag"
 						id="tag"
 						ref={newTagInputRef}
 						type="text"
@@ -248,6 +258,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 				</div>
 			</div>
 			<button
+				data-test="edit-submit"
 				type="submit"
 				className="px-4 py-2 mt-4 ml-auto text-white transition bg-blue-600 rounded-md ring-offset-current ring-offset-2 focus:ring-2 hover:bg-blue-700 dark:bg-gray-600 dark:hover:bg-gray-500 focus:outline-none"
 			>

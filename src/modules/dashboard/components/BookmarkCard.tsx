@@ -70,11 +70,15 @@ const BookmarkCard = ({ data }: Props) => {
 							"h:mmaa",
 						)}`}
 					</span>
-					<div className="w-5/6 text-sm font-medium break-words">
+					<div
+						data-test="bookmark-title"
+						className="w-5/6 text-sm font-medium break-words"
+					>
 						{data?.title}
 					</div>
 					<a
 						href={data?.url}
+						data-test="bookmark-url"
 						target="_blank"
 						rel="noreferrer"
 						className="w-3/4 text-xs text-gray-500 dark:text-gray-400 truncate whitespace-nowrap hover:text-gray-700 transition dark:hover:text-gray-300"
@@ -85,6 +89,7 @@ const BookmarkCard = ({ data }: Props) => {
 						{Object.values(data?.tags).map((item) => {
 							return (
 								<Badge
+									data-test="tag-badge"
 									key={item.id}
 									title={item.name}
 									className="dark:bg-gray-800 border dark:border-gray-600 border-gray-300 bg-white"

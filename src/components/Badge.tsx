@@ -1,21 +1,23 @@
 import clsx from "clsx";
 import * as React from "react";
 
-interface Props {
+type Props = JSX.IntrinsicElements["div"] & {
 	className?: string;
 	title: string;
 	children?: React.ReactNode;
-}
+};
 
 const Badge = React.forwardRef<HTMLDivElement, Props>(
-	({ className = "", title, children }, ref) => {
+	({ className = "", title, children, ...props }, ref) => {
 		return (
 			<div
+				data-test="badge"
 				ref={ref}
 				className={clsx([
 					"flex gap-1.5 px-2 py-1 text-xs font-medium dark:text-white items-center justify-center uppercase rounded-full",
 					className,
 				])}
+				{...props}
 			>
 				{title}
 				{children}
