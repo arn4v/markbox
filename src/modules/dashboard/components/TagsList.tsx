@@ -25,10 +25,10 @@ export default function TagsList() {
 			},
 		},
 	);
-	const [search, setSearch] = React.useState("");
+	const [query, setQuery] = React.useState("");
 	const { result } = useFuse<TagType>({
 		data: data?.tags?.sort((a, b) => a.name.localeCompare(b.name)),
-		query: search,
+		query: query,
 		options: {
 			keys: ["name"],
 		},
@@ -46,11 +46,13 @@ export default function TagsList() {
 	return (
 		<>
 			<Input
-				value={search}
-				onChange={(e) => setSearch(e.target.value)}
-				className="mb-2 w-full px-2 py-2"
+				value={query}
+				onChange={(e) => setQuery(e.target.value)}
+				className="w-full px-2 py-2"
 				placeholder="Search tags..."
 				data-test="tag-search-input"
+				showClear
+				onClear={() => setQuery("")}
 			/>
 			<ul
 				data-test="dashboard-tags-list"
@@ -82,12 +84,12 @@ export default function TagsList() {
 							/>
 						);
 					})
-				) : !isLoading && search.length > 0 ? (
+				) : !isLoading && query.length > 0 ? (
 					<div
 						data-test="no-tags-search-warning"
 						className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 w-full p-6 flex items-center justify-center rounded"
 					>
-						Couldn&apos;t find any results for query {`"${search}"`}, try again.
+						Couldn&apos;t find any results for query {`"${query}"`}, try again.
 					</div>
 				) : null}
 			</ul>

@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import * as React from "react";
-import { HiX } from "react-icons/hi";
 import { useInView } from "react-intersection-observer";
 import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
@@ -54,31 +53,21 @@ const BookmarksGrid = (): JSX.Element => {
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
 			<div className="flex space-x-4 lg:space-x-6 items-center">
-				<div className="relative w-full">
-					<Input
-						type="text"
-						value={query}
-						onChange={(e) => {
-							setQuery(e.target.value);
-						}}
-						ref={queryRef}
-						placeholder="Search bookmarks..."
-						className={clsx([
-							"rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full focus:border-transparent",
-						])}
-						autoComplete="off"
-					/>
-					{query.length > 0 ? (
-						<button
-							className={clsx([
-								"bg-transparent text-gray-500 px-2 absolute right-0 top-0 h-full",
-							])}
-							onClick={() => setQuery("")}
-						>
-							<HiX />
-						</button>
-					) : null}
-				</div>
+				<Input
+					type="text"
+					value={query}
+					onChange={(e) => {
+						setQuery(e.target.value);
+					}}
+					ref={queryRef}
+					placeholder="Search bookmarks..."
+					className={clsx([
+						"rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:caret-white dark:text-white flex group focus:ring-2 ring-offset-2 ring-offset-blue-600 overflow-hidden w-full focus:border-transparent",
+					])}
+					autoComplete="off"
+					showClear
+					onClear={() => setQuery("")}
+				/>
 				<SortButton />
 			</div>
 			{tag && tag !== "All" && (
