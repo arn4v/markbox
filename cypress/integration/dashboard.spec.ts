@@ -18,6 +18,7 @@ describe("When some data is added", () => {
 	beforeEach(() => {
 		cy.login();
 		cy.location("pathname").should("eq", "/dashboard");
+		cy.reload();
 	});
 
 	it("Should render create bookmark button", () => {
@@ -129,7 +130,7 @@ describe("When some data is added", () => {
 			.should("eq", "https://netlify.com");
 	});
 
-	it("Should remove Dev Tools tag from bookmark", () => {
+	it("Should remove Company tag from bookmark", () => {
 		cy.get("[data-test=tag-badge]").should("have.length", 2);
 
 		cy.get("[data-test=bookmark-menu-trigger]").eq(0).should("exist").click();
@@ -141,9 +142,22 @@ describe("When some data is added", () => {
 
 		cy.get("[data-test=edit-tag-badge]").should("have.length", 2);
 
-		cy.get("[data-test=edit-tag-badge]").should("have.length", 2).eq(0).click();
+		cy.get("[data-test=edit-tag-delete]").eq(0).click();
 
-		cy.get("[data-test=edit-tag-badge]").should("have.length", 1);
+		cy.get("[data-test=edit-tag-badge]")
+			.should("have.length", 1)
+			.eq(0)
+			.invoke("text")
+			.should("eq", "Dev Tools");
+
+		cy.get("[data-test=edit-form").submit();
+
+		cy.reload();
+
+		cy.get("[data-test=tag-badge")
+			.should("have.length", 1)
+			.invoke("text")
+			.should("eq", "Dev Tools");
 	});
 
 	it("Should delete bookmark", () => {
