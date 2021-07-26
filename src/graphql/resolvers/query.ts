@@ -203,28 +203,15 @@ const Query: QueryResolvers<GQLContext> = {
 	},
 	async bookmarksCount(_, { tagName }, { req, res, prisma }) {
 		const userId = await protectResolver(req, res);
-		let tagId: string;
-
-		if (typeof tagName === "string")
-			tagId = (
-				await prisma.tag.findFirst({
-					where: {
-						name: tagName,
-						userId,
-					},
-					select: {
-						id: true,
-					},
-				})
-			).id;
 
 		const count = await prisma.bookmark.count({
 			where:
-				typeof tagId === "string"
+				typeof tagName === "string"
 					? {
 							tags: {
-								every: {
-									id: tagId,
+								some: {
+									name: tagName,
+									userId,
 								},
 							},
 							userId,

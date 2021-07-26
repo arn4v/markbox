@@ -20,7 +20,7 @@ const BookmarksGrid = (): JSX.Element => {
 	const [query, setQuery] = React.useState<string>("");
 	const { data, count, isLoading, fetchNextPage } = useInfiniteBookmarksQuery();
 	const { result } = useFuse<Bookmark>({
-		data: data ?? [],
+		data: data,
 		query,
 		options: {
 			keys: ["title", "url", "tags.name"],
@@ -84,6 +84,9 @@ const BookmarksGrid = (): JSX.Element => {
 			{tag && tag !== "All" && (
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
+			<div className="text-base font-medium -mt-4">
+				Showing <span className="font-bold">{count}</span> results
+			</div>
 			{result?.length > 0 ? (
 				<ul
 					data-test="bookmarks-list"
@@ -96,7 +99,7 @@ const BookmarksGrid = (): JSX.Element => {
 						ref={ref}
 						onClick={loadMore}
 						isLoading={isNextPageLoading}
-						isHidden={count === result.length}
+						isHidden={count === data.length}
 					/>
 				</ul>
 			) : (
