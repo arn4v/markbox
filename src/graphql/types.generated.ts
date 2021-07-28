@@ -52,6 +52,7 @@ export type Bookmark = {
 	description: Scalars["String"];
 	url: Scalars["String"];
 	tags: Array<Tag>;
+	isFavourite: Scalars["Boolean"];
 	createdAt: Scalars["String"];
 	updatedAt: Scalars["String"];
 };
@@ -110,6 +111,7 @@ export type Mutation = {
 	generateToken: GeneratedAccessToken;
 	updateToken: AccessToken;
 	deleteToken: Scalars["Boolean"];
+	updateFavourite: Scalars["Boolean"];
 	updateProfile: Scalars["Boolean"];
 };
 
@@ -145,6 +147,11 @@ export type MutationUpdateTokenArgs = {
 
 export type MutationDeleteTokenArgs = {
 	id: Scalars["ID"];
+};
+
+export type MutationUpdateFavouriteArgs = {
+	id: Scalars["ID"];
+	isFavourite: Scalars["Boolean"];
 };
 
 export type MutationUpdateProfileArgs = {
@@ -304,6 +311,16 @@ export type UpdateBookmarkMutation = {
 	};
 };
 
+export type UpdateFavouriteMutationVariables = Exact<{
+	id: Scalars["ID"];
+	isFavourite: Scalars["Boolean"];
+}>;
+
+export type UpdateFavouriteMutation = {
+	__typename?: "Mutation";
+	updateFavourite: boolean;
+};
+
 export type UpdateProfileMutationVariables = Exact<{
 	input: UpdateProfileInput;
 }>;
@@ -345,8 +362,9 @@ export type GetAllBookmarksQuery = {
 			__typename?: "Bookmark";
 			id: string;
 			title: string;
-			description: string;
 			url: string;
+			description: string;
+			isFavourite: boolean;
 			createdAt: string;
 			updatedAt: string;
 			tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
@@ -560,6 +578,7 @@ export type ResolversTypes = {
 	String: ResolverTypeWrapper<Scalars["String"]>;
 	AuthenticationMessage: ResolverTypeWrapper<AuthenticationMessage>;
 	Bookmark: ResolverTypeWrapper<Bookmark>;
+	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	ChangePasswordMessage: ResolverTypeWrapper<ChangePasswordMessage>;
 	CreateBookmarkInput: CreateBookmarkInput;
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
@@ -568,7 +587,6 @@ export type ResolversTypes = {
 	GetBookmarksData: ResolverTypeWrapper<GetBookmarksData>;
 	LoginMessage: ResolverTypeWrapper<LoginMessage>;
 	Mutation: ResolverTypeWrapper<{}>;
-	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Query: ResolverTypeWrapper<{}>;
 	Int: ResolverTypeWrapper<Scalars["Int"]>;
 	RenameTagInput: RenameTagInput;
@@ -585,6 +603,7 @@ export type ResolversParentTypes = {
 	String: Scalars["String"];
 	AuthenticationMessage: AuthenticationMessage;
 	Bookmark: Bookmark;
+	Boolean: Scalars["Boolean"];
 	ChangePasswordMessage: ChangePasswordMessage;
 	CreateBookmarkInput: CreateBookmarkInput;
 	CreateOrUpdateBookmarkTagInput: CreateOrUpdateBookmarkTagInput;
@@ -593,7 +612,6 @@ export type ResolversParentTypes = {
 	GetBookmarksData: GetBookmarksData;
 	LoginMessage: LoginMessage;
 	Mutation: {};
-	Boolean: Scalars["Boolean"];
 	Query: {};
 	Int: Scalars["Int"];
 	RenameTagInput: RenameTagInput;
@@ -632,6 +650,7 @@ export type BookmarkResolvers<
 	description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
+	isFavourite?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -732,6 +751,12 @@ export type MutationResolvers<
 		ParentType,
 		ContextType,
 		RequireFields<MutationDeleteTokenArgs, "id">
+	>;
+	updateFavourite?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationUpdateFavouriteArgs, "id" | "isFavourite">
 	>;
 	updateProfile?: Resolver<
 		ResolversTypes["Boolean"],
@@ -1026,6 +1051,35 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 			)(),
 		options,
 	);
+export const UpdateFavouriteDocument = `
+    mutation UpdateFavourite($id: ID!, $isFavourite: Boolean!) {
+  updateFavourite(id: $id, isFavourite: $isFavourite)
+}
+    `;
+export const useUpdateFavouriteMutation = <
+	TError = unknown,
+	TContext = unknown,
+>(
+	options?: UseMutationOptions<
+		UpdateFavouriteMutation,
+		TError,
+		UpdateFavouriteMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<
+		UpdateFavouriteMutation,
+		TError,
+		UpdateFavouriteMutationVariables,
+		TContext
+	>(
+		(variables?: UpdateFavouriteMutationVariables) =>
+			fetcher<UpdateFavouriteMutation, UpdateFavouriteMutationVariables>(
+				UpdateFavouriteDocument,
+				variables,
+			)(),
+		options,
+	);
 export const UpdateProfileDocument = `
     mutation UpdateProfile($input: UpdateProfileInput!) {
   updateProfile(input: $input)
@@ -1091,8 +1145,9 @@ export const GetAllBookmarksDocument = `
     data {
       id
       title
-      description
       url
+      description
+      isFavourite
       tags {
         id
         name

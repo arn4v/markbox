@@ -7,6 +7,7 @@ export default gql`
 		description: String!
 		url: String!
 		tags: [Tag!]!
+		isFavourite: Boolean!
 		createdAt: String!
 		updatedAt: String!
 	}
@@ -119,6 +120,7 @@ export default gql`
 		generateToken(name: String!, scopes: [String!]!): GeneratedAccessToken!
 		updateToken(id: ID!, scopes: [String!]!): AccessToken!
 		deleteToken(id: ID!): Boolean!
+		updateFavourite(id: ID!, isFavourite: Boolean!): Boolean!
 		updateProfile(input: UpdateProfileInput!): Boolean!
 	}
 `;

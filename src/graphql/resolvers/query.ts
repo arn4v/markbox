@@ -14,6 +14,7 @@ const Query: QueryResolvers<GQLContext> = {
 			description,
 			createdAt,
 			updatedAt,
+			isFavourite,
 			url,
 			tags,
 		} = await prisma.bookmark.findFirst({
@@ -34,6 +35,7 @@ const Query: QueryResolvers<GQLContext> = {
 			title,
 			description,
 			url,
+			isFavourite,
 			tags,
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
@@ -95,15 +97,27 @@ const Query: QueryResolvers<GQLContext> = {
 					  }
 					: {}),
 			})
-		).map(({ id, url, title, description, createdAt, updatedAt, tags }) => ({
-			id,
-			url,
-			title,
-			description,
-			tags: tags.map((item) => ({ id: item.id, name: item.name })),
-			createdAt: createdAt.toISOString(),
-			updatedAt: updatedAt.toISOString(),
-		}));
+		).map(
+			({
+				id,
+				url,
+				title,
+				description,
+				isFavourite,
+				createdAt,
+				updatedAt,
+				tags,
+			}) => ({
+				id,
+				url,
+				title,
+				description,
+				isFavourite,
+				tags: tags.map((item) => ({ id: item.id, name: item.name })),
+				createdAt: createdAt.toISOString(),
+				updatedAt: updatedAt.toISOString(),
+			}),
+		);
 
 		return {
 			data: bookmarks,

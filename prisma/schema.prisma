@@ -55,6 +55,7 @@ model Bookmark {
   id          String   @id @default(uuid())
   title       String   @db.VarChar(1000)
   url         String   @db.VarChar(1000)
+  isFavourite Boolean  @default(false) @map("is_favourite")
   description String   @default("") @db.VarChar(1000)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")

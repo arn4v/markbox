@@ -4,8 +4,10 @@ import * as React from "react";
 import {
 	HiOutlineExternalLink,
 	HiOutlineMenu,
+	HiOutlineStar,
 	HiOutlineTrash,
 	HiPencil,
+	HiStar,
 	HiTrash
 } from "react-icons/hi";
 import { useQueryClient } from "react-query";
@@ -13,7 +15,11 @@ import { useDisclosure } from "react-sensible";
 import Badge from "~/components/Badge";
 import DeleteModal from "~/components/DeleteModal";
 import Popup from "~/components/Popup";
-import { Bookmark, useDeleteBookmarkMutation } from "~/graphql/types.generated";
+import {
+	Bookmark,
+	useDeleteBookmarkMutation,
+	useUpdateFavouriteMutation
+} from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { EditDrawer } from "~/modules/common/components/Edit";
 
@@ -34,6 +40,11 @@ const BookmarkCard = ({ data }: Props) => {
 			queryClient.invalidateQueries("GetAllTags");
 		},
 	});
+	const { mutate: updateFavourite } = useUpdateFavouriteMutation({
+		onSuccess() {
+			queryClient.invalidateQueries("GetAllBookmarks");
+		},
+	});
 	const {
 		isOpen: isDropdownOpen,
 		onClose: onDropdownClose,
@@ -51,6 +62,13 @@ const BookmarkCard = ({ data }: Props) => {
 	);
 	const { isLg } = useBreakpoints();
 	const router = useRouter();
+
+	const onFavourite = React.useCallback(() => {
+		return updateFavourite({
+			id: data?.id,
+			isFavourite: !data?.isFavourite,
+		});
+	}, [data?.id, data?.isFavourite, updateFavourite]);
 
 	React.useEffect(() => {
 		if (isDrawerOpen && isLg) onDrawerOpen();
@@ -98,7 +116,14 @@ const BookmarkCard = ({ data }: Props) => {
 						})}
 					</div>
 				</div>
-				<div className="flex flex-col items-end w-1/6 gap-3">
+				<div className="flex flex-col items-center gap-3">
+					<button onClick={onFavourite}>
+						{data.isFavourite ? (
+							<HiStar className="text-yellow-500 h-4 w-4" />
+						) : (
+							<HiOutlineStar className="h-4 w-4" />
+						)}
+					</button>
 					<Popup
 						isOpen={isDropdownOpen}
 						onDismiss={onDropdownClose}

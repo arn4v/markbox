@@ -81,9 +81,14 @@ const BookmarksGrid = (): JSX.Element => {
 					data-test="bookmarks-list"
 					className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
 				>
-					{result.map((data) => (
-						<BookmarkCard key={data.id} data={data} />
-					))}
+					{result
+						.sort((a, b) => {
+							if (a.isFavourite && !b.isFavourite) return -1;
+							return 0;
+						})
+						.map((data) => (
+							<BookmarkCard key={data.id} data={data} />
+						))}
 					<LoadMoreButton
 						ref={ref}
 						onClick={loadMore}
