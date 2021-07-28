@@ -4,30 +4,14 @@
 
 Bookmarky is an open-source bookmarking app inspired by [Pinboard](https://pinboard.in) built with React, Next.js, TailwindCSS, Prisma2 & GraphQL.
 
-## Roadmap
-
-- `Forgot password?` on login page
-- Change password from settings page
-- Generate API key from settings page
-- Public API
-  - Create/edit bookmark
-  - Create tag
-  - Get all bookmarks
-    - Filter by tag
-
 ## Why build another bookmarking tool?
 
 I tried out Pinboard, it's a great tool and when they say it's fast, they mean it but I decided I care about a great user interface just as much as I care about speed and started building Bookmarky to address my needs.
 
 A few use cases I want to solve are:
 
-- API for automation.
 - Drag and drop newsletter schedule builder (like [Mailbrew](https://mailbrew.com))
-- Integration with Roam Research.
-
-## Screenshots
-
-https://imgur.com/a/F8QgrD1
+- API for automation.
 
 ## License
 
