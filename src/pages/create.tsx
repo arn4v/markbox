@@ -1,8 +1,11 @@
+import { getSession, UserProfile } from "@auth0/nextjs-auth0";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
 import useIsPwa from "~/hooks/use-pwa";
+import { prisma } from "~/lib/utils.server";
 import { CreateForm } from "~/modules/common/components/Create";
 import Navbar from "~/modules/dashboard/components/Navbar";
 
@@ -63,6 +66,35 @@ const CreatePage = () => {
 			</div>
 		</div>
 	);
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+	req,
+	res,
+	query,
+}) => {
+	if (query?.url) {
+		const session = getSession(req, res);
+		const user = await prisma.user.findUnique({
+			where: {
+				auth0Id: (session.user as UserProfile).sub,
+			},
+		});
+		const bookmark = await prisma.bookmark.findFirst({
+			where: {
+				url: query?.url as string,
+				userId: user.id,
+			},
+		});
+
+		if (bookmark && bookmark?.url === query?.url) {
+			res.statusCode = 302;
+			res.setHeader("Location", `/edit/${bookmark.id}`);
+			res.end();
+		}
+	}
+
+	return { props: {} };
 };
 
 export default CreatePage;
