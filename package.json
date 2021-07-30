@@ -5,7 +5,7 @@
 	"author": "Arnav Gosain <arnav@arnavgosain.com>",
 	"scripts": {
 		"start": "next start -p ${PORT-3000}",
-		"start-ci": "yarn db-gen && yarn db-migrate-deploy && yarn start",
+		"start-ci": "yarn db-migrate-deploy && yarn start",
 		"build": "next build",
 		"build-start": "yarn build && yarn start",
 		"dev": "concurrently -n \"next,gql-codegen,prisma-gen\" \"next dev\" \"npm run gql-gen-watch\" \"npm run db-gen-watch\"",
