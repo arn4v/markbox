@@ -26,7 +26,7 @@ export default function DocsPage({ mdxSource: code, metadata }: Props) {
 			return true;
 		},
 	});
-
+	
 	return (
 		<>
 			<style jsx scoped>

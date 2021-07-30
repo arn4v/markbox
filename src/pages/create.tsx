@@ -75,6 +75,11 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
 	if (query?.url) {
 		const session = getSession(req, res);
+
+		if (!session) {
+			return { props: {} };
+		}
+
 		const user = await prisma.user.findUnique({
 			where: {
 				auth0Id: (session.user as UserProfile).sub,
@@ -92,6 +97,10 @@ export const getServerSideProps: GetServerSideProps = async ({
 			res.setHeader("Location", `/edit/${bookmark.id}`);
 			res.end();
 		}
+
+		return {
+			props: {},
+		};
 	}
 
 	return { props: {} };
