@@ -5,6 +5,7 @@ export default gql`
 		tags {
 			id
 			name
+			isPinned
 		}
 	}
 `;

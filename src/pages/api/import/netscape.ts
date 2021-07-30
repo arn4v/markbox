@@ -7,7 +7,7 @@ import {
 	authMiddleware,
 	createHandler,
 	createUploadMiddleware,
-	prisma,
+	prisma
 } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
@@ -97,7 +97,6 @@ export default createHandler<ApiRequest>()
 
 			res.status(204).end();
 		} catch (err) {
-			console.log(err);
 			res.status(500).send({ error: err.toString() });
 		}
 	});

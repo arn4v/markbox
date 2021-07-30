@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
-import { pickKeys } from "~/lib/misc";
 import { createPat } from "~/lib/utils.server";
 import GQLContext from "~/types/GQLContext";
 import protectResolver from "../protect-resolver";
@@ -47,12 +46,18 @@ const Mutation: MutationResolvers<GQLContext> = {
 			description,
 			isFavourite,
 			url,
-			tags: tags.map((item) => pickKeys(item, "id", "name")),
+			tags: tags,
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
 		};
 	},
-	async updateBookmark(_, { input }, { req, res, prisma }) {
+	async updateBookmark(
+		_,
+		{
+			input: { tags: inputTags, tagsDisconnect: inputTagsDisconnect, ...input },
+		},
+		{ req, res, prisma },
+	) {
 		const userId = await protectResolver(req, res);
 
 		const {
@@ -71,21 +76,25 @@ const Mutation: MutationResolvers<GQLContext> = {
 			data: {
 				...input,
 				tags: {
-					create: input.tags
-						.filter((item) => typeof item.name !== "undefined")
-						.map((item) => ({ name: item.name, userId })),
-					connect: input.tags
-						.filter((item) => typeof item.id !== "undefined")
-						.map((item) => ({ id: item.id })),
-					disconnect: input.tagsDisconnect
-						.filter((item) => typeof item.id !== "undefined")
-						.map((item) => ({ id: item.id })),
+					create:
+						inputTags
+							?.filter((item) => typeof item.name !== "undefined")
+							.map((item) => ({ name: item.name, userId })) ?? [],
+					connect:
+						inputTags
+							?.filter((item) => typeof item.id !== "undefined")
+							.map((item) => ({ id: item.id })) ?? [],
+					disconnect:
+						inputTagsDisconnect
+							?.filter((item) => typeof item.id !== "undefined")
+							.map((item) => ({ id: item.id })) ?? [],
 				},
 			},
 			include: {
 				tags: true,
 			},
 		});
+
 		await deleteOrphanTagsForUserId(prisma, userId);
 
 		return {
@@ -94,7 +103,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 			description,
 			url,
 			isFavourite,
-			tags: tags.map((item) => pickKeys(item, "id", "name")),
+			tags: tags,
 			createdAt: createdAt.toISOString(),
 			updatedAt: updatedAt.toISOString(),
 		};
@@ -125,25 +134,22 @@ const Mutation: MutationResolvers<GQLContext> = {
 			return false;
 		}
 	},
-	async renameTag(_, { input: { id, name } }, { prisma, req, res }) {
+	async renameTag(_, { input }, { prisma, req, res }) {
 		await protectResolver(req, res);
 
-		const tag = await prisma.tag.update({
+		const { id, name, isPinned } = await prisma.tag.update({
 			where: {
-				id,
+				id: input.id,
 			},
 			data: {
-				name,
-			},
-			select: {
-				id: true,
-				name: true,
+				name: input.name,
 			},
 		});
 
 		return {
-			id: tag.id,
-			name: tag.name,
+			id,
+			name,
+			isPinned,
 		};
 	},
 	async generateToken(_, { name, scopes }, { prisma, req, res }) {
@@ -224,7 +230,7 @@ const Mutation: MutationResolvers<GQLContext> = {
 			},
 		}));
 	},
-	async updateFavourite(_, { id, isFavourite }, { prisma, req, res }) {
+	async favouriteBookmark(_, { id, isFavourite }, { prisma, req, res }) {
 		await protectResolver(req, res);
 		return !!(await prisma.bookmark.update({
 			where: {
@@ -232,6 +238,17 @@ const Mutation: MutationResolvers<GQLContext> = {
 			},
 			data: {
 				isFavourite,
+			},
+		}));
+	},
+	async pinTag(_, { id, isPinned }, { prisma, req, res }) {
+		await protectResolver(req, res);
+		return !!(await prisma.tag.update({
+			where: {
+				id,
+			},
+			data: {
+				isPinned,
 			},
 		}));
 	},

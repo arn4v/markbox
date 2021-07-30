@@ -18,7 +18,7 @@ import Popup from "~/components/Popup";
 import {
 	Bookmark,
 	useDeleteBookmarkMutation,
-	useUpdateFavouriteMutation
+	useFavouriteBookmarkMutation
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { EditDrawer } from "~/modules/common/components/Edit";
@@ -40,7 +40,7 @@ const BookmarkCard = ({ data }: Props) => {
 			queryClient.invalidateQueries("GetAllTags");
 		},
 	});
-	const { mutate: updateFavourite } = useUpdateFavouriteMutation({
+	const { mutate: updateFavourite } = useFavouriteBookmarkMutation({
 		onSuccess() {
 			queryClient.invalidateQueries("GetAllBookmarks");
 		},

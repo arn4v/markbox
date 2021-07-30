@@ -1,10 +1,10 @@
 import isEqual from "lodash.isequal";
 import React from "react";
 import { HiX } from "react-icons/hi";
+import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import {
-	Bookmark,
 	CreateOrUpdateBookmarkTagInput,
 	Tag,
 	useGetAllTagsQuery,
@@ -21,7 +21,7 @@ interface LocalState {
 }
 
 const processServerTagsToClientNeeds = (
-	data: Bookmark["tags"],
+	data: Tag[],
 ): Record<string, CreateOrUpdateBookmarkTagInput> => {
 	return data.reduce((acc, { name }) => {
 		acc[name] = { name };
@@ -79,7 +79,6 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		{ id },
 		{
 			onSuccess(data) {
-				console.log(data);
 				if (isEqual(state, initialState)) {
 					setState((prev) => ({
 						...prev,
@@ -93,9 +92,11 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		},
 	);
 	const { data } = useGetAllTagsQuery();
+	const queryClient = useQueryClient();
 	const { mutate } = useUpdateBookmarkMutation({
 		onSuccess: (res) => {
 			setState(initialState);
+			queryClient.invalidateQueries("GetAllBookmarks");
 			onSuccess();
 		},
 	});

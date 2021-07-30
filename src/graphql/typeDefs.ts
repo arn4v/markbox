@@ -15,6 +15,7 @@ export default gql`
 	type Tag {
 		id: ID!
 		name: String!
+		isPinned: Boolean!
 	}
 
 	type AuthenticationMessage {
@@ -82,7 +83,7 @@ export default gql`
 		url: String
 		description: String
 		tags: [CreateOrUpdateBookmarkTagInput!]
-		tagsDisconnect: [CreateOrUpdateBookmarkTagInput!]
+		tagsDisconnect: [CreateOrUpdateBookmarkTagInput!]!
 	}
 
 	input RenameTagInput {
@@ -120,7 +121,8 @@ export default gql`
 		generateToken(name: String!, scopes: [String!]!): GeneratedAccessToken!
 		updateToken(id: ID!, scopes: [String!]!): AccessToken!
 		deleteToken(id: ID!): Boolean!
-		updateFavourite(id: ID!, isFavourite: Boolean!): Boolean!
 		updateProfile(input: UpdateProfileInput!): Boolean!
+		favouriteBookmark(id: ID!, isFavourite: Boolean!): Boolean!
+		pinTag(id: ID!, isPinned: Boolean!): Boolean!
 	}
 `;

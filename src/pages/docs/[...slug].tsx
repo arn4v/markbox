@@ -20,13 +20,8 @@ interface Metadata {
 }
 
 export default function DocsPage({ mdxSource: code, metadata }: Props) {
-	useRemoteRefresh({
-		shouldRefresh: (path) => {
-			console.log(metadata);
-			return true;
-		},
-	});
-	
+	useRemoteRefresh();
+
 	return (
 		<>
 			<style jsx scoped>

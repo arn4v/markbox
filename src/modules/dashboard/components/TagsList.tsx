@@ -61,8 +61,9 @@ export default function TagsList() {
 				{result?.length === data?.tags?.length ? (
 					<Tag
 						isEditModeEnabled={false}
-						data={{ id: undefined, name: "All" }}
+						data={{ id: undefined, name: "All", isPinned: false }}
 						isActive={activeTag === "All"}
+						showPin={false}
 					/>
 				) : null}
 				{activeTag !== "All" ? (
@@ -73,17 +74,22 @@ export default function TagsList() {
 					/>
 				) : null}
 				{result?.length > 0 ? (
-					result.map((item) => {
-						if (item.name === activeTag) return null;
-						return (
-							<Tag
-								key={item.id}
-								data={item}
-								isActive={item.name === activeTag}
-								isEditModeEnabled={isEnabled}
-							/>
-						);
-					})
+					result
+						.sort((a, b) => {
+							if (a.isPinned && !b.isPinned) return -1;
+							return 0;
+						})
+						.map((item) => {
+							if (item.name === activeTag) return null;
+							return (
+								<Tag
+									key={item.id}
+									data={item}
+									isActive={item.name === activeTag}
+									isEditModeEnabled={isEnabled}
+								/>
+							);
+						})
 				) : !isLoading && query.length > 0 ? (
 					<div
 						data-test="no-tags-search-warning"

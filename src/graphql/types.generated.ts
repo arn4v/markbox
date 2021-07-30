@@ -111,8 +111,9 @@ export type Mutation = {
 	generateToken: GeneratedAccessToken;
 	updateToken: AccessToken;
 	deleteToken: Scalars["Boolean"];
-	updateFavourite: Scalars["Boolean"];
 	updateProfile: Scalars["Boolean"];
+	favouriteBookmark: Scalars["Boolean"];
+	pinTag: Scalars["Boolean"];
 };
 
 export type MutationCreateBookmarkArgs = {
@@ -149,13 +150,18 @@ export type MutationDeleteTokenArgs = {
 	id: Scalars["ID"];
 };
 
-export type MutationUpdateFavouriteArgs = {
+export type MutationUpdateProfileArgs = {
+	input: UpdateProfileInput;
+};
+
+export type MutationFavouriteBookmarkArgs = {
 	id: Scalars["ID"];
 	isFavourite: Scalars["Boolean"];
 };
 
-export type MutationUpdateProfileArgs = {
-	input: UpdateProfileInput;
+export type MutationPinTagArgs = {
+	id: Scalars["ID"];
+	isPinned: Scalars["Boolean"];
 };
 
 export type Query = {
@@ -201,6 +207,7 @@ export type Tag = {
 	__typename?: "Tag";
 	id: Scalars["ID"];
 	name: Scalars["String"];
+	isPinned: Scalars["Boolean"];
 };
 
 export type UpdateBookmarkInput = {
@@ -209,7 +216,7 @@ export type UpdateBookmarkInput = {
 	url?: Maybe<Scalars["String"]>;
 	description?: Maybe<Scalars["String"]>;
 	tags?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
-	tagsDisconnect?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
+	tagsDisconnect: Array<CreateOrUpdateBookmarkTagInput>;
 };
 
 export type UpdateProfileInput = {
@@ -267,6 +274,16 @@ export type DeleteTokenMutation = {
 	deleteToken: boolean;
 };
 
+export type FavouriteBookmarkMutationVariables = Exact<{
+	id: Scalars["ID"];
+	isFavourite: Scalars["Boolean"];
+}>;
+
+export type FavouriteBookmarkMutation = {
+	__typename?: "Mutation";
+	favouriteBookmark: boolean;
+};
+
 export type GenerateTokenMutationVariables = Exact<{
 	name: Scalars["String"];
 	scopes: Array<Scalars["String"]> | Scalars["String"];
@@ -283,6 +300,13 @@ export type GenerateTokenMutation = {
 		scopes: Array<string>;
 	};
 };
+
+export type PinTagMutationVariables = Exact<{
+	id: Scalars["ID"];
+	isPinned: Scalars["Boolean"];
+}>;
+
+export type PinTagMutation = { __typename?: "Mutation"; pinTag: boolean };
 
 export type RenameTagMutationVariables = Exact<{
 	input?: Maybe<RenameTagInput>;
@@ -309,16 +333,6 @@ export type UpdateBookmarkMutation = {
 		updatedAt: string;
 		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
 	};
-};
-
-export type UpdateFavouriteMutationVariables = Exact<{
-	id: Scalars["ID"];
-	isFavourite: Scalars["Boolean"];
-}>;
-
-export type UpdateFavouriteMutation = {
-	__typename?: "Mutation";
-	updateFavourite: boolean;
 };
 
 export type UpdateProfileMutationVariables = Exact<{
@@ -376,7 +390,9 @@ export type GetAllTagsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllTagsQuery = {
 	__typename?: "Query";
-	tags?: Maybe<Array<{ __typename?: "Tag"; id: string; name: string }>>;
+	tags?: Maybe<
+		Array<{ __typename?: "Tag"; id: string; name: string; isPinned: boolean }>
+	>;
 };
 
 export type GetAllTokensQueryVariables = Exact<{ [key: string]: never }>;
@@ -406,7 +422,12 @@ export type GetBookmarkQuery = {
 		description: string;
 		createdAt: string;
 		updatedAt: string;
-		tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
+		tags: Array<{
+			__typename?: "Tag";
+			id: string;
+			name: string;
+			isPinned: boolean;
+		}>;
 	};
 };
 
@@ -425,7 +446,7 @@ export type GetTagQueryVariables = Exact<{
 
 export type GetTagQuery = {
 	__typename?: "Query";
-	tag: { __typename?: "Tag"; id: string; name: string };
+	tag: { __typename?: "Tag"; id: string; name: string; isPinned: boolean };
 };
 
 export type GetTokenQueryVariables = Exact<{
@@ -752,17 +773,23 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationDeleteTokenArgs, "id">
 	>;
-	updateFavourite?: Resolver<
-		ResolversTypes["Boolean"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationUpdateFavouriteArgs, "id" | "isFavourite">
-	>;
 	updateProfile?: Resolver<
 		ResolversTypes["Boolean"],
 		ParentType,
 		ContextType,
 		RequireFields<MutationUpdateProfileArgs, "input">
+	>;
+	favouriteBookmark?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationFavouriteBookmarkArgs, "id" | "isFavourite">
+	>;
+	pinTag?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationPinTagArgs, "id" | "isPinned">
 	>;
 };
 
@@ -815,6 +842,7 @@ export type TagResolvers<
 > = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	isPinned?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -959,6 +987,35 @@ export const useDeleteTokenMutation = <TError = unknown, TContext = unknown>(
 			)(),
 		options,
 	);
+export const FavouriteBookmarkDocument = `
+    mutation FavouriteBookmark($id: ID!, $isFavourite: Boolean!) {
+  favouriteBookmark(id: $id, isFavourite: $isFavourite)
+}
+    `;
+export const useFavouriteBookmarkMutation = <
+	TError = unknown,
+	TContext = unknown,
+>(
+	options?: UseMutationOptions<
+		FavouriteBookmarkMutation,
+		TError,
+		FavouriteBookmarkMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<
+		FavouriteBookmarkMutation,
+		TError,
+		FavouriteBookmarkMutationVariables,
+		TContext
+	>(
+		(variables?: FavouriteBookmarkMutationVariables) =>
+			fetcher<FavouriteBookmarkMutation, FavouriteBookmarkMutationVariables>(
+				FavouriteBookmarkDocument,
+				variables,
+			)(),
+		options,
+	);
 export const GenerateTokenDocument = `
     mutation GenerateToken($name: String!, $scopes: [String!]!) {
   generateToken(name: $name, scopes: $scopes) {
@@ -987,6 +1044,27 @@ export const useGenerateTokenMutation = <TError = unknown, TContext = unknown>(
 		(variables?: GenerateTokenMutationVariables) =>
 			fetcher<GenerateTokenMutation, GenerateTokenMutationVariables>(
 				GenerateTokenDocument,
+				variables,
+			)(),
+		options,
+	);
+export const PinTagDocument = `
+    mutation PinTag($id: ID!, $isPinned: Boolean!) {
+  pinTag(id: $id, isPinned: $isPinned)
+}
+    `;
+export const usePinTagMutation = <TError = unknown, TContext = unknown>(
+	options?: UseMutationOptions<
+		PinTagMutation,
+		TError,
+		PinTagMutationVariables,
+		TContext
+	>,
+) =>
+	useMutation<PinTagMutation, TError, PinTagMutationVariables, TContext>(
+		(variables?: PinTagMutationVariables) =>
+			fetcher<PinTagMutation, PinTagMutationVariables>(
+				PinTagDocument,
 				variables,
 			)(),
 		options,
@@ -1047,35 +1125,6 @@ export const useUpdateBookmarkMutation = <TError = unknown, TContext = unknown>(
 		(variables?: UpdateBookmarkMutationVariables) =>
 			fetcher<UpdateBookmarkMutation, UpdateBookmarkMutationVariables>(
 				UpdateBookmarkDocument,
-				variables,
-			)(),
-		options,
-	);
-export const UpdateFavouriteDocument = `
-    mutation UpdateFavourite($id: ID!, $isFavourite: Boolean!) {
-  updateFavourite(id: $id, isFavourite: $isFavourite)
-}
-    `;
-export const useUpdateFavouriteMutation = <
-	TError = unknown,
-	TContext = unknown,
->(
-	options?: UseMutationOptions<
-		UpdateFavouriteMutation,
-		TError,
-		UpdateFavouriteMutationVariables,
-		TContext
-	>,
-) =>
-	useMutation<
-		UpdateFavouriteMutation,
-		TError,
-		UpdateFavouriteMutationVariables,
-		TContext
-	>(
-		(variables?: UpdateFavouriteMutationVariables) =>
-			fetcher<UpdateFavouriteMutation, UpdateFavouriteMutationVariables>(
-				UpdateFavouriteDocument,
 				variables,
 			)(),
 		options,
@@ -1178,6 +1227,7 @@ export const GetAllTagsDocument = `
   tags {
     id
     name
+    isPinned
   }
 }
     `;
@@ -1228,6 +1278,7 @@ export const GetBookmarkDocument = `
     tags {
       id
       name
+      isPinned
     }
     createdAt
     updatedAt
@@ -1271,6 +1322,7 @@ export const GetTagDocument = `
   tag(id: $id) {
     id
     name
+    isPinned
   }
 }
     `;

@@ -22,12 +22,7 @@ const Query: QueryResolvers<GQLContext> = {
 				id,
 			},
 			include: {
-				tags: {
-					select: {
-						id: true,
-						name: true,
-					},
-				},
+				tags: true,
 			},
 		});
 		return {
@@ -113,7 +108,11 @@ const Query: QueryResolvers<GQLContext> = {
 				title,
 				description,
 				isFavourite,
-				tags: tags.map((item) => ({ id: item.id, name: item.name })),
+				tags: tags.map((item) => ({
+					id: item.id,
+					name: item.name,
+					isPinned: item.isPinned,
+				})),
 				createdAt: createdAt.toISOString(),
 				updatedAt: updatedAt.toISOString(),
 			}),
@@ -155,7 +154,7 @@ const Query: QueryResolvers<GQLContext> = {
 				userId,
 			},
 		});
-		return tags.map((item) => pickKeys(item, "id", "name"));
+		return tags.map((item) => pickKeys(item, "id", "name", "isPinned"));
 	},
 	async tag(_, { id }, { req, res, prisma }) {
 		await protectResolver(req, res);
@@ -165,6 +164,7 @@ const Query: QueryResolvers<GQLContext> = {
 			},
 			select: {
 				id: true,
+				isPinned: true,
 				name: true,
 			},
 		});

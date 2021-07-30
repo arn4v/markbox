@@ -10,7 +10,7 @@ type Props = JSX.IntrinsicElements["input"] & {
 
 const Input = React.forwardRef(
 	(
-		{ className, ...props }: Props,
+		{ className, showClear, onClear, ...props }: Props,
 		theirRef: React.MutableRefObject<HTMLInputElement>,
 	) => {
 		const ref = React.useRef<HTMLInputElement>(null);
@@ -30,7 +30,7 @@ const Input = React.forwardRef(
 			);
 		}, [className, props, theirRef]);
 
-		if (props.showClear)
+		if (showClear)
 			return (
 				<div className="relative w-full">
 					{inputElement}
@@ -41,7 +41,7 @@ const Input = React.forwardRef(
 							])}
 							onClick={() => {
 								ref.current.value = "";
-								if (props.onClear) props.onClear();
+								if (onClear) onClear();
 							}}
 						>
 							<HiX />

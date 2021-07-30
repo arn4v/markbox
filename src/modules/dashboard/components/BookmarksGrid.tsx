@@ -73,7 +73,10 @@ const BookmarksGrid = (): JSX.Element => {
 			{tag && tag !== "All" && (
 				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
 			)}
-			<div className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}>
+			<div
+				className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}
+				hidden={result.length > 0}
+			>
 				Showing <span className="font-bold">{count}</span> results
 			</div>
 			{result?.length > 0 ? (

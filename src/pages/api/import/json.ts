@@ -156,7 +156,6 @@ export default createHandler<ApiRequest>()
 			await prisma.$transaction(transactions);
 			res.status(204).end();
 		} catch (err) {
-			console.log(err);
 			res.status(400).send(err);
 		}
 	});

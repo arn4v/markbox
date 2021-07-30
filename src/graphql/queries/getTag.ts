@@ -5,6 +5,7 @@ export default gql`
 		tag(id: $id) {
 			id
 			name
+			isPinned
 		}
 	}
 `;
