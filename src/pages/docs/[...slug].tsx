@@ -1,15 +1,16 @@
-import { bundleMDX } from "mdx-bundler";
-import { getMDXComponent } from "mdx-bundler/client";
+import matter from "gray-matter";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+import { useRemoteRefresh } from "next-remote-refresh/hook";
 import { NextSeo } from "next-seo";
 import * as React from "react";
-import MDXComponents from "~/components/MDXComponents";
 import { getDocsSlugs, getSourceFromSlugArray } from "~/lib/docs-mdx";
 import AuthButton from "~/modules/docs/components/AuthButton";
 import Sidebar from "~/modules/docs/components/Sidebar";
 
 interface Props {
-	code: string;
+	mdxSource: MDXRemoteSerializeResult;
 	metadata: Metadata;
 }
 
@@ -18,8 +19,13 @@ interface Metadata {
 	title: string;
 }
 
-export default function DocsPage({ code, metadata }: Props) {
-	const MDXComponent = React.useMemo(() => getMDXComponent(code), [code]);
+export default function DocsPage({ mdxSource: code, metadata }: Props) {
+	useRemoteRefresh({
+		shouldRefresh: (path) => {
+			console.log(metadata);
+			return true;
+		},
+	});
 
 	return (
 		<>
@@ -41,7 +47,7 @@ export default function DocsPage({ code, metadata }: Props) {
 						<article className="mt-8 prose dark:prose-dark flex-grow-1">
 							<h1 className="lg:mb-8 heading">{metadata.title}</h1>
 							<div className="overflow-x-hidden">
-								<MDXComponent components={MDXComponents} />
+								<MDXRemote {...code} />
 							</div>
 						</article>
 					</div>
@@ -55,10 +61,10 @@ export const getStaticProps: GetStaticProps<Props, { slug: string[] }> = async (
 	ctx,
 ) => {
 	const source = getSourceFromSlugArray(ctx.params.slug);
-	const { code, frontmatter } = await bundleMDX(source, {
-		xdmOptions(options) {
-			options.remarkPlugins = [
-				...(options.remarkPlugins ?? []),
+	const { data, content } = matter(source);
+	const mdxSource = await serialize(content, {
+		mdxOptions: {
+			remarkPlugins: [
 				require("remark-code-titles"),
 				require("remark-slug"),
 				[
@@ -69,21 +75,16 @@ export const getStaticProps: GetStaticProps<Props, { slug: string[] }> = async (
 						},
 					},
 				],
-			];
+			],
 
-			options.rehypePlugins = [
-				...(options.rehypePlugins ?? []),
-				require("mdx-prism"),
-			];
-
-			return options;
+			rehypePlugins: [require("mdx-prism")],
 		},
 	});
 
 	return {
 		props: {
-			code,
-			metadata: frontmatter as Metadata,
+			mdxSource,
+			metadata: data as Metadata,
 		},
 	};
 };

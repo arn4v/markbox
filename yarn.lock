@@ -5424,15 +5424,15 @@ es6-object-assign@^1.1.0:
   resolved "https://registry.npmjs.org/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
   integrity sha1-wsNYJlYkfDnqEHyx5mUrb58kUjw=
 
-esbuild@^0.11.12:
-  version "0.11.23"
-  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.11.23.tgz#c42534f632e165120671d64db67883634333b4b8"
-  integrity sha512-iaiZZ9vUF5wJV8ob1tl+5aJTrwDczlvGP0JoMmnpC2B0ppiMCu8n8gmy5ZTGl5bcG081XBVn+U+jP+mPFm5T5Q==
-
 esbuild@^0.12.11:
   version "0.12.14"
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.14.tgz#43157dbd0b36d939247d4eb4909a4886ac40f82e"
   integrity sha512-z8p+6FGiplR7a3pPonXREbm+8IeXjBGvDpVidZmGB/AJMsJSfGCU+n7KOMCazA9AwvagadRWBhiKorC0w9WJvw==
+
+esbuild@^0.12.9:
+  version "0.12.17"
+  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.12.17.tgz#5816f905c2905de0ebbc658860df7b5b48afbcd3"
+  integrity sha512-GshKJyVYUnlSXIZj/NheC2O0Kblh42CS7P1wJyTbbIHevTG4jYMS9NNw8EOd8dDWD0dzydYHS01MpZoUcQXB4g==
 
 esbuild@^0.8.40:
   version "0.8.57"
@@ -9085,6 +9085,11 @@ nanoclone@^0.2.1:
   resolved "https://registry.npmjs.org/nanoclone/-/nanoclone-0.2.1.tgz#dd4090f8f1a110d26bb32c49ed2f5b9235209ed4"
   integrity sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==
 
+nanoid@^2.1.0:
+  version "2.1.11"
+  resolved "https://registry.npmjs.org/nanoid/-/nanoid-2.1.11.tgz#ec24b8a758d591561531b4176a01e3ab4f0f0280"
+  integrity sha512-s/snB+WGm6uwi0WjsZdaVcuf3KJXlfGl2LcxgwkEwJF0D/BWzVWAZW/XY4bFaiR7s0Jk3FPvlnepg1H1b1UwlA==
+
 nanoid@^3.1.22, nanoid@^3.1.23:
   version "3.1.23"
   resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.1.23.tgz#f744086ce7c2bc47ee0a8472574d5c78e4183a81"
@@ -9126,14 +9131,14 @@ next-connect@^0.10.1:
   dependencies:
     trouter "^3.1.0"
 
-next-mdx-remote@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/next-mdx-remote/-/next-mdx-remote-3.0.2.tgz#7e1159b4eb8a6bdd4000c0b6e6631f94d8683f04"
-  integrity sha512-imLrrw6c/Hi1BKRyJE9yLhk45N5zzw+/CxSQRHOAByYUSOhd+DNjUaqm2jtd+/GgxJeYB1d3fJPXmvUZTez1MQ==
+next-mdx-remote@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.npmjs.org/next-mdx-remote/-/next-mdx-remote-3.0.4.tgz#c9b4aff4ec0780b08f34ccd6be966e569d6d4fda"
+  integrity sha512-n/xN6GaeBgJiuTJDrG6iqJ2EY5rEZ99Vf2H1nc75MNn1a6XnZLgT6uQJxqbSN84svc9aU3CSxfRlOqgqVVPHIg==
   dependencies:
     "@mdx-js/mdx" "^1.6.22"
     "@mdx-js/react" "^1.6.22"
-    esbuild "^0.11.12"
+    esbuild "^0.12.9"
     pkg-dir "^5.0.0"
 
 next-pwa@^5.2.21:
@@ -9147,6 +9152,14 @@ next-pwa@^5.2.21:
     terser-webpack-plugin "^5.1.1"
     workbox-webpack-plugin "^6.1.5"
     workbox-window "^6.1.5"
+
+next-remote-refresh@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.npmjs.org/next-remote-refresh/-/next-remote-refresh-0.5.5.tgz#0b99c3f24d47c159612a3a98bc9340389eb2686e"
+  integrity sha512-0g8wthCkASw6FVAvCsfat7iIrlDocqMMIV6/KJk3e0vbXJcuCIc+FNrzoBggufkQsdEPloNd6xeR+2iopmxPrw==
+  dependencies:
+    chokidar "^3.5.2"
+    shortid "^2.2.16"
 
 next-seo@^4.26.0:
   version "4.26.0"
@@ -11355,6 +11368,13 @@ shell-quote@1.7.2:
   version "1.7.2"
   resolved "https://registry.npmjs.org/shell-quote/-/shell-quote-1.7.2.tgz#67a7d02c76c9da24f99d20808fcaded0e0e04be2"
   integrity sha512-mRz/m/JVscCrkMyPqHc/bczi3OQHkLTqXHEFu0zDhK/qfv3UcOA4SVmRCLmos4bhjr9ekVQubj/R7waKapmiQg==
+
+shortid@^2.2.16:
+  version "2.2.16"
+  resolved "https://registry.npmjs.org/shortid/-/shortid-2.2.16.tgz#b742b8f0cb96406fd391c76bfc18a67a57fe5608"
+  integrity sha512-Ugt+GIZqvGXCIItnsL+lvFJOiN7RYqlGy7QE41O3YC1xbNSeDGIRO7xg2JJXIAj1cAGnOeC1r7/T9pgrtQbv4g==
+  dependencies:
+    nanoid "^2.1.0"
 
 side-channel@^1.0.4:
   version "1.0.4"

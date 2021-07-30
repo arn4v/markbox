@@ -1,4 +1,6 @@
 const withPWA = require("next-pwa");
+const withRemoteRefresh = require("next-remote-refresh");
+const path = require("path");
 const isProd = process.env.NODE_ENV === "productioon";
 
 /**
@@ -39,5 +41,10 @@ if (isProd) {
 
 	config = withPWA(config);
 }
+
+if (!isProd)
+	config = withRemoteRefresh({
+		paths: [path.join(__dirname, "src/docs/**/*")],
+	})(config);
 
 module.exports = config;
