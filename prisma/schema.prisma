@@ -42,7 +42,7 @@ model AccessToken {
 model Tag {
   id        String     @id @default(uuid())
   name      String
-  isPinned    Boolean    @default(false) 
+  isPinned  Boolean    @default(false) @map("is_pinned")
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
   bookmarks Bookmark[]
