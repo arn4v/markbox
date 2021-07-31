@@ -1,5 +1,7 @@
+import { MDXProvider } from "@mdx-js/react";
 import { NextSeo } from "next-seo";
 import React from "react";
+import MDXComponents from "~/components/MDXComponents";
 import AuthButton from "~/modules/docs/components/AuthButton";
 import Sidebar from "~/modules/docs/components/Sidebar";
 
@@ -28,7 +30,9 @@ export default function DocsPage({ children, frontMatter: metadata }) {
 						<AuthButton className="hidden lg:flex lg:ml-auto" />
 						<article className="mt-8 prose dark:prose-dark flex-grow-1">
 							<h1 className="lg:mb-8 heading">{metadata.title}</h1>
-							<div className="overflow-x-hidden">{children}</div>
+							<div className="overflow-x-hidden">
+								<MDXProvider components={MDXComponents}>{children}</MDXProvider>
+							</div>
 						</article>
 					</div>
 				</div>
