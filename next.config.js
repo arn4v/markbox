@@ -7,6 +7,7 @@ const isProd = process.env.NODE_ENV === "productioon";
  * @type {import("next/dist/next-server/server/config-shared").NextConfig}
  */
 let config = {
+	pageExtensions: ["ts", "tsx", "js", "jsx"],
 	async redirects() {
 		const redirects = [
 			{
@@ -42,9 +43,26 @@ if (isProd) {
 	config = withPWA(config);
 }
 
-if (!isProd)
-	config = withRemoteRefresh({
-		paths: [path.join(__dirname, "src/docs/**/*")],
-	})(config);
+config = require("next-mdx-builder")({
+	layoutsPath: "layouts",
+	extensions: ["mdx", "md"],
+	layoutExtensions: ["js", "jsx", "ts", "tsx"],
+	xdmOptions: {
+		remarkPlugins: [
+			require("remark-code-titles"),
+			require("remark-slug"),
+			[
+				require("remark-autolink-headings"),
+				{
+					linkProperties: {
+						className: ["anchor"],
+					},
+				},
+			],
+		],
+
+		rehypePlugins: [require("mdx-prism")],
+	},
+})(config);
 
 module.exports = config;

@@ -5,7 +5,6 @@ import React from "react";
 
 const SidebarSection = ({ data }: { data: Category }) => {
 	const router = useRouter();
-	const slug = "/docs/" + (router.query.slug as string[]).join("/");
 
 	return (
 		<nav className="flex flex-col items-start justify-start gap-2">
@@ -18,7 +17,7 @@ const SidebarSection = ({ data }: { data: Category }) => {
 								<a
 									className={clsx([
 										"block py-1 px-2 rounded-md lg:rounded-none lg:rounded-l-md",
-										slug === child.href
+										router.pathname === child.href
 											? "bg-blue-100 dark:bg-blue-200 border-r-4 border-blue-600 dark:border-blue-700 font-medium text-black"
 											: "hover:bg-blue-100 dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-100",
 									])}
