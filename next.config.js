@@ -44,10 +44,7 @@ if (isProd) {
 }
 
 config = require("next-mdx-builder")({
-	layoutsPath: "layouts",
-	extensions: ["mdx", "md"],
-	layoutExtensions: ["js", "jsx", "ts", "tsx"],
-	xdmOptions: {
+	mdxOptions: {
 		remarkPlugins: [
 			require("remark-code-titles"),
 			require("remark-slug"),
