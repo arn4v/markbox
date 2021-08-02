@@ -8,6 +8,20 @@
 	"background_color": "#FFFFFF",
 	"theme_color": "#FFFFFF",
 	"splash_pages": null,
+	"shortcuts": [
+		{
+			"name": "Dashboard",
+			"url": "/dashboard?utm_source=homescreen"
+		},
+		{
+			"name": "Create",
+			"url": "/create?utm_source=homescreen"
+		},
+		{
+			"name": "Settings",
+			"url": "/settings?utm_source=homescreen"
+		}
+	],
 	"share_target": {
 		"action": "/api/create",
 		"method": "GET",
