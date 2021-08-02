@@ -30,9 +30,7 @@ interface Props {
 }
 
 const truncateDescription = (description: string) => {
-	return description.length >= 50
-		? `${description.substring(0, 49)}...`
-		: description;
+	return;
 };
 
 const BookmarkCard = ({ data }: Props) => {
@@ -104,19 +102,23 @@ const BookmarkCard = ({ data }: Props) => {
 					>
 						{data?.url}
 					</a>
-					<div className="flex flex-col space-y-2 px-2 py-2 w-full bg-gray-200 dark:bg-gray-800 rounded-md mt-2">
-						<span className="truncate">
-							{truncateDescription(data?.description)}
-						</span>
-						{data?.description.length >= 50 ? (
-							<button
-								className="mx-auto px-1 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-300 hover:bg-gray-400 transition rounded-lg py-0.5"
-								onClick={onDescOpen}
-							>
-								<HiChevronDown />
-							</button>
-						) : null}
-					</div>
+					{data?.description.length > 0 ? (
+						<div className="flex flex-col space-y-2 px-2 py-2 w-full bg-gray-200 dark:bg-gray-800 rounded-md mt-2">
+							<span className="truncate">
+								{data?.description.length >= 50
+									? `${data?.description.substring(0, 49)}...`
+									: data?.description}
+							</span>
+							{data?.description.length >= 50 ? (
+								<button
+									className="mx-auto px-1 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-300 hover:bg-gray-400 transition rounded-lg py-0.5"
+									onClick={onDescOpen}
+								>
+									<HiChevronDown />
+								</button>
+							) : null}
+						</div>
+					) : null}
 					<div className="flex gap-2 mt-1.5 flex-wrap">
 						{Object.values(data?.tags).map((item) => {
 							return (
@@ -221,7 +223,11 @@ const BookmarkCard = ({ data }: Props) => {
 				}}
 			/>
 			<EditDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} id={data?.id} />
-			<DescriptionModal isOpen={isDescOpen} onClose={onDescClose} data={data?.description} />
+			<DescriptionModal
+				isOpen={isDescOpen}
+				onClose={onDescClose}
+				data={data?.description}
+			/>
 		</>
 	);
 };
