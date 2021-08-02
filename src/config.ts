@@ -42,3 +42,10 @@ export const genericModalMotionProps: MotionProps = {
 	exit: { opacity: 0, y: -20 },
 	transition: { duration: 0.2 },
 };
+
+export const genericModalProps = {
+	containerProps: {
+		className: "flex items-center justify-center z-[999]",
+	},
+	overlayProps: { className: "bg-black bg-opacity-75 z-[999]" },
+};

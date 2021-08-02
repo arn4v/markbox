@@ -9,7 +9,7 @@
 	"theme_color": "#FFFFFF",
 	"splash_pages": null,
 	"share_target": {
-		"action": "/create",
+		"action": "/api/create",
 		"method": "GET",
 		"enctype": "application/x-www-form-urlencoded",
 		"params": {

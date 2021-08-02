@@ -1,4 +1,5 @@
 import React from "react";
+import { genericModalProps } from "~/config";
 import Modal, { ModalContent, ModalProps } from "./Modal";
 
 interface Props extends Pick<ModalProps, "isOpen" | "onClose"> {
@@ -17,10 +18,7 @@ export default function DeleteModal({
 			isOpen={isOpen}
 			onClose={onClose}
 			portalProps={{ type: "delete-modal" }}
-			containerProps={{
-				className: "flex items-center justify-center z-[999]",
-			}}
-			overlayProps={{ className: "bg-black bg-opacity-75 z-[999]" }}
+			{...genericModalProps}
 		>
 			<ModalContent
 				className="z-[1000] flex flex-col items-center justify-center bg-white dark:bg-gray-900 p-6 gap-4 lg:gap-8 rounded-lg"

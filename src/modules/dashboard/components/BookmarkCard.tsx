@@ -2,13 +2,14 @@ import format from "date-fns/format";
 import { useRouter } from "next/router";
 import * as React from "react";
 import {
+	HiChevronDown,
 	HiOutlineExternalLink,
 	HiOutlineMenu,
 	HiOutlineStar,
 	HiOutlineTrash,
 	HiPencil,
 	HiStar,
-	HiTrash
+	HiTrash,
 } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import { useDisclosure } from "react-sensible";
@@ -18,14 +19,21 @@ import Popup from "~/components/Popup";
 import {
 	Bookmark,
 	useDeleteBookmarkMutation,
-	useFavouriteBookmarkMutation
+	useFavouriteBookmarkMutation,
 } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { EditDrawer } from "~/modules/common/components/Edit";
+import DescriptionModal from "./DescriptionModal";
 
 interface Props {
 	data: Bookmark;
 }
+
+const truncateDescription = (description: string) => {
+	return description.length >= 50
+		? `${description.substring(0, 49)}...`
+		: description;
+};
 
 const BookmarkCard = ({ data }: Props) => {
 	const {
@@ -45,16 +53,10 @@ const BookmarkCard = ({ data }: Props) => {
 			queryClient.invalidateQueries("GetAllBookmarks");
 		},
 	});
-	const {
-		isOpen: isDropdownOpen,
-		onClose: onDropdownClose,
-		onToggle: onDropdownToggle,
-	} = useDisclosure();
-	const {
-		isOpen: isDrawerOpen,
-		onOpen: onDrawerOpen,
-		onClose: onDrawerClose,
-	} = useDisclosure();
+	const [isDropdownOpen, _, onDropdownClose, onDropdownToggle] =
+		useDisclosure();
+	const [isDrawerOpen, onDrawerOpen, onDrawerClose] = useDisclosure();
+	const [isDescOpen, onDescOpen, onDescClose] = useDisclosure();
 
 	const date = React.useMemo(
 		() => new Date(data?.createdAt),
@@ -82,7 +84,6 @@ const BookmarkCard = ({ data }: Props) => {
 			>
 				<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 					<span className="text-xs">
-						{/* Need to test the advantages/disadvantages of using IIFEs in JSX */}
 						{`Created on ${format(date, "do MMMM, yyyy")} at ${format(
 							date,
 							"h:mmaa",
@@ -103,6 +104,19 @@ const BookmarkCard = ({ data }: Props) => {
 					>
 						{data?.url}
 					</a>
+					<div className="flex flex-col space-y-2 px-2 py-2 w-full bg-gray-200 dark:bg-gray-800 rounded-md mt-2">
+						<span className="truncate">
+							{truncateDescription(data?.description)}
+						</span>
+						{data?.description.length >= 50 ? (
+							<button
+								className="mx-auto px-1 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-300 hover:bg-gray-400 transition rounded-lg py-0.5"
+								onClick={onDescOpen}
+							>
+								<HiChevronDown />
+							</button>
+						) : null}
+					</div>
 					<div className="flex gap-2 mt-1.5 flex-wrap">
 						{Object.values(data?.tags).map((item) => {
 							return (
@@ -207,6 +221,7 @@ const BookmarkCard = ({ data }: Props) => {
 				}}
 			/>
 			<EditDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} id={data?.id} />
+			<DescriptionModal isOpen={isDescOpen} onClose={onDescClose} data={data?.description} />
 		</>
 	);
 };
