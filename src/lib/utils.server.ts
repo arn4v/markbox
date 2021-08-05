@@ -246,6 +246,6 @@ export const createUploadMiddleware = (filenameSuffix: string) =>
 	});
 
 export const rateLimitMiddleware = rateLimit({
-	windowMs: 60 * 10 * 1000,
+	windowMs: ms("10m"),
 	max: 100,
 });

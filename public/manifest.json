@@ -23,9 +23,7 @@
 		}
 	],
 	"share_target": {
-		"action": "/api/create",
-		"method": "GET",
-		"enctype": "application/x-www-form-urlencoded",
+		"action": "/create",
 		"params": {
 			"title": "title",
 			"url": "url",
