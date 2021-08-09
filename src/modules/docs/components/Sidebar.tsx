@@ -36,6 +36,10 @@ const sidebarData: Category[] = [
 				title: "Data Models",
 				href: "/docs/models",
 			},
+			{
+				title: "Generate Tokens",
+				href: "/docs/generate-tokens",
+			},
 		],
 	},
 	{
