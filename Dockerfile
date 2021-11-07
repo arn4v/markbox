@@ -9,7 +9,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./prisma ./
-RUN yarn install
+RUN yarn install --frozen-lockfile
 RUN yarn db-gen
 
 COPY . .

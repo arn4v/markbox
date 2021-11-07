@@ -14,15 +14,14 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
 	[K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-	[SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-	[SubKey in K]: Maybe<T[SubKey]>;
-};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+	{ [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+	{ [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = {
 	[X in Exclude<keyof T, K>]?: T[X];
-} & { [P in K]-?: NonNullable<T[P]> };
+} &
+	{ [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
 	ID: string;
@@ -35,8 +34,8 @@ export type Scalars = {
 export type AccessToken = {
 	__typename?: "AccessToken";
 	id: Scalars["ID"];
-	lastUsed: Scalars["String"];
 	name: Scalars["String"];
+	lastUsed: Scalars["String"];
 	scopes: Array<Scalars["String"]>;
 };
 
@@ -48,14 +47,14 @@ export type AuthenticationMessage = {
 
 export type Bookmark = {
 	__typename?: "Bookmark";
-	createdAt: Scalars["String"];
-	description: Scalars["String"];
 	id: Scalars["ID"];
-	isFavourite: Scalars["Boolean"];
-	tags: Array<Tag>;
 	title: Scalars["String"];
-	updatedAt: Scalars["String"];
+	description: Scalars["String"];
 	url: Scalars["String"];
+	tags: Array<Tag>;
+	isFavourite: Scalars["Boolean"];
+	createdAt: Scalars["String"];
+	updatedAt: Scalars["String"];
 };
 
 export type ChangePasswordMessage = {
@@ -64,10 +63,10 @@ export type ChangePasswordMessage = {
 };
 
 export type CreateBookmarkInput = {
-	description: Scalars["String"];
-	tags: Array<CreateOrUpdateBookmarkTagInput>;
 	title: Scalars["String"];
 	url: Scalars["String"];
+	description: Scalars["String"];
+	tags: Array<CreateOrUpdateBookmarkTagInput>;
 };
 
 export type CreateOrUpdateBookmarkTagInput = {
@@ -82,60 +81,59 @@ export type FilterBookmarksTagInput = {
 export type GeneratedAccessToken = {
 	__typename?: "GeneratedAccessToken";
 	id: Scalars["ID"];
-	lastUsed: Scalars["String"];
 	name: Scalars["String"];
-	scopes: Array<Scalars["String"]>;
 	token: Scalars["String"];
+	lastUsed: Scalars["String"];
+	scopes: Array<Scalars["String"]>;
 };
 
 export type GetBookmarksData = {
 	__typename?: "GetBookmarksData";
 	cursor?: Maybe<Scalars["String"]>;
-	data: Array<Bookmark>;
 	next_cursor: Scalars["String"];
+	data: Array<Bookmark>;
 };
 
 export type LoginMessage = {
 	__typename?: "LoginMessage";
-	accessToken?: Maybe<Scalars["String"]>;
 	code: Scalars["String"];
 	message: Scalars["String"];
+	accessToken?: Maybe<Scalars["String"]>;
 };
 
 export type Mutation = {
 	__typename?: "Mutation";
 	createBookmark: Bookmark;
-	deleteBookmark: Scalars["Boolean"];
-	deleteTag: Scalars["Boolean"];
-	deleteToken: Scalars["Boolean"];
-	favouriteBookmark: Scalars["Boolean"];
-	generateToken: GeneratedAccessToken;
-	pinTag: Scalars["Boolean"];
-	renameTag: Tag;
 	updateBookmark: Bookmark;
-	updateProfile: Scalars["Boolean"];
+	renameTag: Tag;
+	deleteTag: Scalars["Boolean"];
+	deleteBookmark: Scalars["Boolean"];
+	generateToken: GeneratedAccessToken;
 	updateToken: AccessToken;
+	deleteToken: Scalars["Boolean"];
+	updateProfile: Scalars["Boolean"];
+	favouriteBookmark: Scalars["Boolean"];
+	pinTag: Scalars["Boolean"];
 };
 
 export type MutationCreateBookmarkArgs = {
 	input: CreateBookmarkInput;
 };
 
-export type MutationDeleteBookmarkArgs = {
-	id: Scalars["ID"];
+export type MutationUpdateBookmarkArgs = {
+	input: UpdateBookmarkInput;
+};
+
+export type MutationRenameTagArgs = {
+	input?: Maybe<RenameTagInput>;
 };
 
 export type MutationDeleteTagArgs = {
 	id: Scalars["ID"];
 };
 
-export type MutationDeleteTokenArgs = {
+export type MutationDeleteBookmarkArgs = {
 	id: Scalars["ID"];
-};
-
-export type MutationFavouriteBookmarkArgs = {
-	id: Scalars["ID"];
-	isFavourite: Scalars["Boolean"];
 };
 
 export type MutationGenerateTokenArgs = {
@@ -143,38 +141,39 @@ export type MutationGenerateTokenArgs = {
 	scopes: Array<Scalars["String"]>;
 };
 
-export type MutationPinTagArgs = {
+export type MutationUpdateTokenArgs = {
 	id: Scalars["ID"];
-	isPinned: Scalars["Boolean"];
+	scopes: Array<Scalars["String"]>;
 };
 
-export type MutationRenameTagArgs = {
-	input?: Maybe<RenameTagInput>;
-};
-
-export type MutationUpdateBookmarkArgs = {
-	input: UpdateBookmarkInput;
+export type MutationDeleteTokenArgs = {
+	id: Scalars["ID"];
 };
 
 export type MutationUpdateProfileArgs = {
 	input: UpdateProfileInput;
 };
 
-export type MutationUpdateTokenArgs = {
+export type MutationFavouriteBookmarkArgs = {
 	id: Scalars["ID"];
-	scopes: Array<Scalars["String"]>;
+	isFavourite: Scalars["Boolean"];
+};
+
+export type MutationPinTagArgs = {
+	id: Scalars["ID"];
+	isPinned: Scalars["Boolean"];
 };
 
 export type Query = {
 	__typename?: "Query";
 	bookmark: Bookmark;
 	bookmarks?: Maybe<GetBookmarksData>;
-	bookmarksCount: Scalars["Int"];
 	tag: Tag;
+	bookmarksCount: Scalars["Int"];
 	tags?: Maybe<Array<Tag>>;
-	token: AccessToken;
-	tokens: Array<AccessToken>;
 	user?: Maybe<User>;
+	tokens: Array<AccessToken>;
+	token: AccessToken;
 };
 
 export type QueryBookmarkArgs = {
@@ -182,17 +181,17 @@ export type QueryBookmarkArgs = {
 };
 
 export type QueryBookmarksArgs = {
-	cursor?: Maybe<Scalars["String"]>;
-	sort: Scalars["String"];
 	tag?: Maybe<FilterBookmarksTagInput>;
-};
-
-export type QueryBookmarksCountArgs = {
-	tagName?: Maybe<Scalars["String"]>;
+	sort: Scalars["String"];
+	cursor?: Maybe<Scalars["String"]>;
 };
 
 export type QueryTagArgs = {
 	id: Scalars["ID"];
+};
+
+export type QueryBookmarksCountArgs = {
+	tagName?: Maybe<Scalars["String"]>;
 };
 
 export type QueryTokenArgs = {
@@ -207,17 +206,17 @@ export type RenameTagInput = {
 export type Tag = {
 	__typename?: "Tag";
 	id: Scalars["ID"];
-	isPinned: Scalars["Boolean"];
 	name: Scalars["String"];
+	isPinned: Scalars["Boolean"];
 };
 
 export type UpdateBookmarkInput = {
-	description?: Maybe<Scalars["String"]>;
 	id: Scalars["ID"];
-	tags?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
-	tagsDisconnect: Array<CreateOrUpdateBookmarkTagInput>;
 	title?: Maybe<Scalars["String"]>;
 	url?: Maybe<Scalars["String"]>;
+	description?: Maybe<Scalars["String"]>;
+	tags?: Maybe<Array<CreateOrUpdateBookmarkTagInput>>;
+	tagsDisconnect: Array<CreateOrUpdateBookmarkTagInput>;
 };
 
 export type UpdateProfileInput = {
@@ -227,11 +226,11 @@ export type UpdateProfileInput = {
 
 export type User = {
 	__typename?: "User";
-	createdAt: Scalars["String"];
-	email: Scalars["String"];
-	emailVerified: Scalars["Boolean"];
 	id: Scalars["ID"];
 	name: Scalars["String"];
+	email: Scalars["String"];
+	emailVerified: Scalars["Boolean"];
+	createdAt: Scalars["String"];
 };
 
 export type CreateBookmarkMutationVariables = Exact<{
@@ -369,35 +368,31 @@ export type GetAllBookmarksQueryVariables = Exact<{
 
 export type GetAllBookmarksQuery = {
 	__typename?: "Query";
-	bookmarks?:
-		| {
-				__typename?: "GetBookmarksData";
-				cursor?: string | null | undefined;
-				next_cursor: string;
-				data: Array<{
-					__typename?: "Bookmark";
-					id: string;
-					title: string;
-					url: string;
-					description: string;
-					isFavourite: boolean;
-					createdAt: string;
-					updatedAt: string;
-					tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
-				}>;
-		  }
-		| null
-		| undefined;
+	bookmarks?: Maybe<{
+		__typename?: "GetBookmarksData";
+		cursor?: Maybe<string>;
+		next_cursor: string;
+		data: Array<{
+			__typename?: "Bookmark";
+			id: string;
+			title: string;
+			url: string;
+			description: string;
+			isFavourite: boolean;
+			createdAt: string;
+			updatedAt: string;
+			tags: Array<{ __typename?: "Tag"; id: string; name: string }>;
+		}>;
+	}>;
 };
 
 export type GetAllTagsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllTagsQuery = {
 	__typename?: "Query";
-	tags?:
-		| Array<{ __typename?: "Tag"; id: string; name: string; isPinned: boolean }>
-		| null
-		| undefined;
+	tags?: Maybe<
+		Array<{ __typename?: "Tag"; id: string; name: string; isPinned: boolean }>
+	>;
 };
 
 export type GetAllTokensQueryVariables = Exact<{ [key: string]: never }>;
@@ -473,17 +468,14 @@ export type UserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UserQuery = {
 	__typename?: "Query";
-	user?:
-		| {
-				__typename?: "User";
-				id: string;
-				name: string;
-				email: string;
-				emailVerified: boolean;
-				createdAt: string;
-		  }
-		| null
-		| undefined;
+	user?: Maybe<{
+		__typename?: "User";
+		id: string;
+		name: string;
+		email: string;
+		emailVerified: boolean;
+		createdAt: string;
+	}>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -491,9 +483,23 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
 	resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
+
+export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
+	fragment: string;
+	resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+
+export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
+	selectionSet: string;
+	resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type StitchingResolver<TResult, TParent, TContext, TArgs> =
+	| LegacyStitchingResolver<TResult, TParent, TContext, TArgs>
+	| NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
 	| ResolverFn<TResult, TParent, TContext, TArgs>
-	| ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+	| ResolverWithResolve<TResult, TParent, TContext, TArgs>
+	| StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
 	parent: TParent,
@@ -594,6 +600,8 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
 	AccessToken: ResolverTypeWrapper<AccessToken>;
+	ID: ResolverTypeWrapper<Scalars["ID"]>;
+	String: ResolverTypeWrapper<Scalars["String"]>;
 	AuthenticationMessage: ResolverTypeWrapper<AuthenticationMessage>;
 	Bookmark: ResolverTypeWrapper<Bookmark>;
 	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
@@ -603,13 +611,11 @@ export type ResolversTypes = {
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
 	GeneratedAccessToken: ResolverTypeWrapper<GeneratedAccessToken>;
 	GetBookmarksData: ResolverTypeWrapper<GetBookmarksData>;
-	ID: ResolverTypeWrapper<Scalars["ID"]>;
-	Int: ResolverTypeWrapper<Scalars["Int"]>;
 	LoginMessage: ResolverTypeWrapper<LoginMessage>;
 	Mutation: ResolverTypeWrapper<{}>;
 	Query: ResolverTypeWrapper<{}>;
+	Int: ResolverTypeWrapper<Scalars["Int"]>;
 	RenameTagInput: RenameTagInput;
-	String: ResolverTypeWrapper<Scalars["String"]>;
 	Tag: ResolverTypeWrapper<Tag>;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	UpdateProfileInput: UpdateProfileInput;
@@ -619,6 +625,8 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
 	AccessToken: AccessToken;
+	ID: Scalars["ID"];
+	String: Scalars["String"];
 	AuthenticationMessage: AuthenticationMessage;
 	Bookmark: Bookmark;
 	Boolean: Scalars["Boolean"];
@@ -628,13 +636,11 @@ export type ResolversParentTypes = {
 	FilterBookmarksTagInput: FilterBookmarksTagInput;
 	GeneratedAccessToken: GeneratedAccessToken;
 	GetBookmarksData: GetBookmarksData;
-	ID: Scalars["ID"];
-	Int: Scalars["Int"];
 	LoginMessage: LoginMessage;
 	Mutation: {};
 	Query: {};
+	Int: Scalars["Int"];
 	RenameTagInput: RenameTagInput;
-	String: Scalars["String"];
 	Tag: Tag;
 	UpdateBookmarkInput: UpdateBookmarkInput;
 	UpdateProfileInput: UpdateProfileInput;
@@ -646,8 +652,8 @@ export type AccessTokenResolvers<
 	ParentType extends ResolversParentTypes["AccessToken"] = ResolversParentTypes["AccessToken"],
 > = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	scopes?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -665,14 +671,14 @@ export type BookmarkResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Bookmark"] = ResolversParentTypes["Bookmark"],
 > = {
-	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-	isFavourite?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
-	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
 	title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	tags?: Resolver<Array<ResolversTypes["Tag"]>, ParentType, ContextType>;
+	isFavourite?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -689,10 +695,10 @@ export type GeneratedAccessTokenResolvers<
 	ParentType extends ResolversParentTypes["GeneratedAccessToken"] = ResolversParentTypes["GeneratedAccessToken"],
 > = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	scopes?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
 	token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	lastUsed?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	scopes?: Resolver<Array<ResolversTypes["String"]>, ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -701,8 +707,8 @@ export type GetBookmarksDataResolvers<
 	ParentType extends ResolversParentTypes["GetBookmarksData"] = ResolversParentTypes["GetBookmarksData"],
 > = {
 	cursor?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-	data?: Resolver<Array<ResolversTypes["Bookmark"]>, ParentType, ContextType>;
 	next_cursor?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	data?: Resolver<Array<ResolversTypes["Bookmark"]>, ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -710,13 +716,13 @@ export type LoginMessageResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["LoginMessage"] = ResolversParentTypes["LoginMessage"],
 > = {
+	code?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	accessToken?: Resolver<
 		Maybe<ResolversTypes["String"]>,
 		ParentType,
 		ContextType
 	>;
-	code?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -730,41 +736,11 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationCreateBookmarkArgs, "input">
 	>;
-	deleteBookmark?: Resolver<
-		ResolversTypes["Boolean"],
+	updateBookmark?: Resolver<
+		ResolversTypes["Bookmark"],
 		ParentType,
 		ContextType,
-		RequireFields<MutationDeleteBookmarkArgs, "id">
-	>;
-	deleteTag?: Resolver<
-		ResolversTypes["Boolean"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationDeleteTagArgs, "id">
-	>;
-	deleteToken?: Resolver<
-		ResolversTypes["Boolean"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationDeleteTokenArgs, "id">
-	>;
-	favouriteBookmark?: Resolver<
-		ResolversTypes["Boolean"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationFavouriteBookmarkArgs, "id" | "isFavourite">
-	>;
-	generateToken?: Resolver<
-		ResolversTypes["GeneratedAccessToken"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationGenerateTokenArgs, "name" | "scopes">
-	>;
-	pinTag?: Resolver<
-		ResolversTypes["Boolean"],
-		ParentType,
-		ContextType,
-		RequireFields<MutationPinTagArgs, "id" | "isPinned">
+		RequireFields<MutationUpdateBookmarkArgs, "input">
 	>;
 	renameTag?: Resolver<
 		ResolversTypes["Tag"],
@@ -772,11 +748,35 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationRenameTagArgs, never>
 	>;
-	updateBookmark?: Resolver<
-		ResolversTypes["Bookmark"],
+	deleteTag?: Resolver<
+		ResolversTypes["Boolean"],
 		ParentType,
 		ContextType,
-		RequireFields<MutationUpdateBookmarkArgs, "input">
+		RequireFields<MutationDeleteTagArgs, "id">
+	>;
+	deleteBookmark?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationDeleteBookmarkArgs, "id">
+	>;
+	generateToken?: Resolver<
+		ResolversTypes["GeneratedAccessToken"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationGenerateTokenArgs, "name" | "scopes">
+	>;
+	updateToken?: Resolver<
+		ResolversTypes["AccessToken"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationUpdateTokenArgs, "id" | "scopes">
+	>;
+	deleteToken?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationDeleteTokenArgs, "id">
 	>;
 	updateProfile?: Resolver<
 		ResolversTypes["Boolean"],
@@ -784,11 +784,17 @@ export type MutationResolvers<
 		ContextType,
 		RequireFields<MutationUpdateProfileArgs, "input">
 	>;
-	updateToken?: Resolver<
-		ResolversTypes["AccessToken"],
+	favouriteBookmark?: Resolver<
+		ResolversTypes["Boolean"],
 		ParentType,
 		ContextType,
-		RequireFields<MutationUpdateTokenArgs, "id" | "scopes">
+		RequireFields<MutationFavouriteBookmarkArgs, "id" | "isFavourite">
+	>;
+	pinTag?: Resolver<
+		ResolversTypes["Boolean"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationPinTagArgs, "id" | "isPinned">
 	>;
 };
 
@@ -808,31 +814,31 @@ export type QueryResolvers<
 		ContextType,
 		RequireFields<QueryBookmarksArgs, "sort">
 	>;
-	bookmarksCount?: Resolver<
-		ResolversTypes["Int"],
-		ParentType,
-		ContextType,
-		RequireFields<QueryBookmarksCountArgs, never>
-	>;
 	tag?: Resolver<
 		ResolversTypes["Tag"],
 		ParentType,
 		ContextType,
 		RequireFields<QueryTagArgs, "id">
 	>;
+	bookmarksCount?: Resolver<
+		ResolversTypes["Int"],
+		ParentType,
+		ContextType,
+		RequireFields<QueryBookmarksCountArgs, never>
+	>;
 	tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>;
+	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+	tokens?: Resolver<
+		Array<ResolversTypes["AccessToken"]>,
+		ParentType,
+		ContextType
+	>;
 	token?: Resolver<
 		ResolversTypes["AccessToken"],
 		ParentType,
 		ContextType,
 		RequireFields<QueryTokenArgs, "id">
 	>;
-	tokens?: Resolver<
-		Array<ResolversTypes["AccessToken"]>,
-		ParentType,
-		ContextType
-	>;
-	user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
 export type TagResolvers<
@@ -840,8 +846,8 @@ export type TagResolvers<
 	ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"],
 > = {
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-	isPinned?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	isPinned?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -849,11 +855,11 @@ export type UserResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"],
 > = {
-	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-	emailVerified?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	emailVerified?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+	createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -870,6 +876,12 @@ export type Resolvers<ContextType = any> = {
 	Tag?: TagResolvers<ContextType>;
 	User?: UserResolvers<ContextType>;
 };
+
+/**
+ * @deprecated
+ * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
+ */
+export type IResolvers<ContextType = any> = Resolvers<ContextType>;
 
 export const CreateBookmarkDocument = `
     mutation CreateBookmark($input: CreateBookmarkInput!) {
@@ -1229,7 +1241,7 @@ export const useGetAllTagsQuery = <TData = GetAllTagsQuery, TError = unknown>(
 	options?: UseQueryOptions<GetAllTagsQuery, TError, TData>,
 ) =>
 	useQuery<GetAllTagsQuery, TError, TData>(
-		variables === undefined ? ["GetAllTags"] : ["GetAllTags", variables],
+		["GetAllTags", variables],
 		fetcher<GetAllTagsQuery, GetAllTagsQueryVariables>(
 			GetAllTagsDocument,
 			variables,
@@ -1254,7 +1266,7 @@ export const useGetAllTokensQuery = <
 	options?: UseQueryOptions<GetAllTokensQuery, TError, TData>,
 ) =>
 	useQuery<GetAllTokensQuery, TError, TData>(
-		variables === undefined ? ["GetAllTokens"] : ["GetAllTokens", variables],
+		["GetAllTokens", variables],
 		fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(
 			GetAllTokensDocument,
 			variables,
@@ -1303,9 +1315,7 @@ export const useGetBookmarksCountQuery = <
 	options?: UseQueryOptions<GetBookmarksCountQuery, TError, TData>,
 ) =>
 	useQuery<GetBookmarksCountQuery, TError, TData>(
-		variables === undefined
-			? ["GetBookmarksCount"]
-			: ["GetBookmarksCount", variables],
+		["GetBookmarksCount", variables],
 		fetcher<GetBookmarksCountQuery, GetBookmarksCountQueryVariables>(
 			GetBookmarksCountDocument,
 			variables,
@@ -1365,7 +1375,7 @@ export const useUserQuery = <TData = UserQuery, TError = unknown>(
 	options?: UseQueryOptions<UserQuery, TError, TData>,
 ) =>
 	useQuery<UserQuery, TError, TData>(
-		variables === undefined ? ["User"] : ["User", variables],
+		["User", variables],
 		fetcher<UserQuery, UserQueryVariables>(UserDocument, variables),
 		options,
 	);
