@@ -42,7 +42,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		const { title, url, description } = state;
 		// Transform tags to Array<{ id: string }>
 		const tags = Object.values(state.tags).reduce((acc, cur) => {
-			const existingTag = data?.tags.find((item) => item.name === cur.name);
+			const existingTag = data?.find((item) => item.name === cur.name);
 			if (existingTag) {
 				acc.push({ id: existingTag.id });
 			} else {

@@ -3,12 +3,14 @@ import { createRouter } from "../createRouter";
 
 export const tagsRouter = createRouter()
 	.query("all", {
-		async resolve({ ctx, input }) {
-			return await ctx.prisma.tag.findMany({
+		async resolve({ ctx }) {
+			const tags = await ctx.prisma.tag.findMany({
 				where: {
 					userId: ctx?.user?.id as string,
 				},
 			});
+
+			return tags;
 		},
 	})
 	.query("byId", {

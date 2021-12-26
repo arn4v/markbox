@@ -18,6 +18,6 @@ export const appRouter = createRouter()
 	.merge("bookmarks.", bookmarksRouter)
 	.merge("tags.", tagsRouter)
 	.merge("tokens.", tokensRouter)
-	.merge("users", userRouter);
+	.merge("users.", userRouter);
 
 export type AppRouter = typeof appRouter;

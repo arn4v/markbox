@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useVirtual } from "react-virtual";
-import { Bookmark } from "~/graphql/types.generated";
+import { inferQueryOutput } from "~/lib/trpc";
 import BookmarkCard from "./BookmarkCard";
 
 interface Props {
-	data: Bookmark[];
+	data: inferQueryOutput<"bookmarks.all">["data"];
 }
 
 const VirtualizedBookmarks: Component<Props> = ({ data }) => {

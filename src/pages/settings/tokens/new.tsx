@@ -9,16 +9,16 @@ import {
 	HiOutlineClipboard,
 } from "react-icons/hi";
 import Input from "~/components/Input";
-import { useGenerateTokenMutation } from "~/graphql/types.generated";
+import { trpc } from "~/lib/trpc";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
 export default function NewTokenPage() {
 	const router = useRouter();
-	const [token, setToken] = React.useState<string>(undefined);
+	const [token, setToken] = React.useState<string | undefined>(undefined);
 	const [isCopied, setCopied] = React.useState<boolean>(false);
-	const { mutate } = useGenerateTokenMutation({
+	const { mutate } = trpc.useMutation("tokens.generate", {
 		onSuccess(data) {
-			setToken(data.generateToken.token);
+			setToken(data.token);
 		},
 	});
 	const tokenInputRef = React.useRef<HTMLTextAreaElement>(null);
@@ -69,7 +69,7 @@ export default function NewTokenPage() {
 						<div className="flex items-center w-full gap-4 p-4 bg-gray-100 rounded-lg dark:bg-gray-900">
 							<textarea
 								ref={tokenInputRef}
-								onClick={(e) => tokenInputRef.current.select()}
+								onClick={(e) => tokenInputRef?.current?.select()}
 								className="w-full px-4 py-1 rounded dark:bg-gray-50 dark:text-black"
 								value={token}
 								rows={4}

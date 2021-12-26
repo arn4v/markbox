@@ -3,28 +3,47 @@ import * as React from "react";
 import { useInView } from "react-intersection-observer";
 import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
-import { Bookmark } from "~/graphql/types.generated";
 import useFuse from "~/hooks/use-fuse";
+import { inferQueryOutput, trpc } from "~/lib/trpc";
 import useDashboardStore from "../store";
-import useInfiniteBookmarksQuery from "../use-infinite-bookmarks";
 import BookmarkCard from "./BookmarkCard";
 import LoadMoreButton from "./LoadMoreButton";
 import NoDataWarning from "./NoDataWarning";
 import NoResultsWarning from "./NoResultsWarning";
 import SortButton from "./SortButton";
 
+type Bookmark = NonNullable<inferQueryOutput<"bookmarks.byId">>;
+
 const BookmarksGrid = (): JSX.Element => {
-	const tag = useDashboardStore((state) => state.tag);
+	const { tag, sort } = useDashboardStore(({ tag, sort }) => ({ tag, sort }));
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
-	const { data, count, isLoading, fetchNextPage } = useInfiniteBookmarksQuery();
-	const { result } = useFuse<Bookmark>({
-		data: data,
+	const { isLoading, data: count } = trpc.useQuery([
+		"bookmarks.count",
+		tag === "All" ? {} : { tagName: tag },
+	]);
+	const { data: rawData, fetchNextPage } = trpc.useInfiniteQuery(
+		["bookmarks.all", { tag, sort }],
+		{
+			getPreviousPageParam: (lastPage) => lastPage.cursor,
+			getNextPageParam: (lastPage) => lastPage.next_cursor,
+		},
+	);
+
+	const data = React.useMemo(() => {
+		return rawData?.pages?.reduce((acc, cur) => {
+			return [...acc, ...cur?.data];
+		}, [] as Array<Bookmark>);
+	}, [rawData]) as unknown as Array<Bookmark>;
+
+	const { result } = useFuse({
+		data: data ?? [],
 		query,
 		options: {
 			keys: ["title", "url", "tags.name"],
 		},
 	});
+
 	const { ref, inView } = useInView({});
 	const [isNextPageLoading, setNextPageLoading] =
 		React.useState<boolean>(false);
@@ -96,16 +115,16 @@ const BookmarksGrid = (): JSX.Element => {
 						ref={ref}
 						onClick={loadMore}
 						isLoading={isNextPageLoading}
-						isHidden={count === data.length}
+						isHidden={count === data?.length}
 					/>
 				</ul>
 			) : (
 				<>
 					<NoResultsWarning
-						isVisible={data.length > 0 && result.length === 0}
+						isVisible={data?.length > 0 && result.length === 0}
 					/>
 					<NoDataWarning
-						isVisible={!(data.length > 0 && result.length === 0)}
+						isVisible={!(data?.length > 0 && result.length === 0)}
 					/>
 				</>
 			)}

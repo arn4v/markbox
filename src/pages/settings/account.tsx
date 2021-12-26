@@ -2,33 +2,22 @@ import { NextSeo } from "next-seo";
 import * as React from "react";
 import toast from "react-hot-toast";
 import Input from "~/components/Input";
-import {
-	useUpdateProfileMutation,
-	useUserQuery,
-} from "~/graphql/types.generated";
+import { trpc } from "~/lib/trpc";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
 export default function AccountSettingsPage() {
-	const initialState = {
-		id: undefined,
-		name: "",
-	};
-	const [state, setState] = React.useState(initialState);
-	const {} = useUserQuery(
-		{},
-		{
-			onSuccess(data) {
-				if (state.name === "" && typeof state.id === "undefined") {
-					setState((prev) => ({
-						...prev,
-						id: data.user.id,
-						name: data?.user?.name ?? "",
-					}));
-				}
-			},
+	const [state, setState] = React.useState({ id: "", name: "" });
+	trpc.useQuery(["users.me"], {
+		onSuccess(data) {
+			if (data && state.id === "") {
+				setState({
+					id: data.id,
+					name: data.name,
+				});
+			}
 		},
-	);
-	const { mutate } = useUpdateProfileMutation({
+	});
+	const { mutate } = trpc.useMutation("users.updateProfile", {
 		onSuccess() {
 			toast.success("Successfully updated profile.", {
 				position: "top-center",
@@ -39,7 +28,7 @@ export default function AccountSettingsPage() {
 
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
-		mutate({ input: state });
+		mutate(state);
 	};
 
 	return (

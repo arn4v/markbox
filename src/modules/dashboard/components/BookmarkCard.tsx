@@ -11,27 +11,18 @@ import {
 	HiStar,
 	HiTrash,
 } from "react-icons/hi";
-import { useQueryClient } from "react-query";
 import { useDisclosure } from "react-sensible";
 import Badge from "~/components/Badge";
 import DeleteModal from "~/components/DeleteModal";
 import Popup from "~/components/Popup";
-import {
-	Bookmark,
-	useDeleteBookmarkMutation,
-	useFavouriteBookmarkMutation,
-} from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
+import { inferQueryOutput, trpc } from "~/lib/trpc";
 import { EditDrawer } from "~/modules/common/components/Edit";
 import DescriptionModal from "./DescriptionModal";
 
 interface Props {
-	data: Bookmark;
+	data: NonNullable<inferQueryOutput<"bookmarks.byId">>;
 }
-
-const truncateDescription = (description: string) => {
-	return;
-};
 
 const BookmarkCard = ({ data }: Props) => {
 	const {
@@ -39,16 +30,16 @@ const BookmarkCard = ({ data }: Props) => {
 		onClose: onDeleteClose,
 		onOpen: onDeleteOpen,
 	} = useDisclosure();
-	const queryClient = useQueryClient();
-	const { mutate } = useDeleteBookmarkMutation({
+	const { invalidateQueries } = trpc.useContext();
+	const { mutate } = trpc.useMutation("bookmarks.deleteById", {
 		onSuccess: () => {
-			queryClient.invalidateQueries("GetAllBookmarks");
-			queryClient.invalidateQueries("GetAllTags");
+			invalidateQueries(["bookmarks.all"]);
+			invalidateQueries(["tags.all"]);
 		},
 	});
-	const { mutate: updateFavourite } = useFavouriteBookmarkMutation({
+	const { mutate: updateFavourite } = trpc.useMutation("bookmarks.favourite", {
 		onSuccess() {
-			queryClient.invalidateQueries("GetAllBookmarks");
+			invalidateQueries(["bookmarks.all"]);
 		},
 	});
 	const [isDropdownOpen, _, onDropdownClose, onDropdownToggle] =
@@ -219,7 +210,7 @@ const BookmarkCard = ({ data }: Props) => {
 				onClose={onDeleteClose}
 				isOpen={isDeleteOpen}
 				onDelete={() => {
-					mutate({ id: data?.id });
+					mutate(data?.id);
 					onDeleteClose();
 				}}
 			/>

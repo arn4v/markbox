@@ -4,13 +4,7 @@ import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
-import {
-	CreateOrUpdateBookmarkTagInput,
-	Tag,
-	useGetAllTagsQuery,
-	useGetBookmarkQuery,
-	useUpdateBookmarkMutation
-} from "~/graphql/types.generated";
+import { trpc } from "~/lib/trpc";
 
 interface LocalState {
 	title: string;
@@ -19,46 +13,6 @@ interface LocalState {
 	tags: Record<string, CreateOrUpdateBookmarkTagInput>;
 	tagsDisconnect: Record<string, CreateOrUpdateBookmarkTagInput>;
 }
-
-const processServerTagsToClientNeeds = (
-	data: Tag[],
-): Record<string, CreateOrUpdateBookmarkTagInput> => {
-	return data.reduce((acc, { name }) => {
-		acc[name] = { name };
-		return acc;
-	}, {});
-};
-
-const processClientTagsToServerNeeds = (
-	data: Tag[],
-	tags: LocalState["tags"],
-	tagsDisconnect: LocalState["tagsDisconnect"],
-) => {
-	const transformedTags = Object.values(tags).reduce((acc, cur) => {
-		if (tagsDisconnect[cur?.name]) delete tagsDisconnect[cur?.name];
-		const existingTag = data.find((item) => item.name === cur.name);
-		if (existingTag) {
-			acc.push({ id: existingTag.id });
-		} else {
-			acc.push(cur);
-		}
-		return acc;
-	}, []);
-
-	const transformedTagsDisconnect = Object.values(tagsDisconnect).reduce(
-		(acc, cur) => {
-			const existingTag = data.find((item) => item.name === cur.name);
-			if (existingTag) {
-				acc.push({ id: existingTag.id });
-			}
-
-			return acc;
-		},
-		[],
-	);
-
-	return { tags: transformedTags, tagsDisconnect: transformedTagsDisconnect };
-};
 
 interface Props {
 	id: string;
@@ -75,25 +29,22 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	};
 	const [state, setState] = React.useState<LocalState>(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
-	useGetBookmarkQuery(
-		{ id },
-		{
-			onSuccess(data) {
-				if (isEqual(state, initialState)) {
-					setState((prev) => ({
-						...prev,
-						title: data.bookmark.title,
-						url: data.bookmark.url,
-						description: data.bookmark.description,
-						tags: processServerTagsToClientNeeds(data.bookmark.tags),
-					}));
-				}
-			},
+	trpc.useQuery(["bookmarks.byId", id], {
+		onSuccess(data) {
+			if (isEqual(state, initialState)) {
+				setState((prev) => ({
+					...prev,
+					title: data.bookmark.title,
+					url: data.bookmark.url,
+					description: data.bookmark.description,
+					tags: processServerTagsToClientNeeds(data.bookmark.tags),
+				}));
+			}
 		},
-	);
-	const { data } = useGetAllTagsQuery();
+	});
+	const { data } = trpc.useQuery(["tags.all"]);
 	const queryClient = useQueryClient();
-	const { mutate } = useUpdateBookmarkMutation({
+	const { mutate } = trpc.useMutation(["bookmarks.updateById"], {
 		onSuccess: (res) => {
 			setState(initialState);
 			queryClient.invalidateQueries("GetAllBookmarks");
@@ -105,12 +56,6 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		(e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
 			const { title, url, description } = state;
-
-			const { tags, tagsDisconnect } = processClientTagsToServerNeeds(
-				data.tags,
-				state.tags,
-				state.tagsDisconnect,
-			);
 
 			mutate({
 				input: {
@@ -244,7 +189,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 										},
 									},
 								}));
-								newTagInputRef.current.value = "";
+								newTagInputRef.current?.value = "";
 							}
 						}}
 						placeholder="Separate tags by typing comma (,)"
@@ -252,7 +197,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 						list="tags"
 					/>
 					<datalist id="tags">
-						{data?.tags?.map((item) => {
+						{data?.map((item) => {
 							return <option key={item.id} value={item.name} />;
 						})}
 					</datalist>

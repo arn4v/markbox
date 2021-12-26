@@ -1,8 +1,9 @@
+import type { Tag as TagType } from "@prisma/client";
 import * as React from "react";
 import Input from "~/components/Input";
-import { Tag as TagType, useGetAllTagsQuery } from "~/graphql/types.generated";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useFuse from "~/hooks/use-fuse";
+import { trpc } from "~/lib/trpc";
 import useDashboardStore from "../store";
 import Tag from "./Tag";
 
@@ -15,19 +16,16 @@ export default function TagsList() {
 		...state.edit_mode,
 		tag: state.tag,
 	}));
-	const { data, isLoading } = useGetAllTagsQuery(
-		{},
-		{
-			onSuccess(data) {
-				if (data?.tags?.length === 0) {
-					onDisable();
-				}
-			},
+	const { data, isLoading } = trpc.useQuery(["tags.all"], {
+		onSuccess(data) {
+			if (data?.length === 0) {
+				onDisable();
+			}
 		},
-	);
+	});
 	const [query, setQuery] = React.useState("");
-	const { result } = useFuse<TagType>({
-		data: data?.tags?.sort((a, b) => a.name.localeCompare(b.name)),
+	const { result } = useFuse({
+		data: data?.sort((a, b) => a.name.localeCompare(b.name)) ?? [],
 		query: query,
 		options: {
 			keys: ["name"],
@@ -35,8 +33,8 @@ export default function TagsList() {
 	});
 	const { isLg } = useBreakpoints();
 	const activeTagData = React.useMemo(() => {
-		return data?.tags.find((item) => item.name === activeTag);
-	}, [data?.tags, activeTag]);
+		return data?.find((item) => item.name === activeTag) as TagType;
+	}, [data, activeTag]);
 
 	// Disable edit mode on mobile if it is enabled
 	React.useEffect(() => {
@@ -58,10 +56,9 @@ export default function TagsList() {
 				data-test="dashboard-tags-list"
 				className="flex flex-col items-center justify-start w-full gap-4"
 			>
-				{result?.length === data?.tags?.length ? (
+				{result?.length === data?.length ? (
 					<Tag
 						isEditModeEnabled={false}
-						data={{ id: undefined, name: "All", isPinned: false }}
 						isActive={activeTag === "All"}
 						showPin={false}
 					/>

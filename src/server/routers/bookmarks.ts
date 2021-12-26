@@ -17,6 +17,9 @@ export const bookmarksRouter = createRouter()
 				where: {
 					id: input,
 				},
+				include: {
+					tags: true,
+				},
 			});
 		},
 	})

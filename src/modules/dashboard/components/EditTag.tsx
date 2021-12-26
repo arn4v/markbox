@@ -1,3 +1,4 @@
+import type { Tag } from "@prisma/client";
 import clsx from "clsx";
 import React from "react";
 import { HiPencil } from "react-icons/hi";
@@ -5,23 +6,23 @@ import { useQueryClient } from "react-query";
 import Input from "~/components/Input";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
-import { Tag, useRenameTagMutation } from "~/graphql/types.generated";
+import { inferQueryOutput, trpc } from "~/lib/trpc";
 
 interface EditTagProps {
-	data: Tag;
+	data: NonNullable<inferQueryOutput<"tags.byId">>;
 	isOpen: boolean;
 	onOpen: () => void;
 	onClose: () => void;
 }
 
 const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
-	const queryClient = useQueryClient();
 	const [name, setName] = React.useState<string>(data?.name);
-	const { mutate } = useRenameTagMutation({
+	const { invalidateQueries } = trpc.useContext();
+	const { mutate } = trpc.useMutation("tags.rename", {
 		// Invalidate GetTags query on successful rename
 		onSuccess() {
-			queryClient.invalidateQueries("GetAllTags");
-			queryClient.invalidateQueries("GetAllBookmarks");
+			invalidateQueries(["tags.all"]);
+			invalidateQueries(["bookmarks.all"]);
 			onClose();
 		},
 	});
@@ -51,7 +52,7 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 							className="flex flex-col w-full gap-8"
 							onSubmit={(e) => {
 								e.preventDefault();
-								mutate({ input: { id: data.id, name } });
+								mutate({ id: data.id, name });
 							}}
 						>
 							<div className="text-center font-bold text-lg">Rename tag</div>

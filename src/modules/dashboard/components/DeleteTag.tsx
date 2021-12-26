@@ -1,21 +1,15 @@
 import clsx from "clsx";
 import React from "react";
 import { HiTrash } from "react-icons/hi";
-import { useQueryClient } from "react-query";
 import Modal, { ModalContent } from "~/components/Modal";
-import Popup from "~/components/Popup";
 import { genericModalMotionProps } from "~/config";
-import {
-	Tag,
-	useDeleteTagMutation,
-	useGetBookmarksCountQuery,
-} from "~/graphql/types.generated";
+import { inferQueryOutput, trpc } from "~/lib/trpc";
 
 interface DeleteTagProps {
 	/**
 	 * Tag to delete
 	 */
-	data: Tag;
+	data: NonNullable<inferQueryOutput<"tags.byId">>;
 
 	/**
 	 * Popup open state
@@ -34,15 +28,17 @@ interface DeleteTagProps {
 }
 
 const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
-	const queryClient = useQueryClient();
 	// Get tag bookmarks count
-	const { data: countData } = useGetBookmarksCountQuery({ tagName: data.name });
-	const { mutate } = useDeleteTagMutation({
-		// Invalidate queries onSuccess
+	const { data: bookmarksCount } = trpc.useQuery([
+		"bookmarks.count",
+		{ tagName: data.name },
+	]);
+	const { invalidateQueries } = trpc.useContext();
+	const { mutate } = trpc.useMutation("tags.deleteById", {
 		onSuccess() {
-			queryClient.invalidateQueries("GetAllTags");
-			queryClient.invalidateQueries("GetAllBookmarks");
-			queryClient.invalidateQueries("GetTag");
+			invalidateQueries("GetAllTags");
+			invalidateQueries("GetAllBookmarks");
+			invalidateQueries("GetTag");
 		},
 	});
 
@@ -68,7 +64,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 				<ModalContent className="z-[200]" {...genericModalMotionProps}>
 					<div className="flex flex-col gap-8 p-8 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
 						<div className="text-center whitespace-no-wrap">
-							This tag is related to {countData?.bookmarksCount} bookmarks.
+							This tag is related to {bookmarksCount} bookmarks.
 							<br />
 							Do you really want to delete it?
 						</div>
@@ -84,7 +80,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 								type="button"
 								className="px-2 py-1 bg-red-500 hover:bg-red-600 rounded text-white transition"
 								onClick={() => {
-									mutate({ id: data.id });
+									mutate(data?.id);
 								}}
 							>
 								Delete

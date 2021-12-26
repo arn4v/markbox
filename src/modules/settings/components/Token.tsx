@@ -1,16 +1,17 @@
-import { useQueryClient } from "react-query";
+import type { AccessToken } from "@prisma/client";
 import { useDisclosure } from "react-sensible";
 import DeleteModal from "~/components/DeleteModal";
-import { AccessToken, useDeleteTokenMutation } from "~/graphql/types.generated";
+import { inferQueryOutput, trpc } from "~/lib/trpc";
 
 interface Props {
-	data: AccessToken;
+	data: Pick<AccessToken, "id" | "name">;
 }
+
 export default function Token({ data }: Props) {
-	const queryClient = useQueryClient();
-	const { mutate } = useDeleteTokenMutation({
-		onSuccess(data) {
-			queryClient.invalidateQueries("GetAllTokens");
+	const { invalidateQueries } = trpc.useContext();
+	const { mutate } = trpc.useMutation("tokens.delete", {
+		onSuccess() {
+			invalidateQueries("GetAllTokens");
 			onClose();
 		},
 	});
@@ -32,7 +33,7 @@ export default function Token({ data }: Props) {
 				isOpen={isOpen}
 				onClose={onClose}
 				onDelete={() => {
-					mutate({ id: data.id });
+					mutate(data.id);
 				}}
 			/>
 		</>
