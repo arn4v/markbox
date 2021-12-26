@@ -1,9 +1,16 @@
 import clsx from "clsx";
-import Link from "next/link";
+import * as React from "react";
+import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
 import { isProd } from "~/config";
 
-const SidebarItem = ({ href, children }) => {
+const SidebarItem = ({
+	href,
+	children,
+}: {
+	href: LinkProps["href"];
+	children: React.ReactNode;
+}) => {
 	const router = useRouter();
 	const active = router.pathname === href;
 	return (

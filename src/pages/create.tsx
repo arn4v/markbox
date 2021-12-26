@@ -13,10 +13,10 @@ const CreatePage = () => {
 	const router = useRouter();
 	const isPwa = useIsPwa();
 	const [{ title, url, popup }, setState] = React.useState({
-		title: null,
-		url: null,
-		description: null,
-		popup: false,
+		title: "",
+		url: "",
+		description: "",
+		popup: false as boolean,
 	});
 	const { isLoading } = useAuth(true);
 	const [isMounted, setMounted] = React.useState(false);
@@ -24,9 +24,9 @@ const CreatePage = () => {
 	React.useEffect(() => {
 		// Decode window.location query params
 		const { searchParams } = new URL(window.location.href);
-		const title = searchParams.get("title");
+		const title: string = searchParams.get("title") ?? "";
 		const url = searchParams.get("url");
-		const description = searchParams.get("description");
+		const description: string = searchParams.get("description") ?? "";
 		const popup = !!searchParams.get("popup") ?? false;
 		setState({
 			title,
@@ -76,19 +76,20 @@ export const getServerSideProps: GetServerSideProps = async ({
 	if (query?.url) {
 		const session = getSession(req, res);
 
-		if (!session) {
+		if (!session || !session?.user) {
 			return { props: {} };
 		}
 
 		const user = await prisma.user.findUnique({
 			where: {
-				auth0Id: (session.user as UserProfile).sub,
+				auth0Id: (session?.user as UserProfile)?.sub as string,
 			},
 		});
+
 		const bookmark = await prisma.bookmark.findFirst({
 			where: {
 				url: query?.url as string,
-				userId: user.id,
+				userId: user?.id,
 			},
 		});
 

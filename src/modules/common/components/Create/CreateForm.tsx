@@ -8,7 +8,7 @@ import { trpc } from "~/lib/trpc";
 interface Props {
 	title?: string;
 	url?: string;
-	onSuccess: (...args: unknown[]) => void;
+	onSuccess: Function;
 }
 
 const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
@@ -18,14 +18,13 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		description: "",
 		tags: {} as Record<string, { name: string }>,
 	};
-	// Data fetching/mutation
-	const queryClient = useQueryClient();
+	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
 	const { mutate } = trpc.useMutation(["bookmarks.create"], {
-		onSuccess: () => {
+		onSuccess() {
 			// Invalidate GetAllBookmarks and GetAllTags on successful mutation
-			queryClient.invalidateQueries("GetAllBookmarks");
-			queryClient.invalidateQueries("GetAllTags");
+			invalidateQueries(["bookmarks.all"]);
+			invalidateQueries(["tags.all"]);
 			setState(initialState);
 			onSuccess();
 		},
@@ -40,17 +39,22 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 		const { title, url, description } = state;
-		// Transform tags to Array<{ id: string }>
-		const tags = Object.values(state.tags).reduce((acc, cur) => {
-			const existingTag = data?.find((item) => item.name === cur.name);
-			if (existingTag) {
-				acc.push({ id: existingTag.id });
-			} else {
-				acc.push(cur);
-			}
-			return acc;
-		}, []);
-		mutate({ input: { title, url, description, tags } });
+		const { tagsConnect, tagsCreate } = Object.values(state.tags).reduce(
+			(acc, cur) => {
+				const existingTag = data?.find((item) => item.name === cur.name);
+				if (existingTag) {
+					acc.tagsConnect.push(existingTag.id);
+				} else {
+					acc.tagsCreate.push(cur.name);
+				}
+				return acc;
+			},
+			{ tagsConnect: [], tagsCreate: [] } as {
+				tagsConnect: string[];
+				tagsCreate: string[];
+			},
+		);
+		mutate({ title, url, description, tagsConnect, tagsCreate });
 	};
 
 	const onChange = React.useCallback(
@@ -162,7 +166,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 										},
 									},
 								}));
-								newTagInputRef.current.value = "";
+								if (newTagInputRef?.current) newTagInputRef.current.value = "";
 							}
 						}}
 						placeholder="Separate tags by typing comma (,)"
@@ -170,7 +174,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 						list="tags"
 					/>
 					<datalist id="tags">
-						{data?.tags?.map((item) => {
+						{data?.map((item) => {
 							return <option key={item.id} value={item.name} />;
 						})}
 					</datalist>

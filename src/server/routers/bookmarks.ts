@@ -13,7 +13,7 @@ export const bookmarksRouter = createRouter()
 	.query("byId", {
 		input: z.string().uuid(),
 		async resolve({ ctx, input }) {
-			return ctx.prisma.bookmark.findUnique({
+			return await ctx.prisma.bookmark.findUnique({
 				where: {
 					id: input,
 				},
@@ -119,16 +119,7 @@ export const bookmarksRouter = createRouter()
 			tagsConnect: z.array(z.string().uuid()),
 		}),
 		async resolve({ ctx, input }) {
-			const {
-				createdAt,
-				description,
-				id,
-				isFavourite,
-				tags,
-				title,
-				updatedAt,
-				url,
-			} = await ctx.prisma.bookmark.create({
+			return await ctx.prisma.bookmark.create({
 				data: {
 					...input,
 					tags: {
@@ -148,23 +139,12 @@ export const bookmarksRouter = createRouter()
 					tags: true,
 				},
 			});
-
-			return {
-				id,
-				title,
-				description,
-				isFavourite,
-				url,
-				tags: tags,
-				createdAt: createdAt,
-				updatedAt: updatedAt,
-			};
 		},
 	})
 	.mutation("updateById", {
 		input: z.object({
 			id: z.string().uuid(),
-			name: z.string().optional(),
+			title: z.string().optional(),
 			url: z.string().url().optional(),
 			description: z.string().optional(),
 			tagsCreate: z.array(z.string()).default([]),
@@ -175,16 +155,7 @@ export const bookmarksRouter = createRouter()
 			ctx,
 			input: { tagsConnect, tagsCreate, tagsDisconnect, ...input },
 		}) {
-			const {
-				createdAt,
-				description,
-				id,
-				isFavourite,
-				tags,
-				title,
-				updatedAt,
-				url,
-			} = await ctx.prisma.bookmark.update({
+			const data = await ctx.prisma.bookmark.update({
 				where: {
 					id: input.id,
 				},
@@ -206,16 +177,7 @@ export const bookmarksRouter = createRouter()
 
 			await deleteOrphanTagsForUserId(ctx.prisma, ctx.user?.id as string);
 
-			return {
-				id,
-				title,
-				description,
-				url,
-				isFavourite,
-				tags: tags,
-				createdAt: createdAt,
-				updatedAt: updatedAt,
-			};
+			return data;
 		},
 	})
 	.mutation("favourite", {

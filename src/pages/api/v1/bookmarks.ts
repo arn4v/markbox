@@ -1,145 +1,110 @@
-import * as yup from "yup";
+import { z } from "zod";
 import {
 	createHandler,
 	patAuthMiddleware,
 	prisma,
 	rateLimitMiddleware,
-	withCookies
+	withCookies,
 } from "~/lib/utils.server";
 import ApiRequestGQL from "~/types/ApiRequest";
 
-interface GetBody {
-	id?: string;
-	title?: string;
-	tags?: {
-		AND?: string[];
-		OR?: string[];
-	};
-}
-
-const GetBodySchema = yup
-	.object()
-	.shape({
-		id: yup.string(),
-		title: yup.string(),
-		tags: yup
-			.object()
-			.shape({
-				AND: yup.array().of(yup.string()),
-				OR: yup.array().of(yup.string()),
-			})
-			.test(
-				"either AND or OR",
-				"You can use only AND or OR, not both.",
-				(obj) => {
-					if (obj?.AND && obj?.OR) {
-						return false;
-					} else {
-						return true;
-					}
-				},
-			),
-	})
-	.optional();
-
-interface PostBody {
-	title: string;
-	url: string;
-	tags: string[];
-}
-
-const PostBodySchema = yup.object().shape({
-	title: yup.string().required(),
-	url: yup.string().required(),
-	tags: yup.array(yup.string()),
+const GetBodySchema = z.object({
+	id: z.string().optional(),
+	title: z.string().optional(),
+	tags: z
+		.union([
+			z.object({
+				AND: z.array(z.string()),
+			}),
+			z.object({ OR: z.array(z.string()) }),
+		])
+		.optional(),
 });
 
-interface DeleteQuery {
-	id: string;
-}
+const PostBodySchema = z.object({
+	title: z.string(),
+	url: z.string(),
+	tags: z.array(z.string()),
+});
 
-const DeleteQuerySchema = yup.object().shape({
-	id: yup.string().required(),
+const DeleteQuerySchema = z.object({
+	id: z.string(),
 });
 
 const handler = createHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
 	.use(rateLimitMiddleware)
 	.get(async (req, res) => {
-		try {
-			const body = (
-				req.body ? await GetBodySchema.validate(req.body) : req.body
-			) as GetBody;
-			const items = await prisma.bookmark.findMany({
-				where: {
-					userId: req.ctx.userId,
-					...(typeof body.id === "string"
-						? {
-								id: {
-									equals: body.id,
+		const body = await GetBodySchema.parseAsync(req.body);
+		const items = await prisma.bookmark.findMany({
+			where: {
+				userId: req.ctx.userId,
+				...(typeof body.id === "string"
+					? {
+							id: {
+								equals: body.id,
+							},
+					  }
+					: {}),
+				...(typeof body.title === "string"
+					? {
+							title: {
+								equals: body.title,
+							},
+					  }
+					: {}),
+				...(body?.tags &&
+				(("AND" in body?.tags && Array.isArray(body?.tags?.AND)) ||
+					("OR" in body?.tags && Array.isArray(body?.tags?.OR)))
+					? {
+							tags: {
+								some: {
+									...("OR" in body?.tags && Array.isArray(body?.tags?.OR)
+										? {
+												OR: body?.tags.OR.map((item) => {
+													return { name: item, userId: req.ctx.userId };
+												}),
+										  }
+										: {}),
+									...("AND" in body?.tags && Array.isArray(body?.tags?.AND)
+										? {
+												AND: body?.tags.AND.map((item) => {
+													return { name: item, userId: req.ctx.userId };
+												}),
+										  }
+										: {}),
 								},
-						  }
-						: {}),
-					...(typeof body.title === "string"
-						? {
-								title: {
-									equals: body.title,
-								},
-						  }
-						: {}),
-					...(Array.isArray(body?.tags?.AND) || Array.isArray(body?.tags?.OR)
-						? {
-								tags: {
-									some: {
-										...(body?.tags?.OR
-											? {
-													OR: body?.tags.OR.map((item) => {
-														return { name: item, userId: req.ctx.userId };
-													}),
-											  }
-											: {}),
-										...(body?.tags?.AND
-											? {
-													AND: body?.tags.AND.map((item) => {
-														return { name: item, userId: req.ctx.userId };
-													}),
-											  }
-											: {}),
-									},
-								},
-						  }
-						: {}),
-				},
-				select: {
-					id: true,
-					tags: {
-						select: {
-							id: true,
-							name: true,
-						},
+							},
+					  }
+					: {}),
+			},
+			select: {
+				id: true,
+				tags: {
+					select: {
+						id: true,
+						name: true,
 					},
-					url: true,
-					title: true,
-					createdAt: true,
-					updatedAt: true,
 				},
-			});
-			res.status(200).send({
-				data: items.map((item) => {
-					return {
-						...item,
-						createdAt: item.createdAt.toISOString(),
-						updatedAt: item.updatedAt.toISOString(),
-					};
-				}),
-			});
-		} catch (err) {
-			res.status(400).send(err);
-		}
+				url: true,
+				title: true,
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+		res.status(200).send({
+			data: items.map((item) => {
+				return {
+					...item,
+					createdAt: item.createdAt.toISOString(),
+					updatedAt: item.updatedAt.toISOString(),
+				};
+			}),
+		});
 	})
 	.post(async (req, res) => {
 		try {
-			const body = (await PostBodySchema.validate(req.body)) as PostBody;
+			const body = await PostBodySchema.parseAsync(req.body);
 			try {
 				const tags: Record<string, unknown> = {};
 
@@ -258,29 +223,23 @@ const handler = createHandler<ApiRequestGQL>()
 		res.status(204).end();
 	})
 	.delete(async (req, res) => {
-		try {
-			const body = (req?.query
-				? await DeleteQuerySchema.validate(req?.query)
-				: req?.query) as unknown as DeleteQuery;
-			const doesBookmarkExistForUser = await prisma.bookmark.findFirst({
+		const body = await DeleteQuerySchema.parseAsync(req?.query);
+		const doesBookmarkExistForUser = await prisma.bookmark.findFirst({
+			where: {
+				id: body.id,
+				userId: req.ctx.userId,
+			},
+		});
+		if (doesBookmarkExistForUser) {
+			const deleted = await prisma.bookmark.delete({
 				where: {
 					id: body.id,
-					userId: req.ctx.userId,
 				},
+				select: {},
 			});
-			if (doesBookmarkExistForUser) {
-				const deleted = await prisma.bookmark.delete({
-					where: {
-						id: body.id,
-					},
-					select: {},
-				});
-				res.status(200).send({ message: "Successfully deleted bookmark." });
-			} else {
-				res.status(200).send({ message: "Invalid bookmark id." });
-			}
-		} catch (err) {
-			res.status(400).send(err);
+			res.status(200).send({ message: "Successfully deleted bookmark." });
+		} else {
+			res.status(200).send({ message: "Invalid bookmark id." });
 		}
 	});
 

@@ -22,15 +22,15 @@ export const createContext = async ({
 	if (session) {
 		ctx.session = session;
 
-		const auth0user = session.user as UserProfile;
+		const auth0user = session?.user as UserProfile;
 		ctx.auth0user = auth0user;
 
 		const user = await prisma.user.upsert({
-			where: { email: auth0user?.email },
+			where: { email: auth0user?.email as string },
 			create: {
 				auth0Id: auth0user?.sub,
-				name: auth0user?.name,
-				email: auth0user?.email,
+				name: auth0user?.name as string,
+				email: auth0user?.email as string,
 			},
 			update: {
 				auth0Id: session?.user?.sub,

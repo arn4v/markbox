@@ -7,7 +7,7 @@ import { createSigner, createVerifier } from "fast-jwt";
 import ms from "ms";
 import multer from "multer";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import nextConnect, { Middleware } from "next-connect";
+import nextConnect, { Middleware, NextHandler } from "next-connect";
 import { createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import path from "path";
@@ -46,9 +46,9 @@ const options: Prisma.PrismaClientOptions = {};
 if (!isProd && !!process.env.PRISMA_LOG)
 	options.log = ["query", "info", `warn`, `error`];
 
-if (!global.prisma) global.prisma = new PrismaClient(options);
+if (!(global as any).prisma) (global as any).prisma = new PrismaClient(options);
 
-export const prisma = global.prisma as PrismaClient;
+export const prisma = (global as any).prisma as PrismaClient;
 
 /* -------------------------------------------------------------------------- */
 /*                                Next Connect                                */
@@ -70,8 +70,8 @@ export const createSetCookie =
 		const stringValue =
 			typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
 
-		if ("maxAge" in options) {
-			options.expires = new Date(Date.now() + options.maxAge);
+		if (options?.maxAge) {
+			options.expires = new Date(Date.now() + options?.maxAge);
 		}
 
 		res.setHeader("Set-Cookie", serialize(name, String(stringValue), options));
@@ -82,14 +82,18 @@ export const createSetCookie =
 /**
  * Adds `cookie` function on `res.cookie` to set cookies for response
  */
-export const withCookies =
-	(handler: NextApiHandler) => (req: NextApiRequest, res: ApiResponse) => {
+export function withCookies<
+	T extends NextApiRequest | ApiRequest | ApiRequestGQL,
+	U,
+>(handler: (req: T, res: ApiResponse) => U) {
+	return (req: T, res: ApiResponse) => {
 		res.setCookie = createSetCookie(res);
 		res.removeCookie = (name: string) =>
 			res.setCookie(name, "", { maxAge: -1, path: "/" });
 
 		return handler(req, res);
 	};
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   Mailer                                   */
@@ -133,30 +137,37 @@ export const patAuthMiddleware: Middleware<ApiRequestGQL, ApiResponse> = async (
 	res,
 	next,
 ) => {
-	const auth = req.headers.authorization;
-	if (!auth)
+	const auth = req.headers?.authorization;
+
+	if (typeof auth !== "string") {
 		res.status(400).send({ message: "Authorization header not found." });
+		return;
+	}
+
 	const isMatching = /^Bearer\s+(.+)/.exec(auth);
 	if (isMatching) {
 		try {
 			const token = auth.split(" ")[1].trim();
 			const decoded: DecodedPat = await jwtVerifyPat(token);
 			try {
-				const { userId } = await prisma.accessToken.findUnique({
+				const pat = await prisma.accessToken.findUnique({
 					where: {
 						id: decoded.sub,
 					},
-					select: {
-						userId: true,
+					include: {
+						User: true,
 					},
 				});
+
+				if (!pat) res.status(500).send({ message: "Invalid token." });
+
 				req.ctx = {
 					decodedJwt: decoded,
-					userId,
+					userId: pat?.User?.id,
 				};
 				next();
 			} catch (err) {
-				res.status(500).send({ message: "Unable to get userId for token." });
+				res.status(500).send({ message: "Invalid token." });
 			}
 		} catch (err) {
 			res.status(400).send({ message: "Invalid token." });
@@ -169,10 +180,14 @@ export const patAuthMiddleware: Middleware<ApiRequestGQL, ApiResponse> = async (
 	}
 };
 
-export const authMiddleware = async (req, res, next) => {
+export const authMiddleware: Middleware<ApiRequest, NextApiResponse> = async (
+	req,
+	res,
+	next,
+) => {
 	const session = getSession(req, res);
 
-	if (!session.user) {
+	if (!session?.user) {
 		res.status(400).send("Unable to verify session.");
 		return;
 	}

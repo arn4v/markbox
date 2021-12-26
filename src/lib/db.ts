@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { prisma } from "./utils.server";
 
 /**
  * Deleting a bookmark should also delete tags that were only
@@ -9,7 +8,6 @@ import { prisma } from "./utils.server";
  * Hence, we need to fetch tags associated with that bookmark
  * Then filter tags to find orphan tags and delete them
  */
-
 export async function deleteOrphanTagsForUserId(
 	prisma: PrismaClient,
 	userId: string,
@@ -46,35 +44,3 @@ export async function deleteOrphanTagsForUserId(
 
 	return deleted;
 }
-
-export const getBookmarkById = async ({ id }: { id: string }) => {
-	const {
-		id: _id,
-		title,
-		createdAt,
-		updatedAt,
-		url,
-		tags,
-	} = await prisma.bookmark.findFirst({
-		where: {
-			id,
-		},
-		include: {
-			tags: {
-				select: {
-					id: true,
-					name: true,
-				},
-			},
-		},
-	});
-
-	return {
-		id: _id,
-		title,
-		url,
-		tags,
-		createdAt: createdAt.toISOString(),
-		updatedAt: updatedAt.toISOString(),
-	};
-};

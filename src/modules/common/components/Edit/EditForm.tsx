@@ -4,15 +4,7 @@ import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
-import { trpc } from "~/lib/trpc";
-
-interface LocalState {
-	title: string;
-	url: string;
-	description: string;
-	tags: Record<string, CreateOrUpdateBookmarkTagInput>;
-	tagsDisconnect: Record<string, CreateOrUpdateBookmarkTagInput>;
-}
+import { inferQueryOutput, trpc } from "~/lib/trpc";
 
 interface Props {
 	id: string;
@@ -20,34 +12,34 @@ interface Props {
 }
 
 const EditForm = ({ id, onSuccess }: Props) => {
-	const initialState: LocalState = {
+	const initialState = {
 		title: "",
 		url: "",
 		description: "",
-		tags: {},
-		tagsDisconnect: {},
+		tags: {} as Record<string, true>,
+		tagsDisconnect: {} as Record<string, true>,
 	};
-	const [state, setState] = React.useState<LocalState>(initialState);
+	const [state, setState] = React.useState(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 	trpc.useQuery(["bookmarks.byId", id], {
 		onSuccess(data) {
+			const _data = data as NonNullable<inferQueryOutput<"bookmarks.byId">>;
 			if (isEqual(state, initialState)) {
 				setState((prev) => ({
 					...prev,
-					title: data.bookmark.title,
-					url: data.bookmark.url,
-					description: data.bookmark.description,
-					tags: processServerTagsToClientNeeds(data.bookmark.tags),
+					title: _data.title,
+					url: _data.url,
+					description: _data.description,
 				}));
 			}
 		},
 	});
+	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
-	const queryClient = useQueryClient();
 	const { mutate } = trpc.useMutation(["bookmarks.updateById"], {
-		onSuccess: (res) => {
+		onSuccess() {
 			setState(initialState);
-			queryClient.invalidateQueries("GetAllBookmarks");
+			invalidateQueries("GetAllBookmarks");
 			onSuccess();
 		},
 	});
@@ -55,20 +47,27 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const onSubmit = React.useCallback(
 		(e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
-			const { title, url, description } = state;
+			const { title, url, description, tags, tagsDisconnect } = state;
+
+			const tagsCreate = Object.keys(tags).filter(
+				(tagName) => !data?.find((tagObject) => tagObject.name === tagName),
+			);
+
+			const tagsConnect = data
+				?.filter((item) => tags[item.name])
+				.map((item) => item.id);
 
 			mutate({
-				input: {
-					id,
-					title,
-					description,
-					url,
-					tags,
-					tagsDisconnect,
-				},
+				id,
+				title,
+				description,
+				url,
+				tagsCreate,
+				tagsConnect,
+				tagsDisconnect: Object.keys(tagsDisconnect),
 			});
 		},
-		[data?.tags, id, mutate, state],
+		[data, id, mutate, state],
 	);
 
 	const onChange = React.useCallback(
@@ -136,12 +135,12 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					Tags
 				</label>
 				<div className="flex flex-wrap gap-2 mt-2">
-					{Object.values(state.tags).map((item) => {
+					{Object.keys(state.tags).map((item) => {
 						return (
 							<Badge
 								data-test="edit-tag-badge"
-								key={item.name}
-								title={item?.name}
+								key={item}
+								title={item}
 								className="z-50 dark:bg-gray-900 dark:border-gray-600 border border-gray-300"
 							>
 								<button
@@ -150,13 +149,23 @@ const EditForm = ({ id, onSuccess }: Props) => {
 									onClick={() => {
 										setState((prev) => {
 											const tags = prev.tags;
-											delete tags[item?.name];
+											delete tags[item];
+
+											const toDisconnect: Record<string, true> = {};
+											const existingTag = data?.find(
+												({ name }) => name === item,
+											);
+
+											if (existingTag) {
+												toDisconnect[existingTag?.id] = true;
+											}
+
 											return {
 												...prev,
 												tags,
 												tagsDisconnect: {
 													...prev.tagsDisconnect,
-													[item.name]: { name: item.name },
+													...toDisconnect,
 												},
 											};
 										});
@@ -184,12 +193,10 @@ const EditForm = ({ id, onSuccess }: Props) => {
 									...prev,
 									tags: {
 										...prev.tags,
-										[trimmedValue]: {
-											name: trimmedValue,
-										},
+										[trimmedValue]: true,
 									},
 								}));
-								newTagInputRef.current?.value = "";
+								if (newTagInputRef.current) newTagInputRef.current.value = "";
 							}
 						}}
 						placeholder="Separate tags by typing comma (,)"

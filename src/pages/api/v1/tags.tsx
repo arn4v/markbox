@@ -1,10 +1,11 @@
 import * as yup from "yup";
+import { z } from "zod";
 import {
 	createHandler,
 	patAuthMiddleware,
 	prisma,
 	rateLimitMiddleware,
-	withCookies
+	withCookies,
 } from "~/lib/utils.server";
 import ApiRequestGQL from "~/types/ApiRequest";
 
@@ -13,28 +14,29 @@ interface PatchBody {
 	new_name: string;
 }
 
-const PatchBodySchema = yup.object().shape({
-	name: yup.string().required(),
-	new_name: yup.string().required(),
+const patchSchema = z.object({
+	name: z.string(),
+	new_name: z.string(),
 });
+
+type PatchSchema = z.infer<typeof patchSchema>;
 
 const handler = createHandler<ApiRequestGQL>()
 	.use(patAuthMiddleware)
 	.use(rateLimitMiddleware)
 	.patch(async (req, res) => {
-		try {
-			const body = (req.body
-				? await PatchBodySchema.validate(req.body)
-				: req.body) as unknown as PatchBody;
-			const { id } = await prisma.tag.findFirst({
-				where: {
-					name: body.name,
-					userId: req.ctx.userId,
-				},
-				select: {
-					id: true,
-				},
-			});
+		const body = (
+			req.body ? await patchSchema.parseAsync(req.body) : req.body
+		) as PatchBody;
+		const tag = await prisma.tag.findFirst({
+			where: {
+				name: body.name,
+				userId: req.ctx.userId,
+			},
+		});
+		if (tag) {
+			const { id } = tag;
+
 			const updated = await prisma.tag.update({
 				where: {
 					id,
@@ -49,6 +51,7 @@ const handler = createHandler<ApiRequestGQL>()
 					updatedAt: true,
 				},
 			});
+
 			res.status(200).send({
 				data: {
 					...updated,
@@ -56,8 +59,8 @@ const handler = createHandler<ApiRequestGQL>()
 					updatedAt: updated.updatedAt.toISOString(),
 				},
 			});
-		} catch (err) {
-			res.status(400).send({ message: err.toString() });
+		} else {
+			res.status(400).send({ message: "Tag not found." });
 		}
 	});
 

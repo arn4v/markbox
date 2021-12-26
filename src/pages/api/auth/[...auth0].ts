@@ -16,17 +16,19 @@ export default handleAuth({
 		await handleCallback(req, res, {
 			async afterCallback(req, res, session, options) {
 				const user = session.user as UserProfile;
+
 				await prisma.user.upsert({
 					where: { email: session?.user?.email },
 					create: {
 						auth0Id: user?.sub,
-						name: user?.name,
-						email: user?.email,
+						name: user?.name as string,
+						email: user?.email as string,
 					},
 					update: {
 						auth0Id: session?.user?.sub,
 					},
 				});
+
 				return session;
 			},
 		});

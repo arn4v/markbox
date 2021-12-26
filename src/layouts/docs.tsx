@@ -5,12 +5,17 @@ import MDXComponents from "~/components/MDXComponents";
 import AuthButton from "~/modules/docs/components/AuthButton";
 import Sidebar from "~/modules/docs/components/Sidebar";
 
-interface Metadata {
-	seo_title: string;
-	title: string;
-}
-
-export default function DocsPage({ children, frontMatter: metadata }) {
+export default function DocsPage({
+	children,
+	frontMatter: metadata,
+}: {
+	children: React.ReactNode;
+	frontMatter: {
+		title: string;
+		seo_title: string;
+		layout: string;
+	};
+}) {
 	return (
 		<>
 			<style jsx scoped>

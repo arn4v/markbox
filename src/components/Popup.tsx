@@ -42,18 +42,13 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 			showOverlay = false,
 			...props
 		},
-		ref: React.MutableRefObject<HTMLDivElement>,
+		ref,
 	) => {
 		const internalRef = React.useRef<HTMLDivElement>(null);
 		useOnClickOutside(internalRef, onDismiss);
 
 		return (
-			<div
-				ref={(node) => {
-					mergeRefs(node, internalRef, ref);
-				}}
-				className="relative"
-			>
+			<div ref={mergeRefs([internalRef, ref])} className="relative">
 				{button}
 				<AnimatePresence exitBeforeEnter>
 					{isOpen && showOverlay && (

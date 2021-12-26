@@ -28,7 +28,7 @@ const Sidebar = () => {
 							Tags
 						</h2>
 						{/* Only show Edit mode button when user has created > 0 tags */}
-						{data?.length > 0 ? (
+						{data && data?.length > 0 ? (
 							<button
 								className="px-2 py-0.5 dark:bg-gray-900 bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition rounded-md text-sm focus:outline-none"
 								onClick={onToggle}

@@ -9,15 +9,18 @@ type Props = JSX.IntrinsicElements["button"] & {
 };
 
 const Button = React.forwardRef<HTMLButtonElement, Props>(
-	({ className, variant, color, ...props }, ref) => {
-		const internalRef = React.useRef<HTMLButtonElement>();
+	(
+		{ className = "", variant, color, ...props },
+		ref: React.Ref<HTMLButtonElement>,
+	) => {
+		const internalRef: React.MutableRefObject<HTMLButtonElement | null> =
+			React.useRef(null);
 
 		return (
 			<button
 				{...props}
-				ref={(node) => mergeRefs(node, internalRef, ref)}
+				ref={mergeRefs([internalRef, ref])}
 				className={clsx([
-					"",
 					!/(bg-(.*)|border-(.*))/.test(className) &&
 						`bg-gray-100 border border-gray-300 dark:bg-gray-700 dark:border-none hover:bg-gray-200 dark:hover:bg-gray-600`,
 					variant === "solid" && ``,

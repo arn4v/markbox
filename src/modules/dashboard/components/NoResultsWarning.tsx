@@ -1,4 +1,8 @@
-export default function NoResultsWarning({ isVisible }) {
+export default function NoResultsWarning({
+	isVisible,
+}: {
+	isVisible: boolean;
+}) {
 	if (!isVisible) return null;
 
 	return (

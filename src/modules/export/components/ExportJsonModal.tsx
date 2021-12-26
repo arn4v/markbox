@@ -7,8 +7,14 @@ import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
 
-const ExportJsonModal = ({ isOpen, onClose }) => {
-	const [blob, setBlob] = React.useState<Blob>(null);
+const ExportJsonModal = ({
+	isOpen,
+	onClose,
+}: {
+	isOpen: boolean;
+	onClose(): void;
+}) => {
+	const [blob, setBlob] = React.useState<Blob | null>(null);
 	const [download, setDownload] = React.useState<string>("");
 	const downloadElRef = React.useRef<HTMLAnchorElement>(null);
 	const downloadHref = React.useMemo(() => {
@@ -31,7 +37,7 @@ const ExportJsonModal = ({ isOpen, onClose }) => {
 					}),
 				);
 				setDownload(fileName);
-				downloadElRef.current.click();
+				if (downloadElRef.current) downloadElRef.current.click();
 				setBlob(null);
 				setDownload("");
 				onClose();

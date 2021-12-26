@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useTheme } from "next-themes";
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import {
@@ -10,13 +10,19 @@ import {
 	HiOutlineLogout,
 	HiOutlineMoon,
 	HiOutlineSun,
-	HiOutlineTemplate
+	HiOutlineTemplate,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
 import { useAuth } from "~/hooks/use-auth";
 
-const Item = ({ href, children }) => {
+const Item = ({
+	href,
+	children,
+}: {
+	href: LinkProps["href"];
+	children: React.ReactNode;
+}) => {
 	return (
 		<Link href={href}>
 			<a className="flex items-center justify-center w-full gap-2 py-2 transition border-b border-gray-300 dark:border-blueGray-400 dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-200 dark:text-white">

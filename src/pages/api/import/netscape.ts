@@ -1,4 +1,5 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { Tag } from "@prisma/client";
 import cheerio from "cheerio";
 import { format } from "date-fns";
 import fs from "fs";
@@ -7,7 +8,7 @@ import {
 	authMiddleware,
 	createHandler,
 	createUploadMiddleware,
-	prisma
+	prisma,
 } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
 
@@ -23,7 +24,7 @@ const URL_FILTER_REGEX =
 	/(chrome(-extension)?|about:blank|javascript:|edge(.*))(:\/\/)?/;
 
 const getBookmarksFromHtml = (raw: string) => {
-	const bookmarks = [];
+	const bookmarks: Array<{ title: string; url: string }> = [];
 	const $ = cheerio.load(raw);
 	$("dt > a").each((idx, el) => {
 		const _el = $(el);
@@ -50,53 +51,46 @@ export default createHandler<ApiRequest>()
 		);
 		const raw = fs.readFileSync(filePath, { encoding: "utf-8" });
 
-		try {
-			const bookmarks = getBookmarksFromHtml(raw);
+		const bookmarks = getBookmarksFromHtml(raw);
 
-			const tagName = `Imported from browser ${format(
-				new Date(),
-				"d/MM/yyyy",
-			)}`;
-			let tag = await prisma.tag.findFirst({
-				where: {
+		const tagName = `Imported from browser ${format(new Date(), "d/MM/yyyy")}`;
+		let existingTag = await prisma.tag.findFirst({
+			where: {
+				name: tagName,
+				userId: req.ctx.user.id,
+			},
+		});
+
+		if (!existingTag) {
+			existingTag = await prisma.tag.create({
+				data: {
 					name: tagName,
 					userId: req.ctx.user.id,
 				},
 			});
-
-			if (!tag) {
-				tag = await prisma.tag.create({
-					data: {
-						name: tagName,
-						userId: req.ctx.user.id,
-					},
-				});
-			}
-
-			const transactions = bookmarks.map(({ title, url }) => {
-				return prisma.bookmark.create({
-					data: {
-						title: title.length > 1000 ? title.substr(0, 1000) : title,
-						url: url.length > 1000 ? url.substr(0, 1000) : url,
-						User: {
-							connect: {
-								id: req.ctx.user.id,
-							},
-						},
-						tags: {
-							connect: {
-								id: tag.id,
-							},
-						},
-					},
-				});
-			});
-
-			await prisma.$transaction(transactions);
-			await fs.promises.unlink(filePath);
-
-			res.status(204).end();
-		} catch (err) {
-			res.status(500).send({ error: err.toString() });
 		}
+
+		const transactions = bookmarks.map(({ title, url }) => {
+			return prisma.bookmark.create({
+				data: {
+					title: title.length > 1000 ? title.substr(0, 1000) : title,
+					url: url.length > 1000 ? url.substr(0, 1000) : url,
+					User: {
+						connect: {
+							id: req.ctx.user.id,
+						},
+					},
+					tags: {
+						connect: {
+							id: existingTag?.id,
+						},
+					},
+				},
+			});
+		});
+
+		await prisma.$transaction(transactions);
+		await fs.promises.unlink(filePath);
+
+		res.status(204).end();
 	});

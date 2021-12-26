@@ -7,8 +7,14 @@ import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
 
-const UploadNetscapeModal = ({ isOpen, onClose }) => {
-	const [file, setFile] = React.useState<File>(null);
+const UploadNetscapeModal = ({
+	isOpen,
+	onClose,
+}: {
+	isOpen: boolean;
+	onClose(): void;
+}) => {
+	const [file, setFile] = React.useState<File | null>(null);
 	const { mutate, isLoading } = useMutation(
 		(file: File) => {
 			const formData = new FormData();
@@ -64,7 +70,8 @@ const UploadNetscapeModal = ({ isOpen, onClose }) => {
 					ref={inputRef}
 					type="file"
 					onChange={(e) => {
-						setFile(e.target.files.item(0));
+						if (e.target.files instanceof FileList)
+							setFile(e.target.files.item(0));
 					}}
 					accept=".html"
 					hidden
@@ -83,7 +90,8 @@ const UploadNetscapeModal = ({ isOpen, onClose }) => {
 					<button
 						className="flex items-center justify-center bg-white dark:bg-gray-800 dark:hover:bg-gray-700 transition border border-gray-200 shadow px-2 py-1.5 rounded-md"
 						onClick={() => {
-							inputRef.current.click();
+							if (inputRef.current instanceof HTMLInputElement)
+								inputRef.current.click();
 						}}
 					>
 						{file ? "Change file" : "Click here to select file"}
@@ -106,7 +114,7 @@ const UploadNetscapeModal = ({ isOpen, onClose }) => {
 								: "bg-white dark:bg-gray-800 dark:hover:bg-gray-700",
 						)}
 						onClick={() => {
-							mutate(file);
+							if (file instanceof File) mutate(file);
 						}}
 						disabled={!file}
 					>

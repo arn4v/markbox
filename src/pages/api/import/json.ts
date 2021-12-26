@@ -1,8 +1,7 @@
-import * as yup from "yup";
+import { Bookmark, Tag } from "@prisma/client";
+import { z } from "zod";
 import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";
-
-const tagsArraySchema = yup.array().of(yup.string()).required();
 
 const getAllTagsForUser = async ({ userId }: { userId: string }) =>
 	await prisma.tag.findMany({
@@ -29,133 +28,133 @@ const getAllBookmarksForUser = async ({ userId }: { userId: string }) =>
 		},
 	});
 
-const exportSchema = yup.object().shape({
-	schema_version: yup.number().required(),
-	exported_at: yup.string().required(),
-	data: yup.object().shape({
-		tags: tagsArraySchema,
-		bookmarks: yup
-			.array()
-			.of(
-				yup.object().shape({
-					title: yup.string().required(),
-					url: yup.string().required(),
-					tags: tagsArraySchema,
-				}),
-			)
-			.required(),
+const exportSchema = z.object({
+	schema_version: z.number(),
+	exported_at: z.string(),
+	data: z.object({
+		tags: z.array(z.string()),
+		bookmarks: z.array(
+			z.object({
+				title: z.string(),
+				description: z.string(),
+				url: z.string(),
+				tags: z.array(z.string()),
+			}),
+		),
 	}),
 });
 
-const postBodySchema = yup.object().shape({
-	data: exportSchema.required(),
+const postBodySchema = z.object({
+	data: exportSchema,
 });
-
-type Bookmark = {
-	title: string;
-	url: string;
-	description: string;
-	tags: string[];
-};
-
-type PostBody = {
-	data: {
-		schema_version: number;
-		exported_at: string;
-		data: {
-			tags: string[];
-			bookmarks: Bookmark[];
-		};
-	};
-};
 
 export default createHandler<ApiRequest>()
 	.use(authMiddleware)
 	.post(async (req, res) => {
-		try {
-			const {
-				data: {
-					data: { bookmarks, tags },
+		const body = await postBodySchema.parseAsync(req.body);
+		const data = body?.data?.data;
+
+		let tagsOuter = await prisma.tag.findMany({
+			where: {
+				User: {
+					id: req.ctx.user.id,
 				},
-			} = (await postBodySchema.validate(req.body)) as PostBody;
-			{
-				// Get all existing tags to only add new ones
-				const existingTags = await getAllTagsForUser({
-					userId: req.ctx.user.id,
+			},
+		});
+
+		let existingBookmarks = await prisma.bookmark.findMany({
+			where: {
+				User: {
+					id: req.ctx.user.id,
+				},
+			},
+		});
+
+		{
+			const transactions = data?.tags
+				.filter((name) => {
+					return (
+						typeof tagsOuter.find(
+							(existingTag) => existingTag.name === name,
+						) === "undefined"
+					);
+				})
+				.map((name) => {
+					return prisma.tag.create({
+						data: {
+							name: name,
+							userId: req.ctx.user.id,
+						},
+					});
 				});
 
-				const transactions = tags
-					.filter((name) => {
-						return (
-							typeof existingTags.find(
-								(existingTag) => existingTag.name === name,
-							) === "undefined"
-						);
-					})
-					.map((name) => {
-						return prisma.tag.create({
-							data: {
-								name: name,
-								userId: req.ctx.user.id,
-							},
-						});
-					});
-				await prisma.$transaction(transactions);
-			}
+			await prisma.$transaction(transactions);
+		}
 
-			// Get all existing after adding non-existing tags
-			const tagsData = await getAllTagsForUser({
-				userId: req.ctx.user.id,
-			});
+		tagsOuter = await prisma.tag.findMany({
+			where: {
+				User: {
+					id: req.ctx.user.id,
+				},
+			},
+		});
 
-			// Get all existing bookmarks to use in filtering
-			const bookmarksData = await getAllBookmarksForUser({
-				userId: req.ctx.user.id,
-			});
+		for (const { description, tags, title, url } of data?.bookmarks) {
+			const tagsConnect = tags
+				.map((item) => {
+					const existing = tagsOuter.find(
+						(existingTag) => existingTag.name === item,
+					);
+					return existing;
+				})
+				.filter((item) => !!item)
+				.map((item) => ({
+					id: item?.id,
+				}));
 
-			const transactions = bookmarks.map(
-				({ description, tags, title, url }) => {
-					const tagsToConnect = tags
-						.map((item) => {
-							return tagsData.find((existingTag) => existingTag.name === item);
-						})
-						.filter((item) => !!item)
-						.map(({ id }) => ({ id }));
+			const tagsCreate = tags
+				.filter(
+					(item) => !tagsOuter.find((existingTag) => existingTag.name === item),
+				)
+				.map((name) => ({
+					name,
+				}));
 
-					const existing = bookmarksData.find((item) => item.url === url);
+			const existing = existingBookmarks.find((item) => item.url === url);
 
-					const data = {
+			if (existing) {
+				await prisma.bookmark.update({
+					where: existing ? { id: existing.id } : {},
+					data: {
 						title,
 						url,
 						description,
-						...(tagsToConnect.length > 0
-							? {
-									tags: {
-										connect: tagsToConnect,
-									},
-							  }
-							: {}),
-					};
-
-					return !!existing
-						? prisma.bookmark.update({
-								where: { id: existing.id },
-								data,
-						  })
-						: prisma.bookmark.create({
-								// Code works but throws typescript error
-								// @ts-ignore
-								data: {
-									...data,
-									userId: req.ctx.user.id,
-								},
-						  });
-				},
-			);
-
-			await prisma.$transaction(transactions);
-			res.status(204).end();
-		} catch (err) {
-			res.status(400).send(err);
+						tags: {
+							connect: tagsConnect,
+							create: tagsCreate,
+						},
+					},
+				});
+			} else {
+				const { id } = await prisma.bookmark.create({
+					data: {
+						title,
+						url,
+						description,
+						userId: req.ctx.user.id,
+					},
+				});
+				await prisma.bookmark.update({
+					where: { id },
+					data: {
+						tags: {
+							connect: tagsConnect,
+							create: tagsCreate,
+						},
+					},
+				});
+			}
 		}
+
+		res.status(204).end();
 	});

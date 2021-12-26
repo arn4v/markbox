@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { LinkProps } from "next/link";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,7 +18,13 @@ import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useAuth } from "~/hooks/use-auth";
 import useStore from "../../common/components/Create";
 
-const MenuItem = ({ href, children }) => {
+const MenuItem = ({
+	href,
+	children,
+}: {
+	href: LinkProps["href"];
+	children: React.ReactNode;
+}) => {
 	return (
 		<Link href={href}>
 			<a className="flex items-center justify-center gap-2 px-2 py-2 text-center transition bg-gray-100 rounded-lg dark:bg-gray-600 whitespace-nowrap hover:bg-gray-200 dark:hover:bg-current">

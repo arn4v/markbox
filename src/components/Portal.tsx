@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function Portal({ children, type = "portal" }: Props) {
-	const portalNode = React.useRef<HTMLDivElement>(null);
+	const portalNode = React.useRef<HTMLDivElement | null>(null);
 
 	useIsomorphicLayoutEffect(() => {
 		const existingNode = Array.from(
@@ -23,7 +23,7 @@ export default function Portal({ children, type = "portal" }: Props) {
 			portalNode.current = el;
 		}
 		() => {
-			document.body.removeChild(portalNode.current);
+			if (portalNode.current) document.body.removeChild(portalNode?.current);
 		};
 	}, [children, type]);
 
