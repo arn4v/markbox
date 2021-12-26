@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions", "nApi"]
+  provider = "prisma-client-js"
 }
 
 datasource db {

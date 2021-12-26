@@ -3,10 +3,7 @@ import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
-import {
-	useCreateBookmarkMutation,
-	useGetAllTagsQuery
-} from "~/graphql/types.generated";
+import { trpc } from "~/lib/trpc";
 
 interface Props {
 	title?: string;
@@ -23,8 +20,8 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	};
 	// Data fetching/mutation
 	const queryClient = useQueryClient();
-	const { data } = useGetAllTagsQuery();
-	const { mutate } = useCreateBookmarkMutation({
+	const { data } = trpc.useQuery(["tags.all"]);
+	const { mutate } = trpc.useMutation(["bookmarks.create"], {
 		onSuccess: () => {
 			// Invalidate GetAllBookmarks and GetAllTags on successful mutation
 			queryClient.invalidateQueries("GetAllBookmarks");

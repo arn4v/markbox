@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "CommonJS",
+		"module": "ESNext",
 		"lib": ["DOM", "ESNext"],
 		"allowJs": true,
 		"skipLibCheck": true,
-		"strict": false,
+		"strict": true,
 		"importHelpers": true,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
