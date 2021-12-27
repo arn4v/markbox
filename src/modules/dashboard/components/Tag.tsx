@@ -1,5 +1,7 @@
 import { DrawingPinFilledIcon, DrawingPinIcon } from "@radix-ui/react-icons";
+
 import clsx from "clsx";
+import Link from "next/link";
 import * as React from "react";
 import { useDisclosure } from "react-sensible";
 import { inferQueryOutput, trpc } from "~/lib/trpc";
@@ -36,7 +38,6 @@ export default function Tag({
 			trpcCtx.invalidateQueries(["tags.all"]);
 		},
 	});
-	const setTag = useDashboardStore((state) => state.setTag);
 
 	if (!data) {
 		return (
@@ -44,20 +45,19 @@ export default function Tag({
 				data-test="dashboard-tag"
 				className={clsx(["flex w-full gap-4 items-center"])}
 			>
-				<button
-					onClick={() => {
-						setTag("All");
-					}}
-					className={clsx([
-						"px-4 py-2 flex-grow transition rounded-md dark:text-white border flex items-center justify-between",
-						isDeleteOpen && "z-30",
-						isActive
-							? "dark:bg-gray-500 lg:dark:bg-gray-800 lg:dark:border-gray-700 bg-gray-200 border-gray-300 dark:border-gray-400 font-medium"
-							: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200 border-transparent",
-					])}
-				>
-					<span>All</span>
-				</button>
+				<Link href="/app">
+					<a
+						className={clsx([
+							"px-4 py-2 flex-grow transition rounded-md dark:text-white border flex items-center justify-between",
+							isDeleteOpen && "z-30",
+							isActive
+								? "dark:bg-gray-500 lg:dark:bg-gray-800 lg:dark:border-gray-700 bg-gray-200 border-gray-300 dark:border-gray-400 font-medium"
+								: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200 border-transparent",
+						])}
+					>
+						<span>All</span>
+					</a>
+				</Link>
 			</li>
 		);
 	}
@@ -67,33 +67,33 @@ export default function Tag({
 			data-test="dashboard-tag"
 			className={clsx(["flex w-full gap-4 items-center"])}
 		>
-			<button
-				onClick={() => {
-					setTag(data?.name as string);
-				}}
-				className={clsx([
-					"px-4 py-2 flex-grow transition rounded-md dark:text-white border flex items-center justify-between",
-					isDeleteOpen && "z-30",
-					isActive
-						? "dark:bg-gray-500 lg:dark:bg-gray-800 lg:dark:border-gray-700 bg-gray-200 border-gray-300 dark:border-gray-400 font-medium"
-						: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200 border-transparent",
-				])}
-			>
-				<span>{data?.name}</span>
-				<button
-					hidden={!showPin}
-					onClick={(e) => {
-						e.stopPropagation();
-						pinTag({ id: data?.id as string, isPinned: !data?.isPinned });
-					}}
+			<Link href={`/tag/${data?.name}`}>
+				<a
+					className={clsx([
+						"px-4 py-2 flex-grow transition rounded-md dark:text-white border flex items-center justify-between",
+						isDeleteOpen && "z-30",
+						isActive
+							? "dark:bg-gray-500 lg:dark:bg-gray-800 lg:dark:border-gray-700 bg-gray-200 border-gray-300 dark:border-gray-400 font-medium"
+							: "lg:dark:bg-gray-900 lg:dark:hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500 bg-gray-100 hover:bg-gray-200 border-transparent",
+					])}
 				>
-					{data?.isPinned ? (
-						<DrawingPinFilledIcon className="h-5 w-5" />
-					) : (
-						<DrawingPinIcon className="h-5 w-5" />
-					)}
-				</button>
-			</button>
+					<span>{data?.name}</span>
+					<button
+						hidden={!showPin}
+						onClick={(e) => {
+							e.stopPropagation();
+							pinTag({ id: data?.id as string, isPinned: !data?.isPinned });
+						}}
+					>
+						{data?.isPinned ? (
+							<DrawingPinFilledIcon className="h-5 w-5" />
+						) : (
+							<DrawingPinIcon className="h-5 w-5" />
+						)}
+					</button>
+				</a>
+			</Link>
+
 			{isEditModeEnabled && (
 				<div className="flex items-center gap-4">
 					<EditTagPopup

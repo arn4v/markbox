@@ -13,8 +13,6 @@ const EditPage = () => {
 
 	useAuth(true);
 
-	if (isLoading) return <LoadingPage />;
-
 	return (
 		<div className="flex flex-col w-screen min-h-screen scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 scrollbar scrollbar-thin bg-white dark:bg-black items-center">
 			<Navbar />
@@ -25,7 +23,7 @@ const EditPage = () => {
 				</h1>
 			</div>
 			<div className="flex flex-col gap-6 p-3 w-11/12 lg:p-6 dark:bg-gray-900 bg-white rounded-md border border-gray-300 lg:w-1/2 shadow-lg mt-8">
-				<EditForm id={id} onSuccess={() => router.push("/dashboard")} />
+				<EditForm id={id} onSuccess={() => router.push("/app")} />
 			</div>
 		</div>
 	);

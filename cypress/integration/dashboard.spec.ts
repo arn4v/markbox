@@ -3,7 +3,7 @@ import sel from "../selectors";
 describe("When no data exists", () => {
 	beforeEach(() => {
 		cy.login();
-		cy.location("pathname").should("eq", "/dashboard");
+		cy.location("pathname").should("eq", "/app");
 	});
 
 	it("Should show no data warning", () => {
@@ -25,7 +25,7 @@ describe("When a bookmark is added", () => {
 
 	beforeEach(() => {
 		cy.login();
-		cy.location("pathname").should("eq", "/dashboard");
+		cy.location("pathname").should("eq", "/app");
 		cy.reload();
 	});
 
@@ -53,7 +53,7 @@ describe("When a bookmark is added", () => {
 
 		cy.get(sel.CREATE_FORM).submit();
 
-		cy.location("pathname").should("eq", "/dashboard");
+		cy.location("pathname").should("eq", "/app");
 
 		cy.get(sel.BOOKMARK_CARD).should("have.length", 1);
 	});

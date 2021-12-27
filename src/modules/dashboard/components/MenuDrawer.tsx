@@ -66,12 +66,12 @@ export default function MenuDrawer(): JSX.Element {
 							Docs <HiOutlineDocumentText />
 						</MenuItem>
 						<li className="w-full">
-							{router.pathname === "/dashboard" ? (
+							{router.pathname === "/app" ? (
 								<MenuItem href="/settings">
 									Settings <HiOutlineCog />
 								</MenuItem>
 							) : (
-								<MenuItem href="/dashboard">
+								<MenuItem href="/app">
 									Dashboard <HiOutlineTemplate />
 								</MenuItem>
 							)}

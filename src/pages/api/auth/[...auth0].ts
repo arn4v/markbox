@@ -9,7 +9,7 @@ import { prisma } from "~/lib/utils.server";
 export default handleAuth({
 	async login(req, res) {
 		await handleLogin(req, res, {
-			returnTo: "/dashboard",
+			returnTo: "/app",
 		});
 	},
 	async callback(req, res) {

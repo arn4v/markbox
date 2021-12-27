@@ -57,7 +57,7 @@ const CreatePage = () => {
 						if (popup && !isPwa) {
 							window.close();
 						} else {
-							router.push("/dashboard");
+							router.push("/app");
 						}
 					}}
 					title={title}

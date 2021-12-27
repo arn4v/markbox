@@ -73,12 +73,12 @@ const ProfileDropdown = () => {
 					Docs <HiOutlineDocumentText />
 				</Item>
 				<li className="w-full">
-					{router.pathname === "/dashboard" ? (
+					{router.pathname === "/app" ? (
 						<Item href="/settings/account">
 							Settings <HiOutlineCog />
 						</Item>
 					) : (
-						<Item href="/dashboard">
+						<Item href="/app">
 							Dashboard <HiOutlineTemplate />
 						</Item>
 					)}

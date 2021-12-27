@@ -6,7 +6,7 @@ describe("When not authenticated", () => {
 	});
 
 	it("should redirect to homepage", () => {
-		cy.visit("/dashboard").location("pathname").should("eq", "/");
+		cy.visit("/app").location("pathname").should("eq", "/");
 	});
 
 	it("should show login, signup and get started button if not logged in", () => {

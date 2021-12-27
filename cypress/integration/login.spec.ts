@@ -2,7 +2,7 @@ describe("When logging in", () => {
 	const getLogin = () => cy.get("[data-test=homepage-get-started-link]");
 
 	const logoutIfLoggedIn = (url: string) => {
-		if (url.includes("/dashboard")) {
+		if (url.includes("/app")) {
 			cy.get("[data-test=profile-dropdown]").click();
 			cy.get("[data-test=dropdown-logout-link]").click();
 		}
@@ -40,13 +40,13 @@ describe("When logging in", () => {
 	});
 
 	it("logs out and redirects to homepage", () => {
-		cy.visit("/dashboard");
+		cy.visit("/app");
 
 		// Wait for redirect
 		cy.wait(3000);
 
 		cy.location("pathname").then((loc) => {
-			if (loc === "/dashboard") {
+			if (loc === "/app") {
 				cy.get("[data-test=profile-dropdown]")
 					.click()
 					.get("[data-test=dropdown-logout-link]")
@@ -55,7 +55,7 @@ describe("When logging in", () => {
 				cy.wait(3000);
 
 				cy.location("pathname").should("eq", "/");
-				cy.should("eq", "/dashboard");
+				cy.should("eq", "/app");
 			} else {
 				cy.log("Login failed due to Auth0 but integration");
 			}
