@@ -25,9 +25,9 @@ export const bookmarksRouter = createRouter()
 	})
 	.query("all", {
 		input: z.object({
-			tag: z.string(),
+			tag: z.string().optional(),
 			sort: z.string(),
-			cursor: z.string().nullable(),
+			cursor: z.string().nullish(),
 		}),
 		async resolve({ ctx, input }) {
 			const { cursor, sort, tag } = input;
@@ -114,20 +114,20 @@ export const bookmarksRouter = createRouter()
 		input: z.object({
 			title: z.string(),
 			url: z.string().url(),
-			description: z.string(),
-			tagsCreate: z.array(z.string()),
-			tagsConnect: z.array(z.string().uuid()),
+			description: z.string().optional().default(""),
+			tagsCreate: z.array(z.string()).optional().default([]),
+			tagsConnect: z.array(z.string().uuid()).optional().default([]),
 		}),
-		async resolve({ ctx, input }) {
+		async resolve({ ctx, input: { tagsConnect, tagsCreate, ...input } }) {
 			return await ctx.prisma.bookmark.create({
 				data: {
 					...input,
 					tags: {
-						create: input.tagsCreate.map((item) => ({
+						create: tagsCreate.map((item) => ({
 							name: item,
 							userId: ctx?.user?.id as string,
 						})),
-						connect: input.tagsConnect.map((item) => ({ id: item })),
+						connect: tagsConnect.map((item) => ({ id: item })),
 					},
 					User: {
 						connect: {

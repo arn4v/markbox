@@ -23,10 +23,13 @@ const BookmarksGrid = (): JSX.Element => {
 		tag === "All" ? {} : { tagName: tag },
 	]);
 	const { data: rawData, fetchNextPage } = trpc.useInfiniteQuery(
-		["bookmarks.all", { tag, sort }],
+		["bookmarks.all", { ...(tag !== "All" ? { tag: tag } : {}), sort }],
 		{
 			getPreviousPageParam: (lastPage) => lastPage.cursor,
 			getNextPageParam: (lastPage) => lastPage.next_cursor,
+			onSettled(data, err) {
+				console.log(data, err);
+			},
 		},
 	);
 
