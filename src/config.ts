@@ -7,7 +7,7 @@ export const isProd = process.env.NODE_ENV === "production";
 
 export const BASE_URL =
 	process.env.NEXT_PUBLIC_BASE_URL ??
-	(isProd ? "https://bookmarky.arnavgosain.com" : "http://localhost:3000");
+	(isProd ? "https://bookmarky.mnsht.xyz" : "http://localhost:3000");
 
 export const PASSWORD_REGEX =
 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -33,7 +33,7 @@ export const defaultSeoProps: DefaultSeoProps = {
 	},
 	defaultTitle: "Bookmarky - API-First Bookmarking For Developers",
 	titleTemplate: "%s | Bookmarky",
-	canonical: "https://bookmarky.arnavgosain.com",
+	canonical: "https://bookmarky.mnsht.xyz",
 };
 
 export const genericModalMotionProps: MotionProps = {

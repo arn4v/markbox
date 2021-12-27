@@ -1,15 +1,12 @@
 import { useRouter } from "next/router";
 import React from "react";
-import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
-import { trpc } from "~/lib/trpc";
 import EditForm from "~/modules/common/components/Edit/EditForm";
 import Navbar from "~/modules/dashboard/components/Navbar";
 
 const EditPage = () => {
 	const router = useRouter();
 	const id = router.query.id as string;
-	const { isLoading } = trpc.useQuery(["bookmarks.byId", id]);
 
 	useAuth(true);
 
