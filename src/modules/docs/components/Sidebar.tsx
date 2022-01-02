@@ -1,12 +1,6 @@
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import React from "react";
-import {
-	HiOutlineMenu,
-	HiOutlineMoon,
-	HiOutlineSun,
-	HiOutlineX,
-} from "react-icons/hi";
+import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import { Logo } from "~/components/Logo";
 import AuthButton from "./AuthButton";
@@ -58,8 +52,8 @@ const sidebarData: Category[] = [
 ];
 
 const Sidebar = () => {
-	const { theme, setTheme } = useTheme();
 	const { isOpen, onToggle } = useDisclosure();
+
 	return (
 		<div className="top-0 z-50 flex flex-col items-center justify-between w-full h-full gap-8 px-4 py-4 lg:pt-8 lg:items-start lg:justify-start lg:min-h-screen lg:px-0">
 			<div className="flex items-center justify-between w-full">
@@ -69,15 +63,6 @@ const Sidebar = () => {
 					</a>
 				</Link>
 				<div className="flex items-center gap-4 mr-2">
-					<button
-						onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-					>
-						{theme === "light" ? (
-							<HiOutlineMoon className="w-6 h-6" />
-						) : (
-							<HiOutlineSun className="w-6 h-6" />
-						)}
-					</button>
 					<button onClick={onToggle} className="lg:hidden">
 						{isOpen ? (
 							<HiOutlineX className="w-6 h-6" />

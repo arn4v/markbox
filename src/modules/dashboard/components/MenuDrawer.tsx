@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useTheme } from "next-themes";
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -8,8 +7,6 @@ import {
 	HiOutlineCog,
 	HiOutlineDocumentText,
 	HiOutlineLogout,
-	HiOutlineMoon,
-	HiOutlineSun,
 	HiOutlineTemplate,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
@@ -38,7 +35,6 @@ export default function MenuDrawer(): JSX.Element {
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const { isOpen: isCreateOpen, onClose: onCreateClose } = useStore();
 	const router = useRouter();
-	const { setTheme, theme } = useTheme();
 
 	return (
 		<>
@@ -74,17 +70,6 @@ export default function MenuDrawer(): JSX.Element {
 									Dashboard <HiOutlineTemplate />
 								</MenuItem>
 							)}
-						</li>
-						<li className="w-full">
-							<button
-								className="flex items-center justify-center w-full gap-2 py-2 transition bg-gray-100 rounded-md dark:bg-gray-600 focus:outline-none hover:bg-gray-200"
-								onClick={() => {
-									setTheme(theme === "dark" ? "light" : "dark");
-								}}
-							>
-								Toggle theme
-								{theme === "dark" ? <HiOutlineMoon /> : <HiOutlineSun />}
-							</button>
 						</li>
 						<li className="w-full">
 							<MenuItem href="/api/auth/logout">

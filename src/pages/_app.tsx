@@ -3,7 +3,6 @@ import "@fontsource/inter";
 import "@fontsource/poppins";
 import { withTRPC } from "@trpc/next";
 import { DefaultSeo } from "next-seo";
-import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
 import "prism-themes/themes/prism-gruvbox-dark.css";
 import * as React from "react";
@@ -15,20 +14,17 @@ import { defaultSeoProps } from "~/config";
 import type { AppRouter } from "~/server/routers/_app";
 import "~/styles/index.css";
 
-const queryClient = new QueryClient();
-
 function App({ Component, pageProps }: AppProps) {
+	const [queryClient] = React.useState(() => new QueryClient());
+
 	return (
 		<>
 			<Toaster />
 			<DefaultSeo {...defaultSeoProps} />
+			<CustomHead />
 			<UserProvider>
 				<QueryClientProvider client={queryClient}>
-					{/* {!isProd && <ReactQueryDevtools />} */}
-					<ThemeProvider attribute="class">
-						<CustomHead />
-						<Component {...pageProps} />
-					</ThemeProvider>
+					<Component {...pageProps} />
 				</QueryClientProvider>
 			</UserProvider>
 		</>

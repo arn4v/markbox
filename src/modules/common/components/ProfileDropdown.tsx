@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { useTheme } from "next-themes";
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -8,8 +7,6 @@ import {
 	HiOutlineCog,
 	HiOutlineDocumentText,
 	HiOutlineLogout,
-	HiOutlineMoon,
-	HiOutlineSun,
 	HiOutlineTemplate,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
@@ -36,7 +33,6 @@ const ProfileDropdown = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { user } = useAuth();
 	const router = useRouter();
-	const { setTheme, theme } = useTheme();
 
 	return (
 		<Popup
@@ -82,17 +78,6 @@ const ProfileDropdown = () => {
 							Dashboard <HiOutlineTemplate />
 						</Item>
 					)}
-				</li>
-				<li className="w-full">
-					<button
-						className="flex items-center justify-center w-full gap-2 py-2 transition border-b border-gray-300 dark:hover:bg-gray-500 focus:outline-none dark:border-blueGray-400 hover:bg-gray-200 dark:text-white"
-						onClick={() => {
-							setTheme(theme === "dark" ? "light" : "dark");
-						}}
-					>
-						Toggle theme{" "}
-						{theme === "dark" ? <HiOutlineMoon /> : <HiOutlineSun />}
-					</button>
 				</li>
 				<li className="w-full">
 					<a
