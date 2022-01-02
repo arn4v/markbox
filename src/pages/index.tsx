@@ -4,7 +4,7 @@ import {
 	HiArrowRight,
 	HiMenu,
 	HiOutlineDocumentText,
-	HiX
+	HiX,
 } from "react-icons/hi";
 import { VscGithub } from "react-icons/vsc";
 import { useDisclosure } from "react-sensible";

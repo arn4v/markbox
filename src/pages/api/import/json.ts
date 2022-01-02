@@ -1,4 +1,3 @@
-import { Bookmark, Tag } from "@prisma/client";
 import { z } from "zod";
 import { authMiddleware, createHandler, prisma } from "~/lib/utils.server";
 import { ApiRequest } from "~/types/ApiRequest";

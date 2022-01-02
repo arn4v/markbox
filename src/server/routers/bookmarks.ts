@@ -1,8 +1,7 @@
-import { createRouter } from "../createRouter";
-
 import { z } from "zod";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
 import { SortBy } from "~/modules/dashboard/types";
+import { createRouter } from "../createRouter";
 
 const createOrUpdateBookmarkTagSchema = z.object({
 	id: z.string().nullable(),

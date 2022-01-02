@@ -1,11 +1,9 @@
 import { DrawingPinFilledIcon, DrawingPinIcon } from "@radix-ui/react-icons";
-
 import clsx from "clsx";
 import Link from "next/link";
 import * as React from "react";
 import { useDisclosure } from "react-sensible";
 import { inferQueryOutput, trpc } from "~/lib/trpc";
-import useDashboardStore from "../store";
 import DeleteTagPopup from "./DeleteTag";
 import EditTagPopup from "./EditTag";
 

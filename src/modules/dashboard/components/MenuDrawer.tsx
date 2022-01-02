@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import { LinkProps } from "next/link";
 import { useTheme } from "next-themes";
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import {

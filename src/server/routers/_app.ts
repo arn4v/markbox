@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server";
+import superjson from "superjson";
 import { createRouter } from "../createRouter";
 import { bookmarksRouter } from "./bookmarks";
 import { tagsRouter } from "./tags";
 import { tokensRouter } from "./tokens";
 import { userRouter } from "./user";
-import superjson from "superjson";
 
 export const appRouter = createRouter()
 	.transformer(superjson)

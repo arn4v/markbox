@@ -1,6 +1,5 @@
 import * as React from "react";
 import { HiX } from "react-icons/hi";
-import { useQueryClient } from "react-query";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import { trpc } from "~/lib/trpc";

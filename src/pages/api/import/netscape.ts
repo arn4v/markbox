@@ -1,5 +1,4 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { Tag } from "@prisma/client";
 import cheerio from "cheerio";
 import { format } from "date-fns";
 import fs from "fs";

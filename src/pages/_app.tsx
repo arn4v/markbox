@@ -1,19 +1,19 @@
-import "@fontsource/inter";
-import { withTRPC } from "@trpc/next";
-import "@fontsource/poppins";
-import "prism-themes/themes/prism-gruvbox-dark.css";
-import "~/styles/index.css";
-import * as React from "react";
-import CustomHead from "~/components/CustomHead";
-import superjson from "superjson";
-import { AppProps } from "next/app";
-import { DefaultSeo } from "next-seo";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "react-hot-toast";
 import { UserProvider } from "@auth0/nextjs-auth0";
+import "@fontsource/inter";
+import "@fontsource/poppins";
+import { withTRPC } from "@trpc/next";
+import { DefaultSeo } from "next-seo";
+import { ThemeProvider } from "next-themes";
+import { AppProps } from "next/app";
+import "prism-themes/themes/prism-gruvbox-dark.css";
+import * as React from "react";
+import { Toaster } from "react-hot-toast";
+import { QueryClient, QueryClientProvider } from "react-query";
+import superjson from "superjson";
+import CustomHead from "~/components/CustomHead";
 import { defaultSeoProps } from "~/config";
 import type { AppRouter } from "~/server/routers/_app";
+import "~/styles/index.css";
 
 const queryClient = new QueryClient();
 

@@ -10,6 +10,7 @@
 		"build-start": "yarn build && yarn start",
 		"dev": "concurrently -n \"next,prisma-gen\" \"next dev\" \"npm run db-gen-watch\"",
 		"format": "prettier --write ./src/**/*.{js,jsx,ts,tsx}",
+		"format-imports": "npm run format -- --plugin prettier-plugin-organize-imports",
 		"gen": "npm run db-gen",
 		"prisma": "prisma",
 		"db": "prisma studio --port 5556 --browser none",
@@ -28,12 +29,12 @@
 		"add-user": "ts-node ./scripts/add-user.ts",
 		"update-password": "ts-node ./scripts/update-password.ts",
 		"seed:bookmarks": "ts-node ./scripts/seed-bookmarks.ts",
-		"cz": "cz",
 		"cy-open": "cypress open",
 		"cy-run": "cypress run --browser chrome",
 		"cy-test": "start-server-and-test 3000 cy-run",
 		"cy-test-ui": "start-server-and-test 3000 cy-open",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"@auth0/nextjs-auth0": "^1.6.2",
@@ -117,16 +118,15 @@
 		"@types/react-dom": "^17.0.11",
 		"@types/tailwindcss": "^2.2.4",
 		"autoprefixer": "^10.4.0",
-		"commitizen": "^4.2.4",
 		"concurrently": "^6.5.1",
 		"cypress": "^9.2.0",
-		"cz-conventional-changelog": "3.3.0",
 		"eslint": "^8.5.0",
 		"eslint-config-next": "^12.0.7",
 		"mdx-prism": "^0.3.4",
 		"nodemon": "^2.0.15",
 		"postcss": "^8.4.5",
 		"prettier": "^2.5.1",
+		"prettier-plugin-organize-imports": "^2.3.4",
 		"prisma": "^3.7.0",
 		"rehype": "^12.0.0",
 		"remark-autolink-headings": "^6",
@@ -138,9 +138,7 @@
 		"tailwindcss": "^3.0.7",
 		"typescript": "^4.5.4"
 	},
-	"config": {
-		"commitizen": {
-			"path": "./node_modules/cz-conventional-changelog"
-		}
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": "npm run format-imports"
 	}
 }

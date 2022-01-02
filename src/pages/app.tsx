@@ -1,6 +1,6 @@
 import { NextSeo } from "next-seo";
-import * as React from "react";
 import { useRouter } from "next/router";
+import * as React from "react";
 import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
 import { AppLayout } from "~/modules/dashboard/layouts/App.layout";

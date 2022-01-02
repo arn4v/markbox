@@ -1,11 +1,10 @@
 {
-  "bracketSpacing": true,
-  "endOfLine": "lf",
-  "printWidth": 80,
-  "semi": true,
-  "tabWidth": 2,
-  "trailingComma": "all",
-  "useTabs": true,
-  "arrowParens": "always",
-  "jsxBracketSameLine": false
+	"bracketSpacing": true,
+	"endOfLine": "lf",
+	"printWidth": 80,
+	"semi": true,
+	"tabWidth": 2,
+	"trailingComma": "all",
+	"useTabs": true,
+	"arrowParens": "always"
 }

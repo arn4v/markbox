@@ -2,7 +2,7 @@ import clsx from "clsx";
 import * as React from "react";
 import {
 	HiOutlineSortAscending,
-	HiOutlineSortDescending
+	HiOutlineSortDescending,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";

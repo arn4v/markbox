@@ -1,7 +1,7 @@
 import type { AccessToken } from "@prisma/client";
 import { useDisclosure } from "react-sensible";
 import DeleteModal from "~/components/DeleteModal";
-import { inferQueryOutput, trpc } from "~/lib/trpc";
+import { trpc } from "~/lib/trpc";
 
 interface Props {
 	data: Pick<AccessToken, "id" | "name">;

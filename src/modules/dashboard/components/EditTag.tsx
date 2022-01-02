@@ -1,8 +1,6 @@
-import type { Tag } from "@prisma/client";
 import clsx from "clsx";
 import React from "react";
 import { HiPencil } from "react-icons/hi";
-import { useQueryClient } from "react-query";
 import Input from "~/components/Input";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
