@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import superjson from "superjson";
 import CustomHead from "~/components/CustomHead";
 import { defaultSeoProps } from "~/config";
+import { getBaseUrl } from "~/lib/misc";
 import type { AppRouter } from "~/server/routers/_app";
 import "~/styles/index.css";
 
@@ -31,24 +32,6 @@ function App({ Component, pageProps }: AppProps) {
 			</UserProvider>
 		</>
 	);
-}
-
-function getBaseUrl() {
-	if (process.browser) {
-		return "";
-	}
-	// reference for vercel.com
-	if (process.env.VERCEL_URL) {
-		return `https://${process.env.VERCEL_URL}`;
-	}
-
-	// // reference for render.com
-	if (process.env.RENDER_INTERNAL_HOSTNAME) {
-		return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
-	}
-
-	// assume localhost
-	return `http://localhost:${process.env.PORT ?? 3000}`;
 }
 
 export default withTRPC<AppRouter>({

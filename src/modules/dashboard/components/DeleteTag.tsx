@@ -3,13 +3,13 @@ import React from "react";
 import { HiTrash } from "react-icons/hi";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
-import { inferQueryOutput, trpc } from "~/lib/trpc";
+import { InferQueryOutput, trpc } from "~/lib/trpc";
 
 interface DeleteTagProps {
 	/**
 	 * Tag to delete
 	 */
-	data: NonNullable<inferQueryOutput<"tags.byId">>;
+	data: NonNullable<InferQueryOutput<"tags.byId">>;
 
 	/**
 	 * Popup open state

@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useVirtual } from "react-virtual";
-import { inferQueryOutput } from "~/lib/trpc";
+import { InferQueryOutput } from "~/lib/trpc";
 import BookmarkCard from "./BookmarkCard";
 
 interface Props {
-	data: inferQueryOutput<"bookmarks.all">["data"];
+	data: InferQueryOutput<"bookmarks.all">["data"];
 }
 
 const VirtualizedBookmarks: Component<Props> = ({ data }) => {

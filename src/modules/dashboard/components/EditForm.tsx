@@ -3,7 +3,7 @@ import React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
-import { inferQueryOutput, trpc } from "~/lib/trpc";
+import { InferQueryOutput, trpc } from "~/lib/trpc";
 
 interface Props {
 	id: string;
@@ -22,7 +22,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 	trpc.useQuery(["bookmarks.byId", id], {
 		onSuccess(data) {
-			const _data = data as NonNullable<inferQueryOutput<"bookmarks.byId">>;
+			const _data = data as NonNullable<InferQueryOutput<"bookmarks.byId">>;
 			if (isEqual(state, initialState)) {
 				setState((prev) => ({
 					...prev,

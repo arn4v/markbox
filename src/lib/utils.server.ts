@@ -1,5 +1,7 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import { Prisma, PrismaClient } from "@prisma/client";
+import { createTRPCClient } from "@trpc/client";
+import { httpLink } from "@trpc/client/links/httpLink";
 import { compare, genSalt, hash } from "bcrypt";
 import { CookieSerializeOptions, serialize } from "cookie";
 import rateLimit from "express-rate-limit";
@@ -11,10 +13,13 @@ import nextConnect, { Middleware } from "next-connect";
 import { createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import path from "path";
+import superjson from "superjson";
 import { isProd } from "~/config";
+import { AppRouter } from "~/server/routers/_app";
 import ApiRequestGQL, { ApiRequest } from "~/types/ApiRequest";
 import ApiResponse from "~/types/ApiResponse";
 import DecodedPat from "~/types/DecodedPat";
+import { getBaseUrl } from "./misc";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Auth Utils                                 */
@@ -263,4 +268,14 @@ export const createUploadMiddleware = (filenameSuffix: string) =>
 export const rateLimitMiddleware = rateLimit({
 	windowMs: ms("10m"),
 	max: 100,
+});
+
+export const trpcServerClient = createTRPCClient<AppRouter>({
+	links: [
+		httpLink({
+			url: "/api/trpc",
+		}),
+	],
+	url: `${getBaseUrl()}/api/trpc`,
+	transformer: superjson,
 });

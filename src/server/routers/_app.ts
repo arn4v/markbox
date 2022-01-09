@@ -1,7 +1,9 @@
-import { TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { createRouter } from "../createRouter";
+import { trpcAuthMiddleware } from "../trpcMiddleware";
 import { bookmarksRouter } from "./bookmarks";
+import { collectionsRouter } from "./collections";
+import { publicRouter } from "./public";
 import { tagsRouter } from "./tags";
 import { tokensRouter } from "./tokens";
 import { userRouter } from "./user";
@@ -9,17 +11,16 @@ import { userDataRouter } from "./user-data";
 
 export const appRouter = createRouter()
 	.transformer(superjson)
-	.middleware(async ({ ctx, next }) => {
-		if (!ctx.session || !ctx?.user) {
-			throw new TRPCError({ code: "UNAUTHORIZED" });
-		}
-
-		return next();
-	})
-	.merge("bookmarks.", bookmarksRouter)
-	.merge("tags.", tagsRouter)
-	.merge("tokens.", tokensRouter)
-	.merge("users.", userRouter)
-	.merge("userdata.", userDataRouter);
+	.merge(
+		createRouter()
+			.middleware(trpcAuthMiddleware)
+			.merge("bookmarks.", bookmarksRouter)
+			.merge("tags.", tagsRouter)
+			.merge("tokens.", tokensRouter)
+			.merge("users.", userRouter)
+			.merge("userdata.", userDataRouter)
+			.merge("collections.", collectionsRouter),
+	)
+	.merge("public.", publicRouter);
 
 export type AppRouter = typeof appRouter;

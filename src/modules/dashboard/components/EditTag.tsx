@@ -4,10 +4,10 @@ import { HiPencil } from "react-icons/hi";
 import Input from "~/components/Input";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
-import { inferQueryOutput, trpc } from "~/lib/trpc";
+import { InferQueryOutput, trpc } from "~/lib/trpc";
 
 interface EditTagProps {
-	data: NonNullable<inferQueryOutput<"tags.byId">>;
+	data: NonNullable<InferQueryOutput<"tags.byId">>;
 	isOpen: boolean;
 	onOpen: () => void;
 	onClose: () => void;

@@ -3,12 +3,12 @@ import clsx from "clsx";
 import Link from "next/link";
 import * as React from "react";
 import { useDisclosure } from "react-sensible";
-import { inferQueryOutput, trpc } from "~/lib/trpc";
+import { InferQueryOutput, trpc } from "~/lib/trpc";
 import DeleteTagPopup from "./DeleteTag";
 import EditTagPopup from "./EditTag";
 
 interface TagProps {
-	data?: NonNullable<inferQueryOutput<"tags.byId">>;
+	data?: NonNullable<InferQueryOutput<"tags.byId">>;
 	isActive: boolean;
 	isEditModeEnabled?: boolean;
 	showPin?: boolean;

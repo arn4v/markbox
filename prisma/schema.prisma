@@ -52,10 +52,12 @@ model Collection {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  slug     String             @unique
-  isPublic Boolean            @default(false)
-  tags     Tag[]
-  invites  CollectionInvite[]
+  name           String
+  isPublic       Boolean            @default(false)
+  hashedPassword String?
+  views          BigInt             @default(0)
+  tags           Tag[]
+  invites        CollectionInvite[]
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?

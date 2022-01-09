@@ -4,7 +4,7 @@ import { useInView } from "react-intersection-observer";
 import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
 import useFuse from "~/hooks/use-fuse";
-import { inferQueryOutput, trpc } from "~/lib/trpc";
+import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useStore } from "~/store";
 import BookmarkCard from "./BookmarkCard";
 import LoadMoreButton from "./LoadMoreButton";
@@ -12,7 +12,7 @@ import NoDataWarning from "./NoDataWarning";
 import NoResultsWarning from "./NoResultsWarning";
 import SortButton from "./SortButton";
 
-type Bookmark = NonNullable<inferQueryOutput<"bookmarks.byId">>;
+type Bookmark = NonNullable<InferQueryOutput<"bookmarks.byId">>;
 
 const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
 	const sort = useStore((state) => state.dashboard.sort);
