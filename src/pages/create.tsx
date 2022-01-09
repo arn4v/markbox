@@ -6,7 +6,7 @@ import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
 import useIsPwa from "~/hooks/use-pwa";
 import { prisma } from "~/lib/utils.server";
-import { CreateForm } from "~/modules/common/components/Create";
+import CreateForm from "~/modules/dashboard/components/CreateForm";
 import Navbar from "~/modules/dashboard/components/Navbar";
 
 const CreatePage = () => {

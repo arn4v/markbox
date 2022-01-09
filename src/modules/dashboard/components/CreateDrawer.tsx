@@ -4,8 +4,8 @@ import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import useBreakpoints from "~/hooks/use-breakpoints";
+import { useStore } from "~/store";
 import CreateForm from "./CreateForm";
-import useStore from "./store";
 
 export default function CreateDrawer() {
 	const { isLg } = useBreakpoints();
@@ -13,10 +13,10 @@ export default function CreateDrawer() {
 		return isLg ? "right" : "bottom";
 	}, [isLg]);
 	const router = useRouter();
-	const { isOpen, onClose, onOpen } = useStore();
+	const { isOpen, actions } = useStore((state) => state.createBookmark);
 
 	return (
-		<Drawer isOpen={isOpen} onClose={onClose}>
+		<Drawer isOpen={isOpen} onClose={actions.onClose}>
 			<DrawerContent
 				placement={drawerPlacement}
 				className={clsx([
@@ -27,7 +27,7 @@ export default function CreateDrawer() {
 				<div className="flex items-center justify-between w-full">
 					<h1 className="text-lg font-bold">Create new bookmark</h1>
 					<button
-						onClick={() => onClose()}
+						onClick={() => actions.onClose()}
 						className="p-2 transition bg-gray-100 rounded-lg dark:bg-gray-600 focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 dark:hover:bg-gray-500"
 					>
 						<HiX />
@@ -35,7 +35,7 @@ export default function CreateDrawer() {
 					</button>
 				</div>
 				<div className="mt-8">
-					<CreateForm onSuccess={onClose} />
+					<CreateForm onSuccess={actions.onClose} />
 				</div>
 			</DrawerContent>
 		</Drawer>

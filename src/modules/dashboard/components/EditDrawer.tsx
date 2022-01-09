@@ -4,7 +4,7 @@ import { HiX } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import useBreakpoints from "~/hooks/use-breakpoints";
-import EditForm from "~/modules/common/components/Edit/EditForm";
+import EditForm from "~/modules/dashboard/components/EditForm";
 
 interface Props {
 	isOpen: boolean;

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
-import { AppLayout } from "~/modules/dashboard/layouts/App.layout";
+import { AppLayout } from "~/layouts/App";
 
 const DashboardPage = () => {
 	const router = useRouter();

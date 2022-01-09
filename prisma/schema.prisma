@@ -8,20 +8,59 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(uuid())
-  auth0Id       String?       @unique @map("auth0_id")
-  name          String        @default("")
-  password      String?
-  type          String        @default("email")
-  emailVerified Boolean       @default(false) @map("email_verified")
-  email         String        @unique
-  bookmarks     Bookmark[]
-  tags          Tag[]
-  keys          AccessToken[]
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+  id                String             @id @default(uuid())
+  auth0Id           String?            @unique @map("auth0_id")
+  name              String             @default("")
+  password          String?
+  type              String             @default("email")
+  emailVerified     Boolean            @default(false) @map("email_verified")
+  email             String             @unique
+  bookmarks         Bookmark[]
+  tags              Tag[]
+  keys              AccessToken[]
+  collections       Collection[]
+  collectionInvites CollectionInvite[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
 
   @@map("users")
+}
+
+enum InviteType {
+  READ_ONLY
+  FULL_ACCESS
+}
+
+model CollectionInvite {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  user      User       @relation(fields: [userId], references: [id])
+  type      InviteType
+
+
+  userId       String
+  Collection   Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String?
+  @@map("collection_invites")
+}
+
+model Collection {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  slug     String             @unique
+  isPublic Boolean            @default(false)
+  tags     Tag[]
+  invites  CollectionInvite[]
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@map("collections")
 }
 
 model AccessToken {
@@ -47,8 +86,10 @@ model Tag {
   isPinned  Boolean    @default(false) @map("is_pinned")
   bookmarks Bookmark[]
 
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  User         User?       @relation(fields: [userId], references: [id])
+  userId       String?
+  Collection   Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String?
   @@map("tags")
 }
 

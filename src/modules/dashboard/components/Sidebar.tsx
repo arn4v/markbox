@@ -1,11 +1,11 @@
 import clsx from "clsx";
 import React from "react";
 import { trpc } from "~/lib/trpc";
-import useDashboardStore from "../store";
+import { useStore } from "~/store";
 import TagsList from "./TagsList";
 
 const Sidebar = () => {
-	const { onToggle, isEnabled } = useDashboardStore((state) => state.edit_mode);
+	const { actions, isEnabled } = useStore((state) => state.editMode);
 	const { data } = trpc.useQuery(["tags.all"]);
 
 	return (
@@ -31,7 +31,7 @@ const Sidebar = () => {
 						{data && data?.length > 0 ? (
 							<button
 								className="px-2 py-0.5 dark:bg-gray-900 bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition rounded-md text-sm focus:outline-none"
-								onClick={onToggle}
+								onClick={actions.onToggle}
 							>
 								{isEnabled ? "Dismiss" : "Edit"}
 							</button>

@@ -17,7 +17,7 @@ import DeleteModal from "~/components/DeleteModal";
 import Popup from "~/components/Popup";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { inferQueryOutput, trpc } from "~/lib/trpc";
-import { EditDrawer } from "~/modules/common/components/Edit";
+import EditDrawer from "~/modules/dashboard/components/EditDrawer";
 import DescriptionModal from "./DescriptionModal";
 
 interface Props {

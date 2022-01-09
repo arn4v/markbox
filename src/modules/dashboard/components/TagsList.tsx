@@ -5,14 +5,15 @@ import Input from "~/components/Input";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useFuse from "~/hooks/use-fuse";
 import { trpc } from "~/lib/trpc";
-import useDashboardStore from "../store";
+import { useStore } from "~/store";
 import Tag from "./Tag";
 
 export default function TagsList() {
 	const { query, asPath } = useRouter();
-	const { isEnabled, onDisable } = useDashboardStore((state) => ({
-		...state.edit_mode,
-	}));
+	const [isEnabled, onDisable] = useStore((state) => [
+		state.editMode.isEnabled,
+		state.editMode.actions.onDisable,
+	]);
 	const { data, isLoading } = trpc.useQuery(["tags.all"], {
 		onSuccess(data) {
 			if (data?.length === 0) {

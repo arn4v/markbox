@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Logo } from "~/components/Logo";
-import ProfileDropdown from "~/modules/common/components/ProfileDropdown";
-import CreateButton from "../../common/components/Create/CreateButton";
+import ProfileDropdown from "~/modules/dashboard/components/ProfileDropdown";
+import CreateButton from "./CreateButton";
 import MenuDrawer from "./MenuDrawer";
 import TagsDrawer from "./TagsDrawer";
 

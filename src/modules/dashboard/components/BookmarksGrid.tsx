@@ -5,7 +5,7 @@ import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
 import useFuse from "~/hooks/use-fuse";
 import { inferQueryOutput, trpc } from "~/lib/trpc";
-import useDashboardStore from "../store";
+import { useStore } from "~/store";
 import BookmarkCard from "./BookmarkCard";
 import LoadMoreButton from "./LoadMoreButton";
 import NoDataWarning from "./NoDataWarning";
@@ -15,7 +15,7 @@ import SortButton from "./SortButton";
 type Bookmark = NonNullable<inferQueryOutput<"bookmarks.byId">>;
 
 const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
-	const { sort } = useDashboardStore(({ tag, sort }) => ({ tag, sort }));
+	const sort = useStore((state) => state.dashboard.sort);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
 	const { isLoading, data: count } = trpc.useQuery([

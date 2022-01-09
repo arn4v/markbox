@@ -1,4 +1,4 @@
-import { CreateBookmarkButton } from "~/modules/common/components/Create";
+import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
 
 /**
  * @name NoDataWarning

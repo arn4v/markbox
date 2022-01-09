@@ -12,7 +12,7 @@ import {
 import { useDisclosure } from "react-sensible";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import { useAuth } from "~/hooks/use-auth";
-import useStore from "../../common/components/Create";
+import { useStore } from "~/store";
 
 const MenuItem = ({
 	href,
@@ -33,7 +33,10 @@ const MenuItem = ({
 export default function MenuDrawer(): JSX.Element {
 	const { user } = useAuth();
 	const { isOpen, onClose, onOpen } = useDisclosure();
-	const { isOpen: isCreateOpen, onClose: onCreateClose } = useStore();
+	const {
+		isOpen: isCreateOpen,
+		actions: { onClose: onCreateClose },
+	} = useStore((state) => state.createBookmark);
 	const router = useRouter();
 
 	return (

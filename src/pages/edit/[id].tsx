@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { useAuth } from "~/hooks/use-auth";
-import EditForm from "~/modules/common/components/Edit/EditForm";
+import EditForm from "~/modules/dashboard/components/EditForm";
 import Navbar from "~/modules/dashboard/components/Navbar";
 
 const EditPage = () => {

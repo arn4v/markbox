@@ -6,11 +6,11 @@ import {
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
-import useDashboardStore from "../store";
+import { useStore } from "~/store";
 import { SortBy } from "../types";
 
 const SortButton = () => {
-	const { sort } = useDashboardStore();
+	const sort = useStore((state) => state.dashboard.sort);
 	const { isOpen, onToggle, onClose } = useDisclosure();
 
 	return (
@@ -47,7 +47,10 @@ export interface SortItemProps {
 }
 
 const SortItem = ({ type, children }: SortItemProps) => {
-	const { setSort, sort } = useDashboardStore();
+	const [sort, setSort] = useStore((state) => [
+		state.dashboard.sort,
+		state.dashboard.actions.setSort,
+	]);
 
 	return (
 		<li

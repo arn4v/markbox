@@ -1,7 +1,7 @@
 import { useAuth } from "~/hooks/use-auth";
-import BookmarksGrid from "../components/BookmarksGrid";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+import BookmarksGrid from "../modules/dashboard/components/BookmarksGrid";
+import Navbar from "../modules/dashboard/components/Navbar";
+import Sidebar from "../modules/dashboard/components/Sidebar";
 
 export function AppLayout({ tag }: { tag: string }) {
 	const { isLoading, isAuthenticated } = useAuth(true);
