@@ -22,7 +22,7 @@ const ExportJsonModal = ({
 	}, [blob]);
 	const { mutate, isLoading } = useMutation(
 		() => {
-			return axios.get("/api/export/json", {
+			return axios.get("/api/export-json", {
 				withCredentials: true,
 			});
 		},

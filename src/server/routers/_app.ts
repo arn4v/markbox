@@ -5,6 +5,7 @@ import { bookmarksRouter } from "./bookmarks";
 import { tagsRouter } from "./tags";
 import { tokensRouter } from "./tokens";
 import { userRouter } from "./user";
+import { userDataRouter } from "./user-data";
 
 export const appRouter = createRouter()
 	.transformer(superjson)
@@ -18,6 +19,7 @@ export const appRouter = createRouter()
 	.merge("bookmarks.", bookmarksRouter)
 	.merge("tags.", tagsRouter)
 	.merge("tokens.", tokensRouter)
-	.merge("users.", userRouter);
+	.merge("users.", userRouter)
+	.merge("userdata.", userDataRouter);
 
 export type AppRouter = typeof appRouter;

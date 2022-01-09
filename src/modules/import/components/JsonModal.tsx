@@ -2,10 +2,9 @@ import clsx from "clsx";
 import * as React from "react";
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
-import { useMutation } from "react-query";
-import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
+import { trpc } from "~/lib/trpc";
 
 const UploadJsonModal = ({
 	isOpen,
@@ -15,30 +14,20 @@ const UploadJsonModal = ({
 	onClose(): void;
 }) => {
 	const [file, setFile] = React.useState<File | null>(null);
-	const { mutate, isLoading } = useMutation(
-		async (file: File) => {
-			const exportJson = JSON.parse(await file.text());
-			return await axios.post("/api/import/json", {
-				data: exportJson,
-			});
+	const { mutate, isLoading } = trpc.useMutation("userdata.import-json", {
+		onSuccess() {
+			toast.success(
+				`Queued for import, try again if bookmarks don't show up in 2-3 minutes.`,
+			);
 		},
-		{
-			onSuccess(res) {
-				if (res.status === 204) {
-					toast.success(
-						`Queued for import, try again if bookmarks don't show up in 2-3 minutes.`,
-					);
-				}
-				setFile(null);
-				onClose();
-			},
-			onError() {
-				toast.error("Unable to import file, try again in a few minutes.");
-				setFile(null);
-				onClose();
-			},
+		onError() {
+			toast.error("Unable to import file, try again in a few minutes.");
 		},
-	);
+		onSettled() {
+			setFile(null);
+			onClose();
+		},
+	});
 	const inputRef = React.useRef<HTMLInputElement | null>(null);
 
 	return (
@@ -106,7 +95,12 @@ const UploadJsonModal = ({
 								: "bg-white dark:bg-gray-800 dark:hover:bg-gray-700",
 						)}
 						onClick={() => {
-							if (file) mutate(file);
+							if (file instanceof File) {
+								file
+									.text()
+									.then((value) => JSON.parse(value))
+									.then((json) => mutate(json));
+							}
 						}}
 						disabled={!file}
 					>

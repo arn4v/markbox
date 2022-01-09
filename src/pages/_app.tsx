@@ -1,6 +1,8 @@
 import { UserProvider } from "@auth0/nextjs-auth0";
 import "@fontsource/inter";
 import "@fontsource/poppins";
+// 👇 import the httpBatchLink
+import { httpLink } from "@trpc/client/links/httpLink";
 import { withTRPC } from "@trpc/next";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
@@ -52,6 +54,11 @@ function getBaseUrl() {
 export default withTRPC<AppRouter>({
 	config() {
 		return {
+			links: [
+				httpLink({
+					url: "/api/trpc",
+				}),
+			],
 			url: `${getBaseUrl()}/api/trpc`,
 			transformer: superjson,
 		};

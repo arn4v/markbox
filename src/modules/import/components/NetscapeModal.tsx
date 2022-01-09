@@ -1,53 +1,30 @@
 import clsx from "clsx";
 import React from "react";
-import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
-import { useMutation } from "react-query";
-import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
+import { trpc } from "~/lib/trpc";
 
 const UploadNetscapeModal = ({
 	isOpen,
-	onClose,
+	onClose: outerOnClose,
 }: {
 	isOpen: boolean;
 	onClose(): void;
 }) => {
 	const [file, setFile] = React.useState<File | null>(null);
-	const { mutate, isLoading } = useMutation(
-		(file: File) => {
-			const formData = new FormData();
-			formData.append("file", file);
-			return axios.post("/api/import/netscape", formData);
-		},
-		{
-			onSuccess(res) {
-				if (res.status === 204) {
-					toast.success(
-						`Queued for import, try again if bookmarks don't show up in 2-3 minutes.`,
-					);
-				}
-				_onClose();
-			},
-			onError() {
-				toast.error("Unable to import file, try again in a few minutes.");
-				setFile(null);
-				onClose();
-			},
-		},
-	);
+	const { mutate, isLoading } = trpc.useMutation("userdata.import-netscape");
 	const inputRef = React.useRef<HTMLInputElement>(null);
 
-	const _onClose = React.useCallback(() => {
+	const innerOnClose = () => {
 		setFile(null);
-		onClose();
-	}, [onClose]);
+		outerOnClose();
+	};
 
 	return (
 		<Modal
 			isOpen={isOpen}
-			onClose={_onClose}
+			onClose={innerOnClose}
 			containerProps={{
 				className: "flex items-center justify-center z-[60]",
 			}}
@@ -62,7 +39,7 @@ const UploadNetscapeModal = ({
 			>
 				<div className="w-full flex items-center justify-between">
 					<span className="text-lg font-bold">Upload file</span>
-					<button onClick={_onClose}>
+					<button onClick={innerOnClose}>
 						<HiX />
 					</button>
 				</div>
@@ -99,7 +76,7 @@ const UploadNetscapeModal = ({
 				</div>
 				<div className="w-full flex items-center justify-between">
 					<button
-						onClick={_onClose}
+						onClick={innerOnClose}
 						className={clsx(
 							"px-2 py-1.5 border border-gray-200 text-red-500 dark:text-red-400 dark:hover:text-white rounded-md shadow hover:bg-red-400 dark:hover:bg-red-500 bg-white font-medium dark:bg-gray-800 hover:text-white fonrt-medium transition",
 						)}
@@ -114,7 +91,9 @@ const UploadNetscapeModal = ({
 								: "bg-white dark:bg-gray-800 dark:hover:bg-gray-700",
 						)}
 						onClick={() => {
-							if (file instanceof File) mutate(file);
+							if (file instanceof File) {
+								file.text().then((html) => mutate(html));
+							}
 						}}
 						disabled={!file}
 					>

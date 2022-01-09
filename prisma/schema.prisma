@@ -39,11 +39,12 @@ model AccessToken {
 }
 
 model Tag {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   name      String
   isPinned  Boolean    @default(false) @map("is_pinned")
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
   bookmarks Bookmark[]
 
   User   User?   @relation(fields: [userId], references: [id])
@@ -52,13 +53,14 @@ model Tag {
 }
 
 model Bookmark {
-  id          String   @id @default(uuid())
-  title       String   @db.VarChar(1000)
-  url         String   @db.VarChar(1000)
-  isFavourite Boolean  @default(false) @map("is_favourite")
-  description String   @default("") @db.VarChar(1000)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title       String  @db.VarChar(1000)
+  url         String  @db.VarChar(1000)
+  isFavourite Boolean @default(false) @map("is_favourite")
+  description String  @default("") @db.VarChar(1000)
   tags        Tag[]
 
   User   User?   @relation(fields: [userId], references: [id])

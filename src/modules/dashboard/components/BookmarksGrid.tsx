@@ -27,9 +27,6 @@ const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
 		{
 			getPreviousPageParam: (lastPage) => lastPage.cursor,
 			getNextPageParam: (lastPage) => lastPage.next_cursor,
-			onSettled(data, err) {
-				console.log(data, err);
-			},
 		},
 	);
 

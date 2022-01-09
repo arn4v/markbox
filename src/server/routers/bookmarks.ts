@@ -97,7 +97,7 @@ export const bookmarksRouter = createRouter()
 		input: z.object({
 			tagName: z.string().optional(),
 		}),
-		async resolve({ ctx, input }) {
+		async resolve({ ctx }) {
 			return await ctx.prisma.bookmark.count({
 				where: {
 					userId: ctx?.user?.id as string,
