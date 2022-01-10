@@ -1,8 +1,8 @@
 "use strict";
 import Prisma from "@prisma/client";
+import faker from "@withshepherd/faker";
 import arg from "arg";
 import dotenv from "dotenv";
-import faker from "faker";
 
 dotenv.config();
 const args = arg({
@@ -46,7 +46,7 @@ if (!args["--email"]) {
 					...Array.from(Array(12).keys()).map(() =>
 						prisma.bookmark.create({
 							data: {
-								title: faker.random.words(faker.datatype.number(5)),
+								title: faker.random.words(Math.floor(Math.random() * 11)),
 								url: faker.internet.url(),
 								tags: {
 									connect: {
