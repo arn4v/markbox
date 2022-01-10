@@ -2,7 +2,7 @@ import { Portal, PortalProps } from "@reach/portal";
 import clsx from "clsx";
 import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
 import * as React from "react";
-import useChildren from "use-children";
+import { useFilterChildren } from "react-sensible";
 
 export type ModalProps = {
 	portalProps?: Omit<PortalProps, "children">;
@@ -25,7 +25,7 @@ const Modal: Modal = ({
 	overlayProps,
 	portalProps,
 }) => {
-	const [withModalContent] = useChildren(children, ModalContent);
+	const [withModalContent] = useFilterChildren(children, ModalContent);
 
 	const onEscape = React.useCallback(
 		(event: KeyboardEvent) => {

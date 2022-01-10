@@ -4,6 +4,8 @@ import * as React from "react";
 import LoadingPage from "~/components/LoadingPage";
 import { useAuth } from "~/hooks/use-auth";
 import { AppLayout } from "~/layouts/App";
+import BookmarksGrid from "~/modules/dashboard/components/BookmarksGrid";
+import Sidebar from "~/modules/dashboard/components/Sidebar";
 
 const DashboardPage = () => {
 	const router = useRouter();
@@ -19,7 +21,16 @@ const DashboardPage = () => {
 	return (
 		<>
 			<NextSeo title="Dashboard" noindex />
-			<AppLayout tag={tag} />
+			<AppLayout>
+				{isLoading || !isAuthenticated ? (
+					<></>
+				) : (
+					<>
+						<Sidebar />
+						<BookmarksGrid tag={tag} />
+					</>
+				)}
+			</AppLayout>
 		</>
 	);
 };

@@ -36,9 +36,9 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 	const { invalidateQueries } = trpc.useContext();
 	const { mutate } = trpc.useMutation("tags.deleteById", {
 		onSuccess() {
-			invalidateQueries("GetAllTags");
-			invalidateQueries("GetAllBookmarks");
-			invalidateQueries("GetTag");
+			invalidateQueries(["tags.byId"]);
+			invalidateQueries(["tags.all"]);
+			invalidateQueries(["bookmarks.all"]);
 		},
 	});
 

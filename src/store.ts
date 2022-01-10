@@ -1,5 +1,5 @@
 import create from "zustand";
-import { SortBy } from "./modules/dashboard/types";
+import { SortBy } from "./types";
 
 interface State {
 	createBookmark: {

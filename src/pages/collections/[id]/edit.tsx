@@ -4,18 +4,27 @@ import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import useFuse from "~/hooks/use-fuse";
+import { AppLayout } from "~/layouts/App";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
-import Navbar from "~/modules/dashboard/components/Navbar";
 
 export default function EditBookmarkPage() {
-	const id = useRouter().query.id as string;
+	const router = useRouter();
+	const id = router.query.id as string;
 	const { data: tagsData } = trpc.useQuery(["tags.all"]);
-	const { mutate } = trpc.useMutation("collections.update");
+	const { mutate } = trpc.useMutation("collections.update", {
+		onSuccess() {
+			router.push(`/collections/${id}`);
+		},
+	});
 	const [state, setState] = React.useState({
 		name: "",
-		isPublic: false,
-		tags: {} as Record<string, string | null>,
+		isPublic: null,
+		tags: {},
+	} as {
+		name: string;
+		isPublic: string | null;
+		tags: Record<string, string | null>;
 	});
 	const [search, setSearch] = React.useState("");
 	const { result: tags } = useFuse({
@@ -30,7 +39,7 @@ export default function EditBookmarkPage() {
 		onSuccess(data) {
 			setState({
 				name: data?.name,
-				isPublic: data?.isPublic,
+				isPublic: data?.isPublic === true ? "Yes" : "No",
 				tags: data?.tags.reduce((acc, cur) => {
 					acc[cur?.name] = cur?.id;
 					return acc;
@@ -40,20 +49,12 @@ export default function EditBookmarkPage() {
 	});
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		switch (e.target.name) {
-			case "isPublic": {
-				setState((prev) => ({
-					...prev,
-					[e.target.name]: e.target.value === "Yes" ? true : false,
-				}));
-			}
-			case "name": {
-				setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-			}
-		}
+		setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const onSubmit = () => {
+	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault();
+
 		const tagsDisconnect: { id: string; name: string }[] = [];
 
 		for (const tag of (collection as InferQueryOutput<"collections.byId">)
@@ -75,23 +76,20 @@ export default function EditBookmarkPage() {
 		}
 
 		mutate({
-			...state,
 			id,
+			name: state?.name,
+			isPublic: state?.isPublic === "Yes",
 			tagsConnect,
 			tagsDisconnect: tagsDisconnect.map((item) => item.id),
 		});
 	};
 
 	return (
-		<div
-			data-test="create-root"
-			className="flex flex-col w-screen min-h-screen scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 scrollbar scrollbar-thin bg-white dark:bg-black items-center"
-		>
-			<Navbar />
-			<div className="flex flex-col w-11/12 lg:p-6 dark:bg-gray-900 lg:w-1/2 lg:mt-36 mt-28">
+		<AppLayout>
+			<div className="flex flex-col w-11/12 lg:p-6 dark:bg-gray-900 lg:w-1/2 mt-12 mx-auto">
 				<div className="bg-gray-200 flex items-center px-4 py-4">
 					<h1 className="whitespace-nowrap text-xl lg:text-2xl font-bold upper-case">
-						Create Collection
+						Edit Collection
 					</h1>
 				</div>
 				<form
@@ -123,7 +121,8 @@ export default function EditBookmarkPage() {
 								id="public"
 								name="isPublic"
 								type="radio"
-								value="No"
+								value="Yes"
+								checked={state?.isPublic === "Yes"}
 								onChange={onChange}
 								className="rounded-full appearance-none"
 							/>
@@ -133,6 +132,7 @@ export default function EditBookmarkPage() {
 							<input
 								id="private"
 								name="isPublic"
+								checked={state?.isPublic === "No"}
 								type="radio"
 								value="No"
 								onChange={onChange}
@@ -207,20 +207,26 @@ export default function EditBookmarkPage() {
 									</div>
 								) : (
 									tags?.map((item) => (
-										<button
+										<div
 											key={item?.id}
-											onClick={() =>
-												setState((prev) => ({
-													...prev,
-													tags: {
-														...prev.tags,
-														[item?.name]: item?.id,
-													},
-												}))
-											}
+											className="flex items-center justify-between w-full px-4 py-2 border-b border-stone-300"
 										>
-											{item?.name}
-										</button>
+											<p>{item?.name}</p>
+											<button
+												onClick={() =>
+													setState((prev) => ({
+														...prev,
+														tags: {
+															...prev.tags,
+															[item?.name]: item?.id,
+														},
+													}))
+												}
+												className="block"
+											>
+												Add
+											</button>
+										</div>
 									))
 								)}
 							</div>
@@ -235,6 +241,6 @@ export default function EditBookmarkPage() {
 					</button>
 				</form>
 			</div>
-		</div>
+		</AppLayout>
 	);
 }

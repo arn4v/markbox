@@ -1,15 +1,21 @@
+import { useRouter } from "next/router";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import useFuse from "~/hooks/use-fuse";
+import { AppLayout } from "~/layouts/App";
 import { trpc } from "~/lib/trpc";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
-import Navbar from "~/modules/dashboard/components/Navbar";
 
 export default function CreateCollectionPage() {
+	const router = useRouter();
 	const { data } = trpc.useQuery(["tags.all"]);
-	const { mutate } = trpc.useMutation("collections.create");
+	const { mutate } = trpc.useMutation("collections.create", {
+		onSuccess() {
+			router.push("/collections");
+		},
+	});
 	const [state, setState] = React.useState({
 		name: "",
 		isPublic: false,
@@ -31,9 +37,11 @@ export default function CreateCollectionPage() {
 					...prev,
 					[e.target.name]: e.target.value === "Yes" ? true : false,
 				}));
+				break;
 			}
 			case "name": {
 				setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+				break;
 			}
 		}
 	};
@@ -47,12 +55,8 @@ export default function CreateCollectionPage() {
 	};
 
 	return (
-		<div
-			data-test="create-root"
-			className="flex flex-col w-screen min-h-screen scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 scrollbar scrollbar-thin bg-white dark:bg-black items-center"
-		>
-			<Navbar />
-			<div className="flex flex-col w-11/12 lg:p-6 dark:bg-gray-900 lg:w-1/2 lg:mt-36 mt-28">
+		<AppLayout data-test="create-bookmark-root">
+			<div className="flex flex-col w-11/12 lg:p-6 dark:bg-gray-900 lg:w-1/2 mt-12 mx-auto">
 				<div className="bg-gray-200 flex items-center px-4 py-4">
 					<h1 className="whitespace-nowrap text-xl lg:text-2xl font-bold upper-case">
 						Create Collection
@@ -211,6 +215,6 @@ export default function CreateCollectionPage() {
 					</button>
 				</form>
 			</div>
-		</div>
+		</AppLayout>
 	);
 }

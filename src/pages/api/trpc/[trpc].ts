@@ -15,7 +15,6 @@ export default trpcNext.createNextApiHandler({
 		enabled: false,
 	},
 	onError({ error, input, path }) {
-		console.log("Error", path);
 		if (error.code === "INTERNAL_SERVER_ERROR") {
 			// send to bug reporting
 			console.error("Something went wrong", error);

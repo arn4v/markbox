@@ -12,6 +12,12 @@ export const publicRouter = createRouter().merge(
 					id: input,
 				},
 				include: {
+					User: {
+						select: {
+							id: true,
+							name: true,
+						},
+					},
 					tags: {
 						select: {
 							id: true,

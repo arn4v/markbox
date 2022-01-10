@@ -39,7 +39,7 @@ export default withTRPC<AppRouter>({
 		return {
 			links: [
 				httpLink({
-					url: "/api/trpc",
+					url: `${getBaseUrl()}/api/trpc`,
 				}),
 			],
 			url: `${getBaseUrl()}/api/trpc`,

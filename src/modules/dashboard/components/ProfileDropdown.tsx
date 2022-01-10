@@ -65,20 +65,30 @@ const ProfileDropdown = () => {
 				<li className="px-4 py-2 text-center bg-gray-200 border-b border-gray-300 dark:bg-transparent dark:border-blueGray-400 whitespace-nowrap dark:text-white overflow-ellipsis">
 					Signed in as <br /> {user?.email}
 				</li>
-				<Item href="/docs">
-					Docs <HiOutlineDocumentText />
-				</Item>
 				<li className="w-full">
-					{router.pathname === "/app" ? (
-						<Item href="/settings/account">
-							Settings <HiOutlineCog />
-						</Item>
-					) : (
+					<Item href="/docs">
+						Docs <HiOutlineDocumentText />
+					</Item>
+				</li>
+				{router.pathname !== "/app" ? (
+					<li className="w-full">
 						<Item href="/app">
 							Dashboard <HiOutlineTemplate />
 						</Item>
-					)}
-				</li>
+					</li>
+				) : null}
+				{!router.pathname.includes("/collections") ? (
+					<li className="w-full">
+						<Item href="/collections">Collections</Item>
+					</li>
+				) : null}
+				{!router.pathname.includes("/settings") ? (
+					<li className="w-full">
+						<Item href="/settings/account">
+							Settings <HiOutlineCog />
+						</Item>
+					</li>
+				) : null}
 				<li className="w-full">
 					<a
 						data-test="dropdown-logout-link"

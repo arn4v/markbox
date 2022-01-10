@@ -1,16 +1,17 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { SortBy } from "~/modules/dashboard/types";
+import { hashPassword } from "~/lib/utils.server";
+import { sortBySchema } from "~/types";
 import { createRouter } from "../createRouter";
 
 export const collectionsRouter = createRouter()
 	.query("all", {
 		input: z.object({
-			sort: z.string(),
+			sort: sortBySchema,
 		}),
 		async resolve({ ctx, input }) {
 			let orderBy: Record<string, string> = {};
-			switch (input.sort as SortBy) {
+			switch (input.sort) {
 				case "created_at_asc": {
 					orderBy.createdAt = "asc";
 					break;
@@ -33,9 +34,12 @@ export const collectionsRouter = createRouter()
 			}
 			return await ctx.prisma.collection.findMany({
 				where: {
-					...orderBy,
 					userId: ctx?.user?.id as string,
 				},
+				include: {
+					tags: true,
+				},
+				orderBy,
 			});
 		},
 	})
@@ -62,10 +66,26 @@ export const collectionsRouter = createRouter()
 			return data;
 		},
 	})
+	.query("tags", {
+		input: z.string().uuid(),
+		async resolve({ ctx, input }) {
+			const data = await ctx.prisma.tag.findMany({
+				where: {
+					collectionId: input,
+				},
+			});
+
+			if (!data || typeof data === "undefined")
+				throw new TRPCError({ code: "NOT_FOUND" });
+
+			return data;
+		},
+	})
 	.mutation("create", {
 		input: z.object({
 			name: z.string(),
 			isPublic: z.boolean(),
+			password: z.string().nullish(),
 			tagsConnect: z.array(z.string().uuid()),
 		}),
 		async resolve({ ctx, input }) {
@@ -78,6 +98,16 @@ export const collectionsRouter = createRouter()
 							id,
 						})),
 					},
+					User: {
+						connect: {
+							id: ctx?.user?.id,
+						},
+					},
+					...(input?.password
+						? {
+								hashedPassword: await hashPassword(input?.password),
+						  }
+						: {}),
 				},
 			});
 		},
@@ -96,7 +126,7 @@ export const collectionsRouter = createRouter()
 					id: input.id,
 				},
 				data: {
-					name: input.id,
+					name: input.name,
 					isPublic: input.isPublic,
 					tags: {
 						connect: input.tagsConnect.map((id) => ({
@@ -106,6 +136,16 @@ export const collectionsRouter = createRouter()
 							id,
 						})),
 					},
+				},
+			});
+		},
+	})
+	.mutation("delete", {
+		input: z.string().uuid(),
+		async resolve({ ctx, input }) {
+			return await ctx.prisma.collection.delete({
+				where: {
+					id: input,
 				},
 			});
 		},

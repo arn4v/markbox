@@ -273,7 +273,7 @@ export const rateLimitMiddleware = rateLimit({
 export const trpcServerClient = createTRPCClient<AppRouter>({
 	links: [
 		httpLink({
-			url: "/api/trpc",
+			url: `${getBaseUrl()}/api/trpc`,
 		}),
 	],
 	url: `${getBaseUrl()}/api/trpc`,

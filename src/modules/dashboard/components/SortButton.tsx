@@ -7,7 +7,7 @@ import {
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
 import { useStore } from "~/store";
-import { SortBy } from "../types";
+import { SortBy } from "../../../types";
 
 const SortButton = () => {
 	const sort = useStore((state) => state.dashboard.sort);
