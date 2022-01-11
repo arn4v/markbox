@@ -1,3 +1,5 @@
+import { DEPLOYMENT_URL, isProd } from "~/config";
+
 export function omitKeys<T, K extends keyof T>(
 	obj: T,
 	...keys: K[]
@@ -20,19 +22,15 @@ export function pickKeys<T, K extends keyof T>(
 }
 
 export function getBaseUrl() {
-	if (process.browser) {
-		return "";
+	switch (true) {
+		case typeof DEPLOYMENT_URL === "string": {
+			return DEPLOYMENT_URL;
+		}
+		case isProd: {
+			return "https://bookmarky.mnsht.xyz";
+		}
+		default: {
+			return "http://localhost:3000";
+		}
 	}
-	// reference for vercel.com
-	if (process.env.VERCEL_URL) {
-		return `https://${process.env.VERCEL_URL}`;
-	}
-
-	// // reference for render.com
-	if (process.env.RENDER_INTERNAL_HOSTNAME) {
-		return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
-	}
-
-	// assume localhost
-	return `http://localhost:${process.env.PORT ?? 3000}`;
 }

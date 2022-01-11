@@ -6,7 +6,7 @@ import { useDisclosure } from "react-sensible";
 import superjson from "superjson";
 import { CopyCode } from "~/components/CopyCode";
 import Popup from "~/components/Popup";
-import { DEPLOYMENT_URL } from "~/config";
+import { getBaseUrl } from "~/lib/misc";
 import { trpc } from "~/lib/trpc";
 import { prisma, trpcServerClient } from "~/lib/utils.server";
 
@@ -35,11 +35,13 @@ const SharePopup = ({ id }: { id: string }) => {
 				<div className="bg-white shadow-xl border border-gray-200 p-6 flex flex-col space-y-4 mt-2 rounded-lg">
 					<div>
 						<p className="mb-2 font-medium">Share URL</p>
-						<CopyCode value={`${DEPLOYMENT_URL}/share/${id}`} />
+						<CopyCode value={`${getBaseUrl()}/share/${id}`} />
 					</div>
 					<div>
 						<p className="mb-2 font-medium">Embed Code</p>
-						<CopyCode value={`${DEPLOYMENT_URL}/embed/${id}`} />
+						<CopyCode
+							value={`<iframe src="${getBaseUrl()}/share/${id}" frameborder="0" allowfullscreen></iframe>`}
+						/>
 					</div>
 				</div>
 			</Popup>

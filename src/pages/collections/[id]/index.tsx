@@ -4,8 +4,9 @@ import { useDisclosure } from "react-sensible";
 import Badge from "~/components/Badge";
 import { CopyCode } from "~/components/CopyCode";
 import Modal, { ModalContent } from "~/components/Modal";
-import { DEPLOYMENT_URL, genericModalMotionProps } from "~/config";
+import { genericModalMotionProps } from "~/config";
 import { AppLayout } from "~/layouts/App";
+import { getBaseUrl } from "~/lib/misc";
 import { trpc } from "~/lib/trpc";
 
 export default function PrivateCollectionPage() {
@@ -71,7 +72,7 @@ export default function PrivateCollectionPage() {
 													Shareable URL
 												</dt>
 												<dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-													<a>{`${DEPLOYMENT_URL}/share/${id}`}</a>
+													<a>{`${getBaseUrl()}/share/${id}`}</a>
 												</dd>
 											</div>
 											<div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -80,7 +81,7 @@ export default function PrivateCollectionPage() {
 												</dt>
 												<dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
 													<CopyCode
-														value={`<iframe src="${DEPLOYMENT_URL}/embed/${id}" frameborder="0" allowfullscreen></iframe>`}
+														value={`<iframe src="${getBaseUrl()}/share/${id}" frameborder="0" allowfullscreen></iframe>`}
 													/>
 												</dd>
 											</div>
@@ -89,7 +90,7 @@ export default function PrivateCollectionPage() {
 													Views
 												</dt>
 												<dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-													{data?.views}
+													{data?.views.toString()}
 												</dd>
 											</div>
 										</>

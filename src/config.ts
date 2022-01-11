@@ -50,4 +50,4 @@ export const genericModalProps = {
 	overlayProps: { className: "bg-black bg-opacity-75 z-[999]" },
 };
 
-export const DEPLOYMENT_URL = process.env.NEXT_PUBLIC_DEPLOYMENT_URL;
+export const DEPLOYMENT_URL = process.env.NEXT_PUBLIC_DEPLOYMENT_URL as string;
