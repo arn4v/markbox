@@ -1,5 +1,5 @@
 import Avatar from "boring-avatars";
-import * as playwright from "playwright-aws-lambda";
+import * as playwright from "playwright";
 import { renderToStaticMarkup } from "react-dom/server";
 import { nc } from "~/lib/utils.server";
 
@@ -118,10 +118,11 @@ export default nc().get(async (req, res) => {
 	const width = 1200;
 	const height = 630;
 
-	const browser = await playwright.launchChromium({
+	const browser = await playwright.chromium.launch({
 		headless: true,
 		args: minimal_args,
 	});
+
 	const page = await browser.newPage({
 		viewport: {
 			width,
