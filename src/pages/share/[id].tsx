@@ -3,6 +3,7 @@ import ms from "ms";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
+import QueryString from "qs";
 import * as React from "react";
 import { HiOutlineShare } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
@@ -67,9 +68,30 @@ export default function PublicCollectionPage({ initialData }: Props) {
 
 	return (
 		<>
-			<NextSeo title={`${data?.name} by ${data?.User?.name}`} />
+			<NextSeo
+				title={`${data?.name} by ${data?.User?.name}`}
+				openGraph={{
+					title: `${data?.name} by ${data?.User?.name}`,
+					description: `A Bookmarky Collection by ${data?.User?.name}`,
+					type: "website",
+					url: `${getDeploymentUrl()}/share/${data?.id}`,
+					images: [
+						{
+							height: 630,
+							width: 1200,
+							url:
+								`${getDeploymentUrl()}/api/og/shared-collection?` +
+								QueryString.stringify({
+									id: data?.id,
+									name: data?.name,
+									userName: data?.User?.name,
+								}),
+						},
+					],
+				}}
+			/>
 			<div className="bg-white h-screen w-screen relative">
-				<Navbar />
+				{!isIframe ? <Navbar /> : null}
 				<div className="py-8 flex flex-col px-4 w-full lg:px-0 lg:w-2/3 mx-auto space-y-8">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center space-x-4">

@@ -279,3 +279,5 @@ export const trpcServerClient = createTRPCClient<AppRouter>({
 	url: `${getDeploymentUrl()}/api/trpc`,
 	transformer: superjson,
 });
+
+export const html = String.raw;
