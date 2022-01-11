@@ -8,6 +8,7 @@ import {
 	HiOutlineDocumentText,
 	HiOutlineLogout,
 	HiOutlineTemplate,
+	HiViewGrid,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Popup from "~/components/Popup";
@@ -79,7 +80,9 @@ const ProfileDropdown = () => {
 				) : null}
 				{!router.pathname.includes("/collections") ? (
 					<li className="w-full">
-						<Item href="/collections">Collections</Item>
+						<Item href="/collections">
+							Collections <HiViewGrid />
+						</Item>
 					</li>
 				) : null}
 				{!router.pathname.includes("/settings") ? (

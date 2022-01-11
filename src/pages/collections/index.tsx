@@ -33,7 +33,7 @@ export default function CollectionsPage() {
 							<Link key={coll?.id} href={`/collections/${coll.id}`} passHref>
 								<a className="flex flex-col items-center justify-center space-y-4 bg-white shadow hover:shadow-lg border border-gray-100 transition-all p-8 rounded-lg">
 									<Avatar name={coll?.id} variant="marble" size={48} />
-									<span className="text-lg font-bold uppercase">
+									<span className="text-lg font-bold uppercase text-center">
 										{coll?.name}
 									</span>
 									<span className="flex flex-wrap gap-2 items-center justify-center">

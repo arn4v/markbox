@@ -8,6 +8,7 @@ import {
 	HiOutlineDocumentText,
 	HiOutlineLogout,
 	HiOutlineTemplate,
+	HiViewGrid,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Drawer, { DrawerContent } from "~/components/Drawer";
@@ -63,17 +64,27 @@ export default function MenuDrawer(): JSX.Element {
 						<MenuItem href="/docs">
 							Docs <HiOutlineDocumentText />
 						</MenuItem>
-						<li className="w-full">
-							{router.pathname === "/app" ? (
-								<MenuItem href="/settings">
-									Settings <HiOutlineCog />
-								</MenuItem>
-							) : (
+						{router.pathname !== "/app" ? (
+							<li className="w-full">
 								<MenuItem href="/app">
 									Dashboard <HiOutlineTemplate />
 								</MenuItem>
-							)}
-						</li>
+							</li>
+						) : null}
+						{!router.pathname.includes("/collections") ? (
+							<li className="w-full">
+								<MenuItem href="/collections">
+									Collections <HiViewGrid />
+								</MenuItem>
+							</li>
+						) : null}
+						{!router.pathname.includes("/settings") ? (
+							<li className="w-full">
+								<MenuItem href="/settings/account">
+									Settings <HiOutlineCog />
+								</MenuItem>
+							</li>
+						) : null}
 						<li className="w-full">
 							<MenuItem href="/api/auth/logout">
 								Logout <HiOutlineLogout />
