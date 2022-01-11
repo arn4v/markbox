@@ -32,7 +32,8 @@
 		"cy-run": "cypress run --browser chrome",
 		"cy-test": "start-server-and-test 3000 cy-run",
 		"cy-test-ui": "start-server-and-test 3000 cy-open",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"postinstall": "npx playwright install"
 	},
 	"dependencies": {
 		"@auth0/nextjs-auth0": "^1.7.0",
