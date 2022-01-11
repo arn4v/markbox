@@ -1,5 +1,4 @@
 const withPWA = require("next-pwa");
-const withRemoteRefresh = require("next-remote-refresh");
 const path = require("path");
 const isProd = process.env.NODE_ENV === "productioon";
 

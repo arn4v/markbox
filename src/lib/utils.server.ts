@@ -281,3 +281,5 @@ export const trpcServerClient = createTRPCClient<AppRouter>({
 });
 
 export const html = String.raw;
+
+export const nc = () => nextConnect<NextApiRequest, NextApiResponse>();

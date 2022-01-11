@@ -80,8 +80,9 @@ export default function PublicCollectionPage({ initialData }: Props) {
 							height: 630,
 							width: 1200,
 							url:
-								`${getDeploymentUrl()}/api/og/shared-collection?` +
+								`${getDeploymentUrl()}/api/og?` +
 								QueryString.stringify({
+									template: "collection",
 									id: data?.id,
 									name: data?.name,
 									userName: data?.User?.name,
