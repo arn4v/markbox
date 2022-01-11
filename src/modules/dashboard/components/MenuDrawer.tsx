@@ -8,6 +8,7 @@ import {
 	HiOutlineDocumentText,
 	HiOutlineLogout,
 	HiOutlineTemplate,
+	HiOutlineViewGrid,
 	HiViewGrid,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
@@ -74,7 +75,7 @@ export default function MenuDrawer(): JSX.Element {
 						{!router.pathname.includes("/collections") ? (
 							<li className="w-full">
 								<MenuItem href="/collections">
-									Collections <HiViewGrid />
+									Collections <HiOutlineViewGrid />
 								</MenuItem>
 							</li>
 						) : null}

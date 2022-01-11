@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import React from "react";
 import { HiX } from "react-icons/hi";
-import { useQueryClient } from "react-query";
 import Drawer, { DrawerContent } from "~/components/Drawer";
 import useBreakpoints from "~/hooks/use-breakpoints";
+import { trpc } from "~/lib/trpc";
 import EditForm from "~/modules/dashboard/components/EditForm";
 
 interface Props {
@@ -14,11 +14,11 @@ interface Props {
 
 const EditDrawer = ({ isOpen, onClose, id }: Props) => {
 	const { isLg } = useBreakpoints();
-	const queryClient = useQueryClient();
+	const { invalidateQueries } = trpc.useContext();
 	const onSuccess = () => {
-		queryClient.invalidateQueries("GetAllBookmarks");
-		queryClient.invalidateQueries("GetBookmark");
-		queryClient.invalidateQueries("GetAllTags");
+		invalidateQueries(["bookmarks.all"]);
+		invalidateQueries(["bookmarks.byId", id]);
+		invalidateQueries(["tags.all"]);
 		onClose();
 	};
 

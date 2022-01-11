@@ -38,7 +38,8 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const { mutate } = trpc.useMutation(["bookmarks.updateById"], {
 		onSuccess() {
 			setState(initialState);
-			invalidateQueries("GetAllBookmarks");
+			invalidateQueries(["bookmarks.all"]);
+			invalidateQueries(["bookmarks.byId", id]);
 			onSuccess();
 		},
 	});

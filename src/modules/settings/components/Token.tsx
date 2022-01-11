@@ -11,7 +11,7 @@ export default function Token({ data }: Props) {
 	const { invalidateQueries } = trpc.useContext();
 	const { mutate } = trpc.useMutation("tokens.delete", {
 		onSuccess() {
-			invalidateQueries("GetAllTokens");
+			invalidateQueries(["tokens.all"]);
 			onClose();
 		},
 	});
