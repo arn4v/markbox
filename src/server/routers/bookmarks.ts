@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
-import { SortBy } from "~/modules/dashboard/types";
+import { sortBySchema } from "~/types";
 import { createRouter } from "../createRouter";
 
 const createOrUpdateBookmarkTagSchema = z.object({
@@ -25,7 +25,7 @@ export const bookmarksRouter = createRouter()
 	.query("all", {
 		input: z.object({
 			tag: z.string().optional(),
-			sort: z.string(),
+			sort: sortBySchema,
 			cursor: z.string().nullish(),
 		}),
 		async resolve({ ctx, input }) {
@@ -33,7 +33,7 @@ export const bookmarksRouter = createRouter()
 			const userId = ctx?.user?.id as string;
 
 			let orderBy: Record<string, string> = {};
-			switch (sort as SortBy) {
+			switch (sort) {
 				case "created_at_asc": {
 					orderBy.createdAt = "asc";
 					break;
