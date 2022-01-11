@@ -11,6 +11,7 @@ import { userDataRouter } from "./user-data";
 
 export const appRouter = createRouter()
 	.transformer(superjson)
+	.merge("public.", publicRouter)
 	.merge(
 		createRouter()
 			.middleware(trpcAuthMiddleware)
@@ -20,7 +21,6 @@ export const appRouter = createRouter()
 			.merge("users.", userRouter)
 			.merge("userdata.", userDataRouter)
 			.merge("collections.", collectionsRouter),
-	)
-	.merge("public.", publicRouter);
+	);
 
 export type AppRouter = typeof appRouter;

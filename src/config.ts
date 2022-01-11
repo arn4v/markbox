@@ -5,10 +5,6 @@ export const isSsr = typeof window === "undefined";
 
 export const isProd = process.env.NODE_ENV === "production";
 
-export const BASE_URL =
-	process.env.NEXT_PUBLIC_BASE_URL ??
-	(isProd ? "https://bookmarky.mnsht.xyz" : "http://localhost:3000");
-
 export const PASSWORD_REGEX =
 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -49,5 +45,3 @@ export const genericModalProps = {
 	},
 	overlayProps: { className: "bg-black bg-opacity-75 z-[999]" },
 };
-
-export const DEPLOYMENT_URL = process.env.NEXT_PUBLIC_DEPLOYMENT_URL as string;

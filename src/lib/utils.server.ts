@@ -19,7 +19,7 @@ import { AppRouter } from "~/server/routers/_app";
 import ApiRequestGQL, { ApiRequest } from "~/types/ApiRequest";
 import ApiResponse from "~/types/ApiResponse";
 import DecodedPat from "~/types/DecodedPat";
-import { getBaseUrl } from "./misc";
+import { getDeploymentUrl } from "./misc";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Auth Utils                                 */
@@ -273,9 +273,9 @@ export const rateLimitMiddleware = rateLimit({
 export const trpcServerClient = createTRPCClient<AppRouter>({
 	links: [
 		httpLink({
-			url: `${getBaseUrl()}/api/trpc`,
+			url: `${getDeploymentUrl()}/api/trpc`,
 		}),
 	],
-	url: `${getBaseUrl()}/api/trpc`,
+	url: `${getDeploymentUrl()}/api/trpc`,
 	transformer: superjson,
 });

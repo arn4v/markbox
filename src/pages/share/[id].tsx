@@ -1,22 +1,26 @@
 import Avatar from "boring-avatars";
+import ms from "ms";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import * as React from "react";
 import { HiOutlineShare } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
-import superjson from "superjson";
 import { CopyCode } from "~/components/CopyCode";
 import Popup from "~/components/Popup";
-import { getBaseUrl } from "~/lib/misc";
-import { trpc } from "~/lib/trpc";
+import { getDeploymentUrl } from "~/lib/misc";
+import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { prisma, trpcServerClient } from "~/lib/utils.server";
+import { Navbar } from "~/modules/landing/components/Navbar";
 
 interface Props {
 	id: string;
-	initialData: string;
+	initialData: InferQueryOutput<"public.collections.byId">;
 }
 
 const SharePopup = ({ id }: { id: string }) => {
 	const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+
 	return (
 		<>
 			<Popup
@@ -35,12 +39,12 @@ const SharePopup = ({ id }: { id: string }) => {
 				<div className="bg-white shadow-xl border border-gray-200 p-6 flex flex-col space-y-4 mt-2 rounded-lg">
 					<div>
 						<p className="mb-2 font-medium">Share URL</p>
-						<CopyCode value={`${getBaseUrl()}/share/${id}`} />
+						<CopyCode value={`${getDeploymentUrl()}/share/${id}`} />
 					</div>
 					<div>
 						<p className="mb-2 font-medium">Embed Code</p>
 						<CopyCode
-							value={`<iframe src="${getBaseUrl()}/share/${id}" frameborder="0" allowfullscreen></iframe>`}
+							value={`<iframe src="${getDeploymentUrl()}/share/${id}" frameborder="0" allowfullscreen></iframe>`}
 						/>
 					</div>
 				</div>
@@ -49,16 +53,24 @@ const SharePopup = ({ id }: { id: string }) => {
 	);
 };
 
-export default function PublicCollectionPage({ initialData, id }: Props) {
+export default function PublicCollectionPage({ initialData }: Props) {
+	const router = useRouter();
+	const id = router.query.id as string;
 	const { data } = trpc.useQuery(["public.collections.byId", id], {
-		initialData: superjson.deserialize({ json: initialData }),
+		initialData: initialData,
 	});
+	const [isIframe, setIsIframe] = React.useState(true);
+
+	React.useEffect(() => {
+		setIsIframe(window.location !== window.parent.location);
+	}, []);
 
 	return (
 		<>
 			<NextSeo title={`${data?.name} by ${data?.User?.name}`} />
-			<div className="bg-white h-screen w-screen">
-				<div className="mt-12 flex flex-col px-8 w-full lg:px-0 lg:w-2/3 mx-auto">
+			<div className="bg-white h-screen w-screen relative">
+				<Navbar />
+				<div className="py-8 flex flex-col px-4 w-full lg:px-0 lg:w-2/3 mx-auto space-y-8">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center space-x-4">
 							<Avatar name={data?.id} variant="marble" size={48} />
@@ -74,8 +86,13 @@ export default function PublicCollectionPage({ initialData, id }: Props) {
 					<ol className="mt-8 list-decimal px-6">
 						{data?.bookmarks?.map((item) => {
 							return (
-								<li key={item?.id}>
-									<a target="_blank" rel="noopener noreferrer" href={item?.url}>
+								<li key={item?.id} className="mb-1">
+									<a
+										target="_blank"
+										rel="noopener noreferrer"
+										href={item?.url}
+										className="text-cyan-600 underline hover:text-cyan-700"
+									>
 										{item?.title}
 									</a>
 								</li>
@@ -91,13 +108,18 @@ export default function PublicCollectionPage({ initialData, id }: Props) {
 export const getServerSideProps: GetServerSideProps<
 	Props,
 	{ id: string }
-> = async ({ query }) => {
+> = async ({ query, res }) => {
 	const id = query.id as string;
 	const data = await trpcServerClient.query("public.collections.byId", id);
 
 	if (!data?.isPublic) {
 		return {
 			notFound: true,
+			redirect: {
+				destination: "/404",
+				permanent: false,
+				statusCode: 404,
+			},
 		};
 	}
 
@@ -112,12 +134,15 @@ export const getServerSideProps: GetServerSideProps<
 		},
 	});
 
-	const initialData = JSON.stringify(superjson.serialize(data).json);
+	res?.setHeader(
+		"Cache-Control",
+		`s-maxage=1, stale-while-revalidate=${ms("1 hour") / 100}`,
+	);
 
 	return {
 		props: {
 			id,
-			initialData,
+			initialData: data,
 		},
 	};
 };

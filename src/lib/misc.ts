@@ -1,4 +1,4 @@
-import { DEPLOYMENT_URL, isProd } from "~/config";
+import { isProd } from "~/config";
 
 export function omitKeys<T, K extends keyof T>(
 	obj: T,
@@ -21,10 +21,10 @@ export function pickKeys<T, K extends keyof T>(
 	}, {} as T);
 }
 
-export function getBaseUrl() {
+export function getDeploymentUrl() {
 	switch (true) {
-		case typeof DEPLOYMENT_URL === "string": {
-			return DEPLOYMENT_URL;
+		case !!process.env.NEXT_PUBLIC_DEPLOYMENT_URL: {
+			return process.env.NEXT_PUBLIC_DEPLOYMENT_URL;
 		}
 		case isProd: {
 			return "https://bookmarky.mnsht.xyz";

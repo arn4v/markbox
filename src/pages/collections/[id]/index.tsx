@@ -6,7 +6,7 @@ import { CopyCode } from "~/components/CopyCode";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
 import { AppLayout } from "~/layouts/App";
-import { getBaseUrl } from "~/lib/misc";
+import { getDeploymentUrl } from "~/lib/misc";
 import { trpc } from "~/lib/trpc";
 
 export default function PrivateCollectionPage() {
@@ -72,7 +72,12 @@ export default function PrivateCollectionPage() {
 													Shareable URL
 												</dt>
 												<dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-													<a>{`${getBaseUrl()}/share/${id}`}</a>
+													<a
+														href={`${getDeploymentUrl()}/share/${id}`}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="text-cyan-600 underline hover:text-cyan-700"
+													>{`${getDeploymentUrl()}/share/${id}`}</a>
 												</dd>
 											</div>
 											<div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -81,7 +86,7 @@ export default function PrivateCollectionPage() {
 												</dt>
 												<dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
 													<CopyCode
-														value={`<iframe src="${getBaseUrl()}/share/${id}" frameborder="0" allowfullscreen></iframe>`}
+														value={`<iframe src="${getDeploymentUrl()}/share/${id}" frameborder="0" allowfullscreen></iframe>`}
 													/>
 												</dd>
 											</div>

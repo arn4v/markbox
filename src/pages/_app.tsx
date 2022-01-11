@@ -1,7 +1,6 @@
 import { UserProvider } from "@auth0/nextjs-auth0";
 import "@fontsource/inter";
 import "@fontsource/poppins";
-// 👇 import the httpBatchLink
 import { httpLink } from "@trpc/client/links/httpLink";
 import { withTRPC } from "@trpc/next";
 import { DefaultSeo } from "next-seo";
@@ -13,7 +12,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import superjson from "superjson";
 import CustomHead from "~/components/CustomHead";
 import { defaultSeoProps } from "~/config";
-import { getBaseUrl } from "~/lib/misc";
+import { getDeploymentUrl } from "~/lib/misc";
 import type { AppRouter } from "~/server/routers/_app";
 import "~/styles/index.css";
 
@@ -39,10 +38,10 @@ export default withTRPC<AppRouter>({
 		return {
 			links: [
 				httpLink({
-					url: `${getBaseUrl()}/api/trpc`,
+					url: `${getDeploymentUrl()}/api/trpc`,
 				}),
 			],
-			url: `${getBaseUrl()}/api/trpc`,
+			url: `${getDeploymentUrl()}/api/trpc`,
 			transformer: superjson,
 		};
 	},
