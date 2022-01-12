@@ -8,7 +8,7 @@ export default function IndexPage() {
 
 	return (
 		<div className="min-h-screen w-screen dark:bg-black relative">
-			<Navbar />
+			<Navbar className="sticky top-0" />
 			<div className="w-96 h-64 blur-[350px] absolute bg-sky-400 rounded-full top-1/3 left-1/2 -translate-x-1/2 transform"></div>
 			<section className="dark:text-blueGray-200 text-blueGray-700 container flex flex-col gap-12 px-5 py-8 lg:py-24 mx-auto items-center">
 				<div className="flex flex-col w-full text-left lg:text-center">

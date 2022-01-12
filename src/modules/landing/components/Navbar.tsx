@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import * as React from "react";
 import { HiMenu, HiOutlineDocumentText, HiX } from "react-icons/hi";
 import { VscGithub } from "react-icons/vsc";
@@ -7,7 +8,10 @@ import { Logo } from "~/components/Logo";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { GetStartedButton } from "./GetStartedButton";
 
-export const Navbar = () => {
+export const Navbar = ({
+	className,
+	...props
+}: JSX.IntrinsicElements["header"]) => {
 	const { isOpen, onToggle } = useDisclosure();
 	const { isLg } = useBreakpoints();
 
@@ -18,7 +22,13 @@ export const Navbar = () => {
 	}, [isLg, isOpen, onToggle]);
 
 	return (
-		<header className="sticky top-0 w-full border-b dark:border-gray-700 bg-transparent z-50 backdrop-filter backdrop-blur-lg">
+		<header
+			className={clsx([
+				"w-full border-b dark:border-gray-700 bg-transparent z-50 backdrop-filter backdrop-blur-lg",
+				className,
+			])}
+			{...props}
+		>
 			<div className="flex items-center justify-between lg:px-8 h-20 w-full px-4 lg:w-5/6 mx-auto">
 				<Logo className="text-black dark:text-white" />
 				<nav className="flex items-center gap-8">

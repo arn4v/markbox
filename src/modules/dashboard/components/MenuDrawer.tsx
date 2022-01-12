@@ -9,7 +9,6 @@ import {
 	HiOutlineLogout,
 	HiOutlineTemplate,
 	HiOutlineViewGrid,
-	HiViewGrid,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Drawer, { DrawerContent } from "~/components/Drawer";
