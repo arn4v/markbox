@@ -21,7 +21,7 @@ import EditDrawer from "~/modules/dashboard/components/EditDrawer";
 import DescriptionModal from "./DescriptionModal";
 
 interface Props {
-	data: NonNullable<InferQueryOutput<"bookmarks.byId">>;
+	data: InferQueryOutput<"bookmarks.byId">;
 }
 
 const BookmarkCard = ({ data }: Props) => {
@@ -46,15 +46,12 @@ const BookmarkCard = ({ data }: Props) => {
 		useDisclosure();
 	const [isDrawerOpen, onDrawerOpen, onDrawerClose] = useDisclosure();
 	const [isDescOpen, onDescOpen, onDescClose] = useDisclosure();
-
-	const date = React.useMemo(
-		() => new Date(data?.createdAt),
-		[data?.createdAt],
-	);
 	const { isLg } = useBreakpoints();
 	const router = useRouter();
 
 	const onFavourite = React.useCallback(() => {
+		if (!data?.id) return null;
+
 		return updateFavourite({
 			id: data?.id,
 			isFavourite: !data?.isFavourite,
@@ -73,10 +70,10 @@ const BookmarkCard = ({ data }: Props) => {
 			>
 				<div className="flex flex-col items-start justify-center w-5/6 gap-1">
 					<span className="text-xs">
-						{`Created on ${format(date, "do MMMM, yyyy")} at ${format(
-							date,
-							"h:mmaa",
-						)}`}
+						{`Created on ${format(
+							data?.createdAt,
+							"do MMMM, yyyy",
+						)} at ${format(data?.createdAt, "h:mmaa")}`}
 					</span>
 					<div
 						data-test="bookmark-title"

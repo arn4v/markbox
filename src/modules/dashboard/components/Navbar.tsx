@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Logo } from "~/components/Logo";
 import ProfileDropdown from "~/modules/dashboard/components/ProfileDropdown";
-import CreateButton from "./CreateButton";
+import CreateBookmarkButton from "./CreateButton";
 import MenuDrawer from "./MenuDrawer";
 import TagsDrawer from "./TagsDrawer";
 
@@ -21,7 +21,7 @@ export default function Navbar() {
 					<div className="items-center hidden gap-5 lg:flex">
 						{/* Only show create button on Dashboard */}
 						{router.pathname === "/app" ? (
-							<CreateButton className="text-white border-none" showText />
+							<CreateBookmarkButton className="text-white border-none" showText />
 						) : null}
 						<ProfileDropdown />
 					</div>
@@ -29,7 +29,7 @@ export default function Navbar() {
 						{/* Only show create button and tags drawer on Dashboard */}
 						{router.pathname === "/app" ? (
 							<>
-								<CreateButton className="text-black bg-transparent dark:text-white hover:bg-transparent" />
+								<CreateBookmarkButton className="text-black bg-transparent dark:text-white hover:bg-transparent" />
 								<TagsDrawer />
 							</>
 						) : null}

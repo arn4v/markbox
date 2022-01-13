@@ -10,13 +10,15 @@ interface Props {
 	onSuccess: () => void;
 }
 
+type LocalTags = Record<string, true>;
+
 const EditForm = ({ id, onSuccess }: Props) => {
 	const initialState = {
 		title: "",
 		url: "",
 		description: "",
-		tags: {} as Record<string, true>,
-		tagsDisconnect: {} as Record<string, true>,
+		tags: {} as LocalTags,
+		tagsDisconnect: {} as LocalTags,
 	};
 	const [state, setState] = React.useState(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
@@ -29,6 +31,10 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					title: _data.title,
 					url: _data.url,
 					description: _data.description,
+					tags: _data?.tags.reduce((acc, cur) => {
+						acc[cur?.name] = true;
+						return acc;
+					}, {} as LocalTags),
 				}));
 			}
 		},
@@ -39,7 +45,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		onSuccess() {
 			setState(initialState);
 			invalidateQueries(["bookmarks.all"]);
-			invalidateQueries(["bookmarks.byId", id]);
+			// invalidateQueries(["bookmarks.byId", id]);
 			onSuccess();
 		},
 	});

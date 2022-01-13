@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
 import { sortBySchema } from "~/types";
@@ -12,7 +13,7 @@ export const bookmarksRouter = createRouter()
 	.query("byId", {
 		input: z.string().uuid(),
 		async resolve({ ctx, input }) {
-			return await ctx.prisma.bookmark.findUnique({
+			const data = await ctx.prisma.bookmark.findUnique({
 				where: {
 					id: input,
 				},
@@ -20,6 +21,11 @@ export const bookmarksRouter = createRouter()
 					tags: true,
 				},
 			});
+
+			if (data === null || typeof data === "undefined")
+				throw new TRPCError({ code: "NOT_FOUND" });
+
+			return data;
 		},
 	})
 	.query("all", {
