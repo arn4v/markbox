@@ -2,10 +2,9 @@ import clsx from "clsx";
 import { format } from "date-fns";
 import React from "react";
 import { HiX } from "react-icons/hi";
-import { useMutation } from "react-query";
-import axios from "redaxios";
 import Modal, { ModalContent } from "~/components/Modal";
 import Spinner from "~/components/Spinner";
+import { trpc } from "~/lib/trpc";
 
 const ExportJsonModal = ({
 	isOpen,
@@ -20,30 +19,22 @@ const ExportJsonModal = ({
 	const downloadHref = React.useMemo(() => {
 		return blob ? URL.createObjectURL(blob) : "#";
 	}, [blob]);
-	const { mutate, isLoading } = useMutation(
-		() => {
-			return axios.get("/api/export-json", {
-				withCredentials: true,
-			});
+	const { mutate, isLoading } = trpc.useMutation("userdata.export-json", {
+		onSuccess(res) {
+			const date = new Date(res.results.exported_at);
+			const fileName = `bookmarky-export-${format(date, "yyyyMMdd")}.json`;
+			setBlob(
+				new Blob([JSON.stringify(res.results, null, 4)], {
+					type: "application/json",
+				}),
+			);
+			setDownload(fileName);
+			if (downloadElRef.current) downloadElRef.current.click();
+			setBlob(null);
+			setDownload("");
+			onClose();
 		},
-		{
-			onSuccess(res) {
-				const results = res.data.results;
-				const date = new Date(results.exported_at);
-				const fileName = `bookmarky-export-${format(date, "yyyyMMdd")}.json`;
-				setBlob(
-					new Blob([JSON.stringify(results, null, 4)], {
-						type: "application/json",
-					}),
-				);
-				setDownload(fileName);
-				if (downloadElRef.current) downloadElRef.current.click();
-				setBlob(null);
-				setDownload("");
-				onClose();
-			},
-		},
-	);
+	});
 
 	return (
 		<Modal

@@ -37,5 +37,5 @@ yarn-error.log*
 
 sentry.properties
 uploads/
-dump*.sql
+/*.sql
 .vscode
