@@ -18,6 +18,7 @@ export const userDataRouter = createRouter()
 						description: z.string(),
 						url: z.string(),
 						tags: z.array(z.string()),
+						createdAt: z.string(),
 					}),
 				),
 			}),
@@ -71,7 +72,8 @@ export const userDataRouter = createRouter()
 			const existingBookmarkTransactions = [];
 			const newBookmarkTransactions = [];
 
-			for (const { description, tags, title, url } of input?.data?.bookmarks) {
+			for (const { description, tags, title, url, createdAt } of input?.data
+				?.bookmarks) {
 				const tagsConnect = tags
 					.map((item) => {
 						const existing = tagsOuter.find(
@@ -120,6 +122,8 @@ export const userDataRouter = createRouter()
 								url,
 								description,
 								userId: ctx.user?.id as string,
+								importedAt: new Date(),
+								createdAt: new Date(createdAt),
 							},
 						}),
 						ctx.prisma.bookmark.update({
@@ -165,17 +169,18 @@ export const userDataRouter = createRouter()
 
 			const tags = tagsData.map(({ name }) => name);
 			const bookmarks = bookmarksData.map(
-				({ title, url, tags, description }) => ({
+				({ title, url, tags, description, createdAt }) => ({
 					title,
 					url,
 					tags: tags.map(({ name }) => name),
 					description,
+					createdAt: createdAt.toDateString(),
 				}),
 			);
 
 			return {
 				results: {
-					schema_version: 1,
+					schema_version: 1.1,
 					exported_at: new Date().toISOString(),
 					data: {
 						tags: tags,

@@ -100,11 +100,12 @@ model Bookmark {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title       String  @db.VarChar(1000)
-  url         String  @db.VarChar(1000)
-  isFavourite Boolean @default(false) @map("is_favourite")
-  description String  @default("") @db.VarChar(1000)
+  title       String    @db.VarChar(1000)
+  url         String    @db.VarChar(1000)
+  isFavourite Boolean   @default(false) @map("is_favourite")
+  description String    @default("") @db.VarChar(1000)
   tags        Tag[]
+  importedAt  DateTime? @map("imported_at")
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
