@@ -7,13 +7,21 @@ import useFuse from "~/hooks/use-fuse";
 import { AppLayout } from "~/layouts/App";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
+import { useMixpanel } from "~/providers/Mixpanel";
 
 export default function EditBookmarkPage() {
 	const router = useRouter();
 	const id = router.query.id as string;
+	const mixpanel = useMixpanel();
 	const { data: tagsData } = trpc.useQuery(["tags.all"]);
 	const { mutate } = trpc.useMutation("collections.update", {
-		onSuccess() {
+		onSuccess(data) {
+			mixpanel.track("Collection Updated", {
+				id: data?.id,
+				name: data?.name,
+				isPublic: data?.isPublic,
+				updatedAt: data?.updatedAt.toISOString(),
+			});
 			router.push(`/collections/${id}`);
 		},
 	});

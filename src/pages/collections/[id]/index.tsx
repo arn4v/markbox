@@ -8,14 +8,19 @@ import { genericModalMotionProps } from "~/config";
 import { AppLayout } from "~/layouts/App";
 import { getDeploymentUrl } from "~/lib/misc";
 import { trpc } from "~/lib/trpc";
+import { useMixpanel } from "~/providers/Mixpanel";
 
 export default function PrivateCollectionPage() {
 	const router = useRouter();
 	const id = router.query?.id as string;
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const { invalidateQueries } = trpc.useContext();
+	const mixpanel = useMixpanel();
 	const { mutate } = trpc.useMutation("collections.delete", {
-		onSuccess() {
+		onSuccess(data) {
+			mixpanel.track("Collection Deleted", {
+				id: data?.id,
+			});
 			invalidateQueries(["collections.all"]);
 			router.push("/collections");
 		},

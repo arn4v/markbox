@@ -18,6 +18,7 @@ import Popup from "~/components/Popup";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import EditDrawer from "~/modules/dashboard/components/EditDrawer";
+import { useMixpanel } from "~/providers/Mixpanel";
 import DescriptionModal from "./DescriptionModal";
 
 interface Props {
@@ -31,14 +32,24 @@ const BookmarkCard = ({ data }: Props) => {
 		onOpen: onDeleteOpen,
 	} = useDisclosure();
 	const { invalidateQueries } = trpc.useContext();
+	const mixpanel = useMixpanel();
 	const { mutate } = trpc.useMutation("bookmarks.deleteById", {
-		onSuccess: () => {
+		onSuccess() {
+			mixpanel.track("Bookmark Deleted");
 			invalidateQueries(["bookmarks.all"]);
 			invalidateQueries(["tags.all"]);
 		},
 	});
 	const { mutate: updateFavourite } = trpc.useMutation("bookmarks.favourite", {
-		onSuccess() {
+		onSuccess(isFavourited) {
+			mixpanel.track(
+				isFavourited
+					? "Bookmark Added to Favourites"
+					: "Bookmark Removed From Favourites",
+				{
+					id: data?.id,
+				},
+			);
 			invalidateQueries(["bookmarks.all"]);
 		},
 	});

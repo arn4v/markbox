@@ -3,6 +3,7 @@ import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import { trpc } from "~/lib/trpc";
+import { useMixpanel } from "~/providers/Mixpanel";
 
 interface Props {
 	title?: string;
@@ -19,12 +20,19 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	};
 	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
+	const mixpanel = useMixpanel();
 	const { mutate } = trpc.useMutation(["bookmarks.create"], {
-		onSuccess() {
+		onSuccess(data) {
 			// Invalidate GetAllBookmarks and GetAllTags on successful mutation
 			invalidateQueries(["bookmarks.all"]);
 			invalidateQueries(["tags.all"]);
 			setState(initialState);
+			mixpanel.track("Bookmark Created", {
+				id: data?.id,
+				title: data?.title,
+				url: data?.url,
+				tags: data?.tags?.map((item) => item?.name),
+			});
 			onSuccess();
 		},
 	});

@@ -6,6 +6,7 @@ import { compare, genSalt, hash } from "bcrypt";
 import { CookieSerializeOptions, serialize } from "cookie";
 import rateLimit from "express-rate-limit";
 import { createSigner, createVerifier } from "fast-jwt";
+import { init as initMixpanel } from "mixpanel";
 import ms from "ms";
 import multer from "multer";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -283,3 +284,8 @@ export const trpcServerClient = createTRPCClient<AppRouter>({
 export const html = String.raw;
 
 export const nc = () => nextConnect<NextApiRequest, NextApiResponse>();
+
+export const mixpanel = initMixpanel(
+	process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string,
+	{},
+);

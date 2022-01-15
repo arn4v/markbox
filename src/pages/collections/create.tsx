@@ -7,12 +7,19 @@ import useFuse from "~/hooks/use-fuse";
 import { AppLayout } from "~/layouts/App";
 import { trpc } from "~/lib/trpc";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
+import { useMixpanel } from "~/providers/Mixpanel";
 
 export default function CreateCollectionPage() {
+	const mixpanel = useMixpanel();
 	const router = useRouter();
 	const { data } = trpc.useQuery(["tags.all"]);
 	const { mutate } = trpc.useMutation("collections.create", {
-		onSuccess() {
+		onSuccess(data) {
+			mixpanel.track("Collection Created", {
+				id: data?.id,
+				name: data?.name,
+				isPublic: data?.isPublic,
+			});
 			router.push("/collections");
 		},
 	});

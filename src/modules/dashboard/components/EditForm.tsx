@@ -4,6 +4,7 @@ import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
+import { useMixpanel } from "~/providers/Mixpanel";
 
 interface Props {
 	id: string;
@@ -13,6 +14,7 @@ interface Props {
 type LocalTags = Record<string, true>;
 
 const EditForm = ({ id, onSuccess }: Props) => {
+	const mixpanel = useMixpanel();
 	const initialState = {
 		title: "",
 		url: "",
@@ -43,7 +45,11 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
 	const { mutate } = trpc.useMutation(["bookmarks.updateById"], {
-		onSuccess() {
+		onSuccess(data) {
+			mixpanel.track("Bookmark Updated", {
+				id: data?.id,
+				updatedAt: data?.updatedAt.toISOString(),
+			});
 			setState(initialState);
 			invalidateQueries(["bookmarks.all"]);
 			invalidateQueries(["bookmarks.byId", id]);

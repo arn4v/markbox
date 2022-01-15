@@ -2,7 +2,7 @@ import { getSession, Session, UserProfile } from "@auth0/nextjs-auth0";
 import { User } from "@prisma/client";
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
-import { prisma } from "~/lib/utils.server";
+import { mixpanel, prisma } from "~/lib/utils.server";
 
 export const createContext = async ({
 	req,
@@ -12,6 +12,7 @@ export const createContext = async ({
 		req,
 		res,
 		prisma,
+		mixpanel: mixpanel,
 		session: null as Session | null,
 		auth0user: null as UserProfile | null,
 		user: null as User | null,

@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { v4 } from "uuid";
 import { z } from "zod";
 import { deleteOrphanTagsForUserId } from "~/lib/db";
 import { sortBySchema } from "~/types";
@@ -113,7 +114,13 @@ export const bookmarksRouter = createRouter()
 	})
 	.mutation("deleteById", {
 		input: z.string().uuid(),
-		async resolve({ ctx, input }) {},
+		async resolve({ ctx, input }) {
+			return await ctx.prisma.bookmark.delete({
+				where: {
+					id: input,
+				},
+			});
+		},
 	})
 	.mutation("create", {
 		input: z.object({
@@ -124,15 +131,19 @@ export const bookmarksRouter = createRouter()
 			tagsConnect: z.array(z.string().uuid()).optional().default([]),
 		}),
 		async resolve({ ctx, input: { tagsConnect, tagsCreate, ...input } }) {
-			return await ctx.prisma.bookmark.create({
+			const _tagsCreate = tagsCreate.map((item) => ({
+				id: v4(),
+				name: item,
+				userId: ctx?.user?.id as string,
+			}));
+			const _tagsConnect = tagsConnect.map((item) => ({ id: item }));
+
+			const data = await ctx.prisma.bookmark.create({
 				data: {
 					...input,
 					tags: {
-						create: tagsCreate.map((item) => ({
-							name: item,
-							userId: ctx?.user?.id as string,
-						})),
-						connect: tagsConnect.map((item) => ({ id: item })),
+						create: _tagsCreate,
+						connect: _tagsConnect,
 					},
 					User: {
 						connect: {
@@ -144,6 +155,18 @@ export const bookmarksRouter = createRouter()
 					tags: true,
 				},
 			});
+
+			ctx.mixpanel.track_batch(
+				_tagsCreate.map((item) => ({
+					event: "Tag Created",
+					properties: {
+						distinct_id: ctx?.user?.id,
+						id: item.id,
+					},
+				})),
+			);
+
+			return data;
 		},
 	})
 	.mutation("updateById", {
