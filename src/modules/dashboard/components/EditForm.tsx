@@ -25,7 +25,6 @@ const EditForm = ({ id, onSuccess }: Props) => {
 	const [state, setState] = React.useState(initialState);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 	trpc.useQuery(["bookmarks.byId", id], {
-		staleTime: Infinity,
 		onSuccess(data) {
 			const _data = data as NonNullable<InferQueryOutput<"bookmarks.byId">>;
 			if (isEqual(state, initialState)) {
