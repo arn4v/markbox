@@ -36,7 +36,6 @@
 		"postinstall": "npx playwright install"
 	},
 	"dependencies": {
-		"@amplitude/node": "^1.9.1",
 		"@auth0/nextjs-auth0": "^1.7.0",
 		"@braintree/sanitize-url": "^5.0.2",
 		"@fontsource/inter": "^4.5.1",
@@ -51,7 +50,6 @@
 		"@trpc/react": "^9.17.0",
 		"@trpc/server": "^9.17.0",
 		"@withshepherd/faker": "^5.5.5",
-		"amplitude-js": "^8.15.0",
 		"arg": "^5.0.1",
 		"bcrypt": "^5.0.1",
 		"bookmarks-parser": "^1.5.0",
