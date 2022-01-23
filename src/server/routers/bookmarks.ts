@@ -104,10 +104,34 @@ export const bookmarksRouter = createRouter()
 		input: z.object({
 			tagName: z.string().optional(),
 		}),
-		async resolve({ ctx }) {
+		async resolve({ ctx, input }) {
+			let tagId: string | undefined = undefined;
+
+			if (input?.tagName) {
+				const tag = await ctx?.prisma.tag.findFirst({
+					where: {
+						name: input?.tagName,
+						userId: ctx?.user?.id as string,
+					},
+					select: {
+						id: true,
+					},
+				});
+				if (tag) tagId = tag?.id;
+			}
+
 			return await ctx.prisma.bookmark.count({
 				where: {
 					userId: ctx?.user?.id as string,
+					...(typeof tagId === "string"
+						? {
+								tags: {
+									every: {
+										id: tagId,
+									},
+								},
+						  }
+						: {}),
 				},
 			});
 		},

@@ -16,8 +16,8 @@ export const defaultSeoProps: DefaultSeoProps = {
 		site_name: "Markbox",
 		images: [
 			{
-				url: "/static/og.jpg",
-				height: 627,
+				url: "/static/og.svg",
+				height: 630,
 				width: 1200,
 			},
 		],
