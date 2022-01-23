@@ -7,7 +7,7 @@ layout: "../../../layouts/docs"
 ## Endpoint URL
 
 ```
-https://bookmarky.mnsht.xyz/api/v1/bookmarks
+https://markbox.in/api/v1/bookmarks
 ```
 
 ---
@@ -44,7 +44,7 @@ type GetAllBookmarksData = {
 ### Fetch all bookmarks
 
 ```js
-const res = await fetch("https://bookmarky.mnsht.xyz/api/v1/bookmarks", {
+const res = await fetch("https://markbox.in/api/v1/bookmarks", {
 	method: "GET",
 	headers: {
 		Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ const bookmarks = json.data;
 ```js
 import qs from "querystring";
 const res = await fetch(
-	"https://bookmarky/api/v1/bookmarks" +
+	"https://markbox.in/api/v1/bookmarks" +
 		qs.stringify({
 			tags: ["React", "Next.js"],
 		}),
@@ -87,7 +87,7 @@ type ResponseData = {
 ```js
 import qs from "querystring";
 const res = await fetch(
-	"https://bookmarky/api/v1/bookmarks" +
+	"https://markbox.in/api/v1/bookmarks" +
 		qs.stringify({
 			tags: ["React", "Next.js"],
 		}),

@@ -29,7 +29,7 @@ export const defaultSeoProps: DefaultSeoProps = {
 	},
 	defaultTitle: "Markbox - API-First Bookmarking For Developers",
 	titleTemplate: "%s | Markbox",
-	canonical: "https://bookmarky.mnsht.xyz",
+	canonical: "https://markbox.in",
 };
 
 export const genericModalMotionProps: MotionProps = {

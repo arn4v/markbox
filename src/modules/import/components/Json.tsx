@@ -2,7 +2,7 @@ import React from "react";
 import { useDisclosure } from "react-sensible";
 import UploadJsonModal from "./JsonModal";
 
-const MarkboxJson = () => {
+const JsonImport = () => {
 	const { isOpen, onClose, onOpen } = useDisclosure();
 
 	return (
@@ -18,4 +18,4 @@ const MarkboxJson = () => {
 	);
 };
 
-export default MarkboxJson;
+export default JsonImport;

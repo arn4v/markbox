@@ -27,7 +27,7 @@ export function getDeploymentUrl() {
 			return process.env.NEXT_PUBLIC_DEPLOYMENT_URL;
 		}
 		case isProd: {
-			return "https://bookmarky.mnsht.xyz";
+			return "https://markbox.in";
 		}
 		default: {
 			return "http://localhost:3000";

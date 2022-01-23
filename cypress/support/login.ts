@@ -6,7 +6,7 @@ export const login = () => {
 	cy.url().then((url) => {
 		if (url.includes("auth0.com")) {
 			// Fill username (email)
-			cy.get("input#username").focus().type("test@bookmarky.mnsht.xyz");
+			cy.get("input#username").focus().type("test@markbox.in");
 
 			// Fill password
 			cy.get("input#password").focus().type("CTkJEk5s+-9naqA");
