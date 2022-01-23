@@ -8,7 +8,9 @@ import { genericModalMotionProps } from "~/config";
 import { AppLayout } from "~/layouts/App";
 import { getDeploymentUrl } from "~/lib/misc";
 import { trpc } from "~/lib/trpc";
+import SortButton from "~/modules/dashboard/components/SortButton";
 import { useMixpanel } from "~/providers/Mixpanel";
+import { useStore } from "~/store";
 
 export default function PrivateCollectionPage() {
 	const router = useRouter();
@@ -26,11 +28,16 @@ export default function PrivateCollectionPage() {
 		},
 	});
 	const { data, isLoading } = trpc.useQuery(["collections.byId", id]);
+	const sort = useStore((state) => state.sort.type);
+	const { data: bookmarks, isLoading: isBookmarksLoading } = trpc.useQuery([
+		"collections.bookmarks",
+		{ id, sort },
+	]);
 
 	return (
 		<>
 			<AppLayout>
-				<div className="flex flex-col space-y-8 mt-8">
+				<div className="flex flex-col space-y-8 mt-8 px-6 2xl:px-0">
 					{/* Query is finished loading & collections exist */}
 					{!isLoading && data ? (
 						<div className="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -145,6 +152,33 @@ export default function PrivateCollectionPage() {
 								</div>
 						  ))
 						: null}
+					{!isLoading && !isBookmarksLoading && data && bookmarks ? (
+						<>
+							<hr />
+							<div>
+								<span className="w-full flex items-center justify-between">
+									<h1 className="text-lg font-bold">Bookmarks</h1>
+									<SortButton />
+								</span>
+								<ol className="mt-8 list-decimal px-6">
+									{bookmarks?.map((item) => {
+										return (
+											<li key={item?.id} className="mb-1">
+												<a
+													target="_blank"
+													rel="noopener noreferrer"
+													href={item?.url}
+													className="text-cyan-600 underline hover:text-cyan-700"
+												>
+													{item?.title}
+												</a>
+											</li>
+										);
+									})}
+								</ol>
+							</div>
+						</>
+					) : null}
 				</div>
 			</AppLayout>
 			<Modal

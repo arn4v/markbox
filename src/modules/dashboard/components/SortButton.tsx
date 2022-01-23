@@ -5,29 +5,42 @@ import {
 	HiOutlineSortDescending,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
-import Popup from "~/components/Popup";
+import Popup, { PopupProps } from "~/components/Popup";
 import { useStore } from "~/store";
-import { SortBy } from "../../../types";
+import type { SortBy } from "~/types";
 
-const SortButton = () => {
-	const sort = useStore((state) => state.dashboard.sort);
+const SortButton = ({
+	children,
+	className,
+	placement = "bottom-start",
+}: {
+	children?: React.ReactNode;
+	className?: string;
+	placement?: PopupProps["placement"];
+}) => {
+	const sort = useStore((state) => state.sort.type);
 	const { isOpen, onToggle, onClose } = useDisclosure();
 
 	return (
 		<Popup
-			placement="bottom-start"
+			placement={placement}
 			isOpen={isOpen}
 			onDismiss={onClose}
 			trigger={
 				<button
 					onClick={onToggle}
-					className="h-10 w-10 bg-white border border-gray-300 dark:border-gray-700 dark:bg-gray-800 flex items-center justify-center rounded-lg backdrop-blur-xl hover:bg-gray-200 transition shadow-sm"
+					className={clsx([
+						"h-full border border-gray-200 rounded-lg px-4 shadow hover:shadow-md transition",
+						children ? "flex items-center space-x-2" : "aspect-1",
+						className,
+					])}
 				>
 					{sort === "created_at_asc" || sort === "updated_at_asc" ? (
 						<HiOutlineSortAscending className="h-5 w-5" />
 					) : (
 						<HiOutlineSortDescending className="h-5 w-5" />
 					)}
+					{children ? <span>{children}</span> : null}
 				</button>
 			}
 		>
@@ -48,8 +61,8 @@ export interface SortItemProps {
 
 const SortItem = ({ type, children }: SortItemProps) => {
 	const [sort, setSort] = useStore((state) => [
-		state.dashboard.sort,
-		state.dashboard.actions.setSort,
+		state.sort.type,
+		state.sort.actions.setSort,
 	]);
 
 	return (

@@ -1,6 +1,6 @@
 import { NextSeo } from "next-seo";
 import React from "react";
-import BookmarkyJson from "~/modules/import/components/BookmarkyJson";
+import MarkboxJson from "~/modules/import/components/MarkboxJson";
 import Netscape from "~/modules/import/components/Netscape";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 
@@ -15,7 +15,7 @@ const ImportPage = () => {
 					</div>
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 						<Netscape />
-						<BookmarkyJson />
+						<MarkboxJson />
 					</div>
 				</div>
 			</SettingsPageWrapper>

@@ -1,7 +1,13 @@
 import create from "zustand";
-import { SortBy } from "./types";
+import type { SortBy } from "./types";
 
 interface State {
+	sort: {
+		type: SortBy;
+		actions: {
+			setSort(type: SortBy): void;
+		};
+	};
 	createBookmark: {
 		isOpen: boolean;
 		actions: {
@@ -19,17 +25,23 @@ interface State {
 	};
 	dashboard: {
 		tag: string;
-		sort: SortBy;
 		cursor: string;
 		actions: {
 			setCursor(cursor: string): void;
 			setTag(tag: string): void;
-			setSort(type: SortBy): void;
 		};
 	};
 }
 
 export const useStore = create<State>((set) => ({
+	sort: {
+		type: "created_at_desc",
+		actions: {
+			setSort(sort) {
+				set((prev) => ({ sort: { ...prev.sort, type: sort } }));
+			},
+		},
+	},
 	createBookmark: {
 		isOpen: false,
 		actions: {
@@ -49,14 +61,10 @@ export const useStore = create<State>((set) => ({
 	},
 	dashboard: {
 		tag: "All",
-		sort: "created_at_desc",
 		cursor: "",
 		actions: {
 			setCursor(cursor) {
 				set((prev) => ({ dashboard: { ...prev.dashboard, cursor } }));
-			},
-			setSort(sort) {
-				set((prev) => ({ dashboard: { ...prev.dashboard, sort } }));
 			},
 			setTag(tag) {
 				set((prev) => ({ dashboard: { ...prev.dashboard, tag } }));

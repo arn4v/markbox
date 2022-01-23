@@ -25,10 +25,10 @@ const DashboardPage = () => {
 				{isLoading || !isAuthenticated ? (
 					<></>
 				) : (
-					<>
+					<div>
 						<Sidebar />
 						<BookmarksGrid tag={tag} />
-					</>
+					</div>
 				)}
 			</AppLayout>
 		</>

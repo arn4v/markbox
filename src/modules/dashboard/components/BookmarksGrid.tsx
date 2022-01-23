@@ -15,7 +15,7 @@ import SortButton from "./SortButton";
 type Bookmark = NonNullable<InferQueryOutput<"bookmarks.byId">>;
 
 const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
-	const sort = useStore((state) => state.dashboard.sort);
+	const sort = useStore((state) => state.sort.type);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
 	const { isLoading, data: count } = trpc.useQuery([

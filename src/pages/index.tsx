@@ -29,12 +29,12 @@ export default function IndexPage() {
 						.
 					</h1>
 					<p className="mx-auto text-base font-medium leading-relaxed dark:text-blueGray-200 text-blueGray-700 lg:w-1/3 text-center">
-						Bookmarky is an alternative to in-browser bookmark manager with
+						Markbox is an alternative to in-browser bookmark manager with
 						focus on extending it for your own needs.
 						<br />
 						<br />
 						Want to bookmark with your friends on Discord? Build your own bot
-						and use the Bookmarky API to store data.
+						and use the Markbox API to store data.
 					</p>
 				</div>
 				{!isAuthenticated ? (

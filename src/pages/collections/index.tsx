@@ -14,19 +14,20 @@ export default function CollectionsPage() {
 
 	return (
 		<AppLayout>
-			<div className="flex items-center w-full justify-between mt-8">
+			<div className="flex items-center w-full justify-between mt-8 px-6 2xl:px-0">
 				<h1 className="font-bold text-2xl">Collections</h1>
 				<Link href="/collections/create" passHref>
 					<a
 						className={clsx([
-							"w-full font-medium items-center justify-center flex transition focus:outline-none lg:p-2 lg:rounded-lg lg:gap-2 rounded-full dark:border-gray-300 lg:w-auto lg:h-auto bg-blue-600 hover:bg-blue-700 dark:hover:bg-gray-700 dark:bg-gray-800 border text-white",
+							"p-2 font-medium items-center justify-center flex transition focus:outline-none lg:rounded-lg lg:gap-2 rounded-md dark:border-gray-300 lg:w-auto lg:h-auto bg-blue-600 hover:bg-blue-700 dark:hover:bg-gray-700 dark:bg-gray-800 border text-white",
 						])}
 					>
-						Create Collection <HiPlus />
+						<span className="hidden lg:inline-block">Create Collection</span>{" "}
+						<HiPlus />
 					</a>
 				</Link>
 			</div>
-			<div className="gap-8 grid grid-cols-4 mt-8">
+			<div className="gap-8 grid lg:grid-cols-3 2xl:grid-cols-4 grid-cols-1 mt-8 px-6 2xl:px-0">
 				{/* Query is finished loading & collections exist */}
 				{!isLoading && data && data?.length > 0
 					? data?.map((coll) => (

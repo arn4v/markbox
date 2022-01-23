@@ -11,17 +11,24 @@ export default function Navbar() {
 
 	return (
 		<header className="w-full h-20 border-b dark:border-gray-700 fixed dark:bg-black bg-white z-50">
-			<div className="flex items-center justify-between w-full h-full px-6 mx-auto 2xl:px-0 2xl:w-3/5">
+			<div className="flex items-center justify-between w-full h-full px-6 2xl:px-0 mx-auto 2xl:w-3/5">
 				<Link href="/app">
-					<a>
-						<Logo className="text-black fill-current dark:text-white" />
+					<a className="lg:-ml-1">
+						<Logo
+							className="text-black fill-current dark:text-white"
+							height={Logo.baseHeight * 0.75}
+							width={Logo.baseWidth * 0.75}
+						/>
 					</a>
 				</Link>
 				<nav>
 					<div className="items-center hidden gap-5 lg:flex">
 						{/* Only show create button on Dashboard */}
 						{router.pathname === "/app" ? (
-							<CreateBookmarkButton className="text-white border-none" showText />
+							<CreateBookmarkButton
+								className="text-white border-none"
+								showText
+							/>
 						) : null}
 						<ProfileDropdown />
 					</div>

@@ -1,6 +1,6 @@
 describe("Check homepage", () => {
 	it("index page loaded", () => {
 		cy.visit("/");
-		cy.title().should("include", "Bookmarky");
+		cy.title().should("include", "Markbox");
 	});
 });

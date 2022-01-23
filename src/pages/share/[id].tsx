@@ -1,4 +1,5 @@
 import Avatar from "boring-avatars";
+import clsx from "clsx";
 import ms from "ms";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
@@ -8,18 +9,30 @@ import * as React from "react";
 import { HiOutlineShare } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import { CopyCode } from "~/components/CopyCode";
-import Popup from "~/components/Popup";
+import Popup, { PopupProps } from "~/components/Popup";
 import { getDeploymentUrl } from "~/lib/misc";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { prisma, trpcServerClient } from "~/lib/utils.server";
+import SortButton from "~/modules/dashboard/components/SortButton";
 import { Navbar } from "~/modules/landing/components/Navbar";
+import { useStore } from "~/store";
 
 interface Props {
 	id: string;
 	initialData: InferQueryOutput<"public.collections.byId">;
 }
 
-const SharePopup = ({ id }: { id: string }) => {
+const SharePopup = ({
+	id,
+	className,
+	children,
+	placement = "bottom-start",
+}: {
+	id: string;
+	children?: React.ReactNode;
+	className?: string;
+	placement?: PopupProps["placement"];
+}) => {
 	const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
 
 	return (
@@ -27,15 +40,20 @@ const SharePopup = ({ id }: { id: string }) => {
 			<Popup
 				isOpen={isOpen}
 				onDismiss={onClose}
+				placement={placement}
 				trigger={
 					<button
 						onClick={onToggle}
-						className="h-full aspect-1 border border-gray-200 rounded-lg px-4 shadow hover:shadow-md transition"
+						className={clsx([
+							"h-full border border-gray-200 rounded-lg px-4 shadow hover:shadow-md transition",
+							children ? "flex items-center space-x-2" : "aspect-1",
+							className,
+						])}
 					>
 						<HiOutlineShare />
+						{children}
 					</button>
 				}
-				placement="bottom-start"
 			>
 				<div className="bg-white shadow-xl border border-gray-200 p-6 flex flex-col space-y-4 mt-2 rounded-lg">
 					<div>
@@ -57,7 +75,8 @@ const SharePopup = ({ id }: { id: string }) => {
 export default function PublicCollectionPage({ initialData }: Props) {
 	const router = useRouter();
 	const id = router.query.id as string;
-	const { data } = trpc.useQuery(["public.collections.byId", id], {
+	const sort = useStore((state) => state.sort.type);
+	const { data } = trpc.useQuery(["public.collections.byId", { id, sort }], {
 		initialData: initialData,
 	});
 	const [isIframe, setIsIframe] = React.useState(true);
@@ -72,7 +91,7 @@ export default function PublicCollectionPage({ initialData }: Props) {
 				title={`${data?.name} by ${data?.User?.name}`}
 				openGraph={{
 					title: `${data?.name} by ${data?.User?.name}`,
-					description: `A Bookmarky Collection by ${data?.User?.name}`,
+					description: `A Markbox Collection by ${data?.User?.name}`,
 					type: "website",
 					url: `${getDeploymentUrl()}/share/${data?.id}`,
 					images: [
@@ -102,9 +121,27 @@ export default function PublicCollectionPage({ initialData }: Props) {
 								<p>By {data?.User?.name}</p>
 							</div>
 						</div>
-						<div className="flex items-center space-x-4">
+						<div className="items-center space-x-4 hidden lg:flex">
+							<SortButton />
 							<SharePopup id={id} />
 						</div>
+					</div>
+					<div className="w-full grid grid-cols-1 gap-2 lg:hidden">
+						<SortButton
+							className="w-full flex-grow items-center justify-center h-10"
+							placement="bottom-end"
+						>
+							{" "}
+							<span>Sort</span>
+						</SortButton>
+						<SharePopup
+							id={id}
+							className="flex-grow w-full justify-center h-10"
+							placement="bottom-start"
+						>
+							{" "}
+							<span>Share</span>
+						</SharePopup>
 					</div>
 					<ol className="mt-8 list-decimal px-6">
 						{data?.bookmarks?.map((item) => {
@@ -133,7 +170,7 @@ export const getServerSideProps: GetServerSideProps<
 	{ id: string }
 > = async ({ query, res }) => {
 	const id = query.id as string;
-	const data = await trpcServerClient.query("public.collections.byId", id);
+	const data = await trpcServerClient.query("public.collections.byId", { id });
 
 	if (!data?.isPublic) {
 		return {

@@ -21,7 +21,7 @@ export const MixpanelProvider = ({
 				debug: !isProd,
 				ignore_dnt: true,
 			},
-			"Bookmarky",
+			"Markbox",
 		),
 	);
 	const { data, isLoading } = trpc.useQuery(["users.me"], {

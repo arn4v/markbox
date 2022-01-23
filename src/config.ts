@@ -10,10 +10,10 @@ export const PASSWORD_REGEX =
 
 export const defaultSeoProps: DefaultSeoProps = {
 	openGraph: {
-		title: "Bookmarky - API-First Bookmarking For Developers",
+		title: "Markbox - API-First Bookmarking For Developers",
 		type: "website",
 		locale: "en_IE",
-		site_name: "Bookmarky",
+		site_name: "Markbox",
 		images: [
 			{
 				url: "/static/og.jpg",
@@ -27,8 +27,8 @@ export const defaultSeoProps: DefaultSeoProps = {
 		site: "@site",
 		cardType: "summary_large_image",
 	},
-	defaultTitle: "Bookmarky - API-First Bookmarking For Developers",
-	titleTemplate: "%s | Bookmarky",
+	defaultTitle: "Markbox - API-First Bookmarking For Developers",
+	titleTemplate: "%s | Markbox",
 	canonical: "https://bookmarky.mnsht.xyz",
 };
 
