@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Link from "next/link";
 import * as React from "react";
 import { HiMenu, HiOutlineDocumentText, HiX } from "react-icons/hi";
 import { VscGithub } from "react-icons/vsc";
@@ -30,7 +31,11 @@ export const Navbar = ({
 			{...props}
 		>
 			<div className="flex items-center justify-between lg:px-8 h-20 w-full px-4 lg:w-5/6 mx-auto">
-				<Logo className="text-black dark:text-white" />
+				<Link href="/" passHref>
+					<a>
+						<Logo className="text-black dark:text-white" />
+					</a>
+				</Link>
 				<nav className="flex items-center gap-8">
 					<button onClick={onToggle} className="block lg:hidden">
 						{isOpen ? (
