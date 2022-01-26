@@ -2,6 +2,7 @@ import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
+import Spinner from "~/components/Spinner";
 import { trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 
@@ -21,7 +22,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
 	const mixpanel = useMixpanel();
-	const { mutate } = trpc.useMutation(["bookmarks.create"], {
+	const { mutate, isLoading } = trpc.useMutation(["bookmarks.create"], {
 		onSuccess(data) {
 			// Invalidate GetAllBookmarks and GetAllTags on successful mutation
 			invalidateQueries(["bookmarks.all"]);
@@ -88,6 +89,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					placeholder="Name"
 					value={state.title}
 					onChange={onChange}
+					maxLength={700}
 					autoComplete="off"
 					required
 				/>
@@ -104,6 +106,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					value={state.url}
 					onChange={onChange}
 					autoComplete="off"
+					maxLength={1000}
 					required
 				/>
 			</div>
@@ -190,9 +193,10 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 			<button
 				data-test="create-form-submit"
 				type="submit"
+				disabled={isLoading}
 				className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-gray-500 focus:ring-2 ring-offset-current ring-offset-2 focus:outline-none"
 			>
-				Submit
+				{isLoading ? <Spinner className="h-4 w-4" /> : "Submit"}
 			</button>
 		</form>
 	);

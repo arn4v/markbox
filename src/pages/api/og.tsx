@@ -1,5 +1,5 @@
 import Avatar from "boring-avatars";
-import * as playwright from "playwright";
+import * as puppeteer from "puppeteer";
 import { renderToStaticMarkup } from "react-dom/server";
 import { nc } from "~/lib/utils.server";
 
@@ -118,16 +118,16 @@ export default nc().get(async (req, res) => {
 	const width = 1200;
 	const height = 630;
 
-	const browser = await playwright.chromium.launch({
+	const browser = await puppeteer.launch({
 		headless: true,
 		args: minimal_args,
 	});
 
-	const page = await browser.newPage({
-		viewport: {
-			width,
-			height,
-		},
+	const page = await browser.newPage();
+
+	page.setViewport({
+		width,
+		height,
 	});
 
 	await page.setContent(templates[query.template](query));

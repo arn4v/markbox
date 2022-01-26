@@ -36,7 +36,6 @@ export const MixpanelProvider = ({
 	React.useEffect(() => {
 		if (!trigger && !isLoading && data?.id) {
 			client.identify(data?.id);
-			console.log("User identified in Mixpanel", data?.id);
 			setTrigger(true);
 		}
 	}, [client, data, isLoading, trigger]);
