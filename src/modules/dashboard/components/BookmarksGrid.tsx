@@ -1,8 +1,9 @@
 import clsx from "clsx";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { useInView } from "react-intersection-observer";
+import Badge from "~/components/Badge";
 import Input from "~/components/Input";
-import Spinner from "~/components/Spinner";
 import useFuse from "~/hooks/use-fuse";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useStore } from "~/store";
@@ -14,7 +15,12 @@ import SortButton from "./SortButton";
 
 type Bookmark = NonNullable<InferQueryOutput<"bookmarks.byId">>;
 
-const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
+const BookmarksGrid = (): JSX.Element => {
+	const router = useRouter();
+	const tag = React.useMemo(() => {
+		return (router.query?.tag as string) ?? "All";
+	}, [router.query?.tag]);
+
 	const sort = useStore((state) => state.sort.type);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
@@ -62,19 +68,13 @@ const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
 		return () => setNextPageLoading(false);
 	}, [inView, loadMore]);
 
-	if (isLoading)
-		return (
-			<div className="flex flex-col items-center justify-center flex-grow h-full p-4 lg:p-0 lg:pt-24 lg:pl-8 lg:ml-72">
-				<Spinner />
-			</div>
-		);
-
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
 			<div className="flex space-x-4 lg:space-x-6 items-center">
 				<Input
 					type="text"
 					value={query}
+					disabled={isLoading}
 					onChange={(e) => {
 						setQuery(e.target.value);
 					}}
@@ -89,43 +89,82 @@ const BookmarksGrid = ({ tag }: { tag: string }): JSX.Element => {
 				/>
 				<SortButton />
 			</div>
-			{tag && tag !== "All" && (
-				<div className="text-lg font-bold mt-2">Filtering by tag: {tag}</div>
-			)}
-			<div
-				className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}
-				hidden={result.length === 0}
-			>
-				Showing <span className="font-bold">{count}</span> results
-			</div>
-			{result?.length > 0 ? (
-				<ul
-					data-test="bookmarks-list"
-					className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
-				>
-					{result
-						.sort((a, b) => {
-							if (a.isFavourite && !b.isFavourite) return -1;
-							return 0;
-						})
-						.map((data) => (
-							<BookmarkCard key={data.id} data={data} />
+			{isLoading ? (
+				<>
+					<ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+						{Array.from(Array(5).keys()).map((_, idx) => (
+							<li
+								key={idx}
+								className="flex items-center justify-between w-full p-3 bg-gray-100 rounded-lg dark:bg-gray-900 dark:text-white h-auto"
+							>
+								<div className="flex flex-col items-start justify-center w-5/6 gap-1">
+									<span className="text-xs bg-gray-400 text-gray-400 select-none animate-pulse rounded">
+										Created on 26th January, 2022 at 4:58PM
+									</span>
+									<div className="w-5/6 text-sm font-medium break-words bg-gray-400 text-gray-400 select-none animate-pulse rounded">
+										Placeholder Title
+									</div>
+									<div className="w-3/4 text-xs truncate whitespace-nowrap transition bg-gray-400 text-gray-400 select-none animate-pulse rounded">
+										https://placeholder.com
+									</div>
+									<div className="flex gap-2 mt-1.5 flex-wrap">
+										{Array.from(Array(2).keys()).map((_, idx) => {
+											return (
+												<Badge
+													key={idx}
+													title={"Tag"}
+													className="dark:bg-gray-800 border dark:border-gray-600 border-gray-300 animate-pulse bg-gray-400 text-gray-400 select-none"
+												/>
+											);
+										})}
+									</div>
+								</div>
+							</li>
 						))}
-					<LoadMoreButton
-						ref={ref}
-						onClick={loadMore}
-						isLoading={isNextPageLoading}
-						isHidden={count !== result?.length || count === data?.length}
-					/>
-				</ul>
+					</ul>
+				</>
 			) : (
 				<>
-					<NoResultsWarning
-						isVisible={data?.length > 0 && result.length === 0}
-					/>
-					<NoDataWarning
-						isVisible={!(data?.length > 0 && result.length === 0)}
-					/>
+					<div className="text-lg select-none font-bold mt-2">
+						Filtering by tag: {tag}
+					</div>
+					<div
+						className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}
+						hidden={result.length === 0}
+					>
+						Showing <span className="font-bold select-none">X</span> of{" "}
+						<span className="font-bold">X</span> results
+					</div>
+					{result?.length > 0 ? (
+						<ul
+							data-test="bookmarks-list"
+							className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
+						>
+							{result
+								.sort((a, b) => {
+									if (a.isFavourite && !b.isFavourite) return -1;
+									return 0;
+								})
+								.map((data) => (
+									<BookmarkCard key={data.id} data={data} />
+								))}
+							{count !== result?.length || count === data?.length ? null : (
+								<LoadMoreButton
+									ref={ref}
+									onClick={loadMore}
+									isLoading={isNextPageLoading}
+								/>
+							)}
+						</ul>
+					) : (
+						<>
+							{data?.length > 0 && result.length === 0 ? (
+								<NoResultsWarning />
+							) : (
+								<NoDataWarning />
+							)}
+						</>
+					)}
 				</>
 			)}
 		</div>

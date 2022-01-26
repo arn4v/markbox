@@ -1,7 +1,7 @@
 ---
 title: Roadmap
 seo_title: Roadmap
-layout: "../../layouts/docs"
+layout: "../../layouts/Docs"
 ---
 
 - Fuzzy search for bookmarks

@@ -8,20 +8,13 @@ interface Props {
 	isLoading: boolean;
 
 	/**
-	 * @description LoadMoreButton visibility
-	 */
-	isHidden: boolean;
-
-	/**
 	 * @description onClick handler
 	 */
 	onClick(): void;
 }
 
 const LoadMoreButton = React.forwardRef<HTMLDivElement, Props>(
-	({ onClick, isHidden, isLoading }, ref) => {
-		if (isHidden) return null;
-
+	({ onClick, isLoading }, ref) => {
 		return (
 			<div
 				data-test="bookmarks-load-more"

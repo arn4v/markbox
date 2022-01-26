@@ -4,9 +4,7 @@ import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
  * @name NoDataWarning
  * @description Component to show when user has no bookmarks
  */
-const NoDataWarning = ({ isVisible }: { isVisible: boolean }) => {
-	if (!isVisible) return null;
-
+const NoDataWarning = () => {
 	return (
 		<div
 			data-test="dashboard-no-data-warning"
