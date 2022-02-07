@@ -83,6 +83,7 @@
 		"react-hook-form": "^7.25.1",
 		"react-hot-toast": "^2.2.0",
 		"react-icons": "^4.3.1",
+		"react-infinite-scroll-component": "^6.1.0",
 		"react-intersection-observer": "^8.33.1",
 		"react-query": "^3.34.12",
 		"react-sensible": "^0.3.0",

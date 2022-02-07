@@ -1,14 +1,14 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { useInView } from "react-intersection-observer";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
+import Spinner from "~/components/Spinner";
 import useFuse from "~/hooks/use-fuse";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useStore } from "~/store";
 import BookmarkCard from "./BookmarkCard";
-import LoadMoreButton from "./LoadMoreButton";
 import NoDataWarning from "./NoDataWarning";
 import NoResultsWarning from "./NoResultsWarning";
 import SortButton from "./SortButton";
@@ -24,11 +24,18 @@ const BookmarksGrid = (): JSX.Element => {
 	const sort = useStore((state) => state.sort.type);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
-	const { isLoading, data: count } = trpc.useQuery([
-		"bookmarks.count",
-		tag === "All" ? {} : { tagName: tag },
-	]);
-	const { data: rawData, fetchNextPage } = trpc.useInfiniteQuery(
+
+	const {
+		isLoading,
+		isSuccess,
+		data: count,
+	} = trpc.useQuery(["bookmarks.count", tag === "All" ? {} : { tagName: tag }]);
+
+	const {
+		data: rawData,
+		fetchNextPage,
+		hasNextPage,
+	} = trpc.useInfiniteQuery(
 		["bookmarks.all", { ...(tag !== "All" ? { tag: tag } : {}), sort }],
 		{
 			getPreviousPageParam: (lastPage) => lastPage.cursor,
@@ -49,24 +56,6 @@ const BookmarksGrid = (): JSX.Element => {
 			keys: ["title", "url", "tags.name"],
 		},
 	});
-
-	const { ref, inView } = useInView({});
-	const [isNextPageLoading, setNextPageLoading] =
-		React.useState<boolean>(false);
-
-	const loadMore = React.useCallback(() => {
-		const timer = setTimeout(() => setNextPageLoading(true), 500);
-		fetchNextPage();
-		return () => {
-			clearTimeout(timer);
-			setNextPageLoading(false);
-		};
-	}, [fetchNextPage]);
-
-	React.useEffect(() => {
-		loadMore();
-		return () => setNextPageLoading(false);
-	}, [inView, loadMore]);
 
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
@@ -89,7 +78,7 @@ const BookmarksGrid = (): JSX.Element => {
 				/>
 				<SortButton />
 			</div>
-			{isLoading ? (
+			{!isSuccess ? (
 				<>
 					<ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
 						{Array.from(Array(5).keys()).map((_, idx) => (
@@ -132,12 +121,27 @@ const BookmarksGrid = (): JSX.Element => {
 						className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}
 						hidden={result.length === 0}
 					>
-						Showing <span className="font-bold select-none">X</span> of{" "}
-						<span className="font-bold">X</span> results
+						Showing{" "}
+						<span className="font-bold select-none">
+							{query.length ? result.length : data?.length}
+						</span>{" "}
+						of{" "}
+						<span className="font-bold">
+							{query.length ? data?.length : count}
+						</span>{" "}
+						results
 					</div>
 					{result?.length > 0 ? (
-						<ul
+						<InfiniteScroll
 							data-test="bookmarks-list"
+							dataLength={data?.length}
+							hasMore={query.length ? false : data?.length < (count as number)}
+							next={fetchNextPage}
+							loader={
+								<div className="w-full flex items-center justify-center pt-6 col-span-2">
+									<Spinner className="text-black dark:text-white h-5 w-5" />
+								</div>
+							}
 							className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
 						>
 							{result
@@ -148,14 +152,7 @@ const BookmarksGrid = (): JSX.Element => {
 								.map((data) => (
 									<BookmarkCard key={data.id} data={data} />
 								))}
-							{count !== result?.length || count === data?.length ? null : (
-								<LoadMoreButton
-									ref={ref}
-									onClick={loadMore}
-									isLoading={isNextPageLoading}
-								/>
-							)}
-						</ul>
+						</InfiniteScroll>
 					) : (
 						<>
 							{data?.length > 0 && result.length === 0 ? (

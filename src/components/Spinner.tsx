@@ -3,7 +3,8 @@ import clsx from "clsx";
 interface Props {
 	className?: string;
 }
-function Spinner(props: Props) {
+
+export function Spinner(props: Props) {
 	return (
 		<svg
 			className={clsx([
