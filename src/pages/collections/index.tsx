@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { HiPlus } from "react-icons/hi";
 import Badge from "~/components/Badge";
-import { AppLayout } from "~/layouts/App";
+import { AppLayout } from "~/layouts/app";
 import { trpc } from "~/lib/trpc";
 
 export default function CollectionsPage() {

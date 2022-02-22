@@ -5,7 +5,7 @@ import Badge from "~/components/Badge";
 import { CopyCode } from "~/components/CopyCode";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
-import { AppLayout } from "~/layouts/App";
+import { AppLayout } from "~/layouts/app";
 import { getDeploymentUrl } from "~/lib/misc";
 import { trpc } from "~/lib/trpc";
 import SortButton from "~/modules/dashboard/components/SortButton";

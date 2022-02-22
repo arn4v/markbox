@@ -42,7 +42,7 @@ if (isProd) {
 	config = withPWA(config);
 }
 
-config = require("next-mdx-builder")({
+const withMdxBuilder = require("next-mdx-builder")({
 	mdxOptions: {
 		remarkPlugins: [
 			require("remark-code-titles"),
@@ -59,6 +59,11 @@ config = require("next-mdx-builder")({
 
 		rehypePlugins: [require("mdx-prism")],
 	},
+});
+
+config = withMdxBuilder(config);
+config = require("@next/bundle-analyzer")({
+	enabled: process.env.ANALYZE === "true",
 })(config);
 
 module.exports = config;

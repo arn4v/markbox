@@ -1,7 +1,7 @@
 ---
 title: Data Models
 seo_title: Data Models
-layout: "../../layouts/Docs"
+layout: "../../layouts/docs"
 ---
 
 ## Bookmark

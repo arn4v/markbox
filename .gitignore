@@ -39,3 +39,4 @@ sentry.properties
 uploads/
 /*.sql
 .vscode
+/debug.log

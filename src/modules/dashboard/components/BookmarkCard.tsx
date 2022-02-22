@@ -1,4 +1,5 @@
 import format from "date-fns/format";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import * as React from "react";
 import {
@@ -13,13 +14,17 @@ import {
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
 import Badge from "~/components/Badge";
-import DeleteModal from "~/components/DeleteModal";
 import Popup from "~/components/Popup";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
-import EditDrawer from "~/modules/dashboard/components/EditDrawer";
 import { useMixpanel } from "~/providers/Mixpanel";
 import DescriptionModal from "./DescriptionModal";
+
+const EditDrawer = dynamic(
+	() => import("~/modules/dashboard/components/EditDrawer"),
+);
+
+const DeleteModal = dynamic(() => import("~/components/DeleteModal"));
 
 interface Props {
 	data: InferQueryOutput<"bookmarks.byId">;
