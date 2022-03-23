@@ -2,6 +2,7 @@ import isEqual from "lodash.isequal";
 import React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
+import Button from "~/components/Button";
 import Input from "~/components/Input";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
@@ -222,13 +223,9 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					</datalist>
 				</div>
 			</div>
-			<button
-				data-test="edit-submit"
-				type="submit"
-				className="px-4 py-2 mt-4 ml-auto text-white transition bg-blue-600 rounded-md ring-offset-current ring-offset-2 focus:ring-2 hover:bg-blue-700 dark:bg-gray-600 dark:hover:bg-gray-500 focus:outline-none"
-			>
+			<Button data-test="edit-submit" type="submit" className="mt-4">
 				Submit
-			</button>
+			</Button>
 		</form>
 	);
 };

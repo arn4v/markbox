@@ -2,6 +2,7 @@ import clsx from "clsx";
 import * as React from "react";
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
+import Button from "~/components/Button";
 import Modal, { ModalContent } from "~/components/Modal";
 import { trpc } from "~/lib/trpc";
 
@@ -78,21 +79,10 @@ const UploadJsonModal = ({
 					</button>
 				</div>
 				<div className="w-full flex items-center justify-between">
-					<button
-						onClick={onClose}
-						className={clsx(
-							"px-2 py-1.5 border border-gray-200 text-red-500 dark:text-red-400 dark:hover:text-white rounded-md shadow hover:bg-red-400 dark:hover:bg-red-500 bg-white font-medium dark:bg-gray-800 hover:text-white fonrt-medium transition",
-						)}
-					>
+					<Button variant="outline" theme="danger" onClick={onClose}>
 						Cancel
-					</button>
-					<button
-						className={clsx(
-							"w-20 py-1.5 border border-gray-200 rounded-md shadow font-medium transition dark:bg-gray-600 flex items-center justify-center",
-							file === null
-								? "bg-gray-100 cursor-not-allowed text-gray-400"
-								: "bg-white dark:bg-gray-800 dark:hover:bg-gray-700",
-						)}
+					</Button>
+					<Button
 						onClick={() => {
 							if (file instanceof File) {
 								file
@@ -101,10 +91,11 @@ const UploadJsonModal = ({
 									.then((json) => mutate(json));
 							}
 						}}
-						disabled={!file}
+						isLoading={isLoading}
+						disabled={!file || isLoading}
 					>
 						Upload
-					</button>
+					</Button>
 				</div>
 			</ModalContent>
 		</Modal>

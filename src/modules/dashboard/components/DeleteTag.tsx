@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import { HiTrash } from "react-icons/hi";
+import Button from "~/components/Button";
 import Modal, { ModalContent } from "~/components/Modal";
 import { genericModalMotionProps } from "~/config";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
@@ -34,7 +35,7 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 		{ tagName: data.name },
 	]);
 	const { invalidateQueries } = trpc.useContext();
-	const { mutate } = trpc.useMutation("tags.deleteById", {
+	const { mutate, isLoading } = trpc.useMutation("tags.deleteById", {
 		onSuccess() {
 			invalidateQueries(["tags.byId"]);
 			invalidateQueries(["tags.all"]);
@@ -63,28 +64,30 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 			>
 				<ModalContent className="z-[200]" {...genericModalMotionProps}>
 					<div className="flex flex-col gap-8 p-8 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
-						<div className="text-center whitespace-no-wrap">
+						<div className="text-center whitespace-no-wrap font-medium">
 							This tag is related to {bookmarksCount} bookmarks.
 							<br />
 							Do you really want to delete it?
 						</div>
 						<div className="flex items-center justify-between w-full">
-							<button
+							<Button
 								type="button"
-								className="px-2 py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition rounded"
+								variant="ghost"
+								theme="secondary"
 								onClick={onClose}
 							>
 								Dismiss
-							</button>
-							<button
+							</Button>
+							<Button
 								type="button"
-								className="px-2 py-1 bg-red-500 hover:bg-red-600 rounded text-white transition"
+								theme="danger"
+								isLoading={isLoading}
 								onClick={() => {
 									mutate(data?.id);
 								}}
 							>
 								Delete
-							</button>
+							</Button>
 						</div>
 					</div>
 				</ModalContent>

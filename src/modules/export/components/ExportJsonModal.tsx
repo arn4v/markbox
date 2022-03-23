@@ -1,9 +1,8 @@
-import clsx from "clsx";
 import { format } from "date-fns";
 import React from "react";
 import { HiX } from "react-icons/hi";
+import Button from "~/components/Button";
 import Modal, { ModalContent } from "~/components/Modal";
-import Spinner from "~/components/Spinner";
 import { trpc } from "~/lib/trpc";
 
 const ExportJsonModal = ({
@@ -60,32 +59,18 @@ const ExportJsonModal = ({
 				</div>
 				<a download={download} href={downloadHref} ref={downloadElRef} hidden />
 				<div className="w-full flex items-center justify-between">
-					<button
-						onClick={onClose}
-						className={clsx(
-							"px-2 py-1.5 border border-gray-200 text-red-500 dark:text-red-400 dark:hover:text-white rounded-md shadow hover:bg-red-400 dark:hover:bg-red-500 bg-white font-medium dark:bg-gray-800 hover:text-white fonrt-medium transition",
-						)}
-					>
+					<Button onClick={onClose} theme="danger" variant="outline">
 						Cancel
-					</button>
-					<button
-						className={clsx(
-							"w-44 whitespace-nowrap py-1.5 border border-gray-200 rounded-md shadow font-medium transition dark:bg-gray-600 flex items-center justify-center",
-							!!blob
-								? "bg-gray-100 cursor-not-allowed text-gray-400"
-								: "bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700",
-						)}
+					</Button>
+					<Button
 						onClick={() => {
 							mutate();
 						}}
+						isLoading={isLoading}
 						disabled={!!blob}
 					>
-						{isLoading ? (
-							<Spinner className="h-5 w-5 mr-0" />
-						) : (
-							"Download export.json"
-						)}
-					</button>
+						Download JSON file
+					</Button>
 				</div>
 			</ModalContent>
 		</Modal>
