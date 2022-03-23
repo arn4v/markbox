@@ -1,16 +1,25 @@
 import clsx from "clsx";
 import * as React from "react";
 import { mergeRefs } from "~/lib/react";
-import { Colors } from "~/types/Colors";
+import Spinner from "./Spinner";
 
 type Props = JSX.IntrinsicElements["button"] & {
-	variant: "outline" | "solid";
-	color: Colors;
+	variant: "outline" | "solid" | "unstyled";
+	// color: Colors;
+	isLoading?: boolean;
+	loader?: React.ReactNode;
 };
 
 const Button = React.forwardRef<HTMLButtonElement, Props>(
 	(
-		{ className = "", variant, color, ...props },
+		{
+			className = "",
+			variant,
+			isLoading = false,
+			disabled,
+			loader = <Spinner />,
+			...props
+		},
 		ref: React.Ref<HTMLButtonElement>,
 	) => {
 		const internalRef: React.MutableRefObject<HTMLButtonElement | null> =
@@ -21,13 +30,23 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 				{...props}
 				ref={mergeRefs([internalRef, ref])}
 				className={clsx([
-					!/(bg-(.*)|border-(.*))/.test(className) &&
-						`bg-gray-100 border border-gray-300 dark:bg-gray-700 dark:border-none hover:bg-gray-200 dark:hover:bg-gray-600`,
-					variant === "solid" && ``,
-					variant === "outline" && ``,
+					variant !== "unstyled" && !/(bg-(.*)|border-(.*))/.test(className)
+						? `bg-gray-100 border border-gray-300 dark:bg-gray-700 dark:border-none hover:bg-gray-200 dark:hover:bg-gray-600`
+						: null,
+					"min-w-[max-content]",
 					className,
 				])}
-			/>
+				disabled={disabled || isLoading}
+			>
+				{isLoading ? (
+					<span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+						{loader}
+					</span>
+				) : null}
+				<span className={clsx(isLoading ? "invisible" : "")}>
+					{props.children}
+				</span>
+			</button>
 		);
 	},
 );

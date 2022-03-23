@@ -9,7 +9,7 @@ import { mixpanel, prisma } from "~/lib/utils.server";
 export default handleAuth({
 	async login(req, res) {
 		await handleLogin(req, res, {
-			returnTo: "/app",
+			returnTo: (req.query?.["redirect-url"] as string) ?? "/app",
 		});
 	},
 	async callback(req, res) {

@@ -3,7 +3,6 @@ import * as React from "react";
 import toast from "react-hot-toast";
 import { HiX } from "react-icons/hi";
 import Modal, { ModalContent } from "~/components/Modal";
-import Spinner from "~/components/Spinner";
 import { trpc } from "~/lib/trpc";
 
 const UploadJsonModal = ({
@@ -104,7 +103,7 @@ const UploadJsonModal = ({
 						}}
 						disabled={!file}
 					>
-						{isLoading ? <Spinner className="h-5 w-5 mr-0" /> : "Upload"}
+						Upload
 					</button>
 				</div>
 			</ModalContent>

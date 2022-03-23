@@ -1,6 +1,7 @@
 import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
+import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
 import { trpc } from "~/lib/trpc";
@@ -190,14 +191,16 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					</datalist>
 				</div>
 			</div>
-			<button
+			<Button
 				data-test="create-form-submit"
 				type="submit"
+				variant="unstyled"
+				isLoading={isLoading}
 				disabled={isLoading}
 				className="px-4 py-2 mt-4 ml-auto transition bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-600 hover:bg-gray-200 focus:border-transparent dark:border-transparent dark:hover:bg-gray-500 focus:ring-2 ring-offset-current ring-offset-2 focus:outline-none"
 			>
 				{isLoading ? <Spinner className="h-4 w-4" /> : "Submit"}
-			</button>
+			</Button>
 		</form>
 	);
 };

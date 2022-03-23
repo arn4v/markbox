@@ -1,6 +1,5 @@
 import { UserContext, UserProfile, useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
-import QueryString from "qs";
 import React from "react";
 
 interface UseAuthReturn {
@@ -14,7 +13,6 @@ export function useAuth(
 ): Omit<UserContext, "checkSession"> & { isAuthenticated: boolean } {
 	const { isLoading, user, error } = useUser();
 	const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
 	const router = useRouter();
 
 	React.useEffect(() => {
@@ -23,11 +21,12 @@ export function useAuth(
 			setIsAuthenticated(true);
 		} else {
 			if (isProtected)
-				router.push(
-					"/?" +
-						QueryString.stringify({
-							message: "Unable to verify user, please login again.",
-						}),
+				window.location.replace(
+					"/api/auth/login?" +
+						new URLSearchParams({
+							...router.query,
+							"redirect-url": `${window.location.href}${window.location.search}`,
+						}).toString(),
 				);
 		}
 	}, [isLoading, isProtected, router, user]);
