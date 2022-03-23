@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { HiPencil } from "react-icons/hi";
 import Button from "~/components/Button";
-import Input from "~/components/Input";
+import { Input }  from "~/components/Input";
 import Modal from "~/components/Modal";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 

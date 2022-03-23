@@ -8,7 +8,7 @@ import {
 	HiClipboardCheck,
 	HiOutlineClipboard,
 } from "react-icons/hi";
-import Input from "~/components/Input";
+import { Input }  from "~/components/Input";
 import { trpc } from "~/lib/trpc";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 

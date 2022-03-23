@@ -1,7 +1,7 @@
 import { NextSeo } from "next-seo";
 import * as React from "react";
 import toast from "react-hot-toast";
-import Input from "~/components/Input";
+import { Input }  from "~/components/Input";
 import { trpc } from "~/lib/trpc";
 import SettingsPageWrapper from "~/modules/settings/components/SettingsPageWrapper";
 

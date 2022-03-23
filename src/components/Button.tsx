@@ -40,7 +40,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 				ref={mergeRefs([internalRef, ref])}
 				className={clsx(
 					[
-						"min-w-[max-content] font-medium transition relative focus:outline-none rounded",
+						"min-w-[max-content] font-medium transition relative focus:outline-none rounded focus:ring-4 active:scale-95",
 						className,
 					],
 					variant === "solid"

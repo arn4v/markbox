@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-html.dark:not(html.light) input:-webkit-autofill {
+/* html.dark:not(html.light) input:-webkit-autofill {
 	-webkit-box-shadow: 0 0 0 1000px #52525b inset !important;
 	-webkit-text-fill-color: white !important;
 }
@@ -20,7 +20,7 @@ html.light:not(html.dark) input:-webkit-autofill {
 html.light:not(html.dark) input:-webkit-autofill:focus {
 	-webkit-box-shadow: 0 0 0 1000px #dbeafe inset !important;
 	-webkit-text-fill-color: #1b1b1b !important;
-}
+} */
 
 pre {
 	-ms-overflow-style: none; /* IE and Edge */
@@ -57,4 +57,9 @@ html {
 
 body.modal-open {
 	overflow: hidden;
+}
+
+[list]::-webkit-calendar-picker-indicator {
+	display: none;
+	opacity: 0;
 }

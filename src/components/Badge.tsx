@@ -24,7 +24,7 @@ const Badge = React.forwardRef<HTMLDivElement, Props>(
 				data-test={dataTest}
 				ref={ref}
 				className={clsx([
-					"flex gap-1.5 px-2 py-1 text-xs font-medium dark:text-white items-center justify-center uppercase rounded-full",
+					"flex gap-1.5 px-1.5 py-0.5 text-xs font-medium dark:text-white items-center justify-center uppercase rounded-full",
 					className,
 				])}
 				{...props}

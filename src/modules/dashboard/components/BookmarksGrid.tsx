@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Badge from "~/components/Badge";
-import Input from "~/components/Input";
+import { Input }  from "~/components/Input";
 import Spinner from "~/components/Spinner";
 import { useDebouncedValue } from "~/hooks/use-debounced-value";
 import { InferQueryOutput, trpc } from "~/lib/trpc";

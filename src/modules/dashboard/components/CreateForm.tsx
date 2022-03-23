@@ -1,8 +1,9 @@
+import clsx from "clsx";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Button from "~/components/Button";
-import Input from "~/components/Input";
+import { FormField } from "~/components/FormField";
 import { trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 
@@ -17,7 +18,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		title: "",
 		url: "",
 		description: "",
-		tags: {} as Record<string, { name: string }>,
+		tags: [] as string[],
 	};
 	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
@@ -42,18 +43,19 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		title,
 		url,
 	});
+	const [newTag, setNewTag] = React.useState("");
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 		const { title, url, description } = state;
-		const { tagsConnect, tagsCreate } = Object.values(state.tags).reduce(
+		const { tagsConnect, tagsCreate } = state.tags.reduce(
 			(acc, cur) => {
-				const existingTag = data?.find((item) => item.name === cur.name);
+				const existingTag = data?.find((item) => item.name === cur);
 				if (existingTag) {
 					acc.tagsConnect.push(existingTag.id);
 				} else {
-					acc.tagsCreate.push(cur.name);
+					acc.tagsCreate.push(cur);
 				}
 				return acc;
 			},
@@ -72,20 +74,59 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		[],
 	);
 
+	const addTag = (value: string) => {
+		setState((prev) => {
+			if (prev.tags.includes(value)) return prev;
+
+			const tags = Array.from(new Set([...prev.tags]));
+			tags.push(value);
+
+			newTagInputRef.current!.value = "";
+			setNewTag("");
+
+			return {
+				...prev,
+				tags,
+			};
+		});
+	};
+
+	const removeLastTag = () => {
+		setState((prev) => {
+			const tags = Array.from(new Set([...prev.tags]));
+			tags.pop();
+
+			return {
+				...prev,
+				tags,
+			};
+		});
+	};
+
+	const removeTagByValue = (value: string) => {
+		setState((prev) => {
+			const tags = Array.from(new Set([...prev.tags])).filter(
+				(item) => item === value,
+			);
+
+			return {
+				...prev,
+				tags,
+			};
+		});
+	};
+
 	return (
-		<form
-			data-test="create-form"
-			className="flex flex-col gap-4"
-			onSubmit={onSubmit}
-		>
-			<div className="w-full">
-				<label htmlFor="title" className="block">
-					Title
-				</label>
-				<Input
+		<>
+			<form
+				data-test="create-form"
+				className="flex flex-col space-y-4"
+				onSubmit={onSubmit}
+			>
+				<FormField
+					label="Title"
 					id="title"
 					type="text"
-					className="block w-full h-10 mt-2"
 					placeholder="Name"
 					value={state.title}
 					onChange={onChange}
@@ -93,15 +134,10 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					autoComplete="off"
 					required
 				/>
-			</div>
-			<div className="w-full">
-				<label htmlFor="url" className="block">
-					URL
-				</label>
-				<Input
+				<FormField
+					label="URL"
 					id="url"
 					type="url"
-					className="block w-full h-10 mt-2"
 					placeholder="URL"
 					value={state.url}
 					onChange={onChange}
@@ -109,98 +145,99 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					maxLength={1000}
 					required
 				/>
-			</div>
-			<div className="w-full">
-				<label htmlFor="description" className="block">
-					Description
-				</label>
-				<Input
+				<FormField
+					label="Description"
 					id="description"
 					type="text"
-					className="block w-full h-10 mt-2"
 					placeholder="Description"
 					value={state.description}
 					onChange={onChange}
 					autoComplete="off"
 				/>
-			</div>
-			<div className="w-full">
-				<label htmlFor="url" className="block">
-					Tags
-				</label>
-				<div className="flex flex-wrap gap-2 mt-2">
-					{Object.values(state.tags).map((item) => {
-						return (
-							<Badge
-								key={item.name}
-								title={item?.name}
-								className="z-50 dark:bg-gray-900 dark:border-gray-600 border border-gray-300"
-							>
-								<button
-									type="button"
-									onClick={() => {
-										setState((prev) => {
-											const tags = prev.tags;
-											delete tags[item?.name];
-											return {
-												...prev,
-												tags,
-											};
-										});
-									}}
-								>
-									<HiX />
-								</button>
-							</Badge>
-						);
-					})}
-				</div>
-				<div className="flex w-full gap-6 mt-2">
-					<Input
-						id="tag"
-						ref={newTagInputRef}
-						type="text"
-						autoComplete="off"
-						onChange={(e) => {
-							let trimmedValue = e.target.value.trim();
-							const lastIdx = trimmedValue.length - 1;
-							if (trimmedValue.charAt(lastIdx) === ",") {
-								trimmedValue = trimmedValue.slice(0, -1);
-								setState((prev) => ({
-									...prev,
-									newTag: "",
-									tags: {
-										...prev.tags,
-										[trimmedValue]: {
-											name: trimmedValue,
-										},
-									},
-								}));
-								if (newTagInputRef?.current) newTagInputRef.current.value = "";
-							}
+				<div className="w-full flex flex-col space-y-2">
+					<label htmlFor="tag" className="block">
+						Tags
+					</label>
+					<div
+						className={clsx(
+							"text-black dark:text-white rounded outline-none border border-gray-300 focus:border-gray-400 caret-black flex flex-wrap px-2.5",
+							state.tags.length > 0 && "space-x-4",
+						)}
+						onClick={() => {
+							newTagInputRef.current?.focus();
 						}}
-						placeholder="Separate tags by typing comma (,)"
-						className="block w-full h-10"
-						list="tags"
-					/>
+					>
+						<div className="flex flex-wrap overflow-hidden relative items-center space-x-1.5 h-8">
+							{state.tags.map((item) => {
+								return (
+									<Badge
+										key={item}
+										title={item}
+										className="z-50 border border-gray-300 h-6 text-xs bg-slate-100 hover:bg-slate-200 transition"
+									>
+										<button
+											type="button"
+											onClick={() => removeTagByValue(item)}
+										>
+											<HiX />
+										</button>
+									</Badge>
+								);
+							})}
+						</div>
+						<input
+							id="tag"
+							ref={newTagInputRef}
+							type="text"
+							autoComplete="off"
+							value={newTag}
+							onChange={(e) => setNewTag(e.target.value)}
+							style={{
+								width: `${newTag.length + 10}ch`,
+								minWidth: "2rem",
+								border: "unset",
+								boxShadow: "unset",
+							}}
+							className="text-[inherit] cursor-[inherit] inline-block focus:outline-none text-sm focus:border-none focus:ring-none px-0 whitespace-pre-wrap break-words h-8 caret-black create-form-new-tag"
+							onKeyDown={(e) => {
+								const value = e.currentTarget.value.trim();
+
+								switch (e.key.toLowerCase()) {
+									case "enter": {
+										e.preventDefault();
+										if (value.length) addTag(value);
+										break;
+									}
+									case "backspace": {
+										if (!value.length) {
+											e.preventDefault();
+											removeLastTag();
+										}
+									}
+								}
+							}}
+							list="tags"
+						/>
+					</div>
 					<datalist id="tags">
 						{data?.map((item) => {
 							return <option key={item.id} value={item.name} />;
 						})}
 					</datalist>
+					<p className="text-sm">Press enter to add tag</p>
 				</div>
-			</div>
-			<Button
-				data-test="create-form-submit"
-				type="submit"
-				theme="primary"
-				isLoading={isLoading}
-				disabled={isLoading}
-				className="ml-auto px-4 mt-4"
-			>
-				Submit
-			</Button>
-		</form>
+				<Button
+					data-test="create-form-submit"
+					type="submit"
+					theme="primary"
+					isLoading={isLoading}
+					disabled={isLoading}
+					className="ml-auto px-4 mt-4"
+				>
+					Submit
+				</Button>
+			</form>
+		</>
 	);
 };
 

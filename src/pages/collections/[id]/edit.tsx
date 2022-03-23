@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
-import Input from "~/components/Input";
+import { Input }  from "~/components/Input";
 import useFuse from "~/hooks/use-fuse";
 import { AppLayout } from "~/components/AppLayout";
 import { InferQueryOutput, trpc } from "~/lib/trpc";

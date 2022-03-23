@@ -3,7 +3,7 @@ import React from "react";
 import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Button from "~/components/Button";
-import Input from "~/components/Input";
+import { Input }  from "~/components/Input";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 
