@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -92,6 +93,8 @@ model Tag {
   userId       String?
   Collection   Collection? @relation(fields: [collectionId], references: [id])
   collectionId String?
+
+  @@fulltext([name])
   @@map("tags")
 }
 
@@ -109,5 +112,9 @@ model Bookmark {
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
+
+  @@fulltext([title])
+  @@fulltext([url])
+  @@fulltext([title, url])
   @@map("bookmarks")
 }

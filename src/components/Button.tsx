@@ -12,7 +12,7 @@ type Props = JSX.IntrinsicElements["button"] & {
 		| "danger"
 		| "warning"
 		| "unstyled";
-	scale?: "sm" | "default" | "lg";
+	scale?: "sm" | "base" | "lg";
 	isLoading?: boolean;
 	loader?: React.ReactNode;
 };
@@ -26,7 +26,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 			isLoading = false,
 			disabled,
 			loader = <Spinner className="h-4 w-4" />,
-			scale = "default",
+			scale = "base",
 			...props
 		},
 		ref: React.Ref<HTMLButtonElement>,
@@ -77,7 +77,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 						: "",
 					{
 						"text-xs h-6": scale === "sm",
-						"text-sm px-2 h-8": scale === "default",
+						"text-sm px-2 h-8": scale === "base",
 						"text-base px-4 h-10": scale === "lg",
 					},
 				)}

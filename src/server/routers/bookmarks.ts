@@ -34,6 +34,7 @@ export const bookmarksRouter = createRouter()
 			tag: z.string().optional(),
 			sort: sortBySchema,
 			cursor: z.string().nullish(),
+			query: z.string().optional(),
 		}),
 		async resolve({ ctx, input }) {
 			const { cursor, sort, tag } = input;
@@ -77,9 +78,18 @@ export const bookmarksRouter = createRouter()
 								},
 						  }
 						: {}),
+					...(input.query
+						? {
+								OR: [
+									{ title: { search: `*${input.query}*` } },
+									{ url: { search: `*${input.query}*` } },
+								],
+						  }
+						: {}),
 				},
 				include: {
 					tags: true,
+					_count: true,
 				},
 				orderBy: orderBy,
 				take: 50,
@@ -103,6 +113,7 @@ export const bookmarksRouter = createRouter()
 	.query("count", {
 		input: z.object({
 			tagName: z.string().optional(),
+			query: z.string().optional(),
 		}),
 		async resolve({ ctx, input }) {
 			let tagId: string | undefined = undefined;
@@ -117,12 +128,21 @@ export const bookmarksRouter = createRouter()
 						id: true,
 					},
 				});
+
 				if (tag) tagId = tag?.id;
 			}
 
 			return await ctx.prisma.bookmark.count({
 				where: {
 					userId: ctx?.user?.id as string,
+					...(input.query
+						? {
+								OR: [
+									{ title: { search: `*${input.query}*` } },
+									{ url: { search: `*${input.query}*` } },
+								],
+						  }
+						: {}),
 					...(typeof tagId === "string"
 						? {
 								tags: {

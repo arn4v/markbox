@@ -49,8 +49,8 @@ export const comparePassword = async (password: string, hash: string) => {
 /* -------------------------------------------------------------------------- */
 
 const options: Prisma.PrismaClientOptions = {};
-if (!isProd && !!process.env.PRISMA_LOG)
-	options.log = ["query", "info", `warn`, `error`];
+// if (!isProd && !!process.env.PRISMA_LOG)
+// 	options.log = ["query", "info", `warn`, `error`];
 
 declare global {
 	// allow global `var` declarations

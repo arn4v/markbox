@@ -5,7 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import Spinner from "~/components/Spinner";
-import useFuse from "~/hooks/use-fuse";
+import { useDebouncedValue } from "~/hooks/use-debounced-value";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useStore } from "~/store";
 import BookmarkCard from "./BookmarkCard";
@@ -24,19 +24,29 @@ const BookmarksGrid = (): JSX.Element => {
 	const sort = useStore((state) => state.sort.type);
 	const queryRef = React.useRef<HTMLInputElement>(null);
 	const [query, setQuery] = React.useState<string>("");
+	const debouncedQuery = useDebouncedValue(query, 250);
 
-	const {
-		isLoading,
-		isSuccess,
-		data: count,
-	} = trpc.useQuery(["bookmarks.count", tag === "All" ? {} : { tagName: tag }]);
+	const { data: count, isLoading: isCountLoading } = trpc.useQuery([
+		"bookmarks.count",
+		{
+			...(tag !== "All" ? { tagName: tag } : {}),
+			...(debouncedQuery.length ? { query: debouncedQuery } : {}),
+		},
+	]);
 
 	const {
 		data: rawData,
 		fetchNextPage,
-		hasNextPage,
+		isLoading: isDataLoading,
 	} = trpc.useInfiniteQuery(
-		["bookmarks.all", { ...(tag !== "All" ? { tag: tag } : {}), sort }],
+		[
+			"bookmarks.all",
+			{
+				...(tag !== "All" ? { tag: tag } : {}),
+				...(debouncedQuery.length ? { query: debouncedQuery } : {}),
+				sort,
+			},
+		],
 		{
 			getPreviousPageParam: (lastPage) => lastPage.cursor,
 			getNextPageParam: (lastPage) => lastPage.next_cursor,
@@ -49,21 +59,12 @@ const BookmarksGrid = (): JSX.Element => {
 		}, [] as Array<Bookmark>);
 	}, [rawData]) as unknown as Array<Bookmark>;
 
-	const { result } = useFuse({
-		data: data ?? [],
-		query,
-		options: {
-			keys: ["title", "url", "tags.name"],
-		},
-	});
-
 	return (
 		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
 			<div className="flex space-x-4 lg:space-x-6 items-center">
 				<Input
 					type="text"
 					value={query}
-					disabled={isLoading}
 					onChange={(e) => {
 						setQuery(e.target.value);
 					}}
@@ -78,7 +79,7 @@ const BookmarksGrid = (): JSX.Element => {
 				/>
 				<SortButton />
 			</div>
-			{!isSuccess ? (
+			{isCountLoading || isDataLoading ? (
 				<>
 					<ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
 						{Array.from(Array(5).keys()).map((_, idx) => (
@@ -119,11 +120,11 @@ const BookmarksGrid = (): JSX.Element => {
 					</div>
 					<div
 						className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}
-						hidden={result.length === 0}
+						hidden={!data || data?.length === 0}
 					>
 						Showing{" "}
 						<span className="font-bold select-none">
-							{query.length ? result.length : data?.length}
+							{query.length ? data.length : data?.length}
 						</span>{" "}
 						of{" "}
 						<span className="font-bold">
@@ -131,7 +132,7 @@ const BookmarksGrid = (): JSX.Element => {
 						</span>{" "}
 						results
 					</div>
-					{result?.length > 0 ? (
+					{data?.length > 0 ? (
 						<InfiniteScroll
 							data-test="bookmarks-list"
 							dataLength={data?.length}
@@ -144,7 +145,7 @@ const BookmarksGrid = (): JSX.Element => {
 							}
 							className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6"
 						>
-							{result
+							{data
 								.sort((a, b) => {
 									if (a.isFavourite && !b.isFavourite) return -1;
 									return 0;
@@ -155,7 +156,7 @@ const BookmarksGrid = (): JSX.Element => {
 						</InfiniteScroll>
 					) : (
 						<>
-							{data?.length > 0 && result.length === 0 ? (
+							{data?.length > 0 && data.length === 0 ? (
 								<NoResultsWarning />
 							) : (
 								<NoDataWarning />
