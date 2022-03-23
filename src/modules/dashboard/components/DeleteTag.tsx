@@ -2,8 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { HiTrash } from "react-icons/hi";
 import Button from "~/components/Button";
-import Modal, { ModalContent } from "~/components/Modal";
-import { genericModalMotionProps } from "~/config";
+import Modal from "~/components/Modal";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 
 interface DeleteTagProps {
@@ -57,40 +56,36 @@ const DeleteTagPopup = ({ data, isOpen, onClose, onOpen }: DeleteTagProps) => {
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				containerProps={{
-					className: "flex items-center justify-center z-[60]",
+				contentProps={{
+					className:
+						"flex flex-col gap-8 p-8 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900",
 				}}
-				overlayProps={{ className: "bg-black/[0.75] z-[60]" }}
 			>
-				<ModalContent className="z-[200]" {...genericModalMotionProps}>
-					<div className="flex flex-col gap-8 p-8 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
-						<div className="text-center whitespace-no-wrap font-medium">
-							This tag is related to {bookmarksCount} bookmarks.
-							<br />
-							Do you really want to delete it?
-						</div>
-						<div className="flex items-center justify-between w-full">
-							<Button
-								type="button"
-								variant="ghost"
-								theme="secondary"
-								onClick={onClose}
-							>
-								Dismiss
-							</Button>
-							<Button
-								type="button"
-								theme="danger"
-								isLoading={isLoading}
-								onClick={() => {
-									mutate(data?.id);
-								}}
-							>
-								Delete
-							</Button>
-						</div>
-					</div>
-				</ModalContent>
+				<div className="text-center whitespace-no-wrap font-medium">
+					This tag is related to {bookmarksCount} bookmarks.
+					<br />
+					Do you really want to delete it?
+				</div>
+				<div className="flex items-center justify-between w-full">
+					<Button
+						type="button"
+						variant="ghost"
+						theme="secondary"
+						onClick={onClose}
+					>
+						Dismiss
+					</Button>
+					<Button
+						type="button"
+						theme="danger"
+						isLoading={isLoading}
+						onClick={() => {
+							mutate(data?.id);
+						}}
+					>
+						Delete
+					</Button>
+				</div>
 			</Modal>
 		</>
 	);

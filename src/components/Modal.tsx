@@ -1,18 +1,19 @@
-import { Portal, PortalProps } from "@reach/portal";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import clsx from "clsx";
-import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
-import { useFilterChildren } from "react-sensible";
+import { genericModalMotionProps } from "~/config";
+
+const MotionOverlay = motion(DialogPrimitive.DialogOverlay);
+const MotionContent = motion(DialogPrimitive.DialogContent);
 
 export type ModalProps = {
-	portalProps?: Omit<PortalProps, "children">;
-	containerProps?: {
-		className?: string;
-	};
-	overlayProps?: HTMLMotionProps<"div">;
 	isOpen: boolean;
-	onClose: () => void;
+	onClose(): void | Promise<void>;
 	children: React.ReactNode;
+	portalProps?: DialogPrimitive.PortalProps;
+	contentProps?: Omit<React.ComponentProps<typeof MotionContent>, "ref">;
+	overlayProps?: React.ComponentProps<typeof MotionOverlay>;
 };
 
 interface Modal extends Component<ModalProps> {}
@@ -21,12 +22,10 @@ const Modal: Modal = ({
 	children,
 	isOpen,
 	onClose,
-	containerProps,
 	overlayProps,
 	portalProps,
+	contentProps,
 }) => {
-	const [withModalContent] = useFilterChildren(children, ModalContent);
-
 	const onEscape = React.useCallback(
 		(event: KeyboardEvent) => {
 			event.stopPropagation();
@@ -42,62 +41,43 @@ const Modal: Modal = ({
 
 	return (
 		<AnimatePresence exitBeforeEnter>
-			{isOpen && (
-				<Portal {...portalProps}>
-					<div
-						data-test="modal-root"
-						className={clsx([
-							"h-screen w-screen fixed inset-0 overflow-none z-[60]",
-							containerProps?.className,
-						])}
-					>
-						<motion.div
-							data-test="modal-overlay"
-							className={clsx([
-								"z-[60] fixed inset-0 bg-black",
-								overlayProps?.className,
-							])}
-							variants={{
-								open: { opacity: 1, pointerEvents: "auto" },
-								closed: { opacity: 0, pointerEvents: "none" },
-							}}
-							initial="closed"
-							animate="open"
-							exit="closed"
-							transition={{ type: "tween" }}
-							onClick={onClose}
-						/>
-						{withModalContent}
-					</div>
-				</Portal>
-			)}
+			<DialogPrimitive.Root open={isOpen}>
+				<DialogPrimitive.Portal>
+					{isOpen && (
+						<>
+							<MotionOverlay
+								{...overlayProps}
+								data-test="modal-overlay"
+								className={clsx([
+									"fixed inset-0 bg-black bg-opacity-75 z-[100]",
+									overlayProps?.className,
+								])}
+								variants={{
+									open: { opacity: 1, pointerEvents: "auto" },
+									closed: { opacity: 0, pointerEvents: "none" },
+								}}
+								initial="closed"
+								animate="open"
+								exit="closed"
+								transition={{ type: "tween" }}
+								onClick={onClose}
+							/>
+							<MotionContent
+								data-test="modal-content"
+								className={clsx([
+									"fixed z-[200] transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2",
+								])}
+							>
+								<motion.div {...contentProps} {...genericModalMotionProps}>
+									{children}
+								</motion.div>
+							</MotionContent>
+						</>
+					)}
+				</DialogPrimitive.Portal>
+			</DialogPrimitive.Root>
 		</AnimatePresence>
 	);
 };
-
-Modal.displayName = "Drawer";
-
-interface DrawerContentProps extends HTMLMotionProps<"div"> {
-	children: React.ReactNode;
-}
-
-export const ModalContent = React.forwardRef<
-	HTMLDivElement,
-	DrawerContentProps
->(({ children, className, ...props }, ref) => {
-	return (
-		<motion.div
-			data-test="modal-content"
-			ref={ref}
-			className={clsx(["absolute z-[200]", className])}
-			transition={{ type: "spring", stiffness: 350, damping: 40 }}
-			{...props}
-		>
-			{children}
-		</motion.div>
-	);
-});
-
-ModalContent.displayName = "ModalContent";
 
 export default Modal;

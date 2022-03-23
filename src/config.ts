@@ -32,7 +32,10 @@ export const defaultSeoProps: DefaultSeoProps = {
 	canonical: "https://markbox.in",
 };
 
-export const genericModalMotionProps: MotionProps = {
+export const genericModalMotionProps: Pick<
+	MotionProps,
+	"initial" | "animate" | "exit" | "transition"
+> = {
 	initial: { opacity: 0, y: -20 },
 	animate: { opacity: 1, y: 0 },
 	exit: { opacity: 0, y: -20 },

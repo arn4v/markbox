@@ -3,8 +3,7 @@ import React from "react";
 import { HiPencil } from "react-icons/hi";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
-import Modal, { ModalContent } from "~/components/Modal";
-import { genericModalMotionProps } from "~/config";
+import Modal from "~/components/Modal";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 
 interface EditTagProps {
@@ -40,44 +39,39 @@ const EditTagPopup = ({ data, isOpen, onOpen, onClose }: EditTagProps) => {
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
-				containerProps={{
-					className: "flex items-center justify-center z-[60]",
-				}}
 				overlayProps={{ className: "bg-black bg-opacity-75 z-[60]" }}
 			>
-				<ModalContent className="z-[200]" {...genericModalMotionProps}>
-					<div className="p-6 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
-						<form
-							className="flex flex-col w-full gap-8"
-							onSubmit={(e) => {
-								e.preventDefault();
-								mutate({ id: data.id, name });
-							}}
-						>
-							<div className="text-center font-bold text-lg">Rename tag</div>
-							<div className="flex gap-6 items-center">
-								<label htmlFor="name">Name</label>
-								<Input
-									className="block w-full px-2 py-2"
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									placeholder="Name"
-								/>
-							</div>
-							<div className="flex items-center justify-between w-full">
-								<Button
-									variant="ghost"
-									theme="danger"
-									type="button"
-									onClick={onClose}
-								>
-									Dismiss
-								</Button>
-								<Button type="submit">Rename</Button>
-							</div>
-						</form>
-					</div>
-				</ModalContent>
+				<div className="p-6 bg-white border border-gray-300 rounded-lg dark:border-none dark:bg-gray-900">
+					<form
+						className="flex flex-col w-full gap-8"
+						onSubmit={(e) => {
+							e.preventDefault();
+							mutate({ id: data.id, name });
+						}}
+					>
+						<div className="text-center font-bold text-lg">Rename tag</div>
+						<div className="flex gap-6 items-center">
+							<label htmlFor="name">Name</label>
+							<Input
+								className="block w-full px-2 py-2"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								placeholder="Name"
+							/>
+						</div>
+						<div className="flex items-center justify-between w-full">
+							<Button
+								variant="ghost"
+								theme="danger"
+								type="button"
+								onClick={onClose}
+							>
+								Dismiss
+							</Button>
+							<Button type="submit">Rename</Button>
+						</div>
+					</form>
+				</div>
 			</Modal>
 		</>
 	);
