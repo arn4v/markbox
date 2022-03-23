@@ -1,9 +1,7 @@
-import clsx from "clsx";
 import * as React from "react";
-import { HiX } from "react-icons/hi";
-import Badge from "~/components/Badge";
 import Button from "~/components/Button";
 import { FormField } from "~/components/FormField";
+import { TagInput } from "~/components/TagInput";
 import { trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 
@@ -18,7 +16,6 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		title: "",
 		url: "",
 		description: "",
-		tags: [] as string[],
 	};
 	const { invalidateQueries } = trpc.useContext();
 	const { data } = trpc.useQuery(["tags.all"]);
@@ -43,13 +40,13 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		title,
 		url,
 	});
-	const [newTag, setNewTag] = React.useState("");
+	const [tags, setTags] = React.useState<string[]>([]);
 	const newTagInputRef = React.useRef<HTMLInputElement>(null);
 
 	const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 		const { title, url, description } = state;
-		const { tagsConnect, tagsCreate } = state.tags.reduce(
+		const { tagsConnect, tagsCreate } = tags.reduce(
 			(acc, cur) => {
 				const existingTag = data?.find((item) => item.name === cur);
 				if (existingTag) {
@@ -73,48 +70,6 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 		},
 		[],
 	);
-
-	const addTag = (value: string) => {
-		setState((prev) => {
-			if (prev.tags.includes(value)) return prev;
-
-			const tags = Array.from(new Set([...prev.tags]));
-			tags.push(value);
-
-			newTagInputRef.current!.value = "";
-			setNewTag("");
-
-			return {
-				...prev,
-				tags,
-			};
-		});
-	};
-
-	const removeLastTag = () => {
-		setState((prev) => {
-			const tags = Array.from(new Set([...prev.tags]));
-			tags.pop();
-
-			return {
-				...prev,
-				tags,
-			};
-		});
-	};
-
-	const removeTagByValue = (value: string) => {
-		setState((prev) => {
-			const tags = Array.from(new Set([...prev.tags])).filter(
-				(item) => item === value,
-			);
-
-			return {
-				...prev,
-				tags,
-			};
-		});
-	};
 
 	return (
 		<>
@@ -154,78 +109,7 @@ const CreateForm = ({ title = "", url = "", onSuccess }: Props) => {
 					onChange={onChange}
 					autoComplete="off"
 				/>
-				<div className="w-full flex flex-col space-y-2">
-					<label htmlFor="tag" className="block">
-						Tags
-					</label>
-					<div
-						className={clsx(
-							"text-black dark:text-white rounded outline-none border border-gray-300 focus:border-gray-400 caret-black flex flex-wrap px-2.5",
-							state.tags.length > 0 && "space-x-4",
-						)}
-						onClick={() => {
-							newTagInputRef.current?.focus();
-						}}
-					>
-						<div className="flex flex-wrap overflow-hidden relative items-center space-x-1.5 h-8">
-							{state.tags.map((item) => {
-								return (
-									<Badge
-										key={item}
-										title={item}
-										className="z-50 border border-gray-300 h-6 text-xs bg-slate-100 hover:bg-slate-200 transition"
-									>
-										<button
-											type="button"
-											onClick={() => removeTagByValue(item)}
-										>
-											<HiX />
-										</button>
-									</Badge>
-								);
-							})}
-						</div>
-						<input
-							id="tag"
-							ref={newTagInputRef}
-							type="text"
-							autoComplete="off"
-							value={newTag}
-							onChange={(e) => setNewTag(e.target.value)}
-							style={{
-								width: `${newTag.length + 10}ch`,
-								minWidth: "2rem",
-								border: "unset",
-								boxShadow: "unset",
-							}}
-							className="text-[inherit] cursor-[inherit] inline-block focus:outline-none text-sm focus:border-none focus:ring-none px-0 whitespace-pre-wrap break-words h-8 caret-black create-form-new-tag"
-							onKeyDown={(e) => {
-								const value = e.currentTarget.value.trim();
-
-								switch (e.key.toLowerCase()) {
-									case "enter": {
-										e.preventDefault();
-										if (value.length) addTag(value);
-										break;
-									}
-									case "backspace": {
-										if (!value.length) {
-											e.preventDefault();
-											removeLastTag();
-										}
-									}
-								}
-							}}
-							list="tags"
-						/>
-					</div>
-					<datalist id="tags">
-						{data?.map((item) => {
-							return <option key={item.id} value={item.name} />;
-						})}
-					</datalist>
-					<p className="text-sm">Press enter to add tag</p>
-				</div>
+				<TagInput data={data!} tags={tags} setTags={setTags} />
 				<Button
 					data-test="create-form-submit"
 					type="submit"

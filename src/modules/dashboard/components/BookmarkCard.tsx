@@ -43,6 +43,7 @@ const BookmarkCard = ({ data }: Props) => {
 			mixpanel.track("Bookmark Deleted");
 			invalidateQueries(["bookmarks.all"]);
 			invalidateQueries(["tags.all"]);
+			onDeleteClose();
 		},
 	});
 	const { mutate: updateFavourite } = trpc.useMutation("bookmarks.favourite", {
@@ -224,7 +225,6 @@ const BookmarkCard = ({ data }: Props) => {
 				isOpen={isDeleteOpen}
 				onDelete={() => {
 					mutate(data?.id);
-					onDeleteClose();
 				}}
 			/>
 			<EditDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} id={data?.id} />

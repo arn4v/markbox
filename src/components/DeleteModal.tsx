@@ -41,7 +41,6 @@ export default function DeleteModal({
 					variant="solid"
 					theme="danger"
 					onClick={onDelete}
-					className="px-2 py-1 text-red-500 transition border border-red-500 rounded hover:bg-red-500 hover:text-white dark:border-none dark:bg-red-500 dark:text-white dark:hover:bg-red-600"
 				>
 					Delete
 				</Button>

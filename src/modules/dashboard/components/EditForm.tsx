@@ -1,9 +1,8 @@
 import isEqual from "lodash.isequal";
 import React from "react";
-import { HiX } from "react-icons/hi";
-import Badge from "~/components/Badge";
 import Button from "~/components/Button";
-import { Input }  from "~/components/Input";
+import { Input } from "~/components/Input";
+import { TagInput } from "~/components/TagInput";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 
@@ -20,12 +19,10 @@ const EditForm = ({ id, onSuccess }: Props) => {
 		title: "",
 		url: "",
 		description: "",
-		tags: {} as LocalTags,
-		tagsDisconnect: {} as LocalTags,
 	};
+	const [tags, setTags] = React.useState<string[]>([]);
 	const [state, setState] = React.useState(initialState);
-	const newTagInputRef = React.useRef<HTMLInputElement>(null);
-	trpc.useQuery(["bookmarks.byId", id], {
+	const { data: bookmark } = trpc.useQuery(["bookmarks.byId", id], {
 		onSuccess(data) {
 			const _data = data as NonNullable<InferQueryOutput<"bookmarks.byId">>;
 			if (isEqual(state, initialState)) {
@@ -34,11 +31,13 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					title: _data.title,
 					url: _data.url,
 					description: _data.description,
-					tags: _data?.tags.reduce((acc, cur) => {
-						acc[cur?.name] = true;
-						return acc;
-					}, {} as LocalTags),
 				}));
+				setTags(
+					_data?.tags.reduce((acc, cur) => {
+						acc.push(cur.name);
+						return acc;
+					}, [] as string[]),
+				);
 			}
 		},
 	});
@@ -50,24 +49,33 @@ const EditForm = ({ id, onSuccess }: Props) => {
 				id: data?.id,
 				updatedAt: data?.updatedAt.toISOString(),
 			});
-			setState(initialState);
-			invalidateQueries(["bookmarks.all"]);
-			invalidateQueries(["bookmarks.byId", id]);
-			onSuccess();
+			Promise.all([
+				invalidateQueries(["bookmarks.all"]),
+				invalidateQueries(["bookmarks.byId", id]),
+			]).then(() => {
+				onSuccess();
+			});
 		},
 	});
 
 	const onSubmit = React.useCallback(
 		(e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
-			const { title, url, description, tags, tagsDisconnect } = state;
+			const { title, url, description } = state;
 
-			const tagsCreate = Object.keys(tags).filter(
-				(tagName) => !data?.find((tagObject) => tagObject.name === tagName),
+			const tagsCreate = tags.filter(
+				// item is the tag name
+				(item) => !data?.find((tagObject) => tagObject.name === item),
 			);
 
-			const tagsConnect = data
-				?.filter((item) => tags[item.name])
+			// FIX: This seems very hacky
+			const tagsConnect = tags
+				.map((item) => data!.find((tag) => tag.name === item))
+				.filter((item) => typeof item !== "undefined" && item !== null)
+				.map((item) => item!.id);
+
+			const tagsDisconnect = bookmark!.tags
+				.filter((item) => !tags.includes(item.name))
 				.map((item) => item.id);
 
 			mutate({
@@ -77,10 +85,10 @@ const EditForm = ({ id, onSuccess }: Props) => {
 				url,
 				tagsCreate,
 				tagsConnect,
-				tagsDisconnect: Object.keys(tagsDisconnect),
+				tagsDisconnect,
 			});
 		},
-		[data, id, mutate, state],
+		[data, id, mutate, state, tags],
 	);
 
 	const onChange = React.useCallback(
@@ -143,86 +151,7 @@ const EditForm = ({ id, onSuccess }: Props) => {
 					autoComplete="off"
 				/>
 			</div>
-			<div className="w-full">
-				<label htmlFor="url" className="block">
-					Tags
-				</label>
-				<div className="flex flex-wrap gap-2 mt-2">
-					{Object.keys(state.tags).map((item) => {
-						return (
-							<Badge
-								data-test="edit-tag-badge"
-								key={item}
-								title={item}
-								className="z-50 dark:bg-gray-900 dark:border-gray-600 border border-gray-300"
-							>
-								<button
-									data-test="edit-tag-delete"
-									type="button"
-									onClick={() => {
-										setState((prev) => {
-											const tags = prev.tags;
-											delete tags[item];
-
-											const toDisconnect: Record<string, true> = {};
-											const existingTag = data?.find(
-												({ name }) => name === item,
-											);
-
-											if (existingTag) {
-												toDisconnect[existingTag?.id] = true;
-											}
-
-											return {
-												...prev,
-												tags,
-												tagsDisconnect: {
-													...prev.tagsDisconnect,
-													...toDisconnect,
-												},
-											};
-										});
-									}}
-								>
-									<HiX />
-								</button>
-							</Badge>
-						);
-					})}
-				</div>
-				<div className="flex w-full gap-6 mt-2">
-					<Input
-						data-test="edit-tag"
-						id="tag"
-						ref={newTagInputRef}
-						type="text"
-						autoComplete="off"
-						onChange={(e) => {
-							let trimmedValue = e.target.value.trim();
-							const lastIdx = trimmedValue.length - 1;
-							if (trimmedValue.charAt(lastIdx) === ",") {
-								trimmedValue = trimmedValue.slice(0, -1);
-								setState((prev) => ({
-									...prev,
-									tags: {
-										...prev.tags,
-										[trimmedValue]: true,
-									},
-								}));
-								if (newTagInputRef.current) newTagInputRef.current.value = "";
-							}
-						}}
-						placeholder="Separate tags by typing comma (,)"
-						className="block w-full"
-						list="tags"
-					/>
-					<datalist id="tags">
-						{data?.map((item) => {
-							return <option key={item.id} value={item.name} />;
-						})}
-					</datalist>
-				</div>
-			</div>
+			<TagInput data={data!} tags={tags} setTags={setTags} />
 			<Button data-test="edit-submit" type="submit" className="mt-4">
 				Submit
 			</Button>

@@ -46,7 +46,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					{...props}
 				/>
 			);
-		}, [className, props, theirRef]);
+		}, [className, fullWidth, props, scale, theirRef, variant]);
 
 		if (showClear)
 			return (
