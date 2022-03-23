@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { HiPencil, HiTrash } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
-import { AppLayout } from "src/layouts/app";
+import { AppLayout } from "~/components/AppLayout";
 import Badge from "~/components/Badge";
 import { CopyCode } from "~/components/CopyCode";
 import Modal from "~/components/Modal";

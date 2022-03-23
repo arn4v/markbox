@@ -4,7 +4,7 @@ import { HiX } from "react-icons/hi";
 import Badge from "~/components/Badge";
 import Input from "~/components/Input";
 import useFuse from "~/hooks/use-fuse";
-import { AppLayout } from "~/layouts/app";
+import { AppLayout } from "~/components/AppLayout";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
 import { useMixpanel } from "~/providers/Mixpanel";
