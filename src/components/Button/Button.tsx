@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import * as React from "react";
 import { mergeRefs } from "~/lib/react";
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
-type Props = JSX.IntrinsicElements["button"] & {
+export type ButtonProps = JSX.IntrinsicElements["button"] & {
 	variant?: "solid" | "outline" | "ghost" | "unstyled";
 	theme?:
 		| "primary"
@@ -17,7 +17,7 @@ type Props = JSX.IntrinsicElements["button"] & {
 	loader?: React.ReactNode;
 };
 
-const Button = React.forwardRef<HTMLButtonElement, Props>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	(
 		{
 			className = "",
@@ -40,7 +40,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 				ref={mergeRefs([internalRef, ref])}
 				className={clsx(
 					[
-						"min-w-[max-content] font-medium transition relative focus:outline-none rounded focus:ring-4 active:scale-95",
+						"min-w-[max-content] font-medium transition relative focus:outline-none rounded focus:ring-[3px] active:scale-95",
 						className,
 					],
 					variant === "solid"
@@ -76,7 +76,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 						  }
 						: "",
 					{
-						"text-xs h-6": scale === "sm",
+						"text-xs px-1.5 h-6": scale === "sm",
 						"text-sm px-2 h-8": scale === "base",
 						"text-base px-4 h-10": scale === "lg",
 					},
@@ -97,6 +97,3 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
 );
 
 Button.displayName = "Button";
-
-export type { Props as ButtonProps };
-export default Button;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import Button from "~/components/Button";
+import { Button } from "~/components/Button";
 import { FormField } from "~/components/FormField";
 import { TagInput } from "~/components/TagInput";
 import { trpc } from "~/lib/trpc";

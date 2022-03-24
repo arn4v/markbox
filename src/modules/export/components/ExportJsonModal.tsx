@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import React from "react";
 import { HiX } from "react-icons/hi";
-import Button from "~/components/Button";
+import { Button } from "~/components/Button";
 import Modal from "~/components/Modal";
 import { trpc } from "~/lib/trpc";
 
