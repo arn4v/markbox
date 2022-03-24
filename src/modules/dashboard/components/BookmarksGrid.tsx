@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Badge from "~/components/Badge";
-import { Input }  from "~/components/Input";
+import { Input } from "~/components/Input";
 import Spinner from "~/components/Spinner";
 import { useDebouncedValue } from "~/hooks/use-debounced-value";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
@@ -18,7 +18,7 @@ type Bookmark = NonNullable<InferQueryOutput<"bookmarks.byId">>;
 const BookmarksGrid = (): JSX.Element => {
 	const router = useRouter();
 	const tag = React.useMemo(() => {
-		return (router.query?.tag as string) ?? "All";
+		return (router.query?.tag as string | string[]) ?? "All";
 	}, [router.query?.tag]);
 
 	const sort = useStore((state) => state.sort.type);
@@ -29,7 +29,11 @@ const BookmarksGrid = (): JSX.Element => {
 	const { data: count, isLoading: isCountLoading } = trpc.useQuery([
 		"bookmarks.count",
 		{
-			...(tag !== "All" ? { tagName: tag } : {}),
+			...(tag !== "All"
+				? {
+						tags: !Array.isArray(tag) ? [tag] : tag,
+				  }
+				: {}),
 			...(debouncedQuery.length ? { query: debouncedQuery } : {}),
 		},
 	]);
@@ -42,7 +46,11 @@ const BookmarksGrid = (): JSX.Element => {
 		[
 			"bookmarks.all",
 			{
-				...(tag !== "All" ? { tag: tag } : {}),
+				...(tag !== "All"
+					? {
+							tags: !Array.isArray(tag) ? [tag] : tag,
+					  }
+					: {}),
 				...(debouncedQuery.length ? { query: debouncedQuery } : {}),
 				sort,
 			},
@@ -115,8 +123,19 @@ const BookmarksGrid = (): JSX.Element => {
 				</>
 			) : (
 				<>
-					<div className="text-lg select-none font-bold mt-2">
-						Filtering by tag: {tag}
+					<div className="mt-2 flex items-center justify-start space-x-2">
+						<span className="text-lg select-none font-bold">
+							Filtering by tag:{" "}
+						</span>
+						<span className="flex items-center justify-center space-x-2">
+							{(!Array.isArray(tag) ? [tag] : tag).map((item, idx) => (
+								<Badge
+									key={idx}
+									title={item}
+									className="bg-gray-200 px-2.5 py-1"
+								/>
+							))}
+						</span>
 					</div>
 					<div
 						className={clsx("text-base font-medium", tag !== "All" && "-mt-4")}

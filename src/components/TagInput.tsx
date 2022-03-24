@@ -15,7 +15,6 @@ export function TagInput({
 	setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
 	const [newTag, setNewTag] = React.useState("");
-
 	const { result } = useFuse({
 		query: newTag,
 		data: data.filter((item) => !tags.includes(item.name)),
