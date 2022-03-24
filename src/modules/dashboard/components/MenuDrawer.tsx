@@ -11,7 +11,7 @@ import {
 	HiOutlineViewGrid,
 } from "react-icons/hi";
 import { useDisclosure } from "react-sensible";
-import Drawer, { DrawerContent } from "~/components/Drawer";
+import { Drawer } from "~/components/Drawer";
 import { useAuth } from "~/hooks/use-auth";
 import { useStore } from "~/store";
 
@@ -51,47 +51,50 @@ export default function MenuDrawer(): JSX.Element {
 			>
 				<HiMenu className="h-[20px] w-[20px]" />
 			</button>
-			<Drawer isOpen={isOpen} onClose={onClose}>
-				<DrawerContent
-					placement="bottom"
-					className="w-full h-auto py-8 text-black bg-white rounded-t-lg dark:bg-gray-900 dark:text-white"
-				>
-					<ul className={clsx(["flex flex-col w-full gap-4 px-6 text-base"])}>
-						<li className="px-2 py-2 text-center bg-gray-100 rounded-lg dark:bg-gray-600 whitespace-nowrap">
-							Signed in as <br />
-							{user?.email}
-						</li>
-						<MenuItem href="/docs">
-							Docs <HiOutlineDocumentText />
-						</MenuItem>
-						{router.pathname !== "/app" ? (
-							<li className="w-full">
-								<MenuItem href="/app">
-									Dashboard <HiOutlineTemplate />
-								</MenuItem>
-							</li>
-						) : null}
-						{!router.pathname.includes("/collections") ? (
-							<li className="w-full">
-								<MenuItem href="/collections">
-									Collections <HiOutlineViewGrid />
-								</MenuItem>
-							</li>
-						) : null}
-						{!router.pathname.includes("/settings") ? (
-							<li className="w-full">
-								<MenuItem href="/settings/account">
-									Settings <HiOutlineCog />
-								</MenuItem>
-							</li>
-						) : null}
+			<Drawer
+				isOpen={isOpen}
+				onClose={onClose}
+				position="bottom"
+				contentProps={{
+					className:
+						"w-full h-auto py-8 text-black bg-white rounded-t-lg dark:bg-gray-900 dark:text-white",
+				}}
+			>
+				<ul className={clsx(["flex flex-col w-full gap-4 px-6 text-base"])}>
+					<li className="px-2 py-2 text-center bg-gray-100 rounded-lg dark:bg-gray-600 whitespace-nowrap">
+						Signed in as <br />
+						{user?.email}
+					</li>
+					<MenuItem href="/docs">
+						Docs <HiOutlineDocumentText />
+					</MenuItem>
+					{router.pathname !== "/app" ? (
 						<li className="w-full">
-							<MenuItem href="/api/auth/logout">
-								Logout <HiOutlineLogout />
+							<MenuItem href="/app">
+								Dashboard <HiOutlineTemplate />
 							</MenuItem>
 						</li>
-					</ul>
-				</DrawerContent>
+					) : null}
+					{!router.pathname.includes("/collections") ? (
+						<li className="w-full">
+							<MenuItem href="/collections">
+								Collections <HiOutlineViewGrid />
+							</MenuItem>
+						</li>
+					) : null}
+					{!router.pathname.includes("/settings") ? (
+						<li className="w-full">
+							<MenuItem href="/settings/account">
+								Settings <HiOutlineCog />
+							</MenuItem>
+						</li>
+					) : null}
+					<li className="w-full">
+						<MenuItem href="/api/auth/logout">
+							Logout <HiOutlineLogout />
+						</MenuItem>
+					</li>
+				</ul>
 			</Drawer>
 		</>
 	);

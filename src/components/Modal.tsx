@@ -40,11 +40,11 @@ const Modal: Modal = ({
 	}, [isOpen, onEscape]);
 
 	return (
-		<AnimatePresence exitBeforeEnter>
-			<DialogPrimitive.Root open={isOpen}>
-				<DialogPrimitive.Portal>
-					{isOpen && (
-						<>
+		<DialogPrimitive.Root open={isOpen}>
+			<AnimatePresence>
+				{isOpen ? (
+					<>
+						<DialogPrimitive.Portal {...portalProps} forceMount>
 							<MotionOverlay
 								{...overlayProps}
 								data-test="modal-overlay"
@@ -61,22 +61,24 @@ const Modal: Modal = ({
 								exit="closed"
 								transition={{ type: "tween" }}
 								onClick={onClose}
+								forceMount
 							/>
 							<MotionContent
 								data-test="modal-content"
 								className={clsx([
 									"fixed z-[200] transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2",
 								])}
+								forceMount
 							>
 								<motion.div {...contentProps} {...genericModalMotionProps}>
 									{children}
 								</motion.div>
 							</MotionContent>
-						</>
-					)}
-				</DialogPrimitive.Portal>
-			</DialogPrimitive.Root>
-		</AnimatePresence>
+						</DialogPrimitive.Portal>
+					</>
+				) : null}
+			</AnimatePresence>
+		</DialogPrimitive.Root>
 	);
 };
 

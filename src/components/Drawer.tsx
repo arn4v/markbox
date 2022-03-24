@@ -1,33 +1,49 @@
-import { Portal, PortalProps } from "@reach/portal";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import clsx from "clsx";
-import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
-import { useFilterChildren } from "react-sensible";
+
+const MotionOverlay = motion(DialogPrimitive.DialogOverlay);
+const MotionContent = motion(DialogPrimitive.DialogContent);
 
 type DrawerProps = {
-	portalProps?: Omit<PortalProps, "children">;
-	containerProps?: {
-		className?: string;
-	};
-	overlayProps?: {
-		className?: string;
-	};
 	isOpen: boolean;
 	onClose: () => void;
+	position: "top" | "bottom" | "left" | "right";
 	children: React.ReactNode;
+	portalProps?: Omit<DialogPrimitive.PortalProps, "children">;
+	contentProps?: Omit<React.ComponentProps<typeof MotionContent>, "ref">;
+	overlayProps?: React.ComponentProps<typeof MotionOverlay>;
 };
 
-interface DrawerComponent extends Component<DrawerProps> {}
-
-const Drawer: DrawerComponent = ({
+export const Drawer = ({
 	children,
 	isOpen,
 	onClose,
-	containerProps,
+	position,
+	contentProps,
 	overlayProps,
 	portalProps,
-}) => {
-	const [withDrawerContent] = useFilterChildren(children, DrawerContent);
+}: DrawerProps) => {
+	const [openVariant, closeVariant] = React.useMemo(() => {
+		switch (position) {
+			case "top": {
+				return [{ y: "0" }, { y: "-100%" }];
+			}
+			case "bottom": {
+				return [{ y: "0" }, { y: "100%" }];
+			}
+			case "left": {
+				return [{ x: "0" }, { x: "-100%" }];
+			}
+			case "right": {
+				return [{ x: "0" }, { x: "100%" }];
+			}
+			default: {
+				return [{}, {}];
+			}
+		}
+	}, [position]);
 
 	React.useEffect(() => {
 		const onEscape = (event: KeyboardEvent) => {
@@ -56,130 +72,54 @@ const Drawer: DrawerComponent = ({
 	}, [isOpen, onClose]);
 
 	return (
-		<AnimatePresence>
-			{isOpen && (
-				<Portal {...portalProps}>
-					<div
-						data-test="drawer"
-						className={clsx([
-							"h-screen w-screen fixed inset-0 overflow-none",
-							containerProps?.className ?? "z-[100]",
-						])}
-					>
-						<motion.div
-							data-test="drawer-overlay"
+		<DialogPrimitive.Root open={isOpen}>
+			<AnimatePresence>
+				{isOpen && (
+					<DialogPrimitive.Portal {...portalProps} forceMount>
+						<MotionOverlay
+							{...overlayProps}
+							data-test="modal-overlay"
 							className={clsx([
-								"z-10 fixed inset-0 bg-black",
+								"fixed inset-0 bg-black bg-opacity-75 z-[100]",
 								overlayProps?.className,
 							])}
-							style={
-								{
-									"--tw-bg-opacity": 0.4,
-								} as any
-							}
 							variants={{
-								open: { opacity: 1, pointerEvents: "auto" as const },
-								closed: { opacity: 0, pointerEvents: "none" as const },
+								open: { opacity: 1, pointerEvents: "auto" },
+								closed: { opacity: 0, pointerEvents: "none" },
 							}}
 							initial="closed"
 							animate="open"
 							exit="closed"
 							transition={{ type: "tween" }}
 							onClick={onClose}
+							forceMount
 						/>
-						{withDrawerContent}
-					</div>
-				</Portal>
-			)}
-		</AnimatePresence>
+						<MotionContent
+							data-test="drawer-radix-content"
+							{...contentProps}
+							className={clsx([
+								"fixed top-0 bottom-0 z-[200] w-auto min-w-[450px]",
+								position === "top" && "bottom-auto",
+								position === "bottom" && "top-auto",
+								position === "left" && "left-0",
+								position === "right" && "right-0",
+								contentProps?.className,
+							])}
+							initial="closed"
+							animate="open"
+							exit="closed"
+							variants={{
+								open: { opacity: 1, ...openVariant },
+								closed: { opacity: 0, ...closeVariant },
+							}}
+							transition={{ type: "spring", stiffness: 350, damping: 40 }}
+							forceMount
+						>
+							{children}
+						</MotionContent>
+					</DialogPrimitive.Portal>
+				)}
+			</AnimatePresence>
+		</DialogPrimitive.Root>
 	);
 };
-
-Drawer.displayName = "Drawer";
-
-interface DrawerContentProps extends HTMLMotionProps<"div"> {
-	children: React.ReactNode;
-	placement: "top" | "bottom" | "left" | "right";
-}
-
-export const DrawerContent = React.forwardRef<
-	HTMLDivElement,
-	DrawerContentProps
->(({ children, placement, className }, ref) => {
-	const [openVariant, closeVariant] = React.useMemo(() => {
-		if (placement === "bottom") {
-			return [
-				{
-					y: "0",
-				},
-				{
-					y: "100%",
-				},
-			];
-		}
-
-		if (placement === "top") {
-			return [
-				{
-					y: "0",
-				},
-				{
-					y: "-100%",
-				},
-			];
-		}
-
-		if (placement === "left") {
-			return [
-				{
-					x: "0",
-				},
-				{
-					x: "-100%",
-				},
-			];
-		}
-
-		if (placement === "right") {
-			return [
-				{
-					x: "0",
-				},
-				{
-					x: "100%",
-				},
-			];
-		}
-
-		return [{}, {}];
-	}, [placement]);
-
-	return (
-		<motion.div
-			data-test="drawer-content"
-			ref={ref}
-			className={clsx([
-				"absolute z-30",
-				placement === "top" && "top-0",
-				placement === "bottom" && "bottom-0",
-				placement === "left" && "left-0",
-				placement === "right" && "right-0",
-				className,
-			])}
-			initial="closed"
-			animate="open"
-			exit="closed"
-			variants={{
-				open: { opacity: 1, ...openVariant },
-				closed: { opacity: 0, ...closeVariant },
-			}}
-			transition={{ type: "spring", stiffness: 350, damping: 40 }}
-		>
-			{children}
-		</motion.div>
-	);
-});
-
-DrawerContent.displayName = "DrawerContent";
-
-export default Drawer;
