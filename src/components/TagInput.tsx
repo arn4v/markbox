@@ -17,7 +17,7 @@ export function TagInput({
 	const [newTag, setNewTag] = React.useState("");
 	const { result } = useFuse({
 		query: newTag,
-		data: data.filter((item) => !tags.includes(item.name)),
+		data: data?.filter((item) => !tags.includes(item.name)) ?? [],
 		options: {
 			keys: ["name"],
 			threshold: 0.1,
@@ -28,7 +28,7 @@ export function TagInput({
 	const newTagInputRef = React.useRef<HTMLInputElement | null>(null);
 
 	React.useEffect(() => {
-		if (result.length) {
+		if (newTag.length && result.length) {
 			setActiveIndex(0);
 		} else {
 			setActiveIndex(null);
