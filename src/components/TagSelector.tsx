@@ -2,7 +2,7 @@ import { HiX } from "react-icons/hi";
 import { InferQueryOutput } from "~/lib/trpc";
 import CreateBookmarkButton from "~/modules/dashboard/components/CreateButton";
 import Badge from "./Badge";
-import { Input }  from "./Input";
+import { Input } from "./Input";
 
 type Tag = NonNullable<InferQueryOutput<"tags.byId">>;
 type TagArray = Tag[];
