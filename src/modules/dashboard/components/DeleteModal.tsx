@@ -1,7 +1,7 @@
 import React from "react";
 import { genericModalProps } from "~/config";
-import { Button } from "./Button";
-import Modal, { ModalProps } from "./Modal";
+import { Button } from "../../../components/Button";
+import Modal, { ModalProps } from "../../../components/Modal";
 
 interface Props extends Pick<ModalProps, "isOpen" | "onClose"> {
 	onDelete: () => void;

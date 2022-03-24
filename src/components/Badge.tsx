@@ -9,25 +9,16 @@ type Props = JSX.IntrinsicElements["div"] & {
 };
 
 const Badge = React.forwardRef<HTMLDivElement, Props>(
-	(
-		{
-			className = "",
-			title,
-			children,
-			"data-test": dataTest = "badge",
-			...props
-		},
-		ref,
-	) => {
+	({ className = "", title, children, ...props }, ref) => {
 		return (
 			<div
-				data-test={dataTest}
 				ref={ref}
+				data-test="badge"
+				{...props}
 				className={clsx([
 					"flex gap-1.5 px-1.5 py-0.5 text-xs font-medium dark:text-white items-center justify-center uppercase rounded-full",
 					className,
 				])}
-				{...props}
 			>
 				{title}
 				{children}

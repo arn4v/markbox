@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "~/components/Button";
 import { FormField } from "~/components/FormField";
-import { TagInput } from "~/components/TagInput";
+import { TagInput } from "~/modules/dashboard/components/TagInput";
 import { trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 

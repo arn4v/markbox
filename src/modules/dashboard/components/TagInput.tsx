@@ -3,7 +3,7 @@ import * as React from "react";
 import { HiX } from "react-icons/hi";
 import useFuse from "~/hooks/use-fuse";
 import { InferQueryOutput } from "~/lib/trpc";
-import Badge from "./Badge";
+import Badge from "../../../components/Badge";
 
 export function TagInput({
 	data,

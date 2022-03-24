@@ -2,7 +2,7 @@ import isEqual from "lodash.isequal";
 import React from "react";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
-import { TagInput } from "~/components/TagInput";
+import { TagInput } from "~/modules/dashboard/components/TagInput";
 import { InferQueryOutput, trpc } from "~/lib/trpc";
 import { useMixpanel } from "~/providers/Mixpanel";
 

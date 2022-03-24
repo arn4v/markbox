@@ -1,6 +1,6 @@
 import type { AccessToken } from "@prisma/client";
 import { useDisclosure } from "react-sensible";
-import DeleteModal from "~/components/DeleteModal";
+import DeleteModal from "~/modules/dashboard/components/DeleteModal";
 import { trpc } from "~/lib/trpc";
 
 interface Props {

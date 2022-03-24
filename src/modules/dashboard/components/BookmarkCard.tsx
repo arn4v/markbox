@@ -24,7 +24,7 @@ const EditDrawer = dynamic(
 	() => import("~/modules/dashboard/components/EditDrawer"),
 );
 
-const DeleteModal = dynamic(() => import("~/components/DeleteModal"));
+const DeleteModal = dynamic(() => import("~/modules/dashboard/components/DeleteModal"));
 
 interface Props {
 	data: InferQueryOutput<"bookmarks.byId">;

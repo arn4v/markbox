@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useOnClickOutside } from "react-sensible";
 import { mergeRefs } from "~/lib/react";
-import styles from "./Popup.module.css";
 
 export type PopupProps = JSX.IntrinsicElements["div"] & {
 	isOpen: boolean;
@@ -11,7 +10,6 @@ export type PopupProps = JSX.IntrinsicElements["div"] & {
 	className?: string;
 	children: React.ReactNode;
 	trigger: React.ReactNode;
-	toAnimate?: boolean;
 	showOverlay?: boolean;
 	placement?:
 		| "left"
@@ -37,7 +35,6 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 			onDismiss,
 			isOpen,
 			className,
-			toAnimate = false,
 			placement = "bottom",
 			showOverlay = false,
 			...props
@@ -74,7 +71,6 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 						<div
 							className={clsx([
 								"absolute z-30 rounded-lg",
-								toAnimate && styles.popup,
 								placement !== "custom" && "transform",
 								placement === "bottom-end" && "left-0 top-full",
 								placement === "bottom-start" && "top-full right-0",
