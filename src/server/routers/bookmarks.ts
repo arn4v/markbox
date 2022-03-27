@@ -1,4 +1,3 @@
-import { Tag } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { v4 } from "uuid";
 import { z } from "zod";
@@ -32,13 +31,13 @@ export const bookmarksRouter = createRouter()
 	})
 	.query("all", {
 		input: z.object({
-			tags: z.array(z.string()).optional(),
+			tag: z.string().optional(),
 			sort: sortBySchema,
 			cursor: z.string().nullish(),
 			query: z.string().optional(),
 		}),
 		async resolve({ ctx, input }) {
-			const { cursor, sort, tags } = input;
+			const { cursor, sort, tag } = input;
 			const userId = ctx?.user?.id as string;
 
 			let orderBy: Record<string, string> = {};
@@ -69,11 +68,11 @@ export const bookmarksRouter = createRouter()
 					User: {
 						id: userId,
 					},
-					...(tags && tags.length
+					...(typeof tag === "string"
 						? {
 								tags: {
 									some: {
-										OR: tags?.map((name) => ({ name })),
+										name: tag,
 										userId,
 									},
 								},
@@ -113,26 +112,24 @@ export const bookmarksRouter = createRouter()
 	})
 	.query("count", {
 		input: z.object({
-			tags: z.array(z.string()).optional(),
+			tagName: z.string().optional(),
 			query: z.string().optional(),
 		}),
 		async resolve({ ctx, input }) {
-			let tags: Pick<Tag, "id">[] = [];
+			let tagId: string | undefined = undefined;
 
-			console.log("Tags", input?.tags);
+			if (input?.tagName) {
+				const tag = await ctx?.prisma.tag.findFirst({
+					where: {
+						name: input?.tagName,
+						userId: ctx?.user?.id as string,
+					},
+					select: {
+						id: true,
+					},
+				});
 
-			if (input?.tags) {
-				tags.push(
-					...(await ctx?.prisma.tag.findMany({
-						where: {
-							userId: ctx?.user?.id as string,
-							OR: input?.tags.map((name) => ({ name })),
-						},
-						select: {
-							id: true,
-						},
-					})),
-				);
+				if (tag) tagId = tag?.id;
 			}
 
 			return await ctx.prisma.bookmark.count({
@@ -146,11 +143,11 @@ export const bookmarksRouter = createRouter()
 								],
 						  }
 						: {}),
-					...(tags?.length
+					...(typeof tagId === "string"
 						? {
 								tags: {
-									some: {
-										OR: tags,
+									every: {
+										id: tagId,
 									},
 								},
 						  }
