@@ -22,7 +22,7 @@ const Item = ({
 	children: React.ReactNode;
 }) => {
 	return (
-		<Link href={href}>
+		<Link href={href} passHref>
 			<a className="flex items-center justify-center w-full gap-2 py-2 transition border-b border-gray-300 dark:border-blueGray-400 dark:hover:bg-gray-500 focus:outline-none hover:bg-gray-200 dark:text-white">
 				{children}
 			</a>

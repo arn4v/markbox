@@ -1,7 +1,7 @@
 import type { Tag as TagType } from "@prisma/client";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { Input }  from "~/components/Input";
+import { Input } from "~/components/Input";
 import useBreakpoints from "~/hooks/use-breakpoints";
 import useFuse from "~/hooks/use-fuse";
 import { trpc } from "~/lib/trpc";

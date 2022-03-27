@@ -9,6 +9,13 @@ import Popup, { PopupProps } from "~/components/Popup";
 import { useStore } from "~/store";
 import type { SortBy } from "~/types";
 
+const sortTitleMap = {
+	created_at_desc: "Latest Created",
+	created_at_asc: "Earliest Created",
+	updated_at_desc: "Latest Updated",
+	updated_at_asc: "Earliest Updated",
+};
+
 const SortButton = ({
 	children,
 	className,
@@ -30,15 +37,16 @@ const SortButton = ({
 				<button
 					onClick={onToggle}
 					className={clsx([
-						"h-full border border-gray-200 rounded-lg px-4 shadow hover:shadow-md transition",
-						children ? "flex items-center space-x-2" : "aspect-1",
+						"border border-gray-200 rounded-lg h-8 w-auto flex items-center space-x-4 shadow hover:shadow-md transition px-4",
+						// children ? "flex items-center space-x-2" : "aspect-1",
 						className,
 					])}
 				>
+					<span className="whitespace-nowrap text-s">{sortTitleMap[sort]}</span>
 					{sort === "created_at_asc" || sort === "updated_at_asc" ? (
-						<HiOutlineSortAscending className="h-5 w-5" />
+						<HiOutlineSortAscending className="h-4 w-4" />
 					) : (
-						<HiOutlineSortDescending className="h-5 w-5" />
+						<HiOutlineSortDescending className="h-4 w-4" />
 					)}
 					{children ? <span>{children}</span> : null}
 				</button>

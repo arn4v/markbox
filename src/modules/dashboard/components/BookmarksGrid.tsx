@@ -68,7 +68,7 @@ const BookmarksGrid = (): JSX.Element => {
 	}, [rawData]) as unknown as Array<Bookmark>;
 
 	return (
-		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0 lg:ml-72">
+		<div className="flex flex-col flex-grow h-full p-4 lg:p-0 lg:py-8 gap-6 lg:px-8 2xl:pr-0">
 			<div className="flex space-x-4 lg:space-x-6 items-center">
 				<Input
 					type="text"
