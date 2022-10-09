@@ -1,10 +1,10 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -25,7 +25,6 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-
   @@map("users")
 }
 
@@ -41,10 +40,10 @@ model CollectionInvite {
   user      User       @relation(fields: [userId], references: [id])
   type      InviteType
 
-
   userId       String
   Collection   Collection? @relation(fields: [collectionId], references: [id])
   collectionId String?
+
   @@map("collection_invites")
 }
 
@@ -74,9 +73,9 @@ model AccessToken {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
+
   @@map("access_tokens")
 }
 
@@ -94,7 +93,6 @@ model Tag {
   Collection   Collection? @relation(fields: [collectionId], references: [id])
   collectionId String?
 
-  @@fulltext([name])
   @@map("tags")
 }
 
@@ -113,8 +111,5 @@ model Bookmark {
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
 
-  @@fulltext([title])
-  @@fulltext([url])
-  @@fulltext([title, url])
   @@map("bookmarks")
 }
